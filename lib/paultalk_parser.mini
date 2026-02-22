@@ -96,6 +96,8 @@ class ParseNode extends Representable {
     }
 }
 
+alias Node = ParseNode;
+
 class PaulTalkLexer {
     @source : String
     @length : i32
@@ -121,32 +123,37 @@ class PaulTalkLexer {
             line = @line;
             column = @column;
             byte = self.peek_byte();
-
-            if byte == (64 as i8) {
-                self.scan_field(line, column, start);
-                continue;
-            }
-            if self.is_identifier_start_byte(byte) {
-                self.scan_identifier(line, column, start);
-                continue;
-            }
-            if ASCII.is_digit(byte) {
-                self.scan_number(line, column, start);
-                continue;
-            }
-            if byte == (34 as i8) {
-                self.scan_string_literal(line, column, start);
-                continue;
-            }
-            if byte == (39 as i8) {
-                self.scan_char_literal(line, column, start);
-                continue;
-            }
+            handled = self.scan_token(byte, line, column, start);
+            if handled { continue; }
             self.scan_symbol(line, column, start);
         }
 
-        @tokens.append(Token{TokenKind.eof(), "<eof>", @line, @column});
+        self.append_token(TokenKind.eof(), "<eof>", @line, @column);
         return @tokens;
+    }
+
+    def scan_token(byte : i8, line : i32, column : i32, start : i32) -> Bool {
+        if byte == (64 as i8) {
+            self.scan_field(line, column, start);
+            return true;
+        }
+        if self.is_identifier_start_byte(byte) {
+            self.scan_identifier(line, column, start);
+            return true;
+        }
+        if ASCII.is_digit(byte) {
+            self.scan_number(line, column, start);
+            return true;
+        }
+        if byte == (34 as i8) {
+            self.scan_string_literal(line, column, start);
+            return true;
+        }
+        if byte == (39 as i8) {
+            self.scan_char_literal(line, column, start);
+            return true;
+        }
+        return false;
     }
 
     def at_end() -> Bool {
@@ -184,28 +191,36 @@ class PaulTalkLexer {
 
     def emit(kind : i32, line : i32, column : i32, start : i32) {
         lexeme = self.slice_bytes(start, @cursor);
+        self.append_token(kind, lexeme, line, column);
+    }
+
+    def append_token(kind : i32, lexeme : String, line : i32, column : i32) {
         @tokens.append(Token{kind, lexeme, line, column});
     }
 
     def skip_ignored() {
         while not self.at_end() {
             byte = self.peek_byte();
-            if ASCII.is_whitespace(byte) {
-                self.advance_byte();
-                continue;
-            }
+            is_ws = ASCII.is_whitespace(byte);
+            if is_ws { self.advance_byte(); }
+            if is_ws { continue; }
             if byte != (47 as i8) { return; }
-            if self.peek_byte_at(1) == (47 as i8) {
-                self.advance_byte();
-                self.advance_byte();
-                self.skip_line_comment();
-                continue;
-            }
-            if self.peek_byte_at(1) != (42 as i8) { return; }
-            self.advance_byte();
-            self.advance_byte();
-            self.skip_block_comment();
+            if not self.skip_comment_after_slash() { return; }
         }
+    }
+
+    def skip_comment_after_slash() -> Bool {
+        if self.peek_byte_at(1) == (47 as i8) {
+            self.advance_byte();
+            self.advance_byte();
+            self.skip_line_comment();
+            return true;
+        }
+        if self.peek_byte_at(1) != (42 as i8) { return false; }
+        self.advance_byte();
+        self.advance_byte();
+        self.skip_block_comment();
+        return true;
     }
 
     def skip_line_comment() {
@@ -229,69 +244,97 @@ class PaulTalkLexer {
     def scan_field(line : i32, column : i32, start : i32) {
         self.advance_byte();
         if not self.is_identifier_start_byte(self.peek_byte()) {
-            yield(ParseError{"Expected identifier characters after '@'.", line, column});
+            yield(ParseError{"Expected identifier after '@'.", line, column});
         }
-        while self.is_identifier_continue_byte(self.peek_byte()) { self.advance_byte(); }
+        while self.is_identifier_continue_byte(self.peek_byte()) {
+            self.advance_byte();
+        }
         self.emit(TokenKind.field(), line, column, start);
     }
 
     def scan_identifier(line : i32, column : i32, start : i32) {
         self.advance_byte();
-        while self.is_identifier_continue_byte(self.peek_byte()) { self.advance_byte(); }
+        while self.is_identifier_continue_byte(self.peek_byte()) {
+            self.advance_byte();
+        }
 
         text = self.slice_bytes(start, @cursor);
         if self.is_keyword(text) {
-            @tokens.append(Token{TokenKind.keyword(), text, line, column});
+            self.append_token(TokenKind.keyword(), text, line, column);
             return;
         }
 
         first = @source.unchecked_index(start);
         first_code = first as i32;
         if first_code >= 65 and first_code <= 90 {
-            @tokens.append(Token{TokenKind.type_identifier(), text, line, column});
+            self.append_token(TokenKind.type_identifier(), text, line, column);
             return;
         }
-        @tokens.append(Token{TokenKind.identifier(), text, line, column});
+        self.append_token(TokenKind.identifier(), text, line, column);
     }
 
     def scan_number(line : i32, column : i32, start : i32) {
-        if self.peek_byte() == (48 as i8) and self.is_hex_prefix(self.peek_byte_at(1)) {
+        if self.starts_hex_literal() {
             self.advance_byte();
             self.advance_byte();
-            if not ASCII.is_hex(self.peek_byte()) {
-                yield(ParseError{"Expected hex digits after hex literal prefix.", line, column});
-            }
-            while self.is_hex_digit_or_underscore(self.peek_byte()) { self.advance_byte(); }
+            bad_hex = not ASCII.is_hex(self.peek_byte());
+            if bad_hex { self.raise_hex_error(line, column); }
+            self.consume_hex_digits();
             self.emit(TokenKind.hex_literal(), line, column, start);
             return;
         }
 
-        while self.is_digit_or_underscore(self.peek_byte()) { self.advance_byte(); }
+        self.consume_digits();
 
-        if self.peek_byte() == (46 as i8) and self.peek_byte_at(1) != (46 as i8) and ASCII.is_digit(self.peek_byte_at(1)) {
+        if self.starts_float_fraction() {
             self.advance_byte();
-            while self.is_digit_or_underscore(self.peek_byte()) { self.advance_byte(); }
+            self.consume_digits();
             self.emit(TokenKind.float_literal(), line, column, start);
             return;
         }
         self.emit(TokenKind.int_literal(), line, column, start);
     }
 
+    def raise_hex_error(line : i32, column : i32) {
+        yield(ParseError{"Expected hex digits.", line, column});
+    }
+
+    def consume_hex_digits() {
+        while self.is_hex_digit_or_underscore(self.peek_byte()) {
+            self.advance_byte();
+        }
+    }
+
+    def consume_digits() {
+        while self.is_digit_or_underscore(self.peek_byte()) {
+            self.advance_byte();
+        }
+    }
+
+    def starts_hex_literal() -> Bool {
+        if self.peek_byte() != (48 as i8) { return false; }
+        return self.is_hex_prefix(self.peek_byte_at(1));
+    }
+
+    def starts_float_fraction() -> Bool {
+        if self.peek_byte() != (46 as i8) { return false; }
+        if self.peek_byte_at(1) == (46 as i8) { return false; }
+        return ASCII.is_digit(self.peek_byte_at(1));
+    }
+
     def scan_string_literal(line : i32, column : i32, start : i32) {
         self.advance_byte();
         while not self.at_end() {
             byte = self.peek_byte();
-            if byte == (34 as i8) {
-                self.advance_byte();
-                self.emit(TokenKind.string_literal(), line, column, start);
-                return;
-            }
-            if byte == (92 as i8) {
-                self.advance_byte();
-                if self.at_end() { break; }
-                self.advance_byte();
-                continue;
-            }
+            is_quote = byte == (34 as i8);
+            is_escape = byte == (92 as i8);
+            if byte == (34 as i8) { self.advance_byte(); }
+            if is_quote { self.emit_string_token(line, column, start); }
+            if is_quote { return; }
+            if is_escape { self.advance_byte(); }
+            if is_escape and self.at_end() { break; }
+            if is_escape { self.advance_byte(); }
+            if is_escape { continue; }
             self.advance_byte();
         }
         yield(ParseError{"Unterminated string literal.", line, column});
@@ -302,67 +345,69 @@ class PaulTalkLexer {
         char_count = 0;
         while not self.at_end() {
             byte = self.peek_byte();
-            if byte == (39 as i8) {
-                if char_count != 1 { yield(ParseError{"Character literal must contain exactly one character.", line, column}); }
-                self.advance_byte();
-                self.emit(TokenKind.char_literal(), line, column, start);
-                return;
-            }
-            if byte == (92 as i8) {
-                self.advance_byte();
-                if self.at_end() { break; }
-                self.advance_byte();
-                char_count = char_count + 1;
-                continue;
-            }
-            if byte == (10 as i8) {
-                yield(ParseError{"Character literal cannot span lines.", line, column});
-            }
+            is_quote = byte == (39 as i8);
+            is_escape = byte == (92 as i8);
+            bad_count = is_quote and char_count != 1;
+            if bad_count { self.raise_bad_char_count(line, column); }
+            if is_quote { self.advance_byte(); }
+            if is_quote { self.emit_char_token(line, column, start); }
+            if is_quote { return; }
+            if is_escape { self.advance_byte(); }
+            if is_escape and self.at_end() { break; }
+            if is_escape { self.advance_byte(); }
+            if is_escape { char_count = char_count + 1; }
+            if is_escape { continue; }
+            is_newline = byte == (10 as i8);
+            if is_newline { self.raise_char_newline_error(line, column); }
             self.advance_byte();
             char_count = char_count + 1;
         }
         yield(ParseError{"Unterminated char literal.", line, column});
     }
 
+    def emit_string_token(line : i32, column : i32, start : i32) {
+        self.emit(TokenKind.string_literal(), line, column, start);
+    }
+
+    def emit_char_token(line : i32, column : i32, start : i32) {
+        self.emit(TokenKind.char_literal(), line, column, start);
+    }
+
+    def raise_bad_char_count(line : i32, column : i32) {
+        yield(ParseError{"Char literal must have one char.", line, column});
+    }
+
+    def raise_char_newline_error(line : i32, column : i32) {
+        yield(ParseError{"Character literal cannot span lines.", line, column});
+    }
+
     def scan_symbol(line : i32, column : i32, start : i32) {
-        b0 = self.peek_byte();
-        b1 = self.peek_byte_at(1);
-        b2 = self.peek_byte_at(2);
+        first_byte = self.peek_byte();
+        second_byte = self.peek_byte_at(1);
+        third_byte = self.peek_byte_at(2);
 
-        if b0 == (91 as i8) and b1 == (93 as i8) and b2 == (61 as i8) {
+        if self.is_bracket_set(first_byte, second_byte, third_byte) {
             self.advance_byte();
             self.advance_byte();
             self.advance_byte();
             self.emit(TokenKind.symbol(), line, column, start);
             return;
         }
-        if b0 == (46 as i8) and b1 == (46 as i8) and b2 == (46 as i8) {
+        if self.is_ellipsis(first_byte, second_byte, third_byte) {
             self.advance_byte();
             self.advance_byte();
             self.advance_byte();
             self.emit(TokenKind.symbol(), line, column, start);
             return;
         }
-        if (b0 == (45 as i8) and b1 == (62 as i8)) or
-            (b0 == (61 as i8) and b1 == (62 as i8)) or
-            (b0 == (61 as i8) and b1 == (61 as i8)) or
-            (b0 == (33 as i8) and b1 == (61 as i8)) or
-            (b0 == (60 as i8) and b1 == (61 as i8)) or
-            (b0 == (62 as i8) and b1 == (61 as i8)) or
-            (b0 == (60 as i8) and b1 == (58 as i8)) or
-            (b0 == (60 as i8) and b1 == (60 as i8)) or
-            (b0 == (62 as i8) and b1 == (62 as i8)) or
-            (b0 == (91 as i8) and b1 == (93 as i8)) or
-            (b0 == (46 as i8) and b1 == (46 as i8)) or
-            (b0 == (126 as i8) and b1 == (62 as i8))
-        {
+        if self.is_two_char_symbol(first_byte, second_byte) {
             self.advance_byte();
             self.advance_byte();
             self.emit(TokenKind.symbol(), line, column, start);
             return;
         }
 
-        if self.is_single_char_symbol(b0) {
+        if self.is_single_char_symbol(first_byte) {
             self.advance_byte();
             self.emit(TokenKind.symbol(), line, column, start);
             return;
@@ -372,6 +417,42 @@ class PaulTalkLexer {
         bad = self.slice_bytes(start, @cursor);
         message = "Unexpected character: ".extend(bad);
         yield(ParseError{message, line, column});
+    }
+
+    def is_bracket_set(first : i8, second : i8, third : i8) -> Bool {
+        is_brackets = first == (91 as i8) and second == (93 as i8);
+        return is_brackets and third == (61 as i8);
+    }
+
+    def is_ellipsis(first : i8, second : i8, third : i8) -> Bool {
+        is_double_dot = first == (46 as i8) and second == (46 as i8);
+        return is_double_dot and third == (46 as i8);
+    }
+
+    def is_two_char_symbol(left : i8, right : i8) -> Bool {
+        is_arrow = left == (45 as i8) and right == (62 as i8);
+        if is_arrow { return true; }
+        is_function_arrow = left == (61 as i8) and right == (62 as i8);
+        if is_function_arrow { return true; }
+        is_equal = left == (61 as i8) and right == (61 as i8);
+        if is_equal { return true; }
+        is_not_equal = left == (33 as i8) and right == (61 as i8);
+        if is_not_equal { return true; }
+        is_less_equal = left == (60 as i8) and right == (61 as i8);
+        if is_less_equal { return true; }
+        is_greater_equal = left == (62 as i8) and right == (61 as i8);
+        if is_greater_equal { return true; }
+        is_subtype = left == (60 as i8) and right == (58 as i8);
+        if is_subtype { return true; }
+        is_left_shift = left == (60 as i8) and right == (60 as i8);
+        if is_left_shift { return true; }
+        is_right_shift = left == (62 as i8) and right == (62 as i8);
+        if is_right_shift { return true; }
+        is_brackets = left == (91 as i8) and right == (93 as i8);
+        if is_brackets { return true; }
+        is_double_dot = left == (46 as i8) and right == (46 as i8);
+        if is_double_dot { return true; }
+        return left == (126 as i8) and right == (62 as i8);
     }
 
     def is_single_char_symbol(byte : i8) -> Bool {
@@ -390,17 +471,26 @@ class PaulTalkLexer {
 
     def is_keyword(text : String) -> Bool {
         if text == "import" or text == "alias" { return true; }
-        if text == "class" or text == "extends" or text == "where" or text == "regions" { return true; }
-        if text == "def" or text == "extern" or text == "abstract" { return true; }
-        if text == "getter" or text == "getters" or text == "setter" or text == "setters" { return true; }
-        if text == "if" or text == "else" or text == "while" or text == "for" or text == "in" { return true; }
-        if text == "return" or text == "break" or text == "continue" { return true; }
+        if text == "class" or text == "extends" { return true; }
+        if text == "where" or text == "regions" { return true; }
+        if text == "def" or text == "extern" { return true; }
+        if text == "abstract" { return true; }
+        if text == "getter" or text == "getters" { return true; }
+        if text == "setter" or text == "setters" { return true; }
+        if text == "if" or text == "else" or text == "while" { return true; }
+        if text == "for" or text == "in" { return true; }
+        if text == "return" or text == "break" { return true; }
+        if text == "continue" { return true; }
         if text == "true" or text == "false" or text == "nil" { return true; }
-        if text == "and" or text == "or" or text == "not" or text == "is" { return true; }
-        if text == "as" or text == "into" or text == "of" or text == "from" { return true; }
+        if text == "and" or text == "or" { return true; }
+        if text == "not" or text == "is" { return true; }
+        if text == "as" or text == "into" { return true; }
+        if text == "of" or text == "from" { return true; }
         if text == "yield" or text == "sizeof" { return true; }
-        if text == "holds" or text == "no_alias" or text == "all_alias" { return true; }
-        if text == "bit_and" or text == "bit_or" or text == "bit_xor" { return true; }
+        if text == "holds" or text == "no_alias" { return true; }
+        if text == "all_alias" { return true; }
+        if text == "bit_and" or text == "bit_or" { return true; }
+        if text == "bit_xor" { return true; }
         if text == "yields" { return true; }
         return false;
     }
@@ -451,22 +541,30 @@ class PaulTalkParser {
         if self.match_lexeme("for") { return self.parse_for_statement(); }
         if self.match_lexeme("return") { return self.parse_return_statement(); }
         if self.match_lexeme("break") { return self.parse_break_statement(); }
-        if self.match_lexeme("continue") { return self.parse_continue_statement(); }
-        if self.match_lexeme("{") { return self.parse_block_after_open(self.previous()); }
+        if self.match_lexeme("continue") {
+            return self.parse_continue_statement();
+        }
+        if self.match_lexeme("{") {
+            return self.parse_block_after_open(self.previous());
+        }
         return self.parse_binding_assignment_or_expression_statement();
     }
 
     def parse_import_statement() -> ParseNode {
         start = self.previous();
         node = ParseNode{"import_stmt", "", start.line(), start.column()};
-        first = self.expect_identifier("Expected module identifier after 'import'.");
-        node.add(ParseNode{"path_segment", first.lexeme(), first.line(), first.column()});
+        first = self.expect_identifier("Expected module name.");
+        node.add(self.make_token_node("path_segment", first));
         while self.match_lexeme(".") {
-            segment = self.expect_identifier("Expected module identifier after '.'.");
-            node.add(ParseNode{"path_segment", segment.lexeme(), segment.line(), segment.column()});
+            segment = self.expect_import_segment();
+            node.add(self.make_token_node("path_segment", segment));
         }
         self.expect_lexeme(";", "Expected ';' after import statement.");
         return node;
+    }
+
+    def expect_import_segment() -> Token {
+        return self.expect_identifier("Expected module identifier after '.'.");
     }
 
     def parse_alias_statement() -> ParseNode {
@@ -476,7 +574,7 @@ class PaulTalkParser {
         type_node = self.parse_type();
         self.expect_lexeme(";", "Expected ';' after alias declaration.");
 
-        node = ParseNode{"alias_stmt", name.lexeme(), start.line(), start.column()};
+        node = self.node_at("alias_stmt", name, start);
         node.add(type_node);
         return node;
     }
@@ -484,8 +582,10 @@ class PaulTalkParser {
     def parse_extern_statement() -> ParseNode {
         start = self.previous();
         self.expect_lexeme("def", "Expected 'def' after 'extern'.");
-        name = self.expect_identifier("Expected function name in extern declaration.");
-        node = ParseNode{"extern_def", name.lexeme(), start.line(), start.column()};
+        name = self.expect_identifier(
+            "Expected function name in extern declaration."
+        );
+        node = self.node_at("extern_def", name, start);
         self.parse_extern_signature(node);
         self.parse_optional_constraints(node);
         return node;
@@ -494,7 +594,7 @@ class PaulTalkParser {
     def parse_function_definition() -> ParseNode {
         start = self.previous();
         name = self.expect_identifier("Expected function name after 'def'.");
-        node = ParseNode{"function_def", name.lexeme(), start.line(), start.column()};
+        node = self.node_at("function_def", name, start);
         self.parse_function_signature(node);
         node.add(self.parse_block());
         self.parse_optional_constraints(node);
@@ -509,57 +609,84 @@ class PaulTalkParser {
         if self.match_lexeme("extends") {
             extends_node = ParseNode{"extends"};
             extends_node.add(self.parse_type());
-            while self.match_lexeme(",") { extends_node.add(self.parse_type()); }
+            self.parse_comma_types(extends_node);
             node.add(extends_node);
         }
 
-        if self.match_lexeme("where") {
-            where_node = ParseNode{"where"};
-            where_node.add(self.expect_identifier_node("Expected type variable before '<:' in where clause."));
-            self.expect_lexeme("<:", "Expected '<:' in where clause.");
-            where_node.add(self.parse_type());
-            while self.match_lexeme(",") {
-                where_node.add(self.expect_identifier_node("Expected type variable before '<:' in where clause."));
-                self.expect_lexeme("<:", "Expected '<:' in where clause.");
-                where_node.add(self.parse_type());
-            }
-            node.add(where_node);
-        }
+        if self.match_lexeme("where") { node.add(self.parse_where_clause()); }
 
         self.expect_lexeme("{", "Expected '{' to begin class body.");
         body = ParseNode{"class_body"};
 
-        while not self.check_lexeme("}") and not self.is_at_end() { body.add(self.parse_class_member()); }
+        while not self.check_lexeme("}") and not self.is_at_end() {
+            body.add(self.parse_class_member());
+        }
 
         self.expect_lexeme("}", "Expected '}' after class body.");
         node.add(body);
         return node;
     }
 
+    def parse_where_clause() -> ParseNode {
+        where_node = ParseNode{"where"};
+        where_node.add(self.parse_where_bound());
+        while self.match_lexeme(",") {
+            where_node.add(self.parse_where_bound());
+        }
+        return where_node;
+    }
+
+    def parse_comma_types(node : ParseNode) {
+        while self.match_lexeme(",") { node.add(self.parse_type()); }
+    }
+
+    def parse_where_bound() -> ParseNode {
+        bound = ParseNode{"where_bound"};
+        bound.add(self.expect_where_type_variable());
+        self.expect_lexeme("<:", "Expected '<:' in where clause.");
+        bound.add(self.parse_type());
+        return bound;
+    }
+
+    def expect_where_type_variable() -> ParseNode {
+        return self.expect_identifier_node("Expected type variable.");
+    }
+
     def parse_class_member() -> ParseNode {
         if self.match_lexeme("regions") { return self.parse_regions_clause(); }
-        if self.match_lexeme("getter") or self.match_lexeme("setter") or self.match_lexeme("getters") or self.match_lexeme("setters") {
+        if self.match_lexeme("getter") or self.match_lexeme("setter") {
             return self.parse_accessor_directive(self.previous());
         }
-        if self.check_kind(TokenKind.field()) { return self.parse_field_declaration(); }
-        if self.match_lexeme("abstract") or self.match_lexeme("def") { return self.parse_method_definition(self.previous()); }
+        if self.match_lexeme("getters") or self.match_lexeme("setters") {
+            return self.parse_accessor_directive(self.previous());
+        }
+        if self.check_kind(TokenKind.field()) {
+            return self.parse_field_declaration();
+        }
+        if self.match_lexeme("abstract") or self.match_lexeme("def") {
+            return self.parse_method_definition(self.previous());
+        }
         return self.parse_unknown_member();
     }
 
     def parse_regions_clause() -> ParseNode {
         start = self.previous();
         node = ParseNode{"regions_clause", "", start.line(), start.column()};
-        node.add(self.parse_constraint_list("Expected constraint list after 'regions'."));
+        node.add(self.parse_regions_constraints());
         return node;
     }
 
+    def parse_regions_constraints() -> ParseNode {
+        return self.parse_constraint_list("Expected regions constraints.");
+    }
+
     def parse_accessor_directive(start : Token) -> ParseNode {
-        node = ParseNode{"accessor_directive", start.lexeme(), start.line(), start.column()};
+        node = self.make_token_node("accessor_directive", start);
         field = self.expect_field("Expected field name in accessor directive.");
-        node.add(ParseNode{"field", field.lexeme(), field.line(), field.column()});
+        node.add(self.make_token_node("field", field));
         while self.match_lexeme(",") {
             next_field = self.expect_field("Expected field name after ','.");
-            node.add(ParseNode{"field", next_field.lexeme(), next_field.line(), next_field.column()});
+            node.add(self.make_token_node("field", next_field));
         }
         return node;
     }
@@ -568,14 +695,16 @@ class PaulTalkParser {
         field = self.expect_field("Expected field declaration.");
         self.expect_lexeme(":", "Expected ':' after field name.");
         type_node = self.parse_type();
-        node = ParseNode{"field_decl", field.lexeme(), field.line(), field.column()};
+        node = self.make_token_node("field_decl", field);
         node.add(type_node);
         return node;
     }
 
     def parse_method_definition(start : Token) -> ParseNode {
         abstract_method = start.lexeme() == "abstract";
-        if abstract_method { self.expect_lexeme("def", "Expected 'def' after 'abstract'."); }
+        if abstract_method {
+            self.expect_lexeme("def", "Expected 'def' after 'abstract'.");
+        }
 
         first_name = self.expect_method_name();
         receiver = nil;
@@ -586,16 +715,18 @@ class PaulTalkParser {
         }
 
         has_setter_equals = false;
-        if (name.kind() == TokenKind.identifier() or name.kind() == TokenKind.type_identifier()) and self.match_lexeme("=") {
+        if self.is_identifier_like(name) and self.match_lexeme("=") {
             has_setter_equals = true;
         }
 
-        node = ParseNode{"method_def", name.lexeme(), start.line(), start.column()};
-        if abstract_method { node.add(ParseNode{"modifier", "abstract", name.line(), name.column()}); }
-        if receiver is Token { node.add(ParseNode{"class_receiver", receiver.lexeme(), receiver.line(), receiver.column()}); }
+        node = self.node_at("method_def", name, start);
+        if abstract_method { self.add_abstract_modifier(node, name); }
+        if receiver is Token {
+            node.add(self.make_token_node("class_receiver", receiver));
+        }
         if has_setter_equals {
             equals = self.previous();
-            node.add(ParseNode{"setter_suffix", equals.lexeme(), equals.line(), equals.column()});
+            node.add(self.make_token_node("setter_suffix", equals));
         }
 
         self.parse_method_signature(node);
@@ -604,11 +735,21 @@ class PaulTalkParser {
         return node;
     }
 
+    def add_abstract_modifier(node : ParseNode, name : Token) {
+        abstract_token = Token{
+            TokenKind.identifier(),
+            "abstract",
+            name.line(),
+            name.column()
+        };
+        node.add(self.make_token_node("modifier", abstract_token));
+    }
+
     def parse_unknown_member() -> ParseNode {
         token = self.advance();
         message = "Unexpected token in class body: ".extend(token.lexeme());
         self.fail(message);
-        return ParseNode{"unknown_member_token", token.lexeme(), token.line(), token.column()};
+        return self.make_token_node("unknown_member_token", token);
     }
 
     def parse_if_statement() -> ParseNode {
@@ -633,27 +774,33 @@ class PaulTalkParser {
         node = ParseNode{"for_stmt", "", start.line(), start.column()};
 
         if self.match_lexeme("(") {
-            tuple_target = ParseNode{"tuple_target"};
-            first = self.expect_identifier("Expected tuple target identifier.");
-            tuple_target.add(ParseNode{"identifier", first.lexeme(), first.line(), first.column()});
-            self.expect_lexeme(",", "Expected ',' in tuple loop target.");
-            second = self.expect_identifier("Expected tuple target identifier.");
-            tuple_target.add(ParseNode{"identifier", second.lexeme(), second.line(), second.column()});
-            while self.match_lexeme(",") {
-                next = self.expect_identifier("Expected tuple target identifier.");
-                tuple_target.add(ParseNode{"identifier", next.lexeme(), next.line(), next.column()});
-            }
-            self.expect_lexeme(")", "Expected ')' after tuple loop target.");
-            node.add(tuple_target);
+            node.add(self.parse_tuple_loop_target());
         } else {
-            name = self.expect_identifier("Expected loop target identifier after 'for'.");
-            node.add(ParseNode{"identifier", name.lexeme(), name.line(), name.column()});
+            name = self.expect_identifier("Expected loop target identifier.");
+            node.add(self.make_token_node("identifier", name));
         }
 
         self.expect_lexeme("in", "Expected 'in' after loop target.");
         node.add(self.parse_expression());
         node.add(self.parse_block());
         return node;
+    }
+
+    def parse_tuple_loop_target() -> ParseNode {
+        tuple_target = ParseNode{"tuple_target"};
+        tuple_target.add(self.parse_loop_target_identifier());
+        self.expect_lexeme(",", "Expected ',' in tuple loop target.");
+        tuple_target.add(self.parse_loop_target_identifier());
+        while self.match_lexeme(",") {
+            tuple_target.add(self.parse_loop_target_identifier());
+        }
+        self.expect_lexeme(")", "Expected ')' after tuple loop target.");
+        return tuple_target;
+    }
+
+    def parse_loop_target_identifier() -> ParseNode {
+        token = self.expect_identifier("Expected tuple target identifier.");
+        return self.make_token_node("identifier", token);
     }
 
     def parse_return_statement() -> ParseNode {
@@ -681,9 +828,7 @@ class PaulTalkParser {
         lhs = self.parse_expression();
 
         if self.match_lexeme(":") {
-            if not self.is_variable_decl_target(lhs) {
-                self.fail("Variable declaration target must be an identifier.");
-            }
+            self.require_variable_decl_target(lhs);
             node = ParseNode{"var_decl", "", lhs.line(), lhs.column()};
             node.add(lhs);
             node.add(self.parse_type());
@@ -693,9 +838,7 @@ class PaulTalkParser {
         }
 
         if self.match_lexeme("=") {
-            if not self.is_assignable(lhs) {
-                self.fail("Left-hand side of assignment is not assignable.");
-            }
+            self.require_assignable(lhs);
             node = ParseNode{"assignment", "=", lhs.line(), lhs.column()};
             node.add(lhs);
             node.add(self.parse_expression());
@@ -709,14 +852,26 @@ class PaulTalkParser {
         return node;
     }
 
+    def require_variable_decl_target(node : ParseNode) {
+        if self.is_variable_decl_target(node) { return; }
+        self.fail("Variable declaration target must be an identifier.");
+    }
+
+    def require_assignable(node : ParseNode) {
+        if self.is_assignable(node) { return; }
+        self.fail("Left-hand side of assignment is not assignable.");
+    }
+
     def parse_block() -> ParseNode {
-        open = self.expect_lexeme("block_open", "{", "Expected '{' to begin block.");
+        open = self.expect_lexeme("{", "Expected '{' to begin block.");
         return self.parse_block_after_open(open);
     }
 
     def parse_block_after_open(open : Token) -> ParseNode {
         node = ParseNode{"block", "", open.line(), open.column()};
-        while not self.check_lexeme("}") and not self.is_at_end() { node.add(self.parse_statement()); }
+        while not self.check_lexeme("}") and not self.is_at_end() {
+            node.add(self.parse_statement());
+        }
         self.expect_lexeme("}", "Expected '}' after block.");
         return node;
     }
@@ -730,7 +885,7 @@ class PaulTalkParser {
         while self.match_lexeme("or") {
             op = self.previous();
             right = self.parse_logical_and();
-            left = self.make_binary_node("logical_or", op, left, right);
+            left = self.merge("logical_or", op, left, right);
         }
         return left;
     }
@@ -740,7 +895,7 @@ class PaulTalkParser {
         while self.match_lexeme("and") {
             op = self.previous();
             right = self.parse_equality();
-            left = self.make_binary_node("logical_and", op, left, right);
+            left = self.merge("logical_and", op, left, right);
         }
         return left;
     }
@@ -750,35 +905,54 @@ class PaulTalkParser {
         while self.match_lexeme("==") or self.match_lexeme("!=") {
             op = self.previous();
             right = self.parse_comparison();
-            left = self.make_binary_node("equality", op, left, right);
+            left = self.merge("equality", op, left, right);
         }
         return left;
     }
 
     def parse_comparison() -> ParseNode {
         left = self.parse_additive();
-        while self.match_lexeme("<") or self.match_lexeme(">") or self.match_lexeme("<=") or self.match_lexeme(">=") or self.match_lexeme("..") or self.match_lexeme("...") or self.match_lexeme("is") {
+        while self.match_cmp_op() {
             op = self.previous();
-            if op.lexeme() == "is" {
-                left = self.parse_is_comparison(op, left);
-                continue;
-            }
+            is_check = op.lexeme() == "is";
+            if is_check { left = self.parse_is_comparison(op, left); }
+            if is_check { continue; }
             right = self.parse_additive();
-            left = self.make_binary_node("comparison", op, left, right);
+            left = self.merge("comparison", op, left, right);
         }
         return left;
     }
 
+    def match_cmp_op() -> Bool {
+        if self.match_lexeme("<") { return true; }
+        if self.match_lexeme(">") { return true; }
+        if self.match_lexeme("<=") { return true; }
+        if self.match_lexeme(">=") { return true; }
+        if self.match_lexeme("..") { return true; }
+        if self.match_lexeme("...") { return true; }
+        return self.match_lexeme("is");
+    }
+
     def parse_is_comparison(op : Token, left : ParseNode) -> ParseNode {
-        if self.match_lexeme("not") { return self.make_binary_node("is_not", op, left, self.parse_type_operand()); }
-        return self.make_binary_node("is", op, left, self.parse_type_operand());
+        if self.match_lexeme("not") { return self.make_is_not(op, left); }
+        return self.merge("is", op, left, self.parse_type_operand());
+    }
+
+    def make_is_not(op : Token, left : ParseNode) -> ParseNode {
+        right = self.parse_type_operand();
+        return self.merge("is_not", op, left, right);
     }
 
     def parse_type_operand() -> ParseNode {
         right_type = self.parse_type();
-        right = ParseNode{"type_operand", "", right_type.line(), right_type.column()};
+        right = self.make_type_operand_node(right_type);
         right.add(right_type);
         return right;
+    }
+
+    def make_type_operand_node(node : ParseNode) -> ParseNode {
+        token = Token{TokenKind.identifier(), "", node.line(), node.column()};
+        return self.make_empty_pos_node("type_operand", token);
     }
 
     def parse_additive() -> ParseNode {
@@ -786,36 +960,59 @@ class PaulTalkParser {
         while self.match_lexeme("+") or self.match_lexeme("-") {
             op = self.previous();
             right = self.parse_multiplicative();
-            left = self.make_binary_node("additive", op, left, right);
+            left = self.merge("additive", op, left, right);
         }
         return left;
     }
 
     def parse_multiplicative() -> ParseNode {
         left = self.parse_cast_and_vector();
-        while self.match_lexeme("*") or self.match_lexeme("/") or self.match_lexeme("%") or self.match_lexeme("<<") or self.match_lexeme(">>") or self.match_lexeme("bit_and") or self.match_lexeme("bit_or") or self.match_lexeme("bit_xor") {
+        while self.match_mul_op() {
             op = self.previous();
             right = self.parse_cast_and_vector();
-            left = self.make_binary_node("multiplicative", op, left, right);
+            left = self.merge("multiplicative", op, left, right);
         }
         return left;
     }
 
+    def match_mul_op() -> Bool {
+        if self.match_lexeme("*") { return true; }
+        if self.match_lexeme("/") { return true; }
+        if self.match_lexeme("%") { return true; }
+        if self.match_lexeme("<<") { return true; }
+        if self.match_lexeme(">>") { return true; }
+        if self.match_lexeme("bit_and") { return true; }
+        if self.match_lexeme("bit_or") { return true; }
+        return self.match_lexeme("bit_xor");
+    }
+
     def parse_cast_and_vector() -> ParseNode {
         left = self.parse_unary();
-        while self.match_lexeme("as") or self.match_lexeme("into") or self.match_lexeme("of") or self.match_lexeme("from") {
+        while self.match_cast_or_vec_op() {
             op = self.previous();
-            if op.lexeme() == "as" or op.lexeme() == "into" {
-                right_type = self.parse_type();
-                right = ParseNode{"type_operand", "", right_type.line(), right_type.column()};
-                right.add(right_type);
-                left = self.make_binary_node("cast", op, left, right);
-                continue;
-            }
+            is_cast = self.is_cast_operator(op);
+            if is_cast { left = self.parse_cast_binary(op, left); }
+            if is_cast { continue; }
             right = self.parse_unary();
-            left = self.make_binary_node("vector_op", op, left, right);
+            left = self.merge("vector_op", op, left, right);
         }
         return left;
+    }
+
+    def match_cast_or_vec_op() -> Bool {
+        if self.match_lexeme("as") { return true; }
+        if self.match_lexeme("into") { return true; }
+        if self.match_lexeme("of") { return true; }
+        return self.match_lexeme("from");
+    }
+
+    def parse_cast_binary(op : Token, left : ParseNode) -> ParseNode {
+        right = self.parse_type_operand();
+        return self.merge("cast", op, left, right);
+    }
+
+    def is_cast_operator(op : Token) -> Bool {
+        return op.lexeme() == "as" or op.lexeme() == "into";
     }
 
     def parse_unary() -> ParseNode {
@@ -832,22 +1029,19 @@ class PaulTalkParser {
     def parse_postfix() -> ParseNode {
         node = self.parse_primary();
         while true {
-            if self.match_lexeme("(") {
-                node = self.parse_call_suffix(node);
-                continue;
-            }
-
-            if self.match_lexeme(".") {
-                node = self.parse_dot_suffix(node);
-                continue;
-            }
-
-            if self.check_lexeme("{") and self.can_start_object_creation(node) {
-                node = self.parse_object_creation_suffix(node);
-                continue;
-            }
-            return node;
+            start = @cursor;
+            node = self.parse_postfix_suffix(node);
+            if @cursor == start { return node; }
         }
+    }
+
+    def parse_postfix_suffix(node : ParseNode) -> ParseNode {
+        if self.match_lexeme("(") { return self.parse_call_suffix(node); }
+        if self.match_lexeme(".") { return self.parse_dot_suffix(node); }
+        if self.check_lexeme("{") and self.can_start_object_creation(node) {
+            return self.parse_object_creation_suffix(node);
+        }
+        return node;
     }
 
     def parse_call_suffix(node : ParseNode) -> ParseNode {
@@ -860,8 +1054,10 @@ class PaulTalkParser {
     def parse_dot_suffix(node : ParseNode) -> ParseNode {
         if self.match_lexeme("[") { return self.parse_index_suffix(node); }
         name = self.expect_identifier("Expected member name after '.'.");
-        if self.match_lexeme("(") { return self.parse_method_call_suffix(node, name); }
-        member = ParseNode{"member_access", name.lexeme(), name.line(), name.column()};
+        if self.match_lexeme("(") {
+            return self.parse_method_call_suffix(node, name);
+        }
+        member = self.make_token_node("member_access", name);
         member.add(node);
         return member;
     }
@@ -874,14 +1070,14 @@ class PaulTalkParser {
     }
 
     def parse_method_call_suffix(node : ParseNode, name : Token) -> ParseNode {
-        method = ParseNode{"method_call", name.lexeme(), name.line(), name.column()};
+        method = self.make_token_node("method_call", name);
         method.add(node);
         method.add(self.parse_expression_list(")"));
         return method;
     }
 
     def parse_object_creation_suffix(node : ParseNode) -> ParseNode {
-        open = self.expect_lexeme("object_open", "{", "Expected '{' in object creation.");
+        open = self.expect_lexeme("{", "Expected '{' in object creation.");
         object = ParseNode{"object_creation", "", open.line(), open.column()};
         object.add(node);
         object.add(self.parse_expression_list("}"));
@@ -889,13 +1085,24 @@ class PaulTalkParser {
     }
 
     def can_start_object_creation(node : ParseNode) -> Bool {
-        if node.kind() == "identifier" or node.kind() == "type_identifier" { return true; }
-        if node.kind() == "parameterized_name" or node.kind() == "member_access" { return true; }
+        if node.kind() == "identifier" or node.kind() == "type_identifier" {
+            return true;
+        }
+        if self.is_object_creation_kind(node.kind()) {
+            return true;
+        }
         return false;
     }
 
+    def is_object_creation_kind(kind : String) -> Bool {
+        if kind == "parameterized_name" { return true; }
+        return kind == "member_access";
+    }
+
     def parse_primary() -> ParseNode {
-        if self.looks_like_function_literal() { return self.parse_function_literal(); }
+        if self.looks_like_function_literal() {
+            return self.parse_function_literal();
+        }
         if self.match_lexeme("(") { return self.parse_group_or_tuple(); }
         if self.match_lexeme("[") { return self.parse_array_literal(); }
         if self.match_lexeme("{") { return self.parse_dictionary_literal(); }
@@ -905,7 +1112,7 @@ class PaulTalkParser {
             self.expect_lexeme("(", "Expected '(' after 'sizeof'.");
             type_node = self.parse_type();
             self.expect_lexeme(")", "Expected ')' after sizeof type.");
-            node = ParseNode{"sizeof_expr", "", keyword.line(), keyword.column()};
+            node = self.make_empty_pos_node("sizeof_expr", keyword);
             node.add(type_node);
             return node;
         }
@@ -913,7 +1120,7 @@ class PaulTalkParser {
         if self.match_lexeme("yield") {
             keyword = self.previous();
             self.expect_lexeme("(", "Expected '(' after 'yield'.");
-            node = ParseNode{"yield_expr", "", keyword.line(), keyword.column()};
+            node = self.make_empty_pos_node("yield_expr", keyword);
             if not self.check_lexeme(")") { node.add(self.parse_expression()); }
             self.expect_lexeme(")", "Expected ')' after yield expression.");
             return node;
@@ -921,28 +1128,28 @@ class PaulTalkParser {
 
         token = self.peek();
 
-        if token.kind() == TokenKind.int_literal() or token.kind() == TokenKind.float_literal() or token.kind() == TokenKind.hex_literal() or token.kind() == TokenKind.string_literal() or token.kind() == TokenKind.char_literal() {
+        if self.is_literal_kind(token.kind()) {
             self.advance();
-            return ParseNode{"literal", token.lexeme(), token.line(), token.column()};
+            return self.make_token_node("literal", token);
         }
 
-        if token.lexeme() == "true" or token.lexeme() == "false" or token.lexeme() == "nil" {
+        if self.is_literal_keyword(token.lexeme()) {
             self.advance();
-            return ParseNode{"literal", token.lexeme(), token.line(), token.column()};
+            return self.make_token_node("literal", token);
         }
 
         if token.kind() == TokenKind.field() {
             self.advance();
-            return ParseNode{"field_ref", token.lexeme(), token.line(), token.column()};
+            return self.make_token_node("field_ref", token);
         }
 
-        if token.kind() == TokenKind.identifier() or token.kind() == TokenKind.type_identifier() {
+        if self.is_identifier_or_type(token) {
             self.advance();
             node_kind = "identifier";
-            if token.kind() == TokenKind.type_identifier() { node_kind = "type_identifier"; }
-            base = ParseNode{node_kind, token.lexeme(), token.line(), token.column()};
+            if self.is_type_identifier(token) { node_kind = "type_identifier"; }
+            base = self.make_token_node(node_kind, token);
             if not self.match_lexeme("[") { return base; }
-            typed = ParseNode{"parameterized_name", token.lexeme(), token.line(), token.column()};
+            typed = self.make_token_node("parameterized_name", token);
             typed.add(self.parse_type_list("]"));
             return typed;
         }
@@ -951,24 +1158,52 @@ class PaulTalkParser {
         return ParseNode{"unreachable"};
     }
 
+    def is_literal_kind(kind : i32) -> Bool {
+        if kind == TokenKind.int_literal() { return true; }
+        if kind == TokenKind.float_literal() {
+            return true;
+        }
+        if kind == TokenKind.hex_literal() { return true; }
+        if kind == TokenKind.string_literal() {
+            return true;
+        }
+        return kind == TokenKind.char_literal();
+    }
+
+    def is_identifier_or_type(token : Token) -> Bool {
+        return token.kind() == TokenKind.identifier() or
+            token.kind() == TokenKind.type_identifier();
+    }
+
+    def is_type_identifier(token : Token) -> Bool {
+        return token.kind() == TokenKind.type_identifier();
+    }
+
+    def is_literal_keyword(text : String) -> Bool {
+        if text == "true" or text == "false" { return true; }
+        return text == "nil";
+    }
+
     def parse_function_literal() -> ParseNode {
         open = self.expect_lexeme("(", "Expected '(' for function literal.");
         node = ParseNode{"function_literal", "", open.line(), open.column()};
         node.add(self.parse_parameter_list(false));
-        self.expect_lexeme(")", "Expected ')' after function literal parameters.");
+        self.expect_lexeme(")", "Expected ')' after function literal params.");
         if self.match_lexeme("yields") {
             yield_type = ParseNode{"yield_type"};
             yield_type.add(self.parse_type());
             node.add(yield_type);
         }
-        self.expect_lexeme("=>", "Expected '=>' after function literal signature.");
+        self.expect_lexeme("=>", "Expected '=>' after function literal.");
         node.add(self.parse_block());
         return node;
     }
 
     def parse_group_or_tuple() -> ParseNode {
         open = self.previous();
-        if self.match_lexeme(")") { return ParseNode{"tuple_literal", "", open.line(), open.column()}; }
+        if self.match_lexeme(")") {
+            return ParseNode{"tuple_literal", "", open.line(), open.column()};
+        }
         first = self.parse_expression();
         if not self.match_lexeme(",") {
             self.expect_lexeme(")", "Expected ')' after grouped expression.");
@@ -988,11 +1223,7 @@ class PaulTalkParser {
         open = self.previous();
         node = ParseNode{"array_literal", "", open.line(), open.column()};
         if not self.check_lexeme("]") {
-            node.add(self.parse_expression());
-            while self.match_lexeme(",") {
-                if self.check_lexeme("]") { break; }
-                node.add(self.parse_expression());
-            }
+            self.parse_expression_sequence(node, "]");
         }
         self.expect_lexeme("]", "Expected ']' after array literal.");
         if self.match_lexeme("of") {
@@ -1030,14 +1261,19 @@ class PaulTalkParser {
     def parse_expression_list(terminator : String) -> ParseNode {
         node = ParseNode{"expression_list", terminator};
         if not self.check_lexeme(terminator) {
-            node.add(self.parse_expression());
-            while self.match_lexeme(",") {
-                if self.check_lexeme(terminator) { break; }
-                node.add(self.parse_expression());
-            }
+            self.parse_expression_sequence(node, terminator);
         }
-        self.expect_lexeme(terminator, "Expected closing delimiter for expression list.");
+        self.expect_lexeme(terminator, "Expected expression list delimiter.");
         return node;
+    }
+
+    def parse_expression_sequence(node : ParseNode, terminator : String) {
+        node.add(self.parse_expression());
+        while true {
+            if not self.match_lexeme(",") { return; }
+            if self.check_lexeme(terminator) { return; }
+            node.add(self.parse_expression());
+        }
     }
 
     def parse_type() -> ParseNode {
@@ -1045,7 +1281,7 @@ class PaulTalkParser {
         while self.match_lexeme("|") {
             op = self.previous();
             right = self.parse_nilable_type();
-            left = self.make_binary_node("union_type", op, left, right);
+            left = self.merge("union_type", op, left, right);
         }
         return left;
     }
@@ -1054,7 +1290,7 @@ class PaulTalkParser {
         node = self.parse_type_primary();
         while self.match_lexeme("?") {
             op = self.previous();
-            wrapped = ParseNode{"nilable_type", op.lexeme(), op.line(), op.column()};
+            wrapped = self.make_token_node("nilable_type", op);
             wrapped.add(node);
             node = wrapped;
         }
@@ -1065,10 +1301,10 @@ class PaulTalkParser {
         if self.match_lexeme("(") { return self.parse_parenthesized_type(); }
 
         name = self.expect_type_name("Expected type name.");
-        base = ParseNode{"named_type", name.lexeme(), name.line(), name.column()};
+        base = self.make_token_node("named_type", name);
         if not self.match_lexeme("[") { return base; }
 
-        parameterized = ParseNode{"parameterized_type", name.lexeme(), name.line(), name.column()};
+        parameterized = self.make_token_node("parameterized_type", name);
         parameterized.add(self.parse_type_list("]"));
         return parameterized;
     }
@@ -1078,7 +1314,9 @@ class PaulTalkParser {
         params = ParseNode{"type_list"};
         if not self.check_lexeme(")") { self.parse_type_sequence(params); }
         self.expect_lexeme(")", "Expected ')' in type expression.");
-        if self.match_lexeme("->") or self.match_lexeme("yields") { return self.parse_function_type_after_params(open, params); }
+        if self.match_lexeme("->") or self.match_lexeme("yields") {
+            return self.parse_type_after(open, params);
+        }
         grouped = ParseNode{"grouped_type", "", open.line(), open.column()};
         grouped.add(params);
         return grouped;
@@ -1089,9 +1327,9 @@ class PaulTalkParser {
         while self.match_lexeme(",") { node.add(self.parse_type()); }
     }
 
-    def parse_function_type_after_params(open : Token, params : ParseNode) -> ParseNode {
+    def parse_type_after(open : Token, types : ParseNode) -> ParseNode {
         node = ParseNode{"function_type", "", open.line(), open.column()};
-        node.add(params);
+        node.add(types);
         if self.previous().lexeme() != "->" {
             node.add(self.parse_yield_type());
             return node;
@@ -1113,12 +1351,12 @@ class PaulTalkParser {
     def parse_type_list(terminator : String) -> ParseNode {
         node = ParseNode{"type_list", terminator};
         if self.check_lexeme(terminator) {
-            self.expect_lexeme(terminator, "Expected closing delimiter in type list.");
+            self.expect_lexeme(terminator, "Expected type list delimiter.");
             return node;
         }
 
         if self.try_parse_type_count(node) {
-            self.expect_lexeme(terminator, "Expected closing delimiter in type list.");
+            self.expect_lexeme(terminator, "Expected type list delimiter.");
             return node;
         }
 
@@ -1127,36 +1365,37 @@ class PaulTalkParser {
             if self.check_lexeme(terminator) { break; }
             node.add(self.parse_type());
         }
-        self.expect_lexeme(terminator, "Expected closing delimiter in type list.");
+        self.expect_lexeme(terminator, "Expected type list delimiter.");
         return node;
     }
 
     def try_parse_type_count(node : ParseNode) -> Bool {
-        if not self.check_kind(TokenKind.int_literal()) or self.peek_n(1).lexeme() != "x" { return false; }
+        if not self.check_kind(TokenKind.int_literal()) { return false; }
+        if self.peek_n(1).lexeme() != "x" { return false; }
         count = self.advance();
         self.advance();
-        counted = ParseNode{"type_count", count.lexeme(), count.line(), count.column()};
+        counted = self.make_token_node("type_count", count);
         counted.add(self.parse_type());
         node.add(counted);
         return true;
     }
 
     def parse_extern_signature(node : ParseNode) {
-        self.parse_parameters_and_return(node, false);
+        self.parse_parameters(node, false);
     }
 
     def parse_function_signature(node : ParseNode) {
-        self.parse_parameters_and_return(node, false);
+        self.parse_parameters(node, false);
     }
 
     def parse_method_signature(node : ParseNode) {
         self.parse_optional_generic_parameters(node);
-        self.parse_parameters_and_return(node, true);
+        self.parse_parameters(node, true);
     }
 
-    def parse_parameters_and_return(node : ParseNode, allow_field_params : Bool) {
+    def parse_parameters(node : ParseNode, allow_fields : Bool) {
         self.expect_lexeme("(", "Expected '(' in callable signature.");
-        node.add(self.parse_parameter_list(allow_field_params));
+        node.add(self.parse_parameter_list(allow_fields));
         self.expect_lexeme(")", "Expected ')' after callable parameters.");
         self.parse_optional_return_and_yield_types(node);
     }
@@ -1166,14 +1405,22 @@ class PaulTalkParser {
         generics = ParseNode{"generic_params"};
         if not self.check_lexeme("]") {
             first = self.expect_identifier("Expected generic type variable.");
-            generics.add(ParseNode{"identifier", first.lexeme(), first.line(), first.column()});
-            while self.match_lexeme(",") {
-                next = self.expect_identifier("Expected generic type variable.");
-                generics.add(ParseNode{"identifier", next.lexeme(), next.line(), next.column()});
-            }
+            generics.add(self.make_token_node("identifier", first));
+            self.parse_remaining_generic_identifiers(generics);
         }
         self.expect_lexeme("]", "Expected ']' after generic parameters.");
         node.add(generics);
+    }
+
+    def parse_remaining_generic_identifiers(generics : ParseNode) {
+        while self.match_lexeme(",") {
+            generics.add(self.parse_generic_identifier());
+        }
+    }
+
+    def parse_generic_identifier() -> ParseNode {
+        token = self.expect_identifier("Expected generic type variable.");
+        return self.make_token_node("identifier", token);
     }
 
     def parse_optional_return_and_yield_types(node : ParseNode) {
@@ -1201,7 +1448,7 @@ class PaulTalkParser {
     }
 
     def parse_parameter(allow_field_params : Bool) -> ParseNode {
-        name = self.expect_parameter_name(allow_field_params, "Expected parameter name.");
+        name = self.expect_parameter_name(allow_field_params, "Expected param");
         self.expect_lexeme(":", "Expected ':' in parameter declaration.");
         param = ParseNode{"param", name.lexeme(), name.line(), name.column()};
         param.add(self.parse_type());
@@ -1211,19 +1458,19 @@ class PaulTalkParser {
     def parse_optional_constraints(node : ParseNode) {
         if not self.match_lexeme("~>") { return; }
         start = self.previous();
-        constraints = ParseNode{"constraints", "", start.line(), start.column()};
-        constraints.add(self.parse_constraint_list("Expected '{', 'no_alias', or 'all_alias' after '~>'."));
+        constraints = self.make_empty_pos_node("constraints", start);
+        constraints.add(self.parse_constraint_list("Expected constraints."));
         node.add(constraints);
     }
 
     def parse_constraint_list(message : String) -> ParseNode {
         if self.match_lexeme("no_alias") or self.match_lexeme("all_alias") {
             token = self.previous();
-            return ParseNode{"constraint_atom", token.lexeme(), token.line(), token.column()};
+            return self.make_token_node("constraint_atom", token);
         }
 
         open = self.expect_lexeme("{", message);
-        list_node = ParseNode{"constraint_list", "", open.line(), open.column()};
+        list_node = self.make_empty_pos_node("constraint_list", open);
         if self.match_lexeme("}") { return list_node; }
 
         list_node.add(self.parse_constraint());
@@ -1238,7 +1485,7 @@ class PaulTalkParser {
     def parse_constraint() -> ParseNode {
         if self.check_lexeme("(") {
             left_many = self.parse_parenthesized_region_variable_list();
-            holds = self.expect_lexeme("holds", "Expected 'holds' after region variable list.");
+            holds = self.expect_lexeme("holds", "Expected 'holds'.");
             right = self.parse_region_variable();
             node = ParseNode{"many_holds", "", holds.line(), holds.column()};
             node.add(left_many);
@@ -1249,13 +1496,8 @@ class PaulTalkParser {
         left = self.parse_region_variable();
         if self.match_lexeme("holds") {
             holds = self.previous();
-            if self.check_lexeme("(") {
-                right_many = self.parse_parenthesized_region_variable_list();
-                node = ParseNode{"holds_many", "", holds.line(), holds.column()};
-                node.add(left);
-                node.add(right_many);
-                return node;
-            }
+            holds_many = self.check_lexeme("(");
+            if holds_many { return self.parse_holds_many(holds, left); }
             right = self.parse_region_variable();
             node = ParseNode{"holds_one", "", holds.line(), holds.column()};
             node.add(left);
@@ -1263,37 +1505,49 @@ class PaulTalkParser {
             return node;
         }
 
-        eq = self.expect_lexeme("==", "Expected 'holds' or '==' in constraint.");
-        chain = ParseNode{"equality_chain", eq.lexeme(), eq.line(), eq.column()};
+        eq = self.expect_lexeme("==", "Expected 'holds' or '=='.");
+        chain = self.make_token_node("equality_chain", eq);
         chain.add(left);
         chain.add(self.parse_region_variable());
-        while self.match_lexeme("==") { chain.add(self.parse_region_variable()); }
+        while self.match_lexeme("==") {
+            chain.add(self.parse_region_variable());
+        }
         return chain;
     }
 
+    def parse_holds_many(holds : Token, left : ParseNode) -> ParseNode {
+        right_many = self.parse_parenthesized_region_variable_list();
+        node = ParseNode{"holds_many", "", holds.line(), holds.column()};
+        node.add(left);
+        node.add(right_many);
+        return node;
+    }
+
     def parse_parenthesized_region_variable_list() -> ParseNode {
-        open = self.expect_lexeme("(", "Expected '(' for region variable list.");
-        list_node = ParseNode{"region_variable_list", "", open.line(), open.column()};
+        open = self.expect_lexeme("(", "Expected '(' for region vars.");
+        list_node = self.make_empty_pos_node("region_variable_list", open);
         list_node.add(self.parse_region_variable());
-        while self.match_lexeme(",") { list_node.add(self.parse_region_variable()); }
+        while self.match_lexeme(",") {
+            list_node.add(self.parse_region_variable());
+        }
         self.expect_lexeme(")", "Expected ')' after region variable list.");
         return list_node;
     }
 
     def parse_region_variable() -> ParseNode {
         segment = self.expect_region_segment("Expected region variable.");
-        node = ParseNode{"region_variable", "", segment.line(), segment.column()};
-        node.add(ParseNode{"segment", segment.lexeme(), segment.line(), segment.column()});
+        node = self.make_empty_pos_node("region_variable", segment);
+        node.add(self.make_token_node("segment", segment));
         while self.match_lexeme(".") {
-            next_segment = self.expect_region_segment("Expected identifier or field after '.'.");
-            node.add(ParseNode{"segment", next_segment.lexeme(), next_segment.line(), next_segment.column()});
+            next_segment = self.expect_region_segment("Expected identifier.");
+            node.add(self.make_token_node("segment", next_segment));
         }
         return node;
     }
 
     def looks_like_function_literal() -> Bool {
         if not self.check_lexeme("(") { return false; }
-        closing = self.find_matching_token(@cursor, "(", ")");
+        closing = self.find_match_token(@cursor, "(", ")");
         if closing is not i32 { return false; }
         next = self.token_at(closing + 1);
         if next.lexeme() == "=>" { return true; }
@@ -1309,26 +1563,41 @@ class PaulTalkParser {
         return false;
     }
 
-    def find_matching_token(start_index : i32, open : String, close : String) -> i32? {
+    def find_match_token(start : i32, open : String, close : String) -> i32? {
         depth = 0;
-        index = start_index;
+        index = start;
         while index < @tokens.size() {
             token = @tokens.[index];
             if token.lexeme() == open { depth = depth + 1; }
-            if token.lexeme() == close {
-                depth = depth - 1;
-                if depth == 0 { return index; }
-            }
+            if token.lexeme() == close { depth = depth - 1; }
+            if token.lexeme() == close and depth == 0 { return index; }
             index = index + 1;
         }
         return nil;
     }
 
-    def make_binary_node(kind : String, op : Token, left : ParseNode, right : ParseNode) -> ParseNode {
-        node = ParseNode{kind, op.lexeme(), op.line(), op.column()};
+    def merge(kind : String, token : Token, left : Node, right : Node) -> Node {
+        node = ParseNode{kind, token.lexeme(), token.line(), token.column()};
         node.add(left);
         node.add(right);
         return node;
+    }
+
+    def make_empty_pos_node(kind : String, token : Token) -> ParseNode {
+        return ParseNode{kind, "", token.line(), token.column()};
+    }
+
+    def make_token_node(kind : String, token : Token) -> ParseNode {
+        return ParseNode{kind, token.lexeme(), token.line(), token.column()};
+    }
+
+    def node_at(kind : String, token : Token, anchor : Token) -> Node {
+        return ParseNode{kind, token.lexeme(), anchor.line(), anchor.column()};
+    }
+
+    def is_identifier_like(token : Token) -> Bool {
+        if token.kind() == TokenKind.identifier() { return true; }
+        return token.kind() == TokenKind.type_identifier();
     }
 
     def is_variable_decl_target(node : ParseNode) -> Bool {
@@ -1336,9 +1605,15 @@ class PaulTalkParser {
     }
 
     def is_assignable(node : ParseNode) -> Bool {
-        if self.is_variable_decl_target(node) or node.kind() == "field_ref" { return true; }
-        if node.kind() == "call_expr" or node.kind() == "method_call" { return true; }
-        if node.kind() == "object_creation" or node.kind() == "index_expr" { return true; }
+        if self.is_variable_decl_target(node) or node.kind() == "field_ref" {
+            return true;
+        }
+        if node.kind() == "call_expr" or node.kind() == "method_call" {
+            return true;
+        }
+        if node.kind() == "object_creation" or node.kind() == "index_expr" {
+            return true;
+        }
         if node.kind() == "tuple_literal" { return true; }
         if node.kind() != "group_expr" { return false; }
         if node.children().size() != 1 { return false; }
@@ -1389,12 +1664,6 @@ class PaulTalkParser {
         return self.peek().kind() == kind;
     }
 
-    def expect_lexeme(label : String, lexeme : String, message : String) -> Token {
-        if self.check_lexeme(lexeme) { return self.advance(); }
-        self.fail(message);
-        return Token{TokenKind.eof(), label, 0, 0};
-    }
-
     def expect_lexeme(lexeme : String, message : String) -> Token {
         if self.check_lexeme(lexeme) { return self.advance(); }
         self.fail(message);
@@ -1403,7 +1672,7 @@ class PaulTalkParser {
 
     def expect_identifier(message : String) -> Token {
         token = self.peek();
-        if token.kind() == TokenKind.identifier() or token.kind() == TokenKind.type_identifier() {
+        if self.is_identifier_kind(token.kind()) {
             self.advance();
             return token;
         }
@@ -1413,12 +1682,12 @@ class PaulTalkParser {
 
     def expect_identifier_node(message : String) -> ParseNode {
         token = self.expect_identifier(message);
-        return ParseNode{"identifier", token.lexeme(), token.line(), token.column()};
+        return self.make_token_node("identifier", token);
     }
 
     def expect_type_name(message : String) -> Token {
         token = self.peek();
-        if token.kind() == TokenKind.identifier() or token.kind() == TokenKind.type_identifier() {
+        if self.is_identifier_kind(token.kind()) {
             self.advance();
             return token;
         }
@@ -1438,7 +1707,11 @@ class PaulTalkParser {
 
     def expect_region_segment(message : String) -> Token {
         token = self.peek();
-        if token.kind() == TokenKind.field() or token.kind() == TokenKind.identifier() or token.kind() == TokenKind.type_identifier() {
+        if token.kind() == TokenKind.field() {
+            self.advance();
+            return token;
+        }
+        if self.is_identifier_kind(token.kind()) {
             self.advance();
             return token;
         }
@@ -1457,30 +1730,35 @@ class PaulTalkParser {
 
     def expect_method_name() -> Token {
         token = self.peek();
-        if token.kind() == TokenKind.identifier() or token.kind() == TokenKind.type_identifier() or token.kind() == TokenKind.field() {
+        if token.kind() == TokenKind.field() {
+            self.advance();
+            return token;
+        }
+        if self.is_identifier_kind(token.kind()) {
             self.advance();
             return token;
         }
         if token.kind() == TokenKind.symbol() {
-            if token.lexeme() == "+" or token.lexeme() == "-" or token.lexeme() == "*" or token.lexeme() == "/" {
-                self.advance();
-                return token;
-            }
-            if token.lexeme() == "==" or token.lexeme() == "!=" {
-                self.advance();
-                return token;
-            }
-            if token.lexeme() == "<=" or token.lexeme() == ">=" or token.lexeme() == "<" or token.lexeme() == ">" {
-                self.advance();
-                return token;
-            }
-            if token.lexeme() == "[]" or token.lexeme() == "[]=" {
-                self.advance();
-                return token;
-            }
+            is_operator = self.is_method_operator_lexeme(token.lexeme());
+            if is_operator { self.advance(); }
+            if is_operator { return token; }
         }
         self.fail("Expected method or operator name.");
         return Token{TokenKind.eof(), "<method>", 0, 0};
+    }
+
+    def is_identifier_kind(kind : i32) -> Bool {
+        if kind == TokenKind.identifier() { return true; }
+        return kind == TokenKind.type_identifier();
+    }
+
+    def is_method_operator_lexeme(text : String) -> Bool {
+        if text == "+" or text == "-" { return true; }
+        if text == "*" or text == "/" { return true; }
+        if text == "==" or text == "!=" { return true; }
+        if text == "<=" or text == ">=" { return true; }
+        if text == "<" or text == ">" { return true; }
+        return text == "[]" or text == "[]=";
     }
 
     def fail(message : String) {
@@ -1495,3 +1773,4 @@ def parse_paultalk(source : String) -> ParseNode {
     parser = PaulTalkParser{tokens};
     return parser.parse_program();
 }
+
