@@ -23,6 +23,7 @@ import re
 import platform
 import graph_utils as nx
 import hashlib
+import shlex
 
 # When compiled with Nuitka, DIST_FOLDER will point to the ptalk.dist folder
 DIST_FOLDER = Path(__file__).parent.resolve()
@@ -352,7 +353,18 @@ class CompilationJob:
             *self.settings.hotcold.split(),
         )
         opt = (OPT_PATH, "-S", "-", passes, *settings)
-        optimized_dbg_ir = run_checked(opt, input_text=linked_dbg_ir)
+        hoist_allocas = (OPT_PATH, "-S", "-", "--bugpoint-enable-legacy-pm", "--alloca-hoisting")
+        
+        # We can't express this as a single -passes= pipeline because --alloca-hoisting
+        # is legacy-PM-only, while --passes= uses the new PM. Run as one shell pipeline.
+        pipeline = " | ".join((
+            shell_join(opt),
+            shell_join(hoist_allocas),
+            shell_join(opt),
+            shell_join(hoist_allocas),
+        ))
+        optimized_dbg_ir = run_checked(pipeline, input_text=linked_dbg_ir, shell=True)
+
         self.write_side_ir(self.build.out_optimized_dbg, optimized_dbg_ir)
 
         optimized_ir = run_checked((OPT_PATH, "-S", "-", "--strip-debug"), input_text=optimized_dbg_ir)
@@ -404,10 +416,7 @@ class CompilationJob:
         exe_path = self.output_path.parent / f"{self.output_path.stem}.exe"
         
         # lld with -flavor link is equivalent to lld-link
-        lld_link = (LLD_PATH, "-flavor", "link", self.obj_path, f"/out:{exe_path}",
-            "/stack:8388608", "/ignore:longsections",
-            "/debug", *includes
-        )
+        lld_link = (LLD_PATH, "-flavor", "link", self.obj_path, f"/out:{exe_path}", "/ignore:longsections", "/debug", *includes)
         run_checked(lld_link)
 
         self.record_time("after_lld")
@@ -448,7 +457,7 @@ class OptimizationSettings:
         opt_levels = {
             1:"default<O1>",
             2:"default<O2>",
-            3:"hotcoldsplit,default<O3>,default<O3>,hotcoldsplit" # a pass so nice we run it twice
+            3:"hotcoldsplit,default<O3>" # a pass so nice we run it twice
         }
         return opt_levels[1] if self.debug_mode else opt_levels[3]
 
@@ -681,6 +690,15 @@ def run_checked(command, *, input_text=None, shell=False) -> str:
             message = f"{message}\nyou probably wrote something infinitely recursive"
         raise Exception(message)
     return cmd_out.stdout
+
+def shell_join(command) -> str:
+    parts = [str(part) for part in command]
+    if os.name == "nt":
+        # cmd.exe treats < and > as redirection even when they appear inside arguments,
+        # and our -passes strings contain default<O3>. Escape to keep them literal.
+        cmdline = subprocess.list2cmdline(parts)
+        return cmdline.replace("<", "^<").replace(">", "^>")
+    return shlex.join(parts)
 
 def add_source_directories(input_path):
 
