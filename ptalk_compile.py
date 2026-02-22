@@ -404,7 +404,10 @@ class CompilationJob:
         exe_path = self.output_path.parent / f"{self.output_path.stem}.exe"
         
         # lld with -flavor link is equivalent to lld-link
-        lld_link = (LLD_PATH, "-flavor", "link", self.obj_path, f"/out:{exe_path}", "/ignore:longsections", "/debug", *includes)
+        lld_link = (LLD_PATH, "-flavor", "link", self.obj_path, f"/out:{exe_path}",
+            "/stack:8388608", "/ignore:longsections",
+            "/debug", *includes
+        )
         run_checked(lld_link)
 
         self.record_time("after_lld")
