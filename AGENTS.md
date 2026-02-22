@@ -89,3 +89,5 @@ python ptalk_build.py
 - Stuff in the "Design Docs" folder is more likely to be outdated or speculative
 - If you hit a PaulTalk compiler bug when trying to write substantive code, stop and report the bug to me
 	- Don't contort your code to work around the bug
+- Reuse a build directory so that compilation can use cached artifacts
+	- Don't recompile the entire stdlib every time you want to compile a single file
