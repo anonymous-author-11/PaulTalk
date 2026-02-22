@@ -11,6 +11,42 @@ class SizedIterator[T] extends Iterator[T] {
     abstract def remaining() -> i32 {}
 }
 
+class ASCII {
+    def Self.is_whitespace(byte : i8) -> Bool {
+        if byte == (32 as i8) { return true; }
+        if byte == (9 as i8) { return true; }
+        if byte == (10 as i8) { return true; }
+        if byte == (11 as i8) { return true; }
+        if byte == (12 as i8) { return true; }
+        if byte == (13 as i8) { return true; }
+        return false;
+    }
+
+    def Self.is_alpha(byte : i8) -> Bool {
+        code = byte as i32;
+        if code >= 65 and code <= 90 { return true; }
+        if code >= 97 and code <= 122 { return true; }
+        return false;
+    }
+
+    def Self.is_digit(byte : i8) -> Bool {
+        code = byte as i32;
+        return code >= 48 and code <= 57;
+    }
+
+    def Self.is_alnum(byte : i8) -> Bool {
+        return ASCII.is_alpha(byte) or ASCII.is_digit(byte);
+    }
+
+    def Self.is_hex(byte : i8) -> Bool {
+        if ASCII.is_digit(byte) { return true; }
+        code = byte as i32;
+        if code >= 65 and code <= 70 { return true; }
+        if code >= 97 and code <= 102 { return true; }
+        return false;
+    }
+}
+
 class UTF8 {
 
     // returns (codepoint_seed, bytes_needed)
@@ -52,15 +88,6 @@ class UTF8 {
         return 0;
     }
 
-    def Self.is_ascii_whitespace(byte : i8) -> Bool {
-        if byte == (32 as i8) { return true; }
-        if byte == (9 as i8) { return true; }
-        if byte == (10 as i8) { return true; }
-        if byte == (11 as i8) { return true; }
-        if byte == (12 as i8) { return true; }
-        if byte == (13 as i8) { return true; }
-        return false;
-    }
 }
 
 /*
@@ -267,14 +294,14 @@ class String extends List[Character], Representable {
     }
     def lead_whitespace() -> i32 {
         for i in 0..@byte_length {
-            if not UTF8.is_ascii_whitespace(@bytes.[i]) { return i; }
+            if not ASCII.is_whitespace(@bytes.[i]) { return i; }
         }
         return @byte_length;
     }
     def trail_whitespace() -> i32 {
         for i in 0..@byte_length {
             idx = @byte_length - i - 1;
-            if not UTF8.is_ascii_whitespace(@bytes.[idx]) { return i; }
+            if not ASCII.is_whitespace(@bytes.[idx]) { return i; }
         }
         return @byte_length;
     }
@@ -517,6 +544,128 @@ class StringBytes extends List[i8] {
         return StringByteWriter{@str};
     } ~> { ret.string == @str, ret.dest_reg == @elems_reg }
 
+    def bounds_check(index : i32) yields OutOfBounds {
+        length = @str.byte_length();
+        if index < 0 or index >= length {
+            yield(OutOfBounds.new(length, index));
+        }
+    }
+
+    def [](indices : i32) -> i8 yields OutOfBounds {
+        self.bounds_check(indices);
+        return @str.unchecked_index(indices);
+    }
+
+    def []=(index : i32, value : i8) yields OutOfBounds {
+        self.bounds_check(index);
+        @str.unchecked_insert(index, value);
+    }
+
+    def slice(start : i32, end_exclusive : i32) -> StringBytesView yields OutOfBounds {
+        length = @str.byte_length();
+        if start < 0 or start > length { yield(OutOfBounds.new(length, start)); }
+        if end_exclusive < start or end_exclusive > length {
+            yield(OutOfBounds.new(length, end_exclusive));
+        }
+        return StringBytesView{@str, start, end_exclusive};
+    }
+
+    def [](indices : Range) -> StringBytesView {
+        iterator = indices.iterator();
+        first = iterator.next();
+        if first is not i32 { return self.slice(0, 0); }
+
+        last = first;
+        next = iterator.next();
+        while next is i32 {
+            if next != last + 1 { yield(InvalidSliceRange{}); }
+            last = next;
+            next = iterator.next();
+        }
+        return self.slice(first, last + 1);
+    }
+
+}
+
+class StringBytesView extends Collection[i8] {
+    @str : String
+    @start : i32
+    @end_exclusive : i32
+
+    regions { @elems_reg == @str.elems_reg }
+
+    getters @str, @start, @end_exclusive
+
+    def init(@str : String, @start : i32, @end_exclusive : i32) {
+    }
+
+    def size() -> i32 {
+        return @end_exclusive - @start;
+    }
+
+    def iterator() -> ConstantTimeIterator[i8] {
+        return StringBytesViewIterator{self};
+    }
+
+    def bounds_check(index : i32) yields OutOfBounds {
+        length = self.size();
+        if index < 0 or index >= length {
+            yield(OutOfBounds.new(length, index));
+        }
+    }
+
+    def [](indices : i32) -> i8 yields OutOfBounds {
+        self.bounds_check(indices);
+        return @str.unchecked_index(@start + indices);
+    }
+
+    def [](indices : Range) -> StringBytesView {
+        iterator = indices.iterator();
+        first = iterator.next();
+        if first is not i32 { return self.slice(0, 0); }
+
+        last = first;
+        next = iterator.next();
+        while next is i32 {
+            if next != last + 1 { yield(InvalidSliceRange{}); }
+            last = next;
+            next = iterator.next();
+        }
+        return self.slice(first, last + 1);
+    }
+
+    def slice(start : i32, end_exclusive : i32) -> StringBytesView yields OutOfBounds {
+        length = self.size();
+        if start < 0 or start > length { yield(OutOfBounds.new(length, start)); }
+        if end_exclusive < start or end_exclusive > length {
+            yield(OutOfBounds.new(length, end_exclusive));
+        }
+        return StringBytesView{@str, @start + start, @start + end_exclusive};
+    }
+
+    def to_string() -> String yields InvalidUTF8Error {
+        source_len = @str.byte_length();
+
+        if @start < source_len {
+            start_byte = @str.unchecked_index(@start);
+            if UTF8.is_continuation(start_byte as i32) { yield(InvalidUTF8Error{}); }
+        }
+        if @end_exclusive < source_len {
+            end_byte = @str.unchecked_index(@end_exclusive);
+            if UTF8.is_continuation(end_byte as i32) { yield(InvalidUTF8Error{}); }
+        }
+
+        n_bytes = self.size();
+        bytes = Buffer[i8].new(n_bytes);
+        n_chars = 0;
+        for i in 0..n_bytes {
+            byte = @str.unchecked_index(@start + i);
+            bytes.[i] = byte;
+            if not UTF8.is_continuation(byte as i32) { n_chars = n_chars + 1; }
+        }
+        return String{bytes, n_bytes, n_chars, n_bytes};
+    }
+
 }
 
 // Iterator can trust that the source string is valid.
@@ -545,6 +694,24 @@ class StringBytesIterator extends ConstantTimeIterator[i8] {
     def next() -> i8? {
         if @cursor >= @str.byte_length() { return nil; }
         next = @str.unchecked_index(@cursor);
+        @cursor = @cursor + 1;
+        return next;
+    }
+}
+
+class StringBytesViewIterator extends ConstantTimeIterator[i8] {
+    @view : StringBytesView
+    @cursor : i32
+
+    regions { @elems_reg == @view.elems_reg }
+
+    def init(@view : StringBytesView) {
+        @cursor = 0;
+    }
+
+    def next() -> i8? {
+        if @cursor >= @view.size() { return nil; }
+        next = @view.str().unchecked_index(@view.start() + @cursor);
         @cursor = @cursor + 1;
         return next;
     }
@@ -953,6 +1120,15 @@ class Exception {
 class InvalidUTF8Error extends Exception {
     def init() {
         @message = "Invalid UTF-8 sequence encountered during string conversion.";
+        @line_number = 0;
+        @file_name = "";
+        @stacktrace = Stacktrace{};
+    }
+}
+
+class InvalidSliceRange extends Exception {
+    def init() {
+        @message = "Slice range must be contiguous and increasing by 1.";
         @line_number = 0;
         @file_name = "";
         @stacktrace = Stacktrace{};
