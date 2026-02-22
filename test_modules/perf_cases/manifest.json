@@ -44,6 +44,21 @@
       "name": "hash_remove_random",
       "file": "hash_remove_random.mini",
       "expected_output": "ok"
+    },
+    {
+      "name": "mandelbrot",
+      "file": "mandelbrot_benchmark.mini",
+      "expected_output": "ok"
+    },
+    {
+      "name": "nbody",
+      "file": "nbody_benchmark.mini",
+      "expected_output": "ok"
+    },
+    {
+      "name": "spectral_norm",
+      "file": "spectral_norm_benchmark.mini",
+      "expected_output": "ok"
     }
   ]
 }

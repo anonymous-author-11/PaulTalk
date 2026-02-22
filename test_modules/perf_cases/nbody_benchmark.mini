@@ -1,0 +1,185 @@
+import std;
+
+class Planet {
+    @x : f64
+    @y : f64
+    @z : f64
+    @vx : f64
+    @vy : f64
+    @vz : f64
+    @mass : f64
+
+    getters @x, @y, @z, @vx, @vy, @vz, @mass
+
+    def init(
+        @x : f64,
+        @y : f64,
+        @z : f64,
+        @vx : f64,
+        @vy : f64,
+        @vz : f64,
+        @mass : f64
+    ) {}
+
+    def offset_velocity(dx : f64, dy : f64, dz : f64) {
+        @vx = @vx + dx;
+        @vy = @vy + dy;
+        @vz = @vz + dz;
+    }
+
+    def momentum_x() -> f64 { return @vx * @mass; }
+    def momentum_y() -> f64 { return @vy * @mass; }
+    def momentum_z() -> f64 { return @vz * @mass; }
+
+    def advance(dt : f64) {
+        @x = @x + dt * @vx;
+        @y = @y + dt * @vy;
+        @z = @z + dt * @vz;
+    }
+
+    def distance(other : Planet) -> f64 {
+        dx = @x - other.x();
+        dy = @y - other.y();
+        dz = @z - other.z();
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    def kinetic_energy() -> f64 {
+        speed2 = @vx * @vx + @vy * @vy + @vz * @vz;
+        return 0.5 * @mass * speed2;
+    }
+
+    def potential_energy(other : Planet) -> f64 {
+        return (@mass * other.mass()) / self.distance(other);
+    }
+}
+
+def build_bodies(days_per_year : f64, solar_mass : f64) -> Array[Planet] {
+    bodies = Array[Planet].new(5);
+    bodies.append(Planet.new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, solar_mass));
+    bodies.append(Planet.new(
+        4.841431442464721,
+        -1.1603200440274284,
+        -0.10362204447112311,
+        0.001660076642744037 * days_per_year,
+        0.007699011184197404 * days_per_year,
+        -0.0000690460016972063 * days_per_year,
+        0.0009547919384243266 * solar_mass
+    ));
+    bodies.append(Planet.new(
+        8.34336671824458,
+        4.124798564124305,
+        -0.4035234171143214,
+        -0.002767425107268624 * days_per_year,
+        0.004998528012349172 * days_per_year,
+        0.00002304172975737639 * days_per_year,
+        0.0002858859806661308 * solar_mass
+    ));
+    bodies.append(Planet.new(
+        12.894369562139131,
+        -15.111151401698631,
+        -0.22330757889265573,
+        0.002964601375647616 * days_per_year,
+        0.0023784717395948095 * days_per_year,
+        -0.000029658956854023755 * days_per_year,
+        0.00004366244043351563 * solar_mass
+    ));
+    bodies.append(Planet.new(
+        15.379697114850916,
+        -25.919314609987964,
+        0.17925877295037118,
+        0.0026806777249038933 * days_per_year,
+        0.001628241700382423 * days_per_year,
+        -0.00009515922545197159 * days_per_year,
+        0.000051513890204661145 * solar_mass
+    ));
+    return bodies;
+}
+
+def offset_momentum(bodies : Array[Planet], solar_mass : f64) {
+    px = 0.0;
+    py = 0.0;
+    pz = 0.0;
+    for i in 0..bodies.size() {
+        body = bodies.unchecked_index(i);
+        px = px + body.momentum_x();
+        py = py + body.momentum_y();
+        pz = pz + body.momentum_z();
+    }
+    sun = bodies.unchecked_index(0);
+    sun.offset_velocity(-px / solar_mass, -py / solar_mass, -pz / solar_mass);
+}
+
+def apply_gravity_pair(left : Planet, right : Planet, dt : f64) {
+    dx = left.x() - right.x();
+    dy = left.y() - right.y();
+    dz = left.z() - right.z();
+    distance2 = dx * dx + dy * dy + dz * dz;
+    mag = dt / (distance2 * Math.sqrt(distance2));
+    left_mass = left.mass();
+    right_mass = right.mass();
+
+    left.offset_velocity(
+        -dx * right_mass * mag,
+        -dy * right_mass * mag,
+        -dz * right_mass * mag
+    );
+    right.offset_velocity(
+        dx * left_mass * mag,
+        dy * left_mass * mag,
+        dz * left_mass * mag
+    );
+}
+
+def advance(bodies : Array[Planet], dt : f64, steps : i32) {
+    n = bodies.size();
+    for step in 0..steps {
+        for i in 0..n {
+            left = bodies.unchecked_index(i);
+            start = i + 1;
+            for j in start..n {
+                right = bodies.unchecked_index(j);
+                apply_gravity_pair(left, right, dt);
+            }
+        }
+
+        for i in 0..n {
+            body = bodies.unchecked_index(i);
+            body.advance(dt);
+        }
+    }
+}
+
+def energy(bodies : Array[Planet]) -> f64 {
+    total = 0.0;
+    n = bodies.size();
+    for i in 0..n {
+        left = bodies.unchecked_index(i);
+        total = total + left.kinetic_energy();
+
+        start = i + 1;
+        for j in start..n {
+            right = bodies.unchecked_index(j);
+            total = total - left.potential_energy(right);
+        }
+    }
+    return total;
+}
+
+pi = 3.141592653589793;
+solar_mass = 4.0 * pi * pi;
+days_per_year = 365.24;
+
+bodies = build_bodies(days_per_year, solar_mass);
+offset_momentum(bodies, solar_mass);
+advance(bodies, 0.01, 500000);
+
+final_energy = energy(bodies);
+expected_energy = -0.1690965666661507;
+error = Math.abs(final_energy - expected_energy);
+
+if error < 0.000001 {
+    IO.print("ok");
+} else {
+    IO.print("bad");
+}

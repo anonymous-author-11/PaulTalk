@@ -1,0 +1,71 @@
+import std;
+
+def new_f64_array(n : i32, initial : f64) -> Array[f64] {
+    arr = Array[f64].new(n);
+    for i in 0..n {
+        arr.append(initial);
+    }
+    return arr;
+}
+
+def eval_a(i : i32, j : i32) -> f64 {
+    ij = i + j;
+    denom = ((ij * (ij + 1)) / 2) + i + 1;
+    return 1.0 / (denom as f64);
+}
+
+def multiply_av(n : i32, input : Array[f64], output : Array[f64]) {
+    for i in 0..n {
+        sum = 0.0;
+        for j in 0..n {
+            sum = sum + eval_a(i, j) * input.unchecked_index(j);
+        }
+        output.unchecked_insert(i, sum);
+    }
+}
+
+def multiply_atv(n : i32, input : Array[f64], output : Array[f64]) {
+    for i in 0..n {
+        sum = 0.0;
+        for j in 0..n {
+            sum = sum + eval_a(j, i) * input.unchecked_index(j);
+        }
+        output.unchecked_insert(i, sum);
+    }
+}
+
+def multiply_at_av(n : i32, input : Array[f64], temp : Array[f64], output : Array[f64]) {
+    multiply_av(n, input, temp);
+    multiply_atv(n, temp, output);
+}
+
+def spectral_norm(n : i32) -> f64 {
+    u = new_f64_array(n, 1.0);
+    v = new_f64_array(n, 0.0);
+    temp = new_f64_array(n, 0.0);
+
+    for iter in 0..10 {
+        multiply_at_av(n, u, temp, v);
+        multiply_at_av(n, v, temp, u);
+    }
+
+    v_b_v = 0.0;
+    v_v = 0.0;
+    for i in 0..n {
+        v_b_v = v_b_v + u.unchecked_index(i) * v.unchecked_index(i);
+        v_v = v_v + v.unchecked_index(i) * v.unchecked_index(i);
+    }
+
+    return Math.sqrt(v_b_v / v_v);
+}
+
+n = 500;
+result = spectral_norm(n);
+expected = 1.2742241159529055;
+error = Math.abs(result - expected);
+
+if error < 0.000001 {
+    IO.print("ok");
+} else {
+    IO.print("bad");
+}
