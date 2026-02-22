@@ -87,3 +87,5 @@ python ptalk_build.py
 
 - There are a fair number of random / temporary / old files in this project
 - Stuff in the "Design Docs" folder is more likely to be outdated or speculative
+- If you hit a PaulTalk compiler bug when trying to write substantive code, stop and report the bug to me
+	- Don't contort your code to work around the bug
