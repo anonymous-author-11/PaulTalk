@@ -40,6 +40,20 @@ class CompilerPositiveTestsMixin:
             expected_output = ""
             self.compile_and_run(mini_code, expected_output, "while_condition_string_literal_codegen_regression")
 
+    def test_paultalk_parser_class_method_and_setter_smoke(self):
+            mini_code = """
+                import std;
+                import paultalk_parser;
+
+                src = "class Box { @x : i32 def Self.make(v : i32) -> Box { return Box{v}; } def value=(v : i32) { @x = v; } }";
+                tree = parse_paultalk(src);
+                IO.print(tree.kind());
+                IO.print(tree.children().size());
+                IO.print(tree.children().[0].kind());
+            """
+            expected_output = "program\n1\nclass_def"
+            self.compile_and_run(mini_code, expected_output, "paultalk_parser_class_method_and_setter_smoke")
+
     def test_file_stuff(self):
             mini_code = """
                 import core;

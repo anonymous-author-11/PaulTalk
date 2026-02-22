@@ -17,7 +17,8 @@ STRESS_TEST_NAMES = {
     "test_end_to_end",
     "test_array_iteration",
     "test_matmul",
-    "test_prime_sieves"
+    "test_prime_sieves",
+    "test_paultalk_parser_class_method_and_setter_smoke"
 }
 
 

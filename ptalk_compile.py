@@ -256,7 +256,11 @@ class CompilationJob:
         to_llvm_dialect = f"{MLIR_OPT_PATH} {scf} {arith} {func} {index} {memref} {cf} {ub} {vec} --reconcile-unrealized-casts"
         cmd_out = subprocess.run(to_llvm_dialect, text=True, shell=True, input=module_str, capture_output=True)
         if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
-        module_str = cmd_out.stdout[14:-3].replace("module","// ----- module")[9:]
+        # Keep the existing outer-module trimming behavior, but only rewrite
+        # actual module header lines so string literals are never modified.
+        module_str = cmd_out.stdout[14:-3]
+        module_str = re.sub(r"(?m)^(\s*)module\b", r"\1// ----- module", module_str)
+        module_str = module_str[9:]
         self.metrics.llvm_ir_lines = module_str.count("\n")
         self.record_time("after_mlir_opt_lower")
         self.time_printer.print(f'Time to mlir-opt lower: {self.time_between("before_mlir_opt_lower", "after_mlir_opt_lower")} seconds')
@@ -354,7 +358,8 @@ class CompilationJob:
         )
         opt = (OPT_PATH, "-S", "-", passes, *settings)
         hoist_allocas = (OPT_PATH, "-S", "-", "--bugpoint-enable-legacy-pm", "--alloca-hoisting")
-        
+
+        # We want to hoist allocas after heap2stack, as h2s will create allocas in non-entry blocks
         # We can't express this as a single -passes= pipeline because --alloca-hoisting
         # is legacy-PM-only, while --passes= uses the new PM. Run as one shell pipeline.
         pipeline = " | ".join((
