@@ -1,11 +1,17 @@
 import argparse
+import os
 import sys
 import unittest
 
 from test_modules.base_case import CompilerTestCase
 from test_modules.compiler_negative import CompilerNegativeTestsMixin
 from test_modules.compiler_positive import CompilerPositiveTestsMixin
-from test_modules.contracts import CompilerCliContractTests, DependencyCacheTests, ParserContractTests
+from test_modules.contracts import (
+    CompilerCliContractTests,
+    DependencyCacheTests,
+    LintContractTests,
+    ParserContractTests,
+)
 from test_modules.performance import CompilerPerformanceTests
 
 
@@ -72,8 +78,22 @@ def main():
         default="full",
         help="Select test suite tier."
     )
+    parser.add_argument(
+        "--build-dir",
+        help=(
+            "Reuse an existing build directory for compiled dependency cache. "
+            "When set, the directory is preserved after tests complete."
+        ),
+    )
     parser.add_argument("-v", "--verbose", action="store_true", help="Run with verbose output.")
     args, remaining = parser.parse_known_args()
+
+    if args.build_dir:
+        build_dir = os.path.abspath(args.build_dir)
+        if not os.path.isdir(build_dir):
+            parser.error(f"--build-dir must point to an existing directory: {args.build_dir}")
+        os.environ["PTALK_TEST_BUILD_DIR"] = build_dir
+        os.environ["PTALK_TEST_PRESERVE_BUILD_DIR"] = "1"
 
     suite = build_suite(args.suite, selected_names=remaining if remaining else None)
     runner = unittest.TextTestRunner(verbosity=2 if args.verbose else 1)

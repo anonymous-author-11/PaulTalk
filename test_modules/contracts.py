@@ -11,7 +11,8 @@ from .base_case import CompilerTestCase
 
 class ParserContractTests(unittest.TestCase):
 
-    def _write_temp_source(self, source: str, suffix: str = ".mini") -> Path:
+    @staticmethod
+    def _write_temp_source(source: str, suffix: str = ".mini") -> Path:
         with tempfile.NamedTemporaryFile("w", suffix=suffix, delete=False, encoding="utf-8") as tmp:
             tmp.write(source)
             return Path(tmp.name)
@@ -81,7 +82,8 @@ class CompilerCliContractTests(CompilerTestCase):
 
 class DependencyCacheTests(CompilerTestCase):
 
-    def _run_compile_subprocess(self, input_file: Path, output_file: Path, build_dir: Path):
+    @staticmethod
+    def _run_compile_subprocess(input_file: Path, output_file: Path, build_dir: Path):
         cmd = [
             sys.executable,
             "ptalk_compile.py",
@@ -104,3 +106,34 @@ class CompilerSubprocessContractTests(unittest.TestCase):
             with self.assertRaises(Exception) as cm:
                 run_checked((Path("executables/opt.exe"), "-S", "-"))
             self.assertIn("you probably wrote something infinitely recursive", str(cm.exception))
+
+
+class LintContractTests(unittest.TestCase):
+
+    @staticmethod
+    def _run_ptalk_lint(source: str) -> subprocess.CompletedProcess[str]:
+        with tempfile.NamedTemporaryFile("w", suffix=".mini", delete=False, encoding="utf-8") as tmp:
+            tmp.write(source)
+            source_path = Path(tmp.name)
+
+        try:
+            command = [
+                sys.executable,
+                "tools/lint_ptalk_code.py",
+                str(source_path),
+            ]
+            return subprocess.run(command, capture_output=True, text=True, encoding="utf-8")
+        finally:
+            source_path.unlink(missing_ok=True)
+
+    def test_ptalk_lint_ignores_semicolon_inside_fn_literal(self):
+        result = self._run_ptalk_lint(
+            "operations.contains((a : String, b : String) => { a == b; });\n"
+        )
+        self.assertEqual(result.returncode, 0, msg=result.stdout + result.stderr)
+        self.assertIn("PASS", result.stdout)
+
+    def test_ptalk_lint_flags_two_semicolons_outside_fn_literal(self):
+        result = self._run_ptalk_lint("a(); b();\n")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("R2-one-semicolon", result.stdout)

@@ -22,6 +22,11 @@ class CompilerTestCase(unittest.TestCase):
     def build_dir(cls) -> Path:
         return Path(os.environ.get("PTALK_TEST_BUILD_DIR", "./test_build"))
 
+    @classmethod
+    def preserve_build_dir(cls) -> bool:
+        value = os.environ.get("PTALK_TEST_PRESERVE_BUILD_DIR", "").strip().lower()
+        return value in {"1", "true", "yes", "on"}
+
     @staticmethod
     def _force_remove_tree(path: Path):
         if not path.exists():
@@ -51,7 +56,8 @@ class CompilerTestCase(unittest.TestCase):
         if _cleanup_registered:
             return
         atexit.register(cls._force_remove_tree, cls.bin_dir())
-        atexit.register(cls._force_remove_tree, cls.build_dir())
+        if not cls.preserve_build_dir():
+            atexit.register(cls._force_remove_tree, cls.build_dir())
         _cleanup_registered = True
 
     def tearDown(self):
