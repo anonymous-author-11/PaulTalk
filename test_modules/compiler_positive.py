@@ -21,6 +21,25 @@ class CompilerPositiveTestsMixin:
             expected_output = "nil"
             self.run_mini_code(mini_code, expected_output, "type_inference_break_stmt")
 
+    def test_while_condition_string_literal_codegen_regression(self):
+            mini_code = """
+                import std;
+
+                class Probe {
+                    def init() {}
+                    def check(s : String) -> Bool { return s == "x"; }
+
+                    def run() {
+                        while self.check("x") { break; }
+                    }
+                }
+
+                probe = Probe{};
+                probe.run();
+            """
+            expected_output = ""
+            self.compile_and_run(mini_code, expected_output, "while_condition_string_literal_codegen_regression")
+
     def test_file_stuff(self):
             mini_code = """
                 import core;
