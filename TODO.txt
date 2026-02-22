@@ -700,6 +700,8 @@ DONE:
 
 TODO:
 
+- Add "in" infix operator to desguar to .contains
+- Allow more ways to specify element type of array
 - Argc and argv
 - Should self even point to virtual regions if they aren't identified with a field?
 - See how timings would suffer if we used malloc for bump_alloc
