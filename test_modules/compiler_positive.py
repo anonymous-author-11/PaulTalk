@@ -294,6 +294,21 @@ class CompilerPositiveTestsMixin:
             expected_output = "0\n6\n3\nnil"
             self.run_mini_code(mini_code, expected_output, "string_byte_index_of")
 
+    def test_string_bytes_view_slice_and_into_string(self):
+            mini_code = """
+                import std;
+
+                text = "电脑abc电脑";
+                sub1 = text.bytes().slice(6, 9) into String;
+                IO.print(sub1);
+                sub2 = text.bytes().[6..9] into String;
+                IO.print(sub2);
+                first = text.bytes().[0];
+                IO.print(first as i32);
+            """
+            expected_output = "abc\nabc\n-25"
+            self.compile_and_run(mini_code, expected_output, "string_bytes_view_slice_and_into_string")
+
     def test_string_trim_helpers(self):
             mini_code = """
                 import core;
