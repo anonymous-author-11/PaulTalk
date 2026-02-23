@@ -267,6 +267,7 @@ class CompilationJob:
         self.record_time("after_mlir_opt_lower")
         self.time_printer.print(f'Time to mlir-opt lower: {self.time_between("before_mlir_opt_lower", "after_mlir_opt_lower")} seconds')
 
+        # We wait to translate immarg constants so the optimizer doesn't hoist them
         module_str = module_str.replace("immarg.constant", "llvm.mlir.constant")
 
         mlir_translate = f"{MLIR_TRANSLATE_PATH} --split-input-file --output-split-marker=\"// -----\" --mlir-to-llvmir"
