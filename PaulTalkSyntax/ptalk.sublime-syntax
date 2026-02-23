@@ -113,14 +113,14 @@ contexts:
 
   string:
     - meta_scope: string.quoted.double.mini
-    - match: '\\'
+    - match: '\\.'
       scope: constant.character.escape.mini
     - match: '"'
       pop: true
 
   char:
     - meta_scope: string.quoted.single.mini
-    - match: '\\'
+    - match: '\\.'
       scope: constant.character.escape.mini
     - match: "'"
       pop: true
