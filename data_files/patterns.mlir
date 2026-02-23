@@ -117,7 +117,7 @@ module @patterns {
     %root = pdl.operation "mid.invariant"(%ptr : !pdl.value) {"num_bytes" = %num_bytes_attr} -> (%result_type : !pdl.type)
     pdl.rewrite %root {
       %i64_type = pdl.type : i64
-      %ptr_size = pdl.operation "llvm.mlir.constant" {"value" = %num_bytes_attr} -> (%i64_type : !pdl.type)
+      %ptr_size = pdl.operation "immarg.constant" {"value" = %num_bytes_attr} -> (%i64_type : !pdl.type)
       %ptr_size_result = pdl.result 0 of %ptr_size
       %intrin = pdl.attribute = "llvm.invariant.start.p0"
       %opsegsize = pdl.attribute = array<i32: 2, 0>

@@ -251,19 +251,23 @@ class CompilationJob:
         cf = "--convert-cf-to-llvm"
         ub = "--convert-ub-to-llvm"
         vec = "--convert-vector-to-llvm"
+        unreg = "--allow-unregistered-dialect"
 
         self.record_time("before_mlir_opt_lower")
-        to_llvm_dialect = f"{MLIR_OPT_PATH} {scf} {arith} {func} {index} {memref} {cf} {ub} {vec} --reconcile-unrealized-casts"
+        to_llvm_dialect = f"{MLIR_OPT_PATH} {unreg} {scf} {arith} {func} {index} {memref} {cf} {ub} {vec} --reconcile-unrealized-casts"
         cmd_out = subprocess.run(to_llvm_dialect, text=True, shell=True, input=module_str, capture_output=True)
         if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
-        # Keep the existing outer-module trimming behavior, but only rewrite
-        # actual module header lines so string literals are never modified.
+
+        # only rewrite actual module header lines so string literals are never modified.
         module_str = cmd_out.stdout[14:-3]
         module_str = re.sub(r"(?m)^(\s*)module\b", r"\1// ----- module", module_str)
         module_str = module_str[9:]
+
         self.metrics.llvm_ir_lines = module_str.count("\n")
         self.record_time("after_mlir_opt_lower")
         self.time_printer.print(f'Time to mlir-opt lower: {self.time_between("before_mlir_opt_lower", "after_mlir_opt_lower")} seconds')
+
+        module_str = module_str.replace("immarg.constant", "llvm.mlir.constant")
 
         mlir_translate = f"{MLIR_TRANSLATE_PATH} --split-input-file --output-split-marker=\"// -----\" --mlir-to-llvmir"
         cmd_out = subprocess.run(mlir_translate, text=True, shell=True, input=module_str, capture_output=True)
