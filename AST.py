@@ -803,17 +803,27 @@ class StringLiteral(Expression):
 class CharLiteral(Expression):
     value: str
 
+    @property
+    def n_codepoints(self):
+        return len(self.value)
+
+    @property
+    def n_bytes(self):
+        return len(self.value.encode('utf-8'))
+
+    @property
+    def codepoint(self):
+        return ord(self.value)
+
     def codegen(self, scope):
-        codepoint = ord(self.value)
         cp_info = NodeInfo.from_info(self.info, "codepoint")
-        codepoint_literal = IntegerLiteral(cp_info, codepoint, 32)
+        codepoint_literal = IntegerLiteral(cp_info, self.codepoint, 32)
         char = ObjectCreation(self.info, self.info.id + "_char_literal", self.exprtype(scope), [codepoint_literal])
         return char.codegen(scope)
 
     def exprtype(self, scope):
-        n_codepoints = len(self.value)
-        if n_codepoints != 1:
-            raise Exception(f"{self.info}: Character literal '{self.value}' is not a single Unicode codepoint; it is {n_codepoints}")
+        if self.n_codepoints != 1:
+            raise Exception(f"{self.info}: Character literal '{self.value}' is not a single Unicode codepoint; it is {self.n_codepoints}")
         char_type = FatPtr.basic("Character")
         return scope.type_env.validated_type(self.info, char_type)
 
@@ -1270,6 +1280,9 @@ class As(Expression):
             operand = self.operand.codegen(scope)
             return operand
 
+        if isinstance(self.operand, CharLiteral) and to_integer:
+            return IntegerLiteral(self.info, self.operand.codepoint, to_typ.bitwidth).codegen(scope)
+
         operand_type = self.operand.exprtype(scope)
         operand = self.operand.codegen(scope)
         
@@ -1300,6 +1313,12 @@ class As(Expression):
             return to_typ
         to_float = isinstance(to_typ, Float)
         if from_integer and to_float: return to_typ
+
+        if isinstance(self.operand, CharLiteral) and to_integer:
+            if self.operand.n_bytes * 8 > to_typ.bitwidth:
+                raise Exception(f"{self.info} Char literal {self.operand.value} requires {self.operand.n_bytes} bytes to be represented, and cannot fit in a {to_typ}")
+            return IntegerLiteral(self.info, self.operand.codepoint, to_typ.bitwidth).exprtype(scope)
+
         if not scope.subtype(operand_type, to_typ):
             raise Exception(f"{self.info} Can't cast {operand_type} to {to_typ}")
         return to_typ
