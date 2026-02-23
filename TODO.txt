@@ -700,19 +700,39 @@ DONE:
 
 TODO:
 
+- Allow 'h' as i8 for char literals which are known to be one byte
+- paultalk_parser line 151, type inference bug
+- Might want to actually fix Self type
+	- Constructing an instance of Self
+	- Casting to Self
+	- Class method dispatch on Self
+- Blocking parse tree serialization: stringification for primitives
+	- Blocking stringification for primitives: snprintf
+		- Blocking snprintf: variadic extern defs
 - Add "in" infix operator to desguar to .contains
 - Allow more ways to specify element type of array
+	- Currently supported:
+		- my_array = [Addition{}, Multiplication{}] of Operation
+	- Should be supported
+		- my_array : Array[Operation] = [Addition{}, Multiplication{}]
+		- my_array = [Addition{}, Multiplication{}] as Array[Operation]
+	- Allow same syntax for tuple literals
 - Argc and argv
+	- argc -> i32
+	- argv -> Array[String]
 - Should self even point to virtual regions if they aren't identified with a field?
 - See how timings would suffer if we used malloc for bump_alloc
 	- Then possibly also realloc
 - Region runtime has the potential to make programs faster
-	- Realloc for contiguous (even non-contiguous?) collections
+	- Realloc for contiguous collections
 	- Cache locality: used-together objects allocated together
 	- Even just reusing garbage memory will improve locality
-- Line numbers for errors are wrong
+- Line numbers for errors are wrong among 'special' (pre-core) files
 - Add type inference for 'into' expressions
+	- "int_array into Iterable"
+	- Iterable[i32] inferred
 - Consider To[T] as a builtin type
+	- Auto-casts passed arguments using 'into'
 	- in AST: Into.concrete_method -> MethodDef | None
 
 - Might want to work on intrinsics
