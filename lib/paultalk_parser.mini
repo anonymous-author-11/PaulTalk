@@ -169,7 +169,7 @@ class PaulTalkLexer {
             self.scan_string_literal(line, column, start);
             return true;
         }
-        if byte == (39 as i8) {
+        if byte == ('\'' as i8) {
             self.scan_char_literal(line, column, start);
             return true;
         }
@@ -353,7 +353,7 @@ class PaulTalkLexer {
         char_count = 0;
         while not self.at_end() {
             byte = self.peek_byte();
-            is_quote = byte == (39 as i8);
+            is_quote = byte == ('\'' as i8);
             is_escape = byte == ('\\' as i8);
             bad_count = is_quote and char_count != 1;
             if bad_count { yield(ParseError{bad_message, line, col}); }
