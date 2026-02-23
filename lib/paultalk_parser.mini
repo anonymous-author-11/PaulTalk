@@ -22,35 +22,33 @@ class ParseError extends Exception {
     }
 }
 
-class TokenKind {
-    def Self.eof() -> i32 { return 0; }
-    def Self.identifier() -> i32 { return 1; }
-    def Self.type_identifier() -> i32 { return 2; }
-    def Self.field() -> i32 { return 3; }
-    def Self.int_literal() -> i32 { return 4; }
-    def Self.float_literal() -> i32 { return 5; }
-    def Self.hex_literal() -> i32 { return 6; }
-    def Self.string_literal() -> i32 { return 7; }
-    def Self.char_literal() -> i32 { return 8; }
-    def Self.keyword() -> i32 { return 9; }
-    def Self.symbol() -> i32 { return 10; }
-}
-
 class Token extends Representable {
-    @kind : i32
     @lexeme : String
     @line : i32
     @column : i32
 
-    getters @kind, @lexeme, @line, @column
+    getters @lexeme, @line, @column
 
-    def init(@kind : i32, @lexeme : String, @line : i32, @column : i32) {
+    def init(@lexeme : String, @line : i32, @column : i32) {
     }
 
     def is_lexeme(text : String) -> Bool { return @lexeme == text; }
 
     def repr() -> String { return @lexeme; }
 }
+
+class EOF extends Token {}
+class Identifier extends Token {}
+class TypeIdentifier extends Identifier {}
+class Field extends Token {}
+class Literal extends Token {}
+class IntLiteral extends Literal {}
+class FloatLiteral extends Literal {}
+class HexLiteral extends Literal {}
+class StringLiteral extends Literal {}
+class CharLiteral extends Literal {}
+class Keyword extends Token {}
+class Symbol extends Token {}
 
 class ParseNode extends Representable {
     @kind : String
@@ -150,17 +148,16 @@ class PaulTalkLexer {
             if handled { continue; }
             self.scan_symbol(line, column, start);
         }
-
-        self.append_token(TokenKind.eof(), "<eof>", @line, @column);
+        @tokens.append(EOF{"<eof>", @line, @column});
         return @tokens;
     }
 
     def scan_token(byte : i8, line : i32, column : i32, start : i32) -> Bool {
-        if byte == (64 as i8) {
+        if byte == ('@' as i8) {
             self.scan_field(line, column, start);
             return true;
         }
-        if self.is_identifier_start_byte(byte) {
+        if ASCII.is_alpha(byte) {
             self.scan_identifier(line, column, start);
             return true;
         }
@@ -168,7 +165,7 @@ class PaulTalkLexer {
             self.scan_number(line, column, start);
             return true;
         }
-        if byte == (34 as i8) {
+        if byte == ('"' as i8) {
             self.scan_string_literal(line, column, start);
             return true;
         }
@@ -195,7 +192,7 @@ class PaulTalkLexer {
     def advance_byte() -> i8 {
         byte = self.peek_byte();
         @cursor = @cursor + 1;
-        if byte == (10 as i8) {
+        if byte == ('\n' as i8) {
             @line = @line + 1;
             @column = 1;
             return byte;
@@ -204,18 +201,8 @@ class PaulTalkLexer {
         return byte;
     }
 
-    def slice_bytes(start : i32, end_exclusive : i32) -> String {
-        if end_exclusive <= start { return ""; }
-        return @source.bytes().slice(start, end_exclusive).to_string();
-    }
-
-    def emit(kind : i32, line : i32, column : i32, start : i32) {
-        lexeme = self.slice_bytes(start, @cursor);
-        self.append_token(kind, lexeme, line, column);
-    }
-
-    def append_token(kind : i32, lexeme : String, line : i32, column : i32) {
-        @tokens.append(Token{kind, lexeme, line, column});
+    def slice_from(start : i32) -> String {
+    	return @source.bytes().slice(start, @cursor).to_string();
     }
 
     def skip_ignored() {
@@ -224,19 +211,19 @@ class PaulTalkLexer {
             is_ws = ASCII.is_whitespace(byte);
             if is_ws { self.advance_byte(); }
             if is_ws { continue; }
-            if byte != (47 as i8) { return; }
+            if byte != ('/' as i8) { return; }
             if not self.skip_comment_after_slash() { return; }
         }
     }
 
     def skip_comment_after_slash() -> Bool {
-        if self.peek_byte_at(1) == (47 as i8) {
+        if self.peek_byte_at(1) == ('/' as i8) {
             self.advance_byte();
             self.advance_byte();
             self.skip_line_comment();
             return true;
         }
-        if self.peek_byte_at(1) != (42 as i8) { return false; }
+        if self.peek_byte_at(1) != ('*' as i8) { return false; }
         self.advance_byte();
         self.advance_byte();
         self.skip_block_comment();
@@ -245,7 +232,7 @@ class PaulTalkLexer {
 
     def skip_line_comment() {
         while not self.at_end() {
-            if self.peek_byte() == (10 as i8) { return; }
+            if self.peek_byte() == ('\n' as i8) { return; }
             self.advance_byte();
         }
     }
@@ -253,8 +240,8 @@ class PaulTalkLexer {
     def skip_block_comment() {
         while not self.at_end() {
             byte = self.advance_byte();
-            if byte != (42 as i8) { continue; }
-            if self.peek_byte() != (47 as i8) { continue; }
+            if byte != ('*' as i8) { continue; }
+            if self.peek_byte() != ('/' as i8) { continue; }
             self.advance_byte();
             return;
         }
@@ -269,7 +256,8 @@ class PaulTalkLexer {
         while self.is_identifier_continue_byte(self.peek_byte()) {
             self.advance_byte();
         }
-        self.emit(TokenKind.field(), line, column, start);
+        text = self.slice_from(start);
+        @tokens.append(Field{text, line, column});
     }
 
     def scan_identifier(line : i32, column : i32, start : i32) {
@@ -277,15 +265,17 @@ class PaulTalkLexer {
         while self.is_identifier_continue_byte(self.peek_byte()) {
             self.advance_byte();
         }
-        text = self.slice_bytes(start, @cursor);
+        text = self.slice_from(start);
         if self.is_keyword(text) {
-            self.append_token(TokenKind.keyword(), text, line, column);
+        	@tokens.append(Keyword{text, line, column});
             return;
         }
-        kind = TokenKind.identifier();
         first = @source.unchecked_index(start) as i32;
-        if first >= 65 and first <= 90 { kind = TokenKind.type_identifier(); }
-        self.append_token(kind, text, line, column);
+        if first >= 65 and first <= 90 {
+        	@tokens.append(TypeIdentifier{text, line, column});
+        	return;
+    	}
+		@tokens.append(Identifier{text, line, column});
     }
 
     def scan_number(line : i32, column : i32, start : i32) {
@@ -296,17 +286,17 @@ class PaulTalkLexer {
             bad_message = "Expected hex digits.";
             if bad_hex { yield(ParseError{bad_message, line, column}); }
             self.consume_hex_digits();
-            self.emit(TokenKind.hex_literal(), line, column, start);
+            @tokens.append(HexLiteral{self.slice_from(start), line, column});
             return;
         }
         self.consume_digits();
-        kind = TokenKind.int_literal();
-        if self.starts_float_fraction() {
-            self.advance_byte();
-            self.consume_digits();
-            kind = TokenKind.float_literal();
+        if not self.starts_float_fraction() {
+        	@tokens.append(IntLiteral{self.slice_from(start), line, column});
+        	return;
         }
-        self.emit(kind, line, column, start);
+        self.advance_byte();
+        self.consume_digits();
+        @tokens.append(FloatLiteral{self.slice_from(start), line, column});
     }
 
     def consume_hex_digits() {
@@ -322,26 +312,25 @@ class PaulTalkLexer {
     }
 
     def starts_hex_literal() -> Bool {
-        if self.peek_byte() != (48 as i8) { return false; }
-        return self.peek_byte_at(1) == (120 as i8) or
-            self.peek_byte_at(1) == (88 as i8);
+        if self.peek_byte() != ('0' as i8) { return false; }
+        return self.peek_byte_at(1) == ('x' as i8) or
+            self.peek_byte_at(1) == ('X' as i8);
     }
 
     def starts_float_fraction() -> Bool {
-        if self.peek_byte() != (46 as i8) { return false; }
-        if self.peek_byte_at(1) == (46 as i8) { return false; }
+        if self.peek_byte() != ('.' as i8) { return false; }
+        if self.peek_byte_at(1) == ('.' as i8) { return false; }
         return ASCII.is_digit(self.peek_byte_at(1));
     }
 
-    def scan_string_literal(line : i32, column : i32, start : i32) {
-        kind = TokenKind.string_literal();
+    def scan_string_literal(line : i32, col : i32, start : i32) {
         self.advance_byte();
         while not self.at_end() {
             byte = self.peek_byte();
-            is_quote = byte == (34 as i8);
-            is_escape = byte == (92 as i8);
-            if byte == (34 as i8) { self.advance_byte(); }
-            if is_quote { self.emit(kind, line, column, start); }
+            is_quote = byte == ('"' as i8);
+            is_escape = byte == ('\\' as i8);
+            if byte == ('"' as i8) { self.advance_byte(); }
+            if is_quote { self.emit_string(line, col, start); }
             if is_quote { return; }
             if is_escape { self.advance_byte(); }
             if is_escape and self.at_end() { break; }
@@ -349,11 +338,15 @@ class PaulTalkLexer {
             if is_escape { continue; }
             self.advance_byte();
         }
-        yield(ParseError{"Unterminated string literal.", line, column});
+        yield(ParseError{"Unterminated string literal.", line, col});
     }
 
-    def scan_char_literal(line : i32, column : i32, start : i32) {
-        kind = TokenKind.char_literal();
+    def emit_string(line : i32, col : i32, start : i32) {
+    	str = StringLiteral{self.slice_from(start), line, col};
+    	@tokens.append(str);
+    }
+
+    def scan_char_literal(line : i32, col : i32, start : i32) {
         bad_message = "Char literal must have one char.";
         line_message = "Character literal cannot span lines.";
         self.advance_byte();
@@ -361,85 +354,90 @@ class PaulTalkLexer {
         while not self.at_end() {
             byte = self.peek_byte();
             is_quote = byte == (39 as i8);
-            is_escape = byte == (92 as i8);
+            is_escape = byte == ('\\' as i8);
             bad_count = is_quote and char_count != 1;
-            if bad_count { yield(ParseError{bad_message, line, column}); }
+            if bad_count { yield(ParseError{bad_message, line, col}); }
             if is_quote { self.advance_byte(); }
-            if is_quote { self.emit(kind, line, column, start); }
+            if is_quote { self.emit_char(line, col, start); }
             if is_quote { return; }
             if is_escape { self.advance_byte(); }
             if is_escape and self.at_end() { break; }
             if is_escape { self.advance_byte(); }
             if is_escape { char_count = char_count + 1; }
             if is_escape { continue; }
-            is_newline = byte == (10 as i8);
-            if is_newline { yield(ParseError{line_message, line, column}); }
+            is_newline = byte == ('\n' as i8);
+            if is_newline { yield(ParseError{line_message, line, col}); }
             self.advance_byte();
             char_count = char_count + 1;
         }
-        yield(ParseError{"Unterminated char literal.", line, column});
+        yield(ParseError{"Unterminated char literal.", line, col});
     }
 
-    def scan_symbol(line : i32, column : i32, start : i32) {
+    def emit_char(line : i32, col : i32, start : i32) {
+    	str = CharLiteral{self.slice_from(start), line, col};
+    	@tokens.append(str);
+    }
+
+    def scan_symbol(line : i32, col : i32, start : i32) {
         first_byte = self.peek_byte();
         second_byte = self.peek_byte_at(1);
         third_byte = self.peek_byte_at(2);
-        is_three = first_byte == (91 as i8) and second_byte == (93 as i8);
-        if is_three { is_three = third_byte == (61 as i8); }
+        is_three = first_byte == ('[' as i8) and second_byte == (']' as i8);
+        if is_three { is_three = third_byte == ('=' as i8); }
         if not is_three {
-            is_three = first_byte == (46 as i8) and second_byte == (46 as i8);
-            if is_three { is_three = third_byte == (46 as i8); }
+            is_three = first_byte == ('.' as i8) and second_byte == ('.' as i8);
+            if is_three { is_three = third_byte == ('.' as i8); }
         }
-        if is_three { self.emit_symbol_bytes(3, line, column, start); }
+        if is_three { self.emit_symbol_bytes(3, line, col, start); }
         if is_three { return; }
         if self.is_two_char_symbol(first_byte, second_byte) {
-            self.emit_symbol_bytes(2, line, column, start);
+            self.emit_symbol_bytes(2, line, col, start);
             return;
         }
         if self.is_single_char_symbol(first_byte) {
-            self.emit_symbol_bytes(1, line, column, start);
+            self.emit_symbol_bytes(1, line, col, start);
             return;
         }
 
         self.advance_byte();
-        bad = self.slice_bytes(start, @cursor);
-        message = "Unexpected character: ".extend(bad);
-        yield(ParseError{message, line, column});
+        message = "Unexpected character: ".extend(self.slice_from(start));
+        yield(ParseError{message, line, col});
     }
 
-    def emit_symbol_bytes(count : i32, line : i32, column : i32, start : i32) {
+    def emit_symbol_bytes(count : i32, line : i32, col : i32, start : i32) {
         while count > 0 {
             self.advance_byte();
             count = count - 1;
         }
-        self.emit(TokenKind.symbol(), line, column, start);
+        @tokens.append(Symbol{self.slice_from(start), line, col});
     }
 
     def is_two_char_symbol(left : i8, right : i8) -> Bool {
-        if left == (61 as i8) {
-            return right == (62 as i8) or right == (61 as i8);
+        if left == ('=' as i8) {
+            return right == ('>' as i8) or right == ('=' as i8);
         }
-        if left == (60 as i8) {
-            is_less_group = right == (61 as i8) or right == (58 as i8);
-            return is_less_group or right == (60 as i8);
+        if left == ('<' as i8) {
+            is_less_group = right == ('=' as i8) or right == (':' as i8);
+            return is_less_group or right == ('<' as i8);
         }
-        if left == (62 as i8) {
-            return right == (61 as i8) or right == (62 as i8);
+        if left == ('>' as i8) {
+            return right == ('=' as i8) or right == ('>' as i8);
         }
-        if left == (45 as i8) { return right == (62 as i8); }
-        if left == (33 as i8) { return right == (61 as i8); }
-        if left == (91 as i8) { return right == (93 as i8); }
-        if left == (46 as i8) { return right == (46 as i8); }
-        if left == (126 as i8) { return right == (62 as i8); }
+        if left == ('-' as i8) { return right == ('>' as i8); }
+        if left == ('!' as i8) { return right == ('=' as i8); }
+        if left == ('[' as i8) { return right == (']' as i8); }
+        if left == ('.' as i8) { return right == ('.' as i8); }
+        if left == ('~' as i8) { return right == ('>' as i8); }
         return false;
     }
 
     def is_single_char_symbol(byte : i8) -> Bool {
-        code = byte as i32;
-        if code == 37 or code == 91 or code == 93 { return true; }
-        if code >= 40 and code <= 47 { return true; }
-        if code >= 58 and code <= 63 { return true; }
-        return code >= 123 and code <= 125;
+        if byte == ('%' as i8) or byte == ('[' as i8) or byte == (']' as i8) {
+            return true;
+        }
+        if byte >= ('(' as i8) and byte <= ('/' as i8) { return true; }
+        if byte >= (':' as i8) and byte <= ('?' as i8) { return true; }
+        return byte >= ('{' as i8) and byte <= ('}' as i8);
     }
 
     def is_keyword(text : String) -> Bool {
@@ -456,7 +454,7 @@ class PaulTalkLexer {
     }
 
     def is_identifier_start_byte(byte : i8) -> Bool {
-        return ASCII.is_alpha(byte) or byte == (95 as i8);
+        return ASCII.is_alpha(byte) or byte == ('_' as i8);
     }
 
     def is_identifier_continue_byte(byte : i8) -> Bool {
@@ -464,11 +462,11 @@ class PaulTalkLexer {
     }
 
     def is_digit_or_underscore(byte : i8) -> Bool {
-        return ASCII.is_digit(byte) or byte == (95 as i8);
+        return ASCII.is_digit(byte) or byte == ('_' as i8);
     }
 
     def is_hex_digit_or_underscore(byte : i8) -> Bool {
-        return ASCII.is_hex(byte) or byte == (95 as i8);
+        return ASCII.is_hex(byte) or byte == ('_' as i8);
     }
 
 }
@@ -604,7 +602,7 @@ class PaulTalkParser {
         if self.match_any(["getter", "setter", "getters", "setters"]) {
             return self.parse_accessor_directive(self.previous());
         }
-        if self.check_kind(TokenKind.field()) {
+        if self.peek() is Field {
             field = self.expect_field("Expected field declaration.");
             self.expect_lexeme(":", "Expected ':' after field name.");
             field_node = self.make_token_node("field_decl", field);
@@ -649,7 +647,7 @@ class PaulTalkParser {
         if receiver is Token {
             node.add(self.make_token_node("class_receiver", receiver));
         }
-        if self.is_identifier_kind(name.kind()) and self.match_lexeme("=") {
+        if name is Identifier and self.match_lexeme("=") {
             node.add(self.make_token_node("setter_suffix", self.previous()));
         }
 
@@ -661,12 +659,7 @@ class PaulTalkParser {
     }
 
     def add_abstract_modifier(node : ParseNode, name : Token) {
-        abstract_token = Token{
-            TokenKind.identifier(),
-            "abstract",
-            name.line(),
-            name.column()
-        };
+        abstract_token = Identifier{"abstract", name.line(), name.column()};
         node.add(self.make_token_node("modifier", abstract_token));
     }
 
@@ -813,8 +806,7 @@ class PaulTalkParser {
 
     def parse_type_operand() -> ParseNode {
         right_type = self.parse_type();
-        token = Token{
-            TokenKind.identifier(),
+        token = Identifier{
             "",
             right_type.line(),
             right_type.column()
@@ -906,21 +898,20 @@ class PaulTalkParser {
             return node;
         }
         token = self.peek();
-        is_literal = self.is_literal_kind(token.kind()) or
-            token.lexeme() == "true" or token.lexeme() == "false" or
-            token.lexeme() == "nil";
+        is_literal = token is Literal or token.lexeme() == "true" or
+            token.lexeme() == "false" or token.lexeme() == "nil";
         if is_literal {
             self.advance();
             return self.make_token_node("literal", token);
         }
-        if token.kind() == TokenKind.field() {
+        if token is Field {
             self.advance();
             return self.make_token_node("field_ref", token);
         }
-        if self.is_identifier_kind(token.kind()) {
+        if token is Identifier {
             self.advance();
             node_kind = "identifier";
-            is_type = token.kind() == TokenKind.type_identifier();
+            is_type = token is TypeIdentifier;
             if is_type { node_kind = "type_identifier"; }
             base = self.make_token_node(node_kind, token);
             if not self.match_lexeme("[") { return base; }
@@ -929,14 +920,6 @@ class PaulTalkParser {
         }
         self.fail("Expected expression.");
         return ParseNode{"unreachable"};
-    }
-
-    def is_literal_kind(kind : i32) -> Bool {
-        if kind == TokenKind.int_literal() { return true; }
-        if kind == TokenKind.float_literal() { return true; }
-        if kind == TokenKind.hex_literal() { return true; }
-        if kind == TokenKind.string_literal() { return true; }
-        return kind == TokenKind.char_literal();
     }
 
     def parse_function_literal() -> ParseNode {
@@ -1090,7 +1073,7 @@ class PaulTalkParser {
             self.expect_lexeme(terminator, "Expected type list delimiter.");
             return node;
         }
-        has_count = self.check_kind(TokenKind.int_literal());
+        has_count = self.peek() is IntLiteral;
         if has_count { has_count = self.token_at(@cursor + 1).lexeme() == "x"; }
         if has_count {
             count = self.advance();
@@ -1154,7 +1137,7 @@ class PaulTalkParser {
 
     def parse_parameter(allow_field_params : Bool) -> ParseNode {
         token = self.peek();
-        allow_field = allow_field_params and token.kind() == TokenKind.field();
+        allow_field = allow_field_params and token is Field;
         if allow_field { self.advance(); }
         name = token;
         if not allow_field { name = self.expect_identifier("Expected param"); }
@@ -1313,7 +1296,7 @@ class PaulTalkParser {
 
     def previous() -> Token { return self.token_at(@cursor - 1); }
 
-    def is_at_end() -> Bool { return self.peek().kind() == TokenKind.eof(); }
+    def is_at_end() -> Bool { return self.peek() is EOF; }
 
     def advance() -> Token {
         token = self.peek();
@@ -1337,60 +1320,45 @@ class PaulTalkParser {
         return false;
     }
 
-    def check_kind(kind : i32) -> Bool {
-        if self.is_at_end() { return false; }
-        return self.peek().kind() == kind;
-    }
-
     def expect_lexeme(lexeme : String, message : String) -> Token {
         if self.check_lexeme(lexeme) { return self.advance(); }
         return self.fail_token(message, "<missing>");
     }
 
     def expect_identifier(message : String) -> Token {
-        is_ident = self.is_identifier_kind(self.peek().kind());
-        if is_ident { return self.advance(); }
+        if self.peek() is Identifier { return self.advance(); }
         return self.fail_token(message, "<identifier>");
     }
 
     def expect_field(message : String) -> Token {
-        if self.peek().kind() == TokenKind.field() { return self.advance(); }
+        if self.peek() is Field { return self.advance(); }
         return self.fail_token(message, "<field>");
     }
 
     def expect_region_segment(message : String) -> Token {
-        kind = self.peek().kind();
-        if self.is_field_or_identifier_kind(kind) { return self.advance(); }
+        token = self.peek();
+        if token is Field or token is Identifier { return self.advance(); }
         return self.fail_token(message, "<region>");
     }
 
     def expect_method_name() -> Token {
         token = self.peek();
-        if self.is_field_or_identifier_kind(token.kind()) {
+        if token is Field or token is Identifier {
             self.advance();
             return token;
         }
-        is_operator = token.kind() == TokenKind.symbol() and
+        is_operator = token is Symbol and
             self.is_method_operator_lexeme(token.lexeme());
         if is_operator {
             self.advance();
             return token;
         }
-        return self.fail_token("Expected method or operator name.", "<method>");
+        return self.fail_token("Expected method/operator name.", "<method>");
     }
 
     def fail_token(message : String, fallback : String) -> Token {
         self.fail(message);
-        return Token{TokenKind.eof(), fallback, 0, 0};
-    }
-
-    def is_field_or_identifier_kind(kind : i32) -> Bool {
-        return kind == TokenKind.field() or self.is_identifier_kind(kind);
-    }
-
-    def is_identifier_kind(kind : i32) -> Bool {
-        return kind == TokenKind.identifier() or
-            kind == TokenKind.type_identifier();
+        return EOF{fallback, 0, 0};
     }
 
     def is_method_operator_lexeme(text : String) -> Bool {
