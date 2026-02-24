@@ -54,6 +54,27 @@ class CompilerPositiveTestsMixin:
             expected_output = "program\n1\nclass_def"
             self.compile_and_run(mini_code, expected_output, "paultalk_parser_class_method_and_setter_smoke")
 
+    def test_paultalk_parser_resilient_recovery(self):
+            mini_code = """
+                import std;
+                import paultalk_parser;
+
+                src = "def ok() {} def broken( { return; } def tail() {}";
+                result = parse_paultalk_resilient(src);
+                tree = result.tree();
+
+                has_tail = false;
+                for child in tree.children() {
+                    is_tail = child.kind() == "function_def" and child.value() == "tail";
+                    if is_tail { has_tail = true; }
+                }
+
+                IO.print(result.errors().size() > 0);
+                IO.print(has_tail);
+            """
+            expected_output = "true\ntrue"
+            self.compile_and_run(mini_code, expected_output, "paultalk_parser_resilient_recovery")
+
     def test_file_stuff(self):
             mini_code = """
                 import core;

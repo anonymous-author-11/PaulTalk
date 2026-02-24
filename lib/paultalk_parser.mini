@@ -20,6 +20,8 @@ class ParseError extends Exception {
         print("column".c_string());
         print(@column);
     }
+
+    def message() -> String { return @message; }
 }
 
 class Token extends Representable {
@@ -119,6 +121,18 @@ class ParseNode extends Representable {
 
 alias Node = ParseNode;
 
+class ParseResult {
+    @tree : ParseNode
+    @errors : Array[ParseError]
+
+    getters @tree, @errors
+
+    def init(@tree : ParseNode, @errors : Array[ParseError]) {
+    }
+
+    def has_errors() -> Bool { return @errors.size() > 0; }
+}
+
 class PaulTalkLexer {
     @source : String
     @tokens : Array[Token]
@@ -126,6 +140,10 @@ class PaulTalkLexer {
     @cursor : i32
     @line : i32
     @column : i32
+    @errors : Array[ParseError]
+    @last_error_cursor : i32
+
+    getters @errors
 
     def init(@source : String) {
     	@tokens = [] of Token;
@@ -133,6 +151,8 @@ class PaulTalkLexer {
         @cursor = 0;
         @line = 1;
         @column = 1;
+        @errors = [] of ParseError;
+        @last_error_cursor = -1;
     }
 
     def tokenize() -> Array[Token] {
@@ -245,13 +265,13 @@ class PaulTalkLexer {
             self.advance_byte();
             return;
         }
-        yield(ParseError{"Unterminated block comment.", @line, @column});
+        self.record_error("Unterminated block comment.", @line, @column);
     }
 
     def scan_field(line : i32, column : i32, start : i32) {
         self.advance_byte();
         if not self.is_identifier_start_byte(self.peek_byte()) {
-            yield(ParseError{"Expected identifier after '@'.", line, column});
+            self.record_error("Expected identifier after '@'.", line, column);
         }
         while self.is_identifier_continue_byte(self.peek_byte()) {
             self.advance_byte();
@@ -284,7 +304,7 @@ class PaulTalkLexer {
             self.advance_byte();
             bad_hex = not ASCII.is_hex(self.peek_byte());
             bad_message = "Expected hex digits.";
-            if bad_hex { yield(ParseError{bad_message, line, column}); }
+            if bad_hex { self.record_error(bad_message, line, column); }
             self.consume_hex_digits();
             @tokens.append(HexLiteral{self.slice_from(start), line, column});
             return;
@@ -338,7 +358,7 @@ class PaulTalkLexer {
             if is_escape { continue; }
             self.advance_byte();
         }
-        yield(ParseError{"Unterminated string literal.", line, col});
+        self.record_error("Unterminated string literal.", line, col);
     }
 
     def emit_string(line : i32, col : i32, start : i32) {
@@ -356,7 +376,7 @@ class PaulTalkLexer {
             is_quote = byte == ('\'' as i8);
             is_escape = byte == ('\\' as i8);
             bad_count = is_quote and char_count != 1;
-            if bad_count { yield(ParseError{bad_message, line, col}); }
+            if bad_count { self.record_error(bad_message, line, col); }
             if is_quote { self.advance_byte(); }
             if is_quote { self.emit_char(line, col, start); }
             if is_quote { return; }
@@ -366,11 +386,11 @@ class PaulTalkLexer {
             if is_escape { char_count = char_count + 1; }
             if is_escape { continue; }
             is_newline = byte == ('\n' as i8);
-            if is_newline { yield(ParseError{line_message, line, col}); }
+            if is_newline { self.record_error(line_message, line, col); }
             self.advance_byte();
             char_count = char_count + 1;
         }
-        yield(ParseError{"Unterminated char literal.", line, col});
+        self.record_error("Unterminated char literal.", line, col);
     }
 
     def emit_char(line : i32, col : i32, start : i32) {
@@ -388,26 +408,26 @@ class PaulTalkLexer {
             is_three = first_byte == ('.' as i8) and second_byte == ('.' as i8);
             if is_three { is_three = third_byte == ('.' as i8); }
         }
-        if is_three { self.emit_symbol_bytes(3, line, col, start); }
+        if is_three { self.emit_symbol(3, line, col, start); }
         if is_three { return; }
         if self.is_two_char_symbol(first_byte, second_byte) {
-            self.emit_symbol_bytes(2, line, col, start);
+            self.emit_symbol(2, line, col, start);
             return;
         }
         if self.is_single_char_symbol(first_byte) {
-            self.emit_symbol_bytes(1, line, col, start);
+            self.emit_symbol(1, line, col, start);
             return;
         }
 
         self.advance_byte();
         message = "Unexpected character: ".extend(self.slice_from(start));
-        yield(ParseError{message, line, col});
+        self.record_error(message, line, col);
     }
 
-    def emit_symbol_bytes(count : i32, line : i32, col : i32, start : i32) {
-        while count > 0 {
+    def emit_symbol(bytes : i32, line : i32, col : i32, start : i32) {
+        while bytes > 0 {
             self.advance_byte();
-            count = count - 1;
+            bytes = bytes - 1;
         }
         @tokens.append(Symbol{self.slice_from(start), line, col});
     }
@@ -464,17 +484,33 @@ class PaulTalkLexer {
         return ASCII.is_hex(byte) or byte == ('_' as i8);
     }
 
+    def record_error(message : String, line : i32, column : i32) {
+        if @cursor == @last_error_cursor { return; }
+        @last_error_cursor = @cursor;
+        @errors.append(ParseError{message, line, column});
+    }
+
 }
 
 class PaulTalkParser {
     @tokens : Array[Token]
     @cursor : i32
+    @errors : Array[ParseError]
+    @last_error_cursor : i32
 
-    def init(@tokens : Array[Token]) { @cursor = 0; }
+    getters @errors
+
+    def init(@tokens : Array[Token]) {
+        @cursor = 0;
+        @errors = [] of ParseError;
+        @last_error_cursor = -1;
+    }
 
     def parse_program() -> ParseNode {
         root = ParseNode{"program"};
-        while not self.is_at_end() { root.add(self.parse_statement()); }
+        while not self.is_at_end() {
+            root.add(self.parse_statement_with_recovery());
+        }
         return root;
     }
 
@@ -500,6 +536,21 @@ class PaulTalkParser {
             return self.parse_block_after_open(self.previous());
         }
         return self.parse_binding_assignment_or_expression_statement();
+    }
+
+    def parse_statement_with_recovery() -> ParseNode {
+        start = @cursor;
+        first = self.peek();
+        error_count = @errors.size();
+        node = self.parse_statement();
+        if @errors.size() == error_count {
+            self.ensure_progress(start);
+            return node;
+        }
+        self.synchronize_statement();
+        self.ensure_progress(start);
+        error_node = ParseNode{"error_stmt", "", first.line(), first.column()};
+        return error_node.add(node);
     }
 
     def parse_import_statement() -> ParseNode {
@@ -571,12 +622,32 @@ class PaulTalkParser {
         body = ParseNode{"class_body"};
 
         while not self.check_lexeme("}") and not self.is_at_end() {
-            body.add(self.parse_class_member());
+            body.add(self.parse_class_member_with_recovery());
         }
 
         self.expect_lexeme("}", "Expected '}' after class body.");
         node.add(body);
         return node;
+    }
+
+    def parse_class_member_with_recovery() -> ParseNode {
+        start = @cursor;
+        first = self.peek();
+        error_count = @errors.size();
+        node = self.parse_class_member();
+        if @errors.size() == error_count {
+            self.ensure_progress(start);
+            return node;
+        }
+        self.synchronize_class_member();
+        self.ensure_progress(start);
+        error_node = ParseNode{
+            "error_member",
+            "",
+            first.line(),
+            first.column()
+        };
+        return error_node.add(node);
     }
 
     def parse_where_item() -> ParseNode {
@@ -743,7 +814,7 @@ class PaulTalkParser {
     def parse_block_after_open(open : Token) -> ParseNode {
         node = ParseNode{"block", "", open.line(), open.column()};
         while not self.check_lexeme("}") and not self.is_at_end() {
-            node.add(self.parse_statement());
+            node.add(self.parse_statement_with_recovery());
         }
         self.expect_lexeme("}", "Expected '}' after block.");
         return node;
@@ -1315,6 +1386,49 @@ class PaulTalkParser {
         return false;
     }
 
+    def check_any_lexeme(lexemes : Array[String]) -> Bool {
+        for lexeme in lexemes { if self.check_lexeme(lexeme) { return true; } }
+        return false;
+    }
+
+    def ensure_progress(start : i32) {
+        if @cursor != start { return; }
+        if self.is_at_end() { return; }
+        self.advance();
+    }
+
+    def consume_semicolon() -> Bool {
+        if not self.check_lexeme(";") { return false; }
+        self.advance();
+        return true;
+    }
+
+    def synchronize_statement() {
+        starters = [
+            "import", "alias", "extern", "def", "class", "if",
+            "while", "for", "return", "break", "continue", "{"
+        ];
+        while not self.is_at_end() {
+            if self.consume_semicolon() { return; }
+            if self.check_lexeme("}") { return; }
+            if self.check_any_lexeme(starters) { return; }
+            self.advance();
+        }
+    }
+
+    def synchronize_class_member() {
+        member_starters = ["regions", "getter", "setter", "getters", "setters"];
+        member_starters_2 = ["abstract", "def"];
+        while not self.is_at_end() {
+            if self.check_lexeme("}") { return; }
+            if self.peek() is Field { return; }
+            if self.check_any_lexeme(member_starters) { return; }
+            if self.check_any_lexeme(member_starters_2) { return; }
+            if self.consume_semicolon() { return; }
+            self.advance();
+        }
+    }
+
     def expect_lexeme(lexeme : String, message : String) -> Token {
         if self.check_lexeme(lexeme) { return self.advance(); }
         return self.fail_token(message, "<missing>");
@@ -1364,14 +1478,31 @@ class PaulTalkParser {
 
     def fail(message : String) {
         token = self.peek();
-        yield(ParseError{message, token.line(), token.column()});
+        if @cursor == @last_error_cursor { return; }
+        @last_error_cursor = @cursor;
+        @errors.append(ParseError{message, token.line(), token.column()});
     }
 }
 
-def parse_paultalk(source : String) -> ParseNode {
+def parse_paultalk_resilient(source : String) -> ParseResult {
     lexer = PaulTalkLexer{source};
     tokens = lexer.tokenize();
-    return PaulTalkParser{tokens}.parse_program();
+    parser = PaulTalkParser{tokens};
+    tree = parser.parse_program();
+    errors = [] of ParseError;
+    for err in lexer.errors() { errors.append(err); }
+    for err in parser.errors() { errors.append(err); }
+    return ParseResult{tree, errors};
+}
+
+def parse_paultalk(source : String) -> ParseNode {
+    return parse_paultalk_resilient(source).tree();
+}
+
+def parse_paultalk_strict(source : String) -> ParseNode {
+    result = parse_paultalk_resilient(source);
+    if result.has_errors() { yield(result.errors().[0]); }
+    return result.tree();
 }
 
 def serialize_parse_tree(node : ParseNode) -> String {
