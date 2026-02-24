@@ -700,7 +700,7 @@ DONE:
 
 TODO:
 
-- Allow 'h' as i8 for char literals which are known to be one byte
+- Allow 'h' as i8 for char literals which are known to be one byte [check!]
 - paultalk_parser line 151, type inference bug
 - Might want to actually fix Self type
 	- Constructing an instance of Self
@@ -709,6 +709,7 @@ TODO:
 - Blocking parse tree serialization: stringification for primitives
 	- Blocking stringification for primitives: snprintf
 		- Blocking snprintf: variadic extern defs
+		- Except not really; we can just define a primitive
 - Add "in" infix operator to desguar to .contains
 - Allow more ways to specify element type of array
 	- Currently supported:

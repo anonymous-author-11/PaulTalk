@@ -1868,7 +1868,7 @@ module @patterns {
       %ary = pdl.operation "mid.alloc" {"typ" = %ary_type_attr} -> (%ptr_type : !pdl.type)
       %ary_result = pdl.result 0 of %ary
       pdl.apply_native_rewrite "store_operands_in_container"(%root, %ary_type_attr, %ary_result : !pdl.operation, !pdl.attribute, !pdl.value)
-      %invariant = pdl.operation "mid.invariant"(%ary_result : !pdl.value) {"num_bytes" = %num_bytes} -> (%ptr_type : !pdl.type)
+      // %invariant = pdl.operation "mid.invariant"(%ary_result : !pdl.value) {"num_bytes" = %num_bytes} -> (%ptr_type : !pdl.type)
       pdl.replace %root with (%ary_result : !pdl.value)
     }
   }

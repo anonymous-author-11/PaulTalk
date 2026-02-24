@@ -3237,8 +3237,8 @@ class Behavior(Statement):
         entry = Block([])
         arg = entry.insert_arg(llvm.LLVMPointerType.opaque(), 0)
         fat_ptr = self.fat_ptr(entry)
-        invariant = InvariantOp.make(arg, 8 * self.arity)
-        entry.add_op(invariant)
+        #invariant = InvariantOp.make(arg, 8 * self.arity)
+        #entry.add_op(invariant)
         offset_ptr = AllocateOp.make(llvm.LLVMPointerType.opaque())
         if self.automaton._initial_state_id not in blocks:
             debug_print(self.methods)

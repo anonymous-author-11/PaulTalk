@@ -786,7 +786,7 @@ class StringCodepointWriter extends Writer[i32] {
 
 	def write(value : i32) {
         width = UTF8.encoded_width(value);
-        if width == 0 { width = 3; }
+        if width == 0 { return; }
         @string.reserve_extra(width);
 		@encoder.write(value);
 		@string.increment_chars(1);
@@ -1168,3 +1168,4 @@ def report_exception(current_coroutine : Coroutine[() -> Exception]) {
     exception = current_coroutine.result();
     if exception is Exception { exception.report(); }
 }
+

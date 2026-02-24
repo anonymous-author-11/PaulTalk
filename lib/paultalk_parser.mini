@@ -413,28 +413,23 @@ class PaulTalkLexer {
     }
 
     def is_two_char_symbol(left : i8, right : i8) -> Bool {
-        if left == ('=' as i8) {
-            return right == ('>' as i8) or right == ('=' as i8);
+    	(l_char, r_char) = (Character{left as i32}, Character{right as i32});
+        if l_char == '=' { return r_char == '>' or r_char == '='; }
+        if l_char == '<' {
+            return r_char == '=' or r_char == ':'  or r_char == '<';
         }
-        if left == ('<' as i8) {
-            is_less_group = right == ('=' as i8) or right == (':' as i8);
-            return is_less_group or right == ('<' as i8);
-        }
-        if left == ('>' as i8) {
-            return right == ('=' as i8) or right == ('>' as i8);
-        }
-        if left == ('-' as i8) { return right == ('>' as i8); }
-        if left == ('!' as i8) { return right == ('=' as i8); }
-        if left == ('[' as i8) { return right == (']' as i8); }
-        if left == ('.' as i8) { return right == ('.' as i8); }
-        if left == ('~' as i8) { return right == ('>' as i8); }
+        if l_char == '>' { return r_char == '=' or r_char == '>'; }
+        if l_char == '-' { return r_char == '>'; }
+        if l_char == '!' { return r_char == '='; }
+        if l_char == '[' { return r_char == ']'; }
+        if l_char == '.' { return r_char == '.'; }
+        if l_char == '~' { return r_char == '>'; }
         return false;
     }
 
     def is_single_char_symbol(byte : i8) -> Bool {
-        if byte == ('%' as i8) or byte == ('[' as i8) or byte == (']' as i8) {
-            return true;
-        }
+    	char = Character{byte as i32};
+        if char == '%' or char == '[' or char == ']' { return true; }
         if byte >= ('(' as i8) and byte <= ('/' as i8) { return true; }
         if byte >= (':' as i8) and byte <= ('?' as i8) { return true; }
         return byte >= ('{' as i8) and byte <= ('}' as i8);
