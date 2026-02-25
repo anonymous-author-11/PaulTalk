@@ -324,9 +324,11 @@ class BinaryOp(Expression):
         # For int-int ops where one is a literal, set the literal's width equal to the other
         if isinstance(left_type, Integer) and isinstance(self.right, IntegerLiteral):
             self.right.width = left_type.bitwidth
+            self.right.signed = left_type.signedness.data == Signedness.SIGNED
             right_type = self.right.exprtype(scope)
         if isinstance(right_type, Integer) and isinstance(self.left, IntegerLiteral):
             self.left.width = right_type.bitwidth
+            self.left.signed = right_type.signedness.data == Signedness.SIGNED
             left_type = self.left.exprtype(scope)
         return left_type, right_type
 
@@ -619,10 +621,21 @@ class IntegerLiteral(Expression):
         scope.region.last_block.add_op(const_op)
         return const_op.results[0]
 
+    def reinterpret(self, width: int, signed: bool):
+        if width <= 0:
+            raise Exception(f"{self.info}: Invalid integer width {width} for reinterpretation.")
+        mask = (1 << width) - 1
+        raw_value = self.value & mask
+        if signed and raw_value >= (1 << (width - 1)):
+            raw_value -= (1 << width)
+        self.value = raw_value
+        self.width = width
+        self.signed = signed
+
     def exprtype(self, scope):
         typ = Integer(self.width, Signedness.SIGNED if self.signed else Signedness.UNSIGNED)
         min_val, max_val = typ.value_range()
-        if self.value < min_val or self.value > max_val:
+        if self.value < min_val or self.value >= max_val:
             print(self.signed)
             print(typ.signedness.data)
             raise Exception(f"{self.info}: Integer literal value {self.value} cannot be represented by type {typ}, which has value range [{min_val}, {max_val})")
@@ -1270,16 +1283,27 @@ class As(Expression):
     def subexpressions(self):
         return [self.operand]
 
+    def conform_integer_literal(self, to_typ):
+        if not isinstance(self.operand, IntegerLiteral):
+            return False
+        if not isinstance(to_typ, Integer):
+            return False
+        to_signed = to_typ.signedness.data == Signedness.SIGNED
+        if self.force:
+            self.operand.reinterpret(to_typ.bitwidth, to_signed)
+            return True
+        self.operand.width = to_typ.bitwidth
+        self.operand.signed = to_signed
+        return True
+
     def codegen(self, scope):
 
         to_typ = self.exprtype(scope)
-        to_integer = isinstance(to_typ, Integer)
-        if isinstance(self.operand, IntegerLiteral) and to_integer:
-            self.operand.width = to_typ.bitwidth
-            self.operand.signed = to_typ.signedness.data == Signedness.SIGNED
+        if self.conform_integer_literal(to_typ):
             operand = self.operand.codegen(scope)
             return operand
 
+        to_integer = isinstance(to_typ, Integer)
         if isinstance(self.operand, CharLiteral) and to_integer:
             return IntegerLiteral(self.info, self.operand.codepoint, to_typ.bitwidth).codegen(scope)
 
@@ -1298,17 +1322,15 @@ class As(Expression):
         if not operand_type or operand_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Cannot cast Nothing to {to_typ}.")
         to_typ = scope.type_env.validated_type(self.info, to_typ)
-        to_integer = isinstance(to_typ, Integer)
-        if isinstance(self.operand, IntegerLiteral) and to_integer:
-            self.operand.width = to_typ.bitwidth
-            self.operand.signed = to_typ.signedness.data == Signedness.SIGNED
+        if self.conform_integer_literal(to_typ):
             return self.operand.exprtype(scope)
+        to_integer = isinstance(to_typ, Integer)
         if operand_type == to_typ: return operand_type
         from_integer = isinstance(operand_type, Integer)
         if from_integer and to_integer:
             from_min, from_max = operand_type.value_range()
             to_min, to_max = to_typ.value_range()
-            if not self.force and (from_min < to_min or from_max > to_max):
+            if not self.force and (from_min < to_min or from_max >= to_max):
                 raise Exception(f"{self.info}: Cannot cast {operand_type} to {to_typ} as the value range of the former [{from_min}, {from_max}) is not within the value range of the latter [{to_min}, {to_max})")
             return to_typ
         to_float = isinstance(to_typ, Float)

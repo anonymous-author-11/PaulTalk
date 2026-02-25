@@ -200,6 +200,19 @@ class CompilerPositiveTestsMixin:
             expected_output = "2\n2\nAC\n65\n67"
             self.run_mini_code(mini_code, expected_output, "file_writer_and_iterator")
 
+    def test_hex_literals_unsigned_and_forced_signed_cast(self):
+            mini_code = """
+                import std;
+
+                codepoint = 65;
+                if codepoint <= 0xFFFF { IO.print(3); } else { IO.print(7); }
+
+                byte = 0xEF as i8;
+                IO.print(byte as i32);
+            """
+            expected_output = "3\n-17"
+            self.run_mini_code(mini_code, expected_output, "hex_literals_unsigned_and_forced_signed_cast")
+
     def test_path_object_basics(self):
             mini_code = """
                 import std;

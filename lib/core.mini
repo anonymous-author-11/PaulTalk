@@ -909,7 +909,7 @@ class UTF8CodepointsValidator extends Iterator[i32] {
     setter @replacement_fn
 
     def Self.lossy(iterator : Iterator[i32]) -> UTF8CodepointsValidator {
-        replacement_fn = (codepoint : i32) => { 0xFFFD; };
+        replacement_fn = (codepoint : i32) => { 0xFFFD as i32; };
         return UTF8CodepointsValidator{iterator, replacement_fn};
     } ~> { ret.iterator == iterator }
 
@@ -1031,7 +1031,7 @@ class UTF8Decoder extends ConstantTimeIterator[i32] {
     setter @replacement_fn
 
     def Self.lossy(iterator : Iterator[i8]) -> UTF8Decoder {
-        replacement_fn = (byte : i8) => { 0xFFFD; };
+        replacement_fn = (byte : i8) => { 0xFFFD as i32; };
         return UTF8Decoder{iterator, replacement_fn};
     } ~> { ret.iterator == iterator }
 

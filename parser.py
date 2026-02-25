@@ -523,10 +523,9 @@ class CSTTransformer(Transformer):
 
     def hex_literal(self, token):
         node_info = NodeInfo(None, self.file_path, line_number(token))
-        hex_string = token.value.replace("_","").lstrip('0x')
-        if len(hex_string) % 2 != 0: hex_string = f"0{hex_string}"
-        value = int.from_bytes(bytes.fromhex(hex_string), byteorder='big', signed=True)
-        return IntegerLiteral(node_info, value, 32)
+        hex_string = token.value.replace("_", "").lstrip('0x')
+        value = int(hex_string, 16)
+        return IntegerLiteral(node_info, value, 32, signed=False)
 
     def float_literal(self, token):
         node_info = NodeInfo(None, self.file_path, line_number(token))
