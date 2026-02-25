@@ -700,6 +700,11 @@ DONE:
 
 TODO:
 
+- '5 as u8' should have the same semantics as 'x = 5; x as u8'
+	- Excepting that the former can have more generous inference
+- The numeric value of a hex literal should arguably depend on typing (signed or unsigned)
+- If method has no arguments, use a different behavior wrapper
+	- Avoids passing poison argument which seems to limit inlining
 - Allow 'h' as i8 for char literals which are known to be one byte [check!]
 - paultalk_parser line 151, type inference bug
 - Might want to actually fix Self type
@@ -710,7 +715,7 @@ TODO:
 	- Blocking stringification for primitives: snprintf
 		- Blocking snprintf: variadic extern defs
 		- Except not really; we can just define a primitive
-- Add "in" infix operator to desguar to .contains
+- Add "in" infix operator to desugar to .contains
 - Allow more ways to specify element type of array
 	- Currently supported:
 		- my_array = [Addition{}, Multiplication{}] of Operation

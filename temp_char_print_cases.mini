@@ -1,0 +1,7 @@
+import core;
+import io;
+
+IO.print(65 into Character);
+IO.print(162 into Character);
+IO.print(8364 into Character);
+IO.print(128512 into Character);

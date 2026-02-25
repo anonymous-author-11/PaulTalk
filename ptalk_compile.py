@@ -441,7 +441,7 @@ class OptimizationSettings:
         # inline everything in release, and nothing in debug. let the machine outliner undo some of it later, if requested
         if self.debug_mode:
             return "--inline-threshold=-10000 --inline-enable-cost-benefit-analysis"
-        return "--inline-threshold=1000 --inline-enable-cost-benefit-analysis"
+        return "--inline-threshold=1400 --inline-enable-cost-benefit-analysis"
 
     @property
     def devirt(self):

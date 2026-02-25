@@ -19,9 +19,9 @@ class ProgramArgs extends Collection[String] {
 	}
 
 	// Random access will decode the arg string on every call
-	// Valid tradeoff vs converting into array then indexing
+	// Valid tradeoff vs converting into Array then indexing
 	// E.g. args_ary = ProgramArgs{} into Array; arg = args_ary.[index];
-	// Converting to array decodes every arg string eagerly
+	// Converting to Array decodes every arg string eagerly
 
 	def [](index : i32) -> String {
 		if index < 0 or index >= self.size() {

@@ -421,31 +421,6 @@ module @patterns {
     }
   }
   
-  pdl.pattern @LowerToString : benefit(1) {
-    %ptr_type = pdl.type : !llvm.ptr
-    %format_ptr = pdl.operand : %ptr_type
-    %val = pdl.operands
-    %i32_type = pdl.type : i32
-    %root = pdl.operation "mid.to_string"(%format_ptr, %val : !pdl.value, !pdl.range<value>) -> (%i32_type, %ptr_type : !pdl.type, !pdl.types)
-    pdl.rewrite %root {
-      %tuple_type = pdl.attribute = !llvm.struct<(i32, !llvm.ptr)>
-      %alloca = pdl.operation "mid.alloc" { "typ" = %tuple_type } -> (%ptr_type : !pdl.type)
-      %alloca_result - pdl.result 0 of %alloca
-      %callee = pdl.attribute = @snprintf
-      %opsegsize = pdl.attribute = array<i32: 4, 0>
-      %opbundlesize = pdl.attribute = array<i32>
-      %callee_type = pdl.attribute = !llvm.func<i32 (!llvm.ptr, i32, !llvm.ptr, ...)>
-      %max_const = pdl.operation "llvm.mlir.constant" { value = 32 } -> (%i32_type : !pdl.type)
-      %max = pdl.result 0 of %twenty_const
-      %byte_slice = pdl.attribute : vector<32 x i8>
-      %malloc = pdl.operation "mid.malloc" {"typ" = %byte_slice} -> (%ptr_type : !pdl.type)
-      %malloc_result = pdl.result 0 of %malloc
-      %call = pdl.operation "placeholder.call"(%malloc_result, %max, %format_ptr, %val : !pdl.value, !pdl.value, !pdl.value, !pdl.range<value>) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize, "callee_type" = %callee_type, "var_callee_type" = %callee_type} -> (%i32_type : !pdl.type)
-      %size = pdl.result 0 of %call
-      pdl.replace %root with (%size, %malloc_result : !pdl.value, !pdl.value)
-    }
-  }
-  */
   pdl.pattern @LowerUtilsAPI : benefit(1) {
     %root = pdl.operation "mid.utils_api"
     %i64_type = pdl.type : i64
