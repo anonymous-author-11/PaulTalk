@@ -1,0 +1,58 @@
+import core;
+
+class ProgramArgs extends Collection[String] {
+	@argv : Buffer[Buffer[i8]]
+	@argc : i32
+
+	def init() {
+		@argv = argv();
+		@argc = argc();
+	}
+
+	def program_name() -> String {
+		return String.from_c_string(@argv.[0]);
+	}
+
+	def size() -> i32 {
+		if @argc <= 1 { return 0; }
+		return @argc - 1; // skip argv.[0]
+	}
+
+	// Random access will decode the arg string on every call
+	// Valid tradeoff vs converting into array then indexing
+	// E.g. args_ary = ProgramArgs{} into Array; arg = args_ary.[index];
+	// Converting to array decodes every arg string eagerly
+
+	def [](index : i32) -> String {
+		if index < 0 or index >= self.size() {
+			yield OutOfBounds{self.size(), index};
+		}
+		return String.from_c_string(@argv.[index + 1]);
+	}
+
+	def get(index : i32) -> String? {
+		if index < 0 or index >= self.size() { return nil; }
+		return String.from_c_string(@argv.[index + 1]);
+	}
+
+	def iterator() -> ProgramArgsIterator {
+		return ProgramArgsIterator{@argv, @argc};
+	}
+}
+
+class ProgramArgsIterator extends Iterator[String] {
+	@argv : Buffer[Buffer[i8]]
+	@argc : i32
+	@cursor : i32
+
+	def init(@argv : Buffer[Buffer[i8]], @argc : i32) {
+		@cursor = 1; // skip argv.[0]
+	}
+
+	def next() -> String? {
+		if @cursor >= @argc { return nil; }
+		str = String.from_c_string(@argv.[@cursor]);
+		@cursor = @cursor + 1;
+		return str;
+	}
+}
