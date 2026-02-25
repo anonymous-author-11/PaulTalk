@@ -185,6 +185,13 @@ class String extends List[Character], Representable {
         return result;
     } ~> { ret.elems_reg holds source_bytes.elems_reg }
 
+    // Construct from a null-terminated buffer of bytes
+    def Self.from_c_string(buf : Buffer[i8]) -> String {
+        size = 0;
+        while buf.[size] != (0 as i8) { size = size + 1; } // count bytes
+        return String.from_bytes_lossy(Array{buf, size, size}); // default to lossy conversion
+    }
+
     def Self.from_char(char : Character) -> String {
         str = String{char.n_bytes()};
         str.codepoints().writer().write(char.codepoint());
