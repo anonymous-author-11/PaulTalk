@@ -13,6 +13,9 @@ class IO {
     def Self.print(x : i64) {
         print(x);
     }
+    def Self.print(x : u32) {
+        print(x as i64);
+    }
     def Self.print(x : f64) {
         print(x);
     }

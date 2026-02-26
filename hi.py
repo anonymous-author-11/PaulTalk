@@ -92,6 +92,10 @@ class Integer(ParametrizedAttribute, FixedBitwidthType):
     width: ParameterDef[IntAttr]
     signedness: ParameterDef[SignednessAttr]
 
+    @classmethod
+    def unsigned(cls, data):
+        return Integer(data, Signedness.UNSIGNED)
+
     def __init__(self, data: int | IntAttr, signedness: Signedness | SignednessAttr = Signedness.SIGNED) -> None:
         if isinstance(data, int): data = IntAttr(data)
         if isinstance(signedness, Signedness): signedness = SignednessAttr(signedness)
