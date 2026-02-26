@@ -2238,10 +2238,10 @@ class Format(Expression):
         scope.symbol_table[n_bytes_name] = format_op.results[0]
         scope.type_table[n_bytes_name] = Integer(32)
         n_bytes_id = Identifier(self.info, n_bytes_name)
-        two = IntegerLiteral(NodeInfo.from_info(self.info, "two"), 2, 32)
+        one = IntegerLiteral(NodeInfo.from_info(self.info, "one"), 1, 32)
 
-        # correct for \0A\00 in format string
-        corrected_bytes = Arithmetic(NodeInfo.from_info(self.info, "n_bytes_minus_two"), n_bytes_id, "SUB", two)
+        # correct for \0A in format string
+        corrected_bytes = Arithmetic(NodeInfo.from_info(self.info, "n_bytes_minus_one"), n_bytes_id, "SUB", one)
         obj_name = self.info.id + "_string_literal"
         string = ObjectCreation(self.info, obj_name, self.exprtype(scope), [buf_id, corrected_bytes, corrected_bytes, capacity])
         return string.codegen(scope)
