@@ -130,6 +130,44 @@ class Matrix {
     }
 }
 
+/*
+
+class MatMul {
+    @mat_a : Matrix
+    @mat_b : Matrix
+    @mat_c : Matrix
+    @buf_a : Buffer[f64]
+    @buf_b : Buffer[f64]
+    @buf_c : Buffer[f64]
+
+    def init(@mat_a : Matrix, @mat_b : Matrix) {
+        @mat_c =Matrix.new(@mat_a.rows(), @mat_b.cols());
+        @buf_a = @mat_b.data();
+        @buf_b = @mat_b.data();
+        @buf_c = @mat_c.data();
+    }
+
+    def foo(c_vec : Tuple[8 x f64], i_block : i32, j_block : i32, k_block : i32) -> Tuple[8 x f64] {
+        c_vec = result.get_simd(i_block, j_block);
+        for k_block in kk..k_limit_block {
+            b_kj = other.[k_block, j_block];
+            if b_kj == 0.0 { continue; }
+            a_vec = self.get_simd(i_block, k_block);
+            c_vec = c_vec + a_vec * (8 of b_kj);
+        }
+    }
+
+    def bar()
+}
+
+class MatrixBlock {
+    @i : i32
+    @j : i32
+    @k : i32
+}
+
+*/
+
 def benchmark_matrix_multiplication() {
     size = 2048;
 

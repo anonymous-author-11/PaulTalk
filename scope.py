@@ -307,10 +307,7 @@ class TypeEnvironment:
     def ancestors_inner(self, typ: TypeAttribute) -> list:
         if typ == Any(): return [typ]
         if typ == Nil(): return [typ, Any()]
-        if typ in builtin_types.values(): return [typ, FatPtr.basic("Object"), Any()]
-        if isinstance(typ, Tuple): return [typ, FatPtr.basic("Object"), Any()]
-        if isinstance(typ, Buffer): return [typ, FatPtr.basic("Object"), Any()]
-        if isinstance(typ, Function): return [typ, FatPtr.basic("Object"), Any()]
+        if is_builtin(typ): return [typ, FatPtr.basic("Object"), Any()]
         if isinstance(typ, Union):
             ancestors = [self.ancestors(element) for element in typ.types.data]
             prod = product(*ancestors)

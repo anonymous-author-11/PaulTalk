@@ -700,12 +700,14 @@ DONE:
 
 TODO:
 
-- '5 as u8' should have the same semantics as 'x = 5; x as u8'
-	- Excepting that the former can have more generous inference
-- The numeric value of a hex literal should arguably depend on typing (signed or unsigned)
+- Allow 'h' as i8 for char literals which are known to be one byte [check!]
+- A way to read program arguments (argc, argv) [check!]
+	- argv() -> Collection[String] [check!]
+- '5 as u8' should have the same semantics as 'x = 5; x as u8' [check!]
+- Interpret hex literals as unsigned [check!]
+
 - If method has no arguments, use a different behavior wrapper
 	- Avoids passing poison argument which seems to limit inlining
-- Allow 'h' as i8 for char literals which are known to be one byte [check!]
 - paultalk_parser line 151, type inference bug
 - Might want to actually fix Self type
 	- Constructing an instance of Self
@@ -723,9 +725,7 @@ TODO:
 		- my_array : Array[Operation] = [Addition{}, Multiplication{}]
 		- my_array = [Addition{}, Multiplication{}] as Array[Operation]
 	- Allow same syntax for tuple literals
-- Argc and argv
-	- argc -> i32
-	- argv -> Array[String]
+
 - Should self even point to virtual regions if they aren't identified with a field?
 - See how timings would suffer if we used malloc for bump_alloc
 	- Then possibly also realloc
@@ -1131,9 +1131,6 @@ TODO:
 	- A less meager stdlib
 		- Set, LinkedList
 		- JSON?
-	- A way to read program arguments (argc, argv)
-		- Make it a nice interface
-		- argv() -> Indexable[i32, String]
 
 - Tighten up return type inference for function literals
 	- You can't have a bare return and a return value in the same literal
