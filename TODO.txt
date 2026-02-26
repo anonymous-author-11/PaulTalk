@@ -705,6 +705,8 @@ TODO:
 	- argv() -> Collection[String] [check!]
 - '5 as u8' should have the same semantics as 'x = 5; x as u8' [check!]
 - Interpret hex literals as unsigned [check!]
+- Stringification for primitives [check!]
+	- uses snprintf [check!]
 
 - If method has no arguments, use a different behavior wrapper
 	- Avoids passing poison argument which seems to limit inlining
@@ -713,10 +715,6 @@ TODO:
 	- Constructing an instance of Self
 	- Casting to Self
 	- Class method dispatch on Self
-- Blocking parse tree serialization: stringification for primitives
-	- Blocking stringification for primitives: snprintf
-		- Blocking snprintf: variadic extern defs
-		- Except not really; we can just define a primitive
 - Add "in" infix operator to desugar to .contains
 - Allow more ways to specify element type of array
 	- Currently supported:
@@ -743,6 +741,7 @@ TODO:
 
 - Might want to work on intrinsics
 	- intrinsic("llvm.sin").call()
+	- How to know result type?
 
 - Bug in primesieve.mini where I was able to insert a NaiveSieve into the map without making it extend PrimeSieve
 	- Must be something wrong in behavior.applicable
@@ -1048,7 +1047,6 @@ TODO:
 	- Their allocated size is dynamic
 	- Blocker: Indexing would need to run specialized code to calculate the offset
 
-- Snprintf can convert things to string representations
 - I should be able to declare variadic extern defs
 	- e.g. "extern def printf(Buffer[i8], ...) -> i32"
 - Why does it crash at O0?
