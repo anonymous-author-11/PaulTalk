@@ -253,12 +253,14 @@ module @patterns {
     }
   }
   pdl.pattern  @LowerSetupException: benefit(1) {
-    %root = pdl.operation "mid.setup_exception"
+    %argc = pdl.operand
+    %argv = pdl.operand
+    %root = pdl.operation "mid.setup_exception"(%argc, %argv : !pdl.value, !pdl.value)
     pdl.rewrite %root {
       %callee = pdl.attribute = @setup_landing_pad
-      %opsegsize = pdl.attribute = array<i32: 0, 0>
+      %opsegsize = pdl.attribute = array<i32: 2, 0>
       %opbundlesize = pdl.attribute = array<i32>
-      %call = pdl.operation "placeholder.call" {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+      %call = pdl.operation "placeholder.call"(%argc, %argv : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
       pdl.replace %root with %call
     }
   }
@@ -443,7 +445,7 @@ module @patterns {
       pdl.erase %free_decl
       
       %landing_pad = pdl.attribute = "setup_landing_pad"
-      %func_type_attr1 = pdl.attribute = !llvm.func<void ()>
+      %func_type_attr1 = pdl.attribute = !llvm.func<void (i32, !llvm.ptr)>
       %setup_landing_pad_decl = pdl.operation "llvm.func" {"sym_name" = %landing_pad, "function_type" = %func_type_attr1, "linkage" = %linkage}
       %setup_landing_pad_with_region = pdl.apply_native_rewrite "add_region"(%setup_landing_pad_decl : !pdl.operation) : !pdl.operation
       pdl.erase %setup_landing_pad_decl

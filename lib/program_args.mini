@@ -1,4 +1,8 @@
 import core;
+import io;
+
+extern def argv() -> Buffer[Buffer[i8]]
+extern def argc() -> i32
 
 class ProgramArgs extends Collection[String] {
 	@argv : Buffer[Buffer[i8]]
@@ -25,7 +29,7 @@ class ProgramArgs extends Collection[String] {
 
 	def [](index : i32) -> String {
 		if index < 0 or index >= self.size() {
-			yield OutOfBounds{self.size(), index};
+			yield(OutOfBounds{self.size(), index});
 		}
 		return String.from_c_string(@argv.[index + 1]);
 	}
@@ -37,13 +41,18 @@ class ProgramArgs extends Collection[String] {
 
 	def iterator() -> ProgramArgsIterator {
 		return ProgramArgsIterator{@argv, @argc};
-	}
+	} ~> { ret.argv == @argv }
 }
 
 class ProgramArgsIterator extends Iterator[String] {
 	@argv : Buffer[Buffer[i8]]
 	@argc : i32
 	@cursor : i32
+
+	regions {
+		@elems_reg == @argv,
+		@nxt.elems_reg holds @elems_reg
+	}
 
 	def init(@argv : Buffer[Buffer[i8]], @argc : i32) {
 		@cursor = 1; // skip argv.[0]

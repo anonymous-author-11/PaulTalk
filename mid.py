@@ -1084,6 +1084,8 @@ class NextOp(IRDLOperation):
 @irdl_op_definition
 class SetupExceptionOp(IRDLOperation):
     name = "mid.setup_exception"
+    argc : Operand = operand_def()
+    argv : Operand = operand_def()
 
 @irdl_op_definition
 class GlobalFptrOp(IRDLOperation):
