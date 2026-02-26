@@ -997,6 +997,22 @@ class PrintFOp(IRDLOperation):
     result: OpResult = result_def(IntegerType)
 
 @irdl_op_definition
+class SnprintFOp(IRDLOperation):
+    name = "mid.snprintf"
+    buf: Operand = operand_def()
+    fmt_ptr: Operand = operand_def()
+    msg: Operand = operand_def()
+    result: OpResult = result_def(IntegerType)
+
+@irdl_op_definition
+class FormatOp(IRDLOperation):
+    name = "mid.format"
+    buf: Operand = operand_def()
+    msg: Operand = operand_def()
+    typ: Attribute = attr_def(TypeAttribute)
+    result: OpResult = result_def(IntegerType)
+
+@irdl_op_definition
 class ArithmeticOp(IRDLOperation):
     name = "mid.arithmetic"
     lhs : Operand = operand_def(IntegerType)

@@ -991,3 +991,13 @@ class CompilerPositiveTestsMixin:
             """
             expected_output = "8"
             self.run_mini_code(mini_code, expected_output, "ramp")
+
+    def test_format(self):
+        mini_code = """
+            import io;
+
+            IO.print(77 as String);
+            IO.print(77.77 as String);
+        """
+        expected_output = "77\n77.77000"
+        self.run_mini_code(mini_code, expected_output, "format")

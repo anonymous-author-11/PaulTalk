@@ -1299,6 +1299,11 @@ class As(Expression):
     def codegen(self, scope):
 
         to_typ = self.exprtype(scope)
+        operand_type = self.operand.exprtype(scope)
+
+        if (isinstance(operand_type, Integer) or operand_type == Float() or operand_type == Nil()) and to_typ == FatPtr.basic("String"):
+            return Format(self.info, self.operand).codegen(scope)
+
         if self.conform_integer_literal(to_typ):
             operand = self.operand.codegen(scope)
             return operand
@@ -1307,7 +1312,6 @@ class As(Expression):
         if isinstance(self.operand, CharLiteral) and to_integer:
             return IntegerLiteral(self.info, self.operand.codepoint, to_typ.bitwidth).codegen(scope)
 
-        operand_type = self.operand.exprtype(scope)
         operand = self.operand.codegen(scope)
         
         if operand_type == to_typ: return operand
@@ -1322,6 +1326,8 @@ class As(Expression):
         if not operand_type or operand_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Cannot cast Nothing to {to_typ}.")
         to_typ = scope.type_env.validated_type(self.info, to_typ)
+        if (isinstance(operand_type, Integer) or operand_type == Float() or operand_type == Nil()) and to_typ == FatPtr.basic("String"):
+            return Format(self.info, self.operand).exprtype(scope)
         if self.conform_integer_literal(to_typ):
             return self.operand.exprtype(scope)
         to_integer = isinstance(to_typ, Integer)
@@ -2198,6 +2204,51 @@ class PrintCall(Expression):
     def typeflow(self, scope):
         self.args[0].exprtype(scope)
         self.args[0].typeflow(scope)
+
+@dataclass
+class Format(Expression):
+    arg: Expression
+
+    @property
+    def subexpressions(self):
+        return [self.arg]
+
+    def codegen(self, scope):
+
+        arg_type = self.arg.exprtype(scope)
+
+        if isinstance(arg_type, Nil()):
+            return StringLiteral(self.info, "nil").codegen(scope)
+
+        # Future: add branch for Bool operand
+
+        buf_type = Buffer([Integer(8)])
+        capacity = IntegerLiteral(NodeInfo.from_info(self.info, "thirty_two"), 32, 32)
+        
+        create_buffer = CreateBuffer(NodeInfo.from_info(self.info, "create_buf"), buf_type, capacity)
+        buf_name = self.info.id + "_temp_buf"
+        buf_id = Identifier(self.info, buf_name)
+        assign = Assignment(NodeInfo.from_info(self.info, "assign_buf"), buf_id, create_buffer)
+        assign.codegen(scope)
+        attr_dict = {"typ":arg_type.base_typ()}
+        operands = [buf_id.codegen(scope), self.arg.codegen(scope)]
+        format_op = FormatOp.create(operands=operands, attributes=attr_dict, result_types=[Integer(32)])
+        scope.region.last_block.add_op(format_op)
+        n_bytes_name = self.info.id + "_n_bytes"
+        scope.symbol_table[n_bytes_name] = format_op.results[0]
+        scope.type_table[n_bytes_name] = Integer(32)
+        n_bytes_id = Identifier(self.info, n_bytes_name)
+        two = IntegerLiteral(NodeInfo.from_info(self.info, "two"), 2, 32)
+
+        # correct for \0A\00 in format string
+        corrected_bytes = Arithmetic(NodeInfo.from_info(self.info, "n_bytes_minus_two"), n_bytes_id, "SUB", two)
+        obj_name = self.info.id + "_string_literal"
+        string = ObjectCreation(self.info, obj_name, self.exprtype(scope), [buf_id, corrected_bytes, corrected_bytes, capacity])
+        return string.codegen(scope)
+
+    def exprtype(self, scope):
+        self.arg.exprtype(scope)
+        return FatPtr.basic("String")
 
 @dataclass
 class CttzCall(Expression):

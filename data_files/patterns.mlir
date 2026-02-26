@@ -422,7 +422,28 @@ module @patterns {
       pdl.replace %root with (%call_result : !pdl.value)
     }
   }
-  
+  pdl.pattern @LowerSnprintf : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %i32_type = pdl.type : i32
+    %format_ptr = pdl.operand : %ptr_type
+    %buf_ptr = pdl.operand : %ptr_type
+    %msg = pdl.operands
+    %root = pdl.operation "mid.snprintf"(%buf_ptr, %format_ptr, %msg : !pdl.value, !pdl.value, !pdl.range<value>) -> (%i32_type : !pdl.type)
+    pdl.rewrite %root {
+      %thirty_two = pdl.attribute = 32
+      %const = pdl.operation "llvm.mlir.constant" { "value" = %thirty_two } -> (%i32_type :!pdl.type)
+      %size = pdl.result 0 of %const
+      %load = pdl.operation "llvm.load"(%buf_ptr : !pdl.value) -> (%ptr_type : !pdl.type)
+      %buf = pdl.result 0 of %load
+      %callee = pdl.attribute = @snprintf
+      %opsegsize = pdl.attribute = array<i32: 4, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %callee_type = pdl.attribute = !llvm.func<i32 (!llvm.ptr, i32, !llvm.ptr, ...)>
+      %call = pdl.operation "placeholder.call"(%buf, %size, %format_ptr, %msg : !pdl.value, !pdl.value, !pdl.value, !pdl.range<value>) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize, "callee_type" = %callee_type, "var_callee_type" = %callee_type} -> (%i32_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      pdl.replace %root with (%call_result : !pdl.value)
+    }
+  }
   pdl.pattern @LowerUtilsAPI : benefit(1) {
     %root = pdl.operation "mid.utils_api"
     %i64_type = pdl.type : i64

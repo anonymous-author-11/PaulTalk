@@ -16,7 +16,9 @@ declare ptr @llvm.frameaddress(i32)
 declare void @report_exception( {ptr} )
 
 @i32_string = internal constant [4 x i8] c"%d\0A\00"
+@u32_string = internal constant [4 x i8] c"%u\0A\00"
 @i64_string = internal constant [6 x i8] c"%lld\0A\00"
+@u64_string = internal constant [6 x i8] c"%llu\0A\00"
 @string_string = internal constant [4 x i8] c"%s\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
 @exception_message = internal constant [45 x i8] c"Error: uncaught exception. Program aborted.\0A\00"

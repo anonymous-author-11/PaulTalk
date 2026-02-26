@@ -155,7 +155,8 @@ class LowerMid(ModulePass):
                 LowerBoxDef(),
                 LowerBoxUnionDef(),
                 LowerNew(),
-                LowerUnboxDef()
+                LowerUnboxDef(),
+                LowerFormat()
                 #LowerDataSize(),
                 #LowerSize(),
                 #LowerCreateBuffer(),
@@ -1738,32 +1739,56 @@ class LowerPrintF(RewritePattern):
         printf_call.properties["var_callee_type"] = ftype
         rewriter.replace_matched_op(printf_call)
 
+format_strings = {
+    IntegerType(32):"i32_string", IntegerType(64):"i64_string", Float64Type():"float_string",
+    llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque()]):"string_string"
+}
+
 class LowerPrint(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: PrintOp, rewriter: PatternRewriter):
         debug_code(op)
-        format_str = AddrOfOp.from_string("i32_string")
-        if op.typ == Float64Type() :
-            format_str = AddrOfOp.from_string("float_string")
-        if op.typ == IntegerType(64) :
-            format_str = AddrOfOp.from_string("i64_string")
-        if op.typ == llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque()]):
-            format_str = AddrOfOp.from_string("string_string")
-            load = llvm.LoadOp(op.value, llvm.LLVMPointerType.opaque())
-            input_val: SSAValue = load.results[0]
-        else:
-            load = llvm.LoadOp(op.value, op.typ)
-            input_val: SSAValue = load.results[0]
+        op_typ = op.typ
+        load_type = op_typ
+        if op_typ == llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque()]):
+            load_type = llvm.LLVMPointerType.opaque()
+        load = llvm.LoadOp(op.value, load_type)
+        input_val = load.results[0]
         rewriter.insert_op_before_matched_op(load)
-        if op.typ == IntegerType(1) or op.typ == IntegerType(8):
+        if op_typ == IntegerType(1) or op_typ == IntegerType(8):
             cast_op = arith.ExtSIOp(input_val, IntegerType(32))
             rewriter.insert_op_before_matched_op(cast_op)
             input_val = cast_op.results[0]
-        
+            op_typ = IntegerType(32)
+
+        format_str = AddrOfOp.from_string(format_strings[op_typ])
         printf_call = PrintFOp.create(operands=[format_str.result, input_val], result_types=[IntegerType(32)])
         
         rewriter.insert_op_before_matched_op(format_str)
         rewriter.replace_matched_op(printf_call)
+        debug_code(op)
+
+class LowerFormat(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: FormatOp, rewriter: PatternRewriter):
+        debug_code(op)
+        op_typ = op.typ
+        load = llvm.LoadOp(op.msg, op_typ)
+        input_val = load.results[0]
+        rewriter.insert_op_before_matched_op(load)
+        if op_typ == IntegerType(1) or op_typ == IntegerType(8):
+            cast_op = arith.ExtSIOp(input_val, IntegerType(32))
+            rewriter.insert_op_before_matched_op(cast_op)
+            input_val = cast_op.results[0]
+            op_typ = IntegerType(32)
+
+        format_str = AddrOfOp.from_string(format_strings[op_typ])
+        snprintf_call = SnprintFOp.create(operands=[op.buf, format_str.result, input_val], result_types=[IntegerType(32)])
+        wrap = WrapOp.make(snprintf_call.results[0])
+        
+        rewriter.insert_op_before_matched_op(format_str)
+        rewriter.insert_op_before_matched_op(snprintf_call)
+        rewriter.replace_matched_op(wrap)
         debug_code(op)
 
 class LowerMain(RewritePattern):
