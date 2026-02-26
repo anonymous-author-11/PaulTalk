@@ -354,16 +354,33 @@ class String extends List[Character], Representable {
     def join(parts : Iterable[String]) -> String {
         iterator = parts.iterator();
         first_part = iterator.next();
-        if first_part is not String { return String.empty(); }
-        result = String{first_part.byte_length()};
-        result.extend(first_part);
-        next_part = iterator.next();
-        while next_part is String {
-            result.extend(self);
-            result.extend(next_part);
-            next_part = iterator.next();
+        if first_part is not String { return ""; }
+        return self.join(first_part.copy(), iterator);
+    }
+    def join(parts : Collection[String]) -> String {
+        scan = parts.iterator();
+        first_part = scan.next();
+        if first_part is not String { return ""; }
+
+        // count total bytes for preallocation
+        own_bytes = self.byte_length();
+        capacity = first_part.byte_length();
+        part = scan.next();
+        while part is String {
+            capacity = capacity + own_bytes + part.byte_length();
+            part = scan.next();
         }
-        return result;
+
+        iterator = parts.iterator();
+        start = String{capacity}.extend(iterator.next());
+        return self.join(start, iterator);
+    }
+    def join(first : String, rest : Iterator[String]) -> String {
+        for part in rest {
+            first.extend(self);
+            first.extend(part);
+        }
+        return first;
     }
     def split(delimiter : String) -> Iterable[String] {
         return SplitString{self, delimiter};

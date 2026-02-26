@@ -708,6 +708,11 @@ TODO:
 - Stringification for primitives [check!]
 	- uses snprintf [check!]
 
+- Print parse tree with line numbers
+- Have nice pretty parser errors
+- Use paultalk_parser.mini as the actual parser
+- Make test suite faster
+
 - If method has no arguments, use a different behavior wrapper
 	- Avoids passing poison argument which seems to limit inlining
 - paultalk_parser line 151, type inference bug
