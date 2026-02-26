@@ -1776,7 +1776,9 @@ class LowerMain(RewritePattern):
         first_block = op.body.first_block
         if not last_block or not first_block: raise Exception("no blocks!")
         last_block.add_ops([ret_val, ret_op])
-        setup = SetupExceptionOp.create()
+        argc = first_block.insert_arg(IntegerType(32), 0)
+        argv = first_block.insert_arg(llvm.LLVMPointerType.opaque(), 1)
+        setup = SetupExceptionOp.create(operands=[argc, argv])
         rewriter.insert_op_before(setup, first_block.first_op)
         body = op.detach_region(op.body)
         main_decl = func.FuncOp(op.main_name.data, FunctionType.from_lists([IntegerType(32), llvm.LLVMPointerType.opaque()], [IntegerType(32)]), region=body)
