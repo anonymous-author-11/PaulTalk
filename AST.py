@@ -2217,7 +2217,7 @@ class Format(Expression):
 
         arg_type = self.arg.exprtype(scope)
 
-        if isinstance(arg_type, Nil()):
+        if arg_type == Nil():
             return StringLiteral(self.info, "nil").codegen(scope)
 
         # Future: add branch for Bool operand
