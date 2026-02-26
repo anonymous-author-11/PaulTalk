@@ -2183,8 +2183,15 @@ class PrintCall(Expression):
         return [*self.args]
 
     def codegen(self, scope):
-        attr_dict = {"typ":self.args[0].exprtype(scope).base_typ()}
-        debug_print_op = PrintOp.create(operands=[self.args[0].codegen(scope)], attributes=attr_dict, result_types=[IntegerType(32)])
+        arg_type = self.args[0].exprtype(scope)
+        attr_dict = {"typ":arg_type.base_typ()}
+        if arg_type == FatPtr.basic("String"):
+            c_string = MethodCall(NodeInfo.from_info(self.info, "c_string"), self.args[0], "c_string", [])
+            operands = [c_string.codegen(scope)]
+            attr_dict = {"typ":c_string.exprtype(scope).base_typ()}
+        else:
+            operands = [self.args[0].codegen(scope)]
+        debug_print_op = PrintOp.create(operands=operands, attributes=attr_dict, result_types=[IntegerType(32)])
         scope.region.last_block.add_op(debug_print_op)
         return debug_print_op.results[0]
 
