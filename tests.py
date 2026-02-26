@@ -24,9 +24,9 @@ STRESS_TEST_NAMES = {
     "test_array_iteration",
     "test_matmul",
     "test_prime_sieves",
-    "test_paultalk_parser_class_method_and_setter_smoke"
+    "test_paultalk_parser_class_method_and_setter_smoke",
+    "test_paultalk_parser_resilient_recovery"
 }
-
 
 def iter_tests(test_suite):
     for test in test_suite:

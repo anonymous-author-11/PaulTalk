@@ -372,13 +372,16 @@ class String extends List[Character], Representable {
         }
 
         iterator = parts.iterator();
-        start = String{capacity}.extend(iterator.next());
+        iterator.next();
+        start = String{capacity}.extend(first_part);
         return self.join(start, iterator);
     }
     def join(first : String, rest : Iterator[String]) -> String {
-        for part in rest {
+        part = rest.next();
+        while part is String {
             first.extend(self);
             first.extend(part);
+            part = rest.next();
         }
         return first;
     }
