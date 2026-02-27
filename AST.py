@@ -2197,13 +2197,33 @@ class PrintCall(Expression):
             attr_dict = {"typ":c_string.exprtype(scope).base_typ()}
         else:
             operands = [self.args[0].codegen(scope)]
-        debug_print_op = PrintOp.create(operands=operands, attributes=attr_dict, result_types=[IntegerType(32)])
-        scope.region.last_block.add_op(debug_print_op)
-        return debug_print_op.results[0]
+        print_op = PrintOp.create(operands=operands, attributes=attr_dict, result_types=[IntegerType(32)])
+        wrap = WrapOp.make(print_op.results[0])
+        scope.region.last_block.add_ops([print_op, wrap])
+        return wrap.results[0]
 
-    def typeflow(self, scope):
+    def exprtype(self, scope):
         self.args[0].exprtype(scope)
-        self.args[0].typeflow(scope)
+        return Integer(32)
+
+@dataclass
+class PrintFCall(Expression):
+    args: List[Expression]
+
+    @property
+    def subexpressions(self):
+        return [*self.args]
+
+    def codegen(self, scope):
+        operands = [arg.codegen(scope) for arg in self.args]
+        print_op = PrintFOp.create(operands=operands, result_types=[IntegerType(32)])
+        wrap = WrapOp.make(print_op.results[0])
+        scope.region.last_block.add_ops([print_op, wrap])
+        return wrap.results[0]
+
+    def exprtype(self, scope):
+        self.args[0].exprtype(scope)
+        return Integer(32)
 
 @dataclass
 class Format(Expression):
@@ -2440,6 +2460,9 @@ class ExternDef(Statement):
 
     def codegen(self, scope):
         if self.name in scope.comp_unit.codegenned: return
+        if self.name == "printf":
+            scope.comp_unit.codegenned.add(self.name)
+            return
         arg_types = [param.type(scope.type_env).base_typ() for param in self.params]
         result_type = self.return_type().base_typ() if self.return_type() else llvm.LLVMVoidType()
         func = llvm.FuncOp(self.name, llvm.LLVMFunctionType(arg_types, result_type), llvm.LinkageAttr("external"))

@@ -597,6 +597,8 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, line_number(func_name))
         if func_name.value == "print":
             return PrintCall(node_info, args)
+        if func_name.value == "printf":
+            return PrintFCall(node_info, args)
         if func_name.value == "cttz":
             return CttzCall(node_info, args)
         if func_name.value == "blsr":
