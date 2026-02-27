@@ -352,28 +352,7 @@ class CompilationJob:
 
     def run_opt(self, linked_dbg_ir: str) -> str:
 
-        passes = f"--passes={self.settings.opt_level}"
-
-        settings = (
-            *self.settings.devirt.split(),
-            *self.settings.vec.split(),
-            *self.settings.inlining.split(),
-            *self.settings.attributor().split(),
-            *self.settings.hotcold.split(),
-        )
-        opt = (OPT_PATH, "-S", "-", passes, *settings)
-        hoist_allocas = (OPT_PATH, "-S", "-", "--bugpoint-enable-legacy-pm", "--alloca-hoisting")
-
-        # We want to hoist allocas after heap2stack, as h2s will create allocas in non-entry blocks
-        # We can't express this as a single -passes= pipeline because --alloca-hoisting
-        # is legacy-PM-only, while --passes= uses the new PM. Run as one shell pipeline.
-        pipeline = " | ".join((
-            shell_join(opt),
-            shell_join(hoist_allocas),
-            shell_join(opt),
-            shell_join(hoist_allocas),
-        ))
-        optimized_dbg_ir = run_checked(pipeline, input_text=linked_dbg_ir, shell=True)
+        optimized_dbg_ir = run_checked(self.settings.opt_pipeline, input_text=linked_dbg_ir, shell=True)
 
         self.write_side_ir(self.build.out_optimized_dbg, optimized_dbg_ir)
 
@@ -463,13 +442,37 @@ class OptimizationSettings:
         return "--hotcoldsplit-max-params=100 --hotcoldsplit-threshold=-1 --inline-cold-callsite-threshold=-10000 --enable-cold-section"
 
     @property
-    def opt_level(self):
-        opt_levels = {
-            1:"default<O1>",
-            2:"default<O2>",
-            3:"hotcoldsplit,default<O3>" # a pass so nice we run it twice
-        }
-        return opt_levels[1] if self.debug_mode else opt_levels[3]
+    def opt_pipeline(self):
+
+        settings = (
+            *self.devirt.split(),
+            *self.vec.split(),
+            *self.inlining.split(),
+            *self.attributor().split(),
+            *self.hotcold.split(),
+        )
+
+        if self.debug_mode:
+            passes = f"--passes=default<O1>"
+            return shell_join((OPT_PATH, "-S", "-", passes, *settings))
+
+        passes = f"--passes=hotcoldsplit,default<O3>"
+
+        opt = (OPT_PATH, "-", passes, *settings)
+        hoist_allocas_bitcode = (OPT_PATH, "-", "--bugpoint-enable-legacy-pm", "--alloca-hoisting")
+        hoist_allocas_textual = (OPT_PATH, "-S", "-", "--bugpoint-enable-legacy-pm", "--alloca-hoisting")
+
+        # We want to hoist allocas after heap2stack, as h2s will create allocas in non-entry blocks
+        # We can't express this as a single -passes= pipeline because --alloca-hoisting
+        # is legacy-PM-only, while --passes= uses the new PM. Run as one shell pipeline.
+        pipeline = " | ".join((
+            shell_join(opt),
+            shell_join(hoist_allocas_bitcode),
+            shell_join(opt),
+            shell_join(hoist_allocas_textual),
+        ))
+
+        return pipeline
 
     @property
     def llc_options(self):
@@ -482,6 +485,8 @@ class OptimizationSettings:
         # Heap-to-stack will convert malloc to alloca, retroactively creating UB if used in a tail call
         no_tail = "--disable-tail-calls"
         heap2stack = "--max-heap-to-stack-size=1024"
+
+        if self.debug_mode: heap2stack = "--max-heap-to-stack-size=0"
 
         open_world = "--attributor-assume-closed-world=false"
         use_internal_attributes = "--attributor-manifest-internal"
