@@ -1,0 +1,7 @@
+import std;
+import paultalk_parser;
+
+src = BufferedFile{"lib/unicode_example.mini", "rb"}.read();
+result = parse_paultalk_resilient(src);
+formatted = result.formatted_errors(src);
+IO.print(formatted);

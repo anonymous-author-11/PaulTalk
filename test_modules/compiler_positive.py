@@ -75,6 +75,28 @@ class CompilerPositiveTestsMixin:
         expected_output = "true\ntrue"
         self.compile_and_run(mini_code, expected_output, "paultalk_parser_resilient_recovery")
 
+    def test_paultalk_parser_formats_errors_with_source_context(self):
+        mini_code = """
+            import std;
+            import paultalk_parser;
+
+            src = "x = @;";
+            result = parse_paultalk_resilient(src);
+            formatted = result.formatted_errors(src);
+
+            IO.print(result.errors().size() > 0);
+            IO.print(formatted.contains("Parse error at line 1, column 5:"));
+            IO.print(formatted.contains("Expected identifier after '@'."));
+            IO.print(formatted.contains("1 | x = @;"));
+            IO.print(formatted.contains("^"));
+        """
+        expected_output = "true\ntrue\ntrue\ntrue\ntrue"
+        self.compile_and_run(
+            mini_code,
+            expected_output,
+            "paultalk_parser_formats_errors_with_source_context"
+        )
+
     def test_file_stuff(self):
         mini_code = """
             import core;
@@ -999,5 +1021,5 @@ class CompilerPositiveTestsMixin:
             IO.print(77 as String);
             IO.print(77.77 as String);
         """
-        expected_output = "77\n77.770000"
+        expected_output = "77\n77.770000" 
         self.run_mini_code(mini_code, expected_output, "format")

@@ -14,14 +14,23 @@ class ParseError extends Exception {
     }
 
     def print_message() {
-        print(@message.c_string());
-        print("line".c_string());
-        print(@line);
-        print("column".c_string());
-        print(@column);
+        print(self.header());
     }
 
     def message() -> String { return @message; }
+
+    def header() -> String {
+        return "Parse error at line "
+            .extend(@line as String)
+            .extend(", column ")
+            .extend(@column as String)
+            .extend(": ")
+            .extend(@message);
+    }
+
+    def format(source : String) -> String {
+        return format_parse_error(source, self);
+    }
 }
 
 class Token extends Representable {
@@ -131,6 +140,58 @@ class ParseResult {
     }
 
     def has_errors() -> Bool { return @errors.size() > 0; }
+
+    def formatted_errors(source : String) -> String {
+        return format_parse_errors(source, @errors);
+    }
+
+    def print_errors(source : String) {
+        text = self.formatted_errors(source);
+        if text.byte_length() == 0 { return; }
+        print(text);
+    }
+}
+
+def line_text_at(source : String, line_number : i32) -> String {
+    if line_number < 1 { return ""; }
+    index = 1;
+    for line_text in source.split("\n") {
+        if index == line_number { return trim_trailing_cr(line_text); }
+        index = index + 1;
+    }
+    return "";
+}
+
+def trim_trailing_cr(text : String) -> String {
+    if not text.ends_with("\r") { return text; }
+    return text.bytes().slice(0, text.byte_length() - 1) into String;
+}
+
+def format_parse_error(source : String, error : ParseError) -> String {
+    line_number = error.line();
+    column = error.column();
+    if column < 1 { column = 1; }
+
+    line_number_text = line_number as String;
+    source_line = line_text_at(source, line_number);
+    pointer = " ".repeat(column - 1).extend("^");
+    gutter_pad = " ".repeat(line_number_text.byte_length());
+    return error.header()
+        .extend("\n")
+        .extend(line_number_text)
+        .extend(" | ")
+        .extend(source_line)
+        .extend("\n")
+        .extend(gutter_pad)
+        .extend(" | ")
+        .extend(pointer);
+}
+
+def format_parse_errors(source : String, errors : Array[ParseError]) -> String {
+    if errors.size() == 0 { return ""; }
+    rendered = [] of String;
+    for error in errors { rendered.append(format_parse_error(source, error)); }
+    return "\n\n".join(rendered);
 }
 
 class PaulTalkLexer {
