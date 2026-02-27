@@ -1,0 +1,435 @@
+import std;
+
+extern def _write(fd : i32, bytes : Buffer[i8], n_bytes : i32) -> i32
+extern def clock() -> i64
+extern def _kbhit() -> i32
+extern def _getch() -> i32
+extern def system(command : Buffer[i8]) -> i32
+extern def GetStdHandle(handle_id : i32) -> Buffer[i32]
+extern def GetConsoleMode(handle : Buffer[i32], out_mode : Buffer[i32]) -> i32
+extern def SetConsoleMode(handle : Buffer[i32], mode : i32) -> i32
+extern def srand(seed : i32)
+extern def rand() -> i32
+extern def time(seconds : i64) -> i64
+
+class Terminal {
+    def Self.write(text : String) {
+        _write(1, text.c_string(), text.byte_length());
+    }
+
+    def Self.clear() {
+        Self.write("\x1b[2J");
+    }
+
+    def Self.home() {
+        Self.write("\x1b[H");
+    }
+
+    def Self.hide_cursor() {
+        Self.write("\x1b[?25l");
+    }
+
+    def Self.show_cursor() {
+        Self.write("\x1b[?25h");
+    }
+
+    def Self.enter_alt_screen() {
+        Self.write("\x1b[?1049h\x1b[H");
+    }
+
+    def Self.leave_alt_screen() {
+        Self.write("\x1b[?1049l");
+    }
+
+    def Self.try_enable_ansi() -> Bool {
+        stdout_handle = GetStdHandle(-11);
+        if stdout_handle is Nil { return false; }
+
+        mode_buf = Buffer[i32].new(1);
+        ok = GetConsoleMode(stdout_handle, mode_buf);
+        if ok == 0 { return false; }
+
+        vt_mode = mode_buf.[0] bit_or 4;
+        ok = SetConsoleMode(stdout_handle, vt_mode);
+        return ok != 0;
+    }
+}
+
+class PongConfig {
+    def Self.width() -> i32 { return 64; }
+    def Self.height() -> i32 { return 22; }
+    def Self.paddle_height() -> i32 { return 4; }
+    def Self.left_x() -> i32 { return 2; }
+    def Self.right_x() -> i32 { return Self.width() - 3; }
+    def Self.frame_ticks() -> i64 {
+        return 50 as i64;
+    }
+    def Self.winning_score() -> i32 { return 9; }
+}
+
+class PongState {
+    @left_top : i32
+    @right_top : i32
+    @ball_x : i32
+    @ball_y : i32
+    @ball_vx : i32
+    @ball_vy : i32
+    @ball_speed_div : i32
+    @ball_speed_tick : i32
+    @left_score : i32
+    @right_score : i32
+
+    def init() {
+        @left_top = (PongConfig.height() - PongConfig.paddle_height()) / 2;
+        @right_top = @left_top;
+        @left_score = 0;
+        @right_score = 0;
+        @ball_x = PongConfig.width() / 2;
+        @ball_y = PongConfig.height() / 2;
+        @ball_vx = 1;
+        @ball_vy = 1;
+        if (rand() bit_and 1) == 0 {
+            @ball_vx = 1;
+        } else {
+            @ball_vx = -1;
+        }
+        if (rand() bit_and 1) == 0 {
+            @ball_vy = 1;
+        } else {
+            @ball_vy = -1;
+        }
+        @ball_speed_div = 1 + (rand() bit_and 1);
+        @ball_speed_tick = 0;
+    }
+
+    def clamp_paddle(top : i32) -> i32 {
+        if top < 1 { return 1; }
+        max_top = PongConfig.height() - PongConfig.paddle_height() - 1;
+        if top > max_top { return max_top; }
+        return top;
+    }
+
+    def random_sign() -> i32 {
+        if (rand() bit_and 1) == 0 { return 1; }
+        return -1;
+    }
+
+    def reset_ball(to_right : Bool) {
+        @ball_x = PongConfig.width() / 2;
+        @ball_y = PongConfig.height() / 2;
+        @ball_vx = self.random_sign();
+        if (rand() bit_and 7) == 0 and to_right { @ball_vx = 1; }
+        if (rand() bit_and 7) == 0 and not to_right { @ball_vx = -1; }
+        @ball_vy = self.random_sign();
+        @ball_speed_div = 1 + (rand() bit_and 1);
+        @ball_speed_tick = 0;
+    }
+
+    def apply_controls(lu : Bool, ld : Bool, ru : Bool, rd : Bool) {
+        if lu and not ld {
+            @left_top = self.clamp_paddle(@left_top - 1);
+        }
+        if ld and not lu {
+            @left_top = self.clamp_paddle(@left_top + 1);
+        }
+        if ru and not rd {
+            @right_top = self.clamp_paddle(@right_top - 1);
+        }
+        if rd and not ru {
+            @right_top = self.clamp_paddle(@right_top + 1);
+        }
+    }
+
+    def left_won() -> Bool {
+        return @left_score >= PongConfig.winning_score();
+    }
+
+    def right_won() -> Bool {
+        return @right_score >= PongConfig.winning_score();
+    }
+
+    def finished() -> Bool {
+        return self.left_won() or self.right_won();
+    }
+
+    def bump_vertical_from_paddle(paddle_top : i32, y : i32) {
+        center = paddle_top + (PongConfig.paddle_height() / 2);
+        if y < center {
+            @ball_vy = -1;
+            return;
+        }
+        if y > center {
+            @ball_vy = 1;
+            return;
+        }
+    }
+
+    def bounce_on_walls(next_y : i32) -> i32 {
+        if next_y <= 1 {
+            @ball_vy = 1;
+            return 1;
+        }
+        if next_y >= (PongConfig.height() - 2) {
+            @ball_vy = -1;
+            return PongConfig.height() - 2;
+        }
+        return next_y;
+    }
+
+    def in_left_paddle(y : i32) -> Bool {
+        return y >= @left_top and y < (@left_top + PongConfig.paddle_height());
+    }
+
+    def in_right_paddle(y : i32) -> Bool {
+        right_bottom = @right_top + PongConfig.paddle_height();
+        return y >= @right_top and y < right_bottom;
+    }
+
+    def maybe_bounce_left(next_x : i32, next_y : i32) -> i32 {
+        if next_x != PongConfig.left_x() { return next_x; }
+        if not self.in_left_paddle(next_y) { return next_x; }
+
+        @ball_vx = 1;
+        self.bump_vertical_from_paddle(@left_top, next_y);
+        return @ball_x + @ball_vx;
+    }
+
+    def maybe_bounce_right(next_x : i32, next_y : i32) -> i32 {
+        if next_x != PongConfig.right_x() { return next_x; }
+        if not self.in_right_paddle(next_y) { return next_x; }
+
+        @ball_vx = -1;
+        self.bump_vertical_from_paddle(@right_top, next_y);
+        return @ball_x + @ball_vx;
+    }
+
+    def score_if_needed(next_x : i32) -> Bool {
+        if next_x <= 0 {
+            @right_score = @right_score + 1;
+            self.reset_ball(true);
+            return true;
+        }
+
+        if next_x >= (PongConfig.width() - 1) {
+            @left_score = @left_score + 1;
+            self.reset_ball(false);
+            return true;
+        }
+        return false;
+    }
+
+    def step() {
+        if self.finished() { return; }
+        @ball_speed_tick = @ball_speed_tick + 1;
+        if @ball_speed_tick < @ball_speed_div { return; }
+        @ball_speed_tick = 0;
+
+        next_y = @ball_y + @ball_vy;
+        next_y = self.bounce_on_walls(next_y);
+
+        next_x = @ball_x + @ball_vx;
+        next_x = self.maybe_bounce_left(next_x, next_y);
+        next_x = self.maybe_bounce_right(next_x, next_y);
+        if self.score_if_needed(next_x) { return; }
+
+        @ball_x = next_x;
+        @ball_y = next_y;
+    }
+
+    def is_left_paddle(x : i32, y : i32) -> Bool {
+        if x != PongConfig.left_x() { return false; }
+        return self.in_left_paddle(y);
+    }
+
+    def is_right_paddle(x : i32, y : i32) -> Bool {
+        if x != PongConfig.right_x() { return false; }
+        return self.in_right_paddle(y);
+    }
+
+    def is_border(x : i32, y : i32) -> Bool {
+        if y == 0 or y == (PongConfig.height() - 1) { return true; }
+        if x == 0 or x == (PongConfig.width() - 1) { return true; }
+        return false;
+    }
+
+    def cell_char(x : i32, y : i32) -> Character {
+        if x == @ball_x and y == @ball_y { return 'O'; }
+        if self.is_left_paddle(x, y) { return '|'; }
+        if self.is_right_paddle(x, y) { return '|'; }
+        if self.is_border(x, y) { return '#'; }
+        return ' ';
+    }
+
+    def status_line() -> String {
+        line = String{128};
+        line.extend("PaulTalk Pong  L:");
+        line.extend(@left_score as String);
+        line.extend("  R:");
+        line.extend(@right_score as String);
+        line.extend("    W/S left  O/L right  Q quit");
+        return line;
+    }
+
+    def winner_text() -> String {
+        if self.left_won() { return "  Left wins. Press Q to exit."; }
+        if self.right_won() { return "  Right wins. Press Q to exit."; }
+        return "";
+    }
+
+    def append_row(frame : String, y : i32, is_last : Bool) {
+        x = 0;
+        while x < PongConfig.width() {
+            frame.append(self.cell_char(x, y));
+            x = x + 1;
+        }
+        if is_last { return; }
+        frame.append('\n');
+    }
+
+    def render(ansi_enabled : Bool) {
+        frame_capacity = (PongConfig.width() + 2) * (PongConfig.height() + 3);
+        frame = String{frame_capacity};
+        if ansi_enabled {
+            frame.extend("\x1b[H");
+        } else {
+            system("cls".c_string());
+        }
+        frame.extend(self.status_line());
+        frame.append('\n');
+
+        y = 0;
+        while y < PongConfig.height() {
+            is_last = y == (PongConfig.height() - 1);
+            self.append_row(frame, y, is_last);
+            y = y + 1;
+        }
+
+        frame.extend(self.winner_text());
+        Terminal.write(frame);
+    }
+}
+
+class Pong {
+    @state : PongState
+    @ansi_enabled : Bool
+    @left_dir : i32
+    @right_dir : i32
+    @left_hold_until : i64
+    @right_hold_until : i64
+    @quit_requested : Bool
+
+    def init() {
+        seed = time(0 as i64) as i32;
+        if seed == 0 { seed = clock() as i32; }
+        srand(seed);
+        @state = PongState{};
+        @ansi_enabled = Terminal.try_enable_ansi();
+        @left_dir = 0;
+        @right_dir = 0;
+        @left_hold_until = 0 as i64;
+        @right_hold_until = 0 as i64;
+        @quit_requested = false;
+    }
+
+    def hold_window() -> i64 {
+        return 320 as i64;
+    }
+
+    def apply_key(key : i32, now : i64) {
+        if key == 113 or key == 81 {
+            @quit_requested = true;
+            return;
+        }
+        if key == 119 or key == 87 {
+            @left_dir = -1;
+            @left_hold_until = now + self.hold_window();
+            return;
+        }
+        if key == 115 or key == 83 {
+            @left_dir = 1;
+            @left_hold_until = now + self.hold_window();
+            return;
+        }
+        if key == 111 or key == 79 {
+            @right_dir = -1;
+            @right_hold_until = now + self.hold_window();
+            return;
+        }
+        if key == 108 or key == 76 {
+            @right_dir = 1;
+            @right_hold_until = now + self.hold_window();
+            return;
+        }
+    }
+
+    def consume_extended_key(key : i32) -> Bool {
+        if key != 0 and key != 224 { return false; }
+        _getch();
+        return true;
+    }
+
+    def poll_keys(now : i64) {
+        while _kbhit() != 0 {
+            key = _getch();
+            if self.consume_extended_key(key) { continue; }
+            self.apply_key(key, now);
+        }
+    }
+
+    def refresh_dirs(now : i64) {
+        if now > @left_hold_until { @left_dir = 0; }
+        if now > @right_hold_until { @right_dir = 0; }
+    }
+
+    def move_paddles() {
+        @state.apply_controls(
+            @left_dir < 0,
+            @left_dir > 0,
+            @right_dir < 0,
+            @right_dir > 0
+        );
+    }
+
+    def apply_input(now : i64) -> Bool {
+        self.poll_keys(now);
+        self.refresh_dirs(now);
+        return @quit_requested;
+    }
+
+    def next_tick(current_tick : i64, now : i64) -> i64 {
+        if (now - current_tick) > (250 as i64) { return now; }
+        return current_tick + PongConfig.frame_ticks();
+    }
+
+    def run() {
+        if @ansi_enabled {
+            Terminal.enter_alt_screen();
+            Terminal.clear();
+            Terminal.hide_cursor();
+        }
+
+        tick = clock();
+        should_quit = false;
+
+        while not should_quit {
+            now = clock();
+            should_quit = self.apply_input(now);
+            if should_quit { continue; }
+
+            if now < tick { continue; }
+            tick = self.next_tick(tick, now);
+
+            self.move_paddles();
+            @state.step();
+            @state.render(@ansi_enabled);
+        }
+
+        if @ansi_enabled {
+            Terminal.show_cursor();
+            Terminal.leave_alt_screen();
+        }
+    }
+}
+
+pong = Pong{};
+pong.run();
