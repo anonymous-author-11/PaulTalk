@@ -197,22 +197,22 @@ def format_parse_errors(source : String, errors : Array[ParseError]) -> String {
 class PaulTalkLexer {
     @source : String
     @tokens : Array[Token]
+    @errors : Array[ParseError]
     @length : i32
     @cursor : i32
     @line : i32
     @column : i32
-    @errors : Array[ParseError]
     @last_error_cursor : i32
 
     getters @errors
 
     def init(@source : String) {
     	@tokens = [] of Token;
+        @errors = [] of ParseError;
         @length = @source.byte_length();
         @cursor = 0;
         @line = 1;
         @column = 1;
-        @errors = [] of ParseError;
         @last_error_cursor = -1;
     }
 

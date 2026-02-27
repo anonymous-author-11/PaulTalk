@@ -25,7 +25,8 @@ STRESS_TEST_NAMES = {
     "test_matmul",
     "test_prime_sieves",
     "test_paultalk_parser_class_method_and_setter_smoke",
-    "test_paultalk_parser_resilient_recovery"
+    "test_paultalk_parser_resilient_recovery",
+    "test_paultalk_parser_formats_errors_with_source_context"
 }
 
 def iter_tests(test_suite):
