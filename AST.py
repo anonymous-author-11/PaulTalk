@@ -2454,8 +2454,6 @@ class ExternDef(Statement):
         return self._return_type
 
     def typeflow(self, scope):
-        if self.name[0].isupper():
-            raise Exception(f"{self.info}: Function names should not be capitalized.")
         for i, param in enumerate(self.params): param.typeflow(scope)
 
 @dataclass
