@@ -36,13 +36,13 @@ class File extends IndexableCollection[i32, i8, i8] {
 	def size() -> i32 {
 		length = self.byte_length();
 		max_i32 = i32.max() as i64;
-		if length > max_i32 { yield(FileSystemError.new()); }
+		if length > max_i32 { yield(FileSystemError{}); }
 		return length as i32;
 	}
 
 	def bounds_check(index : i32) {
 		length = self.size();
-		if index < 0 or index >= length { yield(OutOfBounds.new(length, index)); }
+		if index < 0 or index >= length { yield(OutOfBounds{length, index}); }
 	}
 
 	def indices() -> Range {
@@ -56,7 +56,7 @@ class File extends IndexableCollection[i32, i8, i8] {
 	def unchecked_index(index : i32) -> i8 {
 		value = self.read_at(index as i64);
 		if value is i8 { return value; }
-		yield(FileSystemError.new());
+		yield(FileSystemError{});
 	}
 
 	def [](index : i32) -> i8 {
@@ -68,7 +68,7 @@ class File extends IndexableCollection[i32, i8, i8] {
 		single_byte = Buffer[i8].new(1);
 		single_byte.[0] = value;
 		written = self.write(index as i64, single_byte, 1);
-		if written < 1 { yield(FileSystemError.new()); }
+		if written < 1 { yield(FileSystemError{}); }
 	}
 
 	def []=(index : i32, value : i8) {
@@ -89,7 +89,7 @@ class File extends IndexableCollection[i32, i8, i8] {
 		i = 0;
 		while i < length_i32 {
 			byte = self.read_at(i as i64);
-			if byte is not i8 { yield(FileSystemError.new()); }
+			if byte is not i8 { yield(FileSystemError{}); }
 			buf.[i] = byte;
 			i = i + 1;
 		}
@@ -99,7 +99,7 @@ class File extends IndexableCollection[i32, i8, i8] {
 	def write(text : String) -> i64 {
 		text_len = text.byte_length();
 		written = self.write(0 as i64, text.c_string(), text_len);
-		if written < text_len { yield(FileSystemError.new()); }
+		if written < text_len { yield(FileSystemError{}); }
 		return written as i64;
 	}
 
@@ -145,25 +145,25 @@ class BufferedFile extends File {
 		@cache_len = 0;
 		@open = false;
 		@handle = fopen(@name.c_string(), @mode.c_string());
-		if @handle is Nil { yield(FileSystemError.new()); }
+		if @handle is Nil { yield(FileSystemError{}); }
 		@open = true;
 	} ~> all_alias
 
 	def ensure_open() {
-		if not @open { yield(FileSystemError.new()); }
+		if not @open { yield(FileSystemError{}); }
 	} ~> no_alias
 
 	def current_position() -> i64 {
 		self.ensure_open();
 		pos = ftell(@handle);
-		if pos < 0 as i64 { yield(FileSystemError.new()); }
+		if pos < 0 as i64 { yield(FileSystemError{}); }
 		return pos;
 	} ~> no_alias
 
 	def seek_to(offset : i64) {
 		self.ensure_open();
 		status = fseek(@handle, offset, Self.seek_set());
-		if status != 0 { yield(FileSystemError.new()); }
+		if status != 0 { yield(FileSystemError{}); }
 	} ~> no_alias
 
 	def invalidate_cache() {
@@ -184,7 +184,7 @@ class BufferedFile extends File {
 		self.seek_to(start_offset);
 		@cache_len = 0;
 		read_count = fread(@cache, 1 as i64, @cache_capacity as i64, @handle);
-		if ferror(@handle) != 0 { yield(FileSystemError.new()); }
+		if ferror(@handle) != 0 { yield(FileSystemError{}); }
 		@cache_start = start_offset;
 		@cache_len = read_count as i32;
 	} ~> no_alias
@@ -204,8 +204,8 @@ class BufferedFile extends File {
 		single_byte = Buffer[i8].new(1);
 		single_byte.[0] = value;
 		written = fwrite(single_byte, 1 as i64, 1 as i64, @handle);
-		if written < 1 as i64 { yield(FileSystemError.new()); }
-		if ferror(@handle) != 0 { yield(FileSystemError.new()); }
+		if written < 1 as i64 { yield(FileSystemError{}); }
+		if ferror(@handle) != 0 { yield(FileSystemError{}); }
 	}
 
 	def write(offset : i64, source : Buffer[i8], n_bytes : i32) -> i32 {
@@ -213,7 +213,7 @@ class BufferedFile extends File {
 		if n_bytes <= 0 { return 0; }
 		self.seek_to(offset);
 		written = fwrite(source, 1 as i64, n_bytes as i64, @handle);
-		if ferror(@handle) != 0 { yield(FileSystemError.new()); }
+		if ferror(@handle) != 0 { yield(FileSystemError{}); }
 		self.invalidate_cache();
 		return written as i32;
 	}
@@ -221,9 +221,9 @@ class BufferedFile extends File {
 	def byte_length() -> i64 {
 		self.ensure_open();
 		status = fseek(@handle, 0 as i64, Self.seek_end());
-		if status != 0 { yield(FileSystemError.new()); }
+		if status != 0 { yield(FileSystemError{}); }
 		length = ftell(@handle);
-		if length < 0 as i64 { yield(FileSystemError.new()); }
+		if length < 0 as i64 { yield(FileSystemError{}); }
 		return length;
 	}
 
@@ -243,7 +243,7 @@ class BufferedFile extends File {
 	def reopen() {
 		self.close();
 		@handle = fopen(@name.c_string(), @mode.c_string());
-		if @handle is Nil { yield(FileSystemError.new()); }
+		if @handle is Nil { yield(FileSystemError{}); }
 		@open = true;
 		self.invalidate_cache();
 	} ~> no_alias
@@ -253,7 +253,7 @@ class BufferedFile extends File {
 		int = fclose(@handle);
 		@open = false;
 		self.invalidate_cache();
-		if int == -1 { yield(FileSystemError.new()); }
+		if int == -1 { yield(FileSystemError{}); }
 	}
 
 	def read() -> String {
@@ -263,7 +263,7 @@ class BufferedFile extends File {
 		self.seek_to(0 as i64);
 		buf = Buffer[i8].new(length_i32 + 1);
 		read_count = fread(buf, 1 as i64, length_i64, @handle);
-		if read_count < length_i64 { yield(FileSystemError.new()); }
+		if read_count < length_i64 { yield(FileSystemError{}); }
 		return String.from_bytes_lossy(Array{buf, length_i32, length_i32});
 	}
 }
@@ -311,11 +311,11 @@ class FileWriter extends Writer[i8] {
 	def init(@file : File, @cursor : i64) {
 		@scratch_capacity = Self.default_scratch_capacity();
 		@scratch = Buffer[i8].new(@scratch_capacity);
-		if @cursor < 0 as i64 { yield(FileSystemError.new()); }
+		if @cursor < 0 as i64 { yield(FileSystemError{}); }
 	}
 
 	def cursor=(new_cursor : i64) {
-		if new_cursor < 0 as i64 { yield(FileSystemError.new()); }
+		if new_cursor < 0 as i64 { yield(FileSystemError{}); }
 		@cursor = new_cursor;
 	}
 
@@ -392,7 +392,7 @@ class FileSystem {
 	}
 	def Self.remove(file_name : String) {
 		status = remove(file_name.c_string());
-		if status != 0 { yield(FileSystemError.new()); }
+		if status != 0 { yield(FileSystemError{}); }
 	}
 
 }

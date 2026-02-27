@@ -138,7 +138,7 @@ class Array[T] extends
         past_end = index > (@length - 1);
         before_start = (@length + index) < 0;
         if past_end or before_start {
-            yield(OutOfBounds.new(@length, index));
+            yield(OutOfBounds{@length, index});
         }
     }
     

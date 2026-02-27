@@ -1125,22 +1125,27 @@ class Exception {
         @stacktrace = Stacktrace{};
     }
 
+    def message() -> String {
+        return @message;
+    }
+
     def set_info(@line_number : i32, @file_name : String) {}
 
     def report() {
-        print("---------".c_string());
-        print("Exception thrown from file".c_string());
-        print(@file_name.c_string());
-        print("At line".c_string());
-        print(@line_number);
-        print("With message".c_string());
-        self.print_message();
-        print("Stack trace:".c_string());
+        print(
+            "---------"
+            .extend("\n")
+            .extend("Exception thrown from file ")
+            .extend(@file_name)
+            .extend(" at line ")
+            .extend(@line_number as String)
+            .extend(" with message\n\n")
+            .extend(self.message())
+            .extend("\n\n")
+            .extend("Stack trace:\n")
+        );
         @stacktrace.print();
-        print("---------".c_string());
-    }
-    def print_message() {
-        print(@message.c_string());
+        print("---------");
     }
 }
 
@@ -1172,22 +1177,28 @@ class OutOfBounds extends Exception {
         @message = "An out-of-bounds error occurred while indexing into a collection.";
         @stacktrace = Stacktrace{};
     }
-    def print_message() {
-        print(@message.c_string());
+    def message() -> String {
         details = @details;
-        if details is OutOfBoundsDetails { details.report(); }
+        message = @message;
+
+        if details is OutOfBoundsDetails {
+            message.extend("\n").extend(details.report());
+        }
+        return message;
     }
 }
 
 class OutOfBoundsDetails {
     @bounds : i32
     @index : i32
+
     def init(@bounds : i32, @index : i32) {}
-    def report() {
-        print("The size of the collection being indexed was".c_string());
-        print(@bounds);
-        print("The indexing argument was".c_string());
-        print(@index);
+
+    def report() -> String {
+        return "The size of the collection being indexed was "
+            .extend(@bounds as String)
+            .extend("\nThe indexing argument was ")
+            .extend(@index as String);
     }
 }
 
