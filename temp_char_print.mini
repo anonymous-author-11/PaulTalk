@@ -1,4 +1,0 @@
-import core;
-import io;
-
-IO.print(8364 into Character);

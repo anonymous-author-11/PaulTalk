@@ -13,33 +13,22 @@ extern def rand() -> i32
 extern def time(seconds : i64) -> i64
 
 class Terminal {
+
     def Self.write(text : String) {
         _write(1, text.c_string(), text.byte_length());
     }
 
-    def Self.clear() {
-        Self.write("\x1b[2J");
-    }
+    def Self.clear() { Self.write("\x1b[2J"); }
 
-    def Self.home() {
-        Self.write("\x1b[H");
-    }
+    def Self.home() { Self.write("\x1b[H"); }
 
-    def Self.hide_cursor() {
-        Self.write("\x1b[?25l");
-    }
+    def Self.hide_cursor() { Self.write("\x1b[?25l"); }
 
-    def Self.show_cursor() {
-        Self.write("\x1b[?25h");
-    }
+    def Self.show_cursor() { Self.write("\x1b[?25h"); }
 
-    def Self.enter_alt_screen() {
-        Self.write("\x1b[?1049h\x1b[H");
-    }
+    def Self.enter_alt_screen() { Self.write("\x1b[?1049h\x1b[H"); }
 
-    def Self.leave_alt_screen() {
-        Self.write("\x1b[?1049l");
-    }
+    def Self.leave_alt_screen() { Self.write("\x1b[?1049l"); }
 
     def Self.try_enable_ansi() -> Bool {
         stdout_handle = GetStdHandle(-11);
@@ -61,94 +50,123 @@ class PongConfig {
     def Self.paddle_height() -> i32 { return 4; }
     def Self.left_x() -> i32 { return 2; }
     def Self.right_x() -> i32 { return Self.width() - 3; }
-    def Self.frame_ticks() -> i64 {
-        return 50 as i64;
-    }
+    def Self.frame_ticks() -> i64 { return 50 as i64; }
     def Self.winning_score() -> i32 { return 9; }
 }
 
-class PongState {
-    @left_top : i32
-    @right_top : i32
-    @left_motion : i32
-    @right_motion : i32
-    @ball_x : i32
-    @ball_y : i32
-    @ball_vx : i32
-    @ball_vy : i32
-    @ball_speed_div : i32
-    @ball_speed_tick : i32
-    @left_score : i32
-    @right_score : i32
+class Ball {
+    @x : i32
+    @y : i32
+    @vx : i32
+    @vy : i32
+    @speed_div : i32
+    @speed_tick : i32
 
-    def init() {
-        @left_top = (PongConfig.height() - PongConfig.paddle_height()) / 2;
-        @right_top = @left_top;
-        @left_motion = 0;
-        @right_motion = 0;
-        @left_score = 0;
-        @right_score = 0;
-        @ball_x = PongConfig.width() / 2;
-        @ball_y = PongConfig.height() / 2;
-        @ball_vx = 1;
-        @ball_vy = 1;
-        if (rand() bit_and 1) == 0 {
-            @ball_vx = 1;
-        } else {
-            @ball_vx = -1;
-        }
-        if (rand() bit_and 1) == 0 {
-            @ball_vy = 1;
-        } else {
-            @ball_vy = -1;
-        }
-        @ball_speed_div = 1 + (rand() bit_and 1);
-        @ball_speed_tick = 0;
+    getters @x, @y, @vx, @vy
+    setters @vy, @vx
+
+    def Self.random_sign() -> i32 {
+        if (rand() bit_and 1) == 0 { return 1; }
+        return -1;
     }
 
-    def clamp_paddle(top : i32) -> i32 {
+    def Self.from_center() -> Ball {
+        vx = Self.random_sign();
+        vy = Self.random_sign();
+        return Ball{PongConfig.width() / 2, PongConfig.height() / 2, vx, vy};
+    }
+
+    def init(@x : i32, @y : i32, @vx : i32, @vy : i32) {
+        @speed_div = 1 + (rand() bit_and 1);
+        @speed_tick = 0;
+    }
+
+    def reset(to_right : Bool) {
+        @x = PongConfig.width() / 2;
+        @y = PongConfig.height() / 2;
+        @vx = Ball.random_sign();
+        if (rand() bit_and 7) == 0 and to_right { @vx = 1; }
+        if (rand() bit_and 7) == 0 and not to_right { @vx = -1; }
+        @vy = Ball.random_sign();
+        @speed_div = 1 + (rand() bit_and 1);
+        @speed_tick = 0;
+    }
+
+    def tick_ready() -> Bool {
+        @speed_tick = @speed_tick + 1;
+        if @speed_tick < @speed_div { return false; }
+        @speed_tick = 0;
+        return true;
+    }
+
+    def set_position(x : i32, y : i32) {
+        @x = x;
+        @y = y;
+    }
+}
+
+class Paddle {
+    @x : i32
+    @top : i32
+    @motion : i32
+
+    getters @x, @top, @motion
+
+    def init(@x : i32, @top : i32) {
+        @motion = 0;
+    }
+
+    def clamp(top : i32) -> i32 {
         if top < 1 { return 1; }
         max_top = PongConfig.height() - PongConfig.paddle_height() - 1;
         if top > max_top { return max_top; }
         return top;
     }
 
-    def random_sign() -> i32 {
-        if (rand() bit_and 1) == 0 { return 1; }
-        return -1;
+    def apply(up : Bool, down : Bool) {
+        @motion = 0;
+        if up and not down {
+            @motion = -1;
+            @top = self.clamp(@top - 1);
+        }
+        if down and not up {
+            @motion = 1;
+            @top = self.clamp(@top + 1);
+        }
+    }
+
+    def contains(y : i32) -> Bool {
+        return y >= @top and y < (@top + PongConfig.paddle_height());
+    }
+
+    def center() -> i32 {
+        return @top + (PongConfig.paddle_height() / 2);
+    }
+}
+
+class PongState {
+    @left : Paddle
+    @right : Paddle
+    @ball : Ball
+    @left_score : i32
+    @right_score : i32
+
+    def init() {
+        top = (PongConfig.height() - PongConfig.paddle_height()) / 2;
+        @left = Paddle{PongConfig.left_x(), top};
+        @right = Paddle{PongConfig.right_x(), top};
+        @left_score = 0;
+        @right_score = 0;
+        @ball = Ball.from_center();
     }
 
     def reset_ball(to_right : Bool) {
-        @ball_x = PongConfig.width() / 2;
-        @ball_y = PongConfig.height() / 2;
-        @ball_vx = self.random_sign();
-        if (rand() bit_and 7) == 0 and to_right { @ball_vx = 1; }
-        if (rand() bit_and 7) == 0 and not to_right { @ball_vx = -1; }
-        @ball_vy = self.random_sign();
-        @ball_speed_div = 1 + (rand() bit_and 1);
-        @ball_speed_tick = 0;
+        @ball.reset(to_right);
     }
 
     def apply_controls(lu : Bool, ld : Bool, ru : Bool, rd : Bool) {
-        @left_motion = 0;
-        if lu and not ld {
-            @left_motion = -1;
-            @left_top = self.clamp_paddle(@left_top - 1);
-        }
-        if ld and not lu {
-            @left_motion = 1;
-            @left_top = self.clamp_paddle(@left_top + 1);
-        }
-
-        @right_motion = 0;
-        if ru and not rd {
-            @right_motion = -1;
-            @right_top = self.clamp_paddle(@right_top - 1);
-        }
-        if rd and not ru {
-            @right_motion = 1;
-            @right_top = self.clamp_paddle(@right_top + 1);
-        }
+        @left.apply(lu, ld);
+        @right.apply(ru, rd);
     }
 
     def left_won() -> Bool {
@@ -163,64 +181,47 @@ class PongState {
         return self.left_won() or self.right_won();
     }
 
-    def bump_vertical_from_paddle(paddle_top : i32, y : i32, motion : i32) {
+    def bump_vertical_from_paddle(paddle : Paddle, y : i32) {
+        motion = paddle.motion();
         if motion < 0 {
-            @ball_vy = -1;
+            @ball.vy() = -1;
             return;
         }
         if motion > 0 {
-            @ball_vy = 1;
+            @ball.vy() = 1;
             return;
         }
 
-        center = paddle_top + (PongConfig.paddle_height() / 2);
+        center = paddle.center();
         if y < center {
-            @ball_vy = -1;
+            @ball.vy() = -1;
             return;
         }
         if y > center {
-            @ball_vy = 1;
+            @ball.vy() = 1;
             return;
         }
     }
 
     def bounce_on_walls(next_y : i32) -> i32 {
         if next_y <= 1 {
-            @ball_vy = 1;
+            @ball.vy() = 1;
             return 1;
         }
         if next_y >= (PongConfig.height() - 2) {
-            @ball_vy = -1;
+            @ball.vy() = -1;
             return PongConfig.height() - 2;
         }
         return next_y;
     }
 
-    def in_left_paddle(y : i32) -> Bool {
-        return y >= @left_top and y < (@left_top + PongConfig.paddle_height());
-    }
+    def maybe_bounce(nx : i32, ny : i32, paddle : Paddle, out_vx : i32) -> i32 {
+        if nx != paddle.x() { return nx; }
+        if not paddle.contains(ny) { return nx; }
 
-    def in_right_paddle(y : i32) -> Bool {
-        right_bottom = @right_top + PongConfig.paddle_height();
-        return y >= @right_top and y < right_bottom;
-    }
-
-    def maybe_bounce_left(next_x : i32, next_y : i32) -> i32 {
-        if next_x != PongConfig.left_x() { return next_x; }
-        if not self.in_left_paddle(next_y) { return next_x; }
-
-        @ball_vx = 1;
-        self.bump_vertical_from_paddle(@left_top, next_y, @left_motion);
-        return @ball_x + @ball_vx;
-    }
-
-    def maybe_bounce_right(next_x : i32, next_y : i32) -> i32 {
-        if next_x != PongConfig.right_x() { return next_x; }
-        if not self.in_right_paddle(next_y) { return next_x; }
-
-        @ball_vx = -1;
-        self.bump_vertical_from_paddle(@right_top, next_y, @right_motion);
-        return @ball_x + @ball_vx;
+        @ball.vx() = out_vx;
+        self.bump_vertical_from_paddle(paddle, ny);
+        return @ball.x() + @ball.vx();
     }
 
     def score_if_needed(next_x : i32) -> Bool {
@@ -240,30 +241,22 @@ class PongState {
 
     def step() {
         if self.finished() { return; }
-        @ball_speed_tick = @ball_speed_tick + 1;
-        if @ball_speed_tick < @ball_speed_div { return; }
-        @ball_speed_tick = 0;
+        if not @ball.tick_ready() { return; }
 
-        next_y = @ball_y + @ball_vy;
+        next_y = @ball.y() + @ball.vy();
         next_y = self.bounce_on_walls(next_y);
 
-        next_x = @ball_x + @ball_vx;
-        next_x = self.maybe_bounce_left(next_x, next_y);
-        next_x = self.maybe_bounce_right(next_x, next_y);
+        next_x = @ball.x() + @ball.vx();
+        next_x = self.maybe_bounce(next_x, next_y, @left, 1);
+        next_x = self.maybe_bounce(next_x, next_y, @right, -1);
         if self.score_if_needed(next_x) { return; }
 
-        @ball_x = next_x;
-        @ball_y = next_y;
+        @ball.set_position(next_x, next_y);
     }
 
-    def is_left_paddle(x : i32, y : i32) -> Bool {
-        if x != PongConfig.left_x() { return false; }
-        return self.in_left_paddle(y);
-    }
-
-    def is_right_paddle(x : i32, y : i32) -> Bool {
-        if x != PongConfig.right_x() { return false; }
-        return self.in_right_paddle(y);
+    def is_paddle(x : i32, y : i32, paddle : Paddle) -> Bool {
+        if x != paddle.x() { return false; }
+        return paddle.contains(y);
     }
 
     def is_border(x : i32, y : i32) -> Bool {
@@ -272,17 +265,17 @@ class PongState {
         return false;
     }
 
-    def ball_y() -> i32 { return @ball_y; }
-    def ball_vx() -> i32 { return @ball_vx; }
+    def ball_y() -> i32 { return @ball.y(); }
+    def ball_vx() -> i32 { return @ball.vx(); }
 
     def right_center() -> i32 {
-        return @right_top + (PongConfig.paddle_height() / 2);
+        return @right.center();
     }
 
     def cell_char(x : i32, y : i32) -> Character {
-        if x == @ball_x and y == @ball_y { return 'O'; }
-        if self.is_left_paddle(x, y) { return '|'; }
-        if self.is_right_paddle(x, y) { return '|'; }
+        if x == @ball.x() and y == @ball.y() { return 'O'; }
+        if self.is_paddle(x, y, @left) { return '|'; }
+        if self.is_paddle(x, y, @right) { return '|'; }
         if self.is_border(x, y) { return '#'; }
         return ' ';
     }
@@ -336,17 +329,64 @@ class PongState {
     }
 }
 
+class InputAxis {
+    @dir : i32
+    @confirmed : Bool
+    @primed : Bool
+    @hold_until : i64
+
+    def init() {
+        @dir = 0;
+        @confirmed = false;
+        @primed = false;
+        @hold_until = 0 as i64;
+    }
+
+    def arm(dir : i32, now : i64, hold : i64, initial : i64) {
+        if @dir == dir and now <= @hold_until {
+            @confirmed = true;
+            @primed = false;
+            @hold_until = now + hold;
+            return;
+        }
+        @dir = dir;
+        @confirmed = false;
+        @primed = true;
+        @hold_until = now + initial;
+    }
+
+    def set_confirmed_dir(dir : i32) {
+        @dir = dir;
+        @confirmed = true;
+        @primed = false;
+    }
+
+    def expire(now : i64) {
+        if now <= @hold_until { return; }
+        self.clear();
+    }
+
+    def clear() {
+        @dir = 0;
+        @confirmed = false;
+        @primed = false;
+        @hold_until = 0 as i64;
+    }
+
+    def step_dir() -> i32 {
+        if @dir == 0 { return 0; }
+        if @confirmed { return @dir; }
+        if not @primed { return 0; }
+        @primed = false;
+        return @dir;
+    }
+}
+
 class Pong {
     @state : PongState
     @ansi_enabled : Bool
-    @left_dir : i32
-    @right_dir : i32
-    @left_confirmed : Bool
-    @right_confirmed : Bool
-    @left_primed : Bool
-    @right_primed : Bool
-    @left_hold_until : i64
-    @right_hold_until : i64
+    @left_axis : InputAxis
+    @right_axis : InputAxis
     @quit_requested : Bool
     @right_ai : Bool
 
@@ -356,14 +396,8 @@ class Pong {
         srand(seed);
         @state = PongState{};
         @ansi_enabled = Terminal.try_enable_ansi();
-        @left_dir = 0;
-        @right_dir = 0;
-        @left_confirmed = false;
-        @right_confirmed = false;
-        @left_primed = false;
-        @right_primed = false;
-        @left_hold_until = 0 as i64;
-        @right_hold_until = 0 as i64;
+        @left_axis = InputAxis{};
+        @right_axis = InputAxis{};
         @quit_requested = false;
         @right_ai = true;
     }
@@ -376,30 +410,8 @@ class Pong {
         return 100 as i64;
     }
 
-    def arm_left(dir : i32, now : i64) {
-        if @left_dir == dir and now <= @left_hold_until {
-            @left_confirmed = true;
-            @left_primed = false;
-            @left_hold_until = now + self.hold_window();
-            return;
-        }
-        @left_dir = dir;
-        @left_confirmed = false;
-        @left_primed = true;
-        @left_hold_until = now + self.initial_hold_window();
-    }
-
-    def arm_right(dir : i32, now : i64) {
-        if @right_dir == dir and now <= @right_hold_until {
-            @right_confirmed = true;
-            @right_primed = false;
-            @right_hold_until = now + self.hold_window();
-            return;
-        }
-        @right_dir = dir;
-        @right_confirmed = false;
-        @right_primed = true;
-        @right_hold_until = now + self.initial_hold_window();
+    def arm_axis(axis : InputAxis, dir : i32, now : i64) {
+        axis.arm(dir, now, self.hold_window(), self.initial_hold_window());
     }
 
     def apply_key(key : i32, now : i64) {
@@ -409,28 +421,25 @@ class Pong {
         }
         if key == 116 or key == 84 {
             @right_ai = not @right_ai;
-            @right_dir = 0;
-            @right_confirmed = false;
-            @right_primed = false;
-            @right_hold_until = 0 as i64;
+            @right_axis.clear();
             return;
         }
         if key == 119 or key == 87 {
-            self.arm_left(-1, now);
+            self.arm_axis(@left_axis, -1, now);
             return;
         }
         if key == 115 or key == 83 {
-            self.arm_left(1, now);
+            self.arm_axis(@left_axis, 1, now);
             return;
         }
         if key == 111 or key == 79 {
             if @right_ai { return; }
-            self.arm_right(-1, now);
+            self.arm_axis(@right_axis, -1, now);
             return;
         }
         if key == 108 or key == 76 {
             if @right_ai { return; }
-            self.arm_right(1, now);
+            self.arm_axis(@right_axis, 1, now);
             return;
         }
     }
@@ -449,33 +458,9 @@ class Pong {
         }
     }
 
-    def refresh_dirs(now : i64) {
-        if now > @left_hold_until {
-            @left_dir = 0;
-            @left_confirmed = false;
-            @left_primed = false;
-        }
-        if now > @right_hold_until {
-            @right_dir = 0;
-            @right_confirmed = false;
-            @right_primed = false;
-        }
-    }
-
-    def left_step_dir() -> i32 {
-        if @left_dir == 0 { return 0; }
-        if @left_confirmed { return @left_dir; }
-        if not @left_primed { return 0; }
-        @left_primed = false;
-        return @left_dir;
-    }
-
-    def right_step_dir() -> i32 {
-        if @right_dir == 0 { return 0; }
-        if @right_confirmed { return @right_dir; }
-        if not @right_primed { return 0; }
-        @right_primed = false;
-        return @right_dir;
+    def expire_axes(now : i64) {
+        @left_axis.expire(now);
+        @right_axis.expire(now);
     }
 
     def ai_right_dir() -> i32 {
@@ -496,8 +481,8 @@ class Pong {
     }
 
     def move_paddles() {
-        left_step = self.left_step_dir();
-        right_step = self.right_step_dir();
+        left_step = @left_axis.step_dir();
+        right_step = @right_axis.step_dir();
         @state.apply_controls(
             left_step < 0,
             left_step > 0,
@@ -508,11 +493,9 @@ class Pong {
 
     def apply_input(now : i64) -> Bool {
         self.poll_keys(now);
-        self.refresh_dirs(now);
+        self.expire_axes(now);
         if @right_ai {
-            @right_dir = self.ai_right_dir();
-            @right_confirmed = true;
-            @right_primed = false;
+            @right_axis.set_confirmed_dir(self.ai_right_dir());
         }
         return @quit_requested;
     }
