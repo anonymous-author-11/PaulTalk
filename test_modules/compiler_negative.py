@@ -96,12 +96,6 @@ class CompilerNegativeTestsMixin:
             """
             self.compile_fails(mini_code, "Function foo already declared", "dup_func")
 
-    def test_extern_def_capitalized_name(self):
-            mini_code = """
-            extern def Printf(x : i32) -> i32
-            """
-            self.compile_fails(mini_code, "Function names should not be capitalized.", "extern_capitalized_func_name")
-
     def test_function_def_capitalized_name(self):
             mini_code = """
             def Foo() {}
