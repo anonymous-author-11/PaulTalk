@@ -317,12 +317,8 @@ def benchmark_primes() {
         
         time_taken = end_time - start_time;
         
-        IO.print("Number of primes up to");
-        IO.print(limit);
-        IO.print(":");
-        IO.print(prime_count);
-        IO.print("Time taken:");
-        IO.print(time_taken);
+        IO.print("Number of primes up to ${limit}: ${prime_count}");
+        IO.print("Time taken: ${time_taken}");
     }
 }
 

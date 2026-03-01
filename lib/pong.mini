@@ -282,10 +282,7 @@ class PongState {
 
     def status_line() -> String {
         line = String{128};
-        line.extend("PaulTalk Pong  L:");
-        line.extend(@left_score as String);
-        line.extend("  R:");
-        line.extend(@right_score as String);
+        line.extend("PaulTalk Pong  L: ${@left_score}  R: ${@right_score}");
         line.extend("    W/S left  T toggle right AI  Q quit");
         return line;
     }

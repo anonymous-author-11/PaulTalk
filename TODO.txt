@@ -709,9 +709,17 @@ TODO:
 	- uses snprintf [check!]
 - Have nice pretty parser errors [check!]
 - Make test suite faster [check!]
+- Print parse tree with line numbers [check!]
+- String interpolation [check!]
+	- Allocate exact size up front [check!]
+	- Cast interpolations to String [check!]
+	- "a ${5 + 3} b" syntax [check!]
+- Use interpolation in the stdlib [check!]
+- Add interpolation to syntax highlighting [check!]
 
-- Print parse tree with line numbers
 - Use paultalk_parser.mini as the actual parser
+
+- Update lib/paultalk_parser.mini with interpolation
 
 - If method has no arguments, use a different behavior wrapper
 	- Avoids passing poison argument which seems to limit inlining

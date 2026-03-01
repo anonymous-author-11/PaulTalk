@@ -235,8 +235,7 @@ class Path extends Representable {
         suffix = ext;
         if suffix.byte_length() > 0 and not suffix.starts_with(".") {
             prefixed = String{suffix.byte_length() + 1};
-            prefixed.extend(".");
-            prefixed.extend(suffix);
+            prefixed.extend(".${suffix}");
             suffix = prefixed;
         }
 

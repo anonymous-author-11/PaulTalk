@@ -35,12 +35,11 @@ def shuffle(arr: Array[i32], n: i32, rng: PRNG) {
 
 def print_benchmark_result(test_name: String, n: i32, duration: i64) {
     IO.print(test_name);
-    IO.print("  Operations: "); IO.print(n);
-    IO.print("  Total Time: "); IO.print(duration); IO.print(" ms");
-    if n > 0 {
-        ns_per_op = (duration * 1_000_000) / n;
-        IO.print("  Time/Op:    ~"); IO.print(ns_per_op); IO.print(" ns");
-    }
+    IO.print("  Operations: ${n}");
+    IO.print("  Total Time: ${duration} ms");
+    if n == 0 { return; }
+    ns_per_op = (duration * 1_000_000) / n;
+    IO.print("  Time/Op:    ~${ns_per_op} ns");
 }
 
 def benchmark_insert_sequential(n: i32) {
@@ -63,8 +62,9 @@ def benchmark_insert_sequential(n: i32) {
         if map.size() != 0 { verification_passed = false; }
     }
     print_benchmark_result("Insert Sequential", n, end_time - start_time);
-    IO.print("    Verification: ");
-    if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+    pass_result = "FAIL";
+    if verification_passed { pass_result = "PASS"; }
+    IO.print("    Verification: ${pass_result}");
 }
 
 def benchmark_insert_random(n: i32) {
@@ -104,9 +104,10 @@ def benchmark_insert_random(n: i32) {
         if map.size() != 0 { verification_passed = false; }
     }
     print_benchmark_result("Insert Random", n, end_time - start_time);
-    IO.print("    Verification: ");
-    if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
-    IO.print("    (Expected unique size: "); IO.print(expected_size); IO.print(")");
+    pass_result = "FAIL";
+    if verification_passed { pass_result = "PASS"; }
+    IO.print("    Verification: ${pass_result}");
+    IO.print("    (Expected unique size: ${expected_size})");
 }
 
 def benchmark_get_sequential(n: i32) {
@@ -134,7 +135,9 @@ def benchmark_get_sequential(n: i32) {
 
     verification_passed = actual_sum == expected_sum;
     print_benchmark_result("Get Sequential", n, end_time - start_time);
-    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+    pass_result = "FAIL";
+    if verification_passed { pass_result = "PASS"; }
+    IO.print("    Verification: ${pass_result}");
 }
 
 def benchmark_get_random(n: i32) {
@@ -167,8 +170,10 @@ def benchmark_get_random(n: i32) {
     end_time: i64 = clock();
     
     verification_passed = actual_sum == expected_sum;
+    pass_result = "FAIL";
+    if verification_passed { pass_result = "PASS"; }
     print_benchmark_result("Get Random", n, end_time - start_time);
-    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+    IO.print("    Verification: ${pass_result}");
 }
 
 def benchmark_get_miss(n: i32) {
@@ -206,7 +211,7 @@ def benchmark_get_miss(n: i32) {
     }
 
     if miss_keys_generated < n {
-        IO.print("Warning: Could only generate "); IO.print(miss_keys_generated); IO.print(" guaranteed miss keys.");
+        IO.print("Warning: Could only generate ${miss_keys_generated} guaranteed miss keys.");
         n = miss_keys_generated;
     }
 
@@ -233,8 +238,10 @@ def benchmark_get_miss(n: i32) {
     }
 
     print_benchmark_result("Get Miss", n, end_time - start_time);
-    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
-    IO.print("    (Misses: "); IO.print(miss_count); IO.print(", Hits: "); IO.print(hit_count); IO.print(")");
+    pass_result = "FAIL";
+    if verification_passed { pass_result = "PASS"; }
+    IO.print("    Verification: ${pass_result}");
+    IO.print("    (Misses: ${miss_count}, Hits: ${hit_count})");
 }
 
 def benchmark_remove_random(n: i32) {
@@ -259,7 +266,7 @@ def benchmark_remove_random(n: i32) {
     }
 
     if keys_added_count < n {
-        IO.print("Warning: Could only generate "); IO.print(keys_added_count); IO.print(" unique keys for remove test.");
+        IO.print("Warning: Could only generate ${keys_added_count} unique keys for remove test.");
         n = keys_added_count;
     }
 
@@ -282,8 +289,10 @@ def benchmark_remove_random(n: i32) {
     verification_passed = remove_count == n and map.size() == 0;
     
     print_benchmark_result("Remove Random", n, end_time - start_time);
-    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
-    IO.print("    (Items removed: "); IO.print(remove_count); IO.print(")");
+    pass_result = "FAIL";
+    if verification_passed { pass_result = "PASS"; }
+    IO.print("    Verification: ${pass_result}");
+    IO.print("    (Items removed: ${remove_count})");
 }
 
 IO.print("--- Map Benchmarks ---");

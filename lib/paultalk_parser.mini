@@ -20,12 +20,7 @@ class ParseError extends Exception {
     def message() -> String { return @message; }
 
     def header() -> String {
-        return "Parse error at line "
-            .extend(@line as String)
-            .extend(", column ")
-            .extend(@column as String)
-            .extend(": ")
-            .extend(@message);
+        return "Parse error at line ${@line}, column ${@column}: ${@message}";
     }
 
     def format(source : String) -> String {
@@ -92,11 +87,7 @@ class ParseNode extends Representable {
 
     def repr() -> String {
         if @value.byte_length() == 0 { return @kind; }
-        out = String.empty();
-        out.extend(@kind);
-        out.extend("(");
-        out.extend(@value);
-        return out.extend(")");
+        return "${@kind}(${@value})";
     }
 
     def tree_string() -> String {
@@ -120,11 +111,7 @@ class ParseNode extends Representable {
     }
 
     def append_indent(out : String, depth : i32) {
-        i = 0;
-        while i < depth {
-            out.extend("  ");
-            i = i + 1;
-        }
+        for i in 0..depth { out.extend("  "); }
     }
 }
 
@@ -177,14 +164,8 @@ def format_parse_error(source : String, error : ParseError) -> String {
     pointer = " ".repeat(column - 1).extend("^");
     gutter_pad = " ".repeat(line_number_text.byte_length());
     return error.header()
-        .extend("\n")
-        .extend(line_number_text)
-        .extend(" | ")
-        .extend(source_line)
-        .extend("\n")
-        .extend(gutter_pad)
-        .extend(" | ")
-        .extend(pointer);
+        .extend("\n${line_number} | ${source_line}")
+        .extend("\n${gutter_pad} | ${pointer}");
 }
 
 def format_parse_errors(source : String, errors : Array[ParseError]) -> String {
@@ -481,7 +462,7 @@ class PaulTalkLexer {
         }
 
         self.advance_byte();
-        message = "Unexpected character: ".extend(self.slice_from(start));
+        message = "Unexpected character: ${self.slice_from(start)}";
         self.record_error(message, line, col);
     }
 
@@ -588,9 +569,8 @@ class PaulTalkParser {
         if self.match_any(["break", "continue"]) {
             token = self.previous();
             text = token.lexeme();
-            message = "Expected ';' after '".extend(text).extend("'.");
-            self.expect_lexeme(";", message);
-            kind = text.extend("_stmt");
+            self.expect_lexeme(";",  "Expected ';' after '${text}'.");
+            kind = "${text}_stmt";
             return ParseNode{kind, "", token.line(), token.column()};
         }
         if self.match_lexeme("{") {
@@ -739,7 +719,7 @@ class PaulTalkParser {
             return self.parse_method_definition(self.previous());
         }
         token = self.advance();
-        message = "Unexpected token in class body: ".extend(token.lexeme());
+        message = "Unexpected token in class body: ${token.lexeme()}";
         self.fail(message);
         return self.make_token_node("unknown_member_token", token);
     }

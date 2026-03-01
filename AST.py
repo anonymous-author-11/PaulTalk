@@ -2300,7 +2300,7 @@ class Format(Expression):
         if isinstance(self.arg, BoolLiteral):
             return StringLiteral(self.info, ["true", "false"][arg.value]).codegen(scope)
 
-        # Future: add branch for Bool operand
+        # Future: add branch for non-literal Bool operand
 
         buf_type = Buffer([Integer(8)])
         capacity = IntegerLiteral(NodeInfo.from_info(self.info, "thirty_two"), 32, 32)
