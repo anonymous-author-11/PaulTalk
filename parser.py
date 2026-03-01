@@ -22,7 +22,7 @@ def get_cached_parser():
 
 def get_fresh_parser():
     with open(GRAMMAR_PATH, "r") as f: grammar = f.read()
-    fresh_parser = Lark(grammar, parser='lalr', propagate_positions=True, _plugins=lark_cython.plugins)
+    fresh_parser = Lark(grammar, parser='lalr', lexer='contextual', propagate_positions=True, _plugins=lark_cython.plugins)
     with open(CACHED_GRAMMAR_PATH, "wb") as f: fresh_parser.save(f)
     return fresh_parser
 
@@ -532,9 +532,31 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, line_number(token))
         return DoubleLiteral(node_info, float(token.value.replace("_","")))
 
-    def string_literal(self, token):
+    def string_text(self, token):
+        try:
+            # STRING_TEXT excludes outer quotes, so add them back for escape handling.
+            value = ast.literal_eval(f"\"{token.value}\"")
+        except Exception as e:
+            print(token)
+            print(token.value)
+            raise Exception(token)
         node_info = NodeInfo(None, self.file_path, line_number(token))
-        return StringLiteral(node_info, ast.literal_eval(token.value))
+        return StringLiteral(node_info, value)
+
+    def string_interp(self, interp_open, expr):
+        if isinstance(expr, StringLiteral):
+            return expr
+        node_info = NodeInfo(None, self.file_path, line_number(interp_open))
+        return As(node_info, expr, FatPtr.basic("String"))
+
+    def string_literal(self, open_quote, *parts_and_close):
+        close_quote = parts_and_close[-1]
+        string_parts = parts_and_close[:-1]
+        node_info = NodeInfo(None, self.file_path, line_number(open_quote))
+        if all(isinstance(part, StringLiteral) for part in string_parts):
+            concatenated = "".join([literal.value for literal in string_parts])
+            return StringLiteral(node_info, concatenated)
+        return InterpolatedStringLiteral(node_info, string_parts)
 
     def char_literal(self, token):
         node_info = NodeInfo(None, self.file_path, line_number(token))

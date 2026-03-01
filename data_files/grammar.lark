@@ -160,14 +160,19 @@ primary: "(" expression ")" -> paren_expr
        | TRUE -> bool_literal
        | FALSE -> bool_literal
        | NIL -> nil_literal
-       | STRING -> string_literal
        | CHAR -> char_literal
+       | string_literal
        | function_literal
        | array_literal
        | dictionary_literal
        | sizeof_call
        | yield_call
        | assignable
+
+string_literal: QUOTE string_part* QUOTE
+
+string_part: STRING_TEXT             -> string_text
+           | INTERP_OPEN expression "}"    -> string_interp
 
 expression_list: (expression ("," expression)*)?
 
@@ -242,7 +247,9 @@ LOWERCASE_IDENT: /[a-z_][a-zA-Z0-9_]*/
 INT:   /[0-9]+(_[0-9]+)*/
 HEX:   /0x[0-9a-fA-F]+(_[0-9a-fA-F]+)*/
 FLOAT: /[0-9]+(_[0-9]+)*\.[0-9]+(_[0-9]+)*/
-STRING: /"(?:[^"\\]|\\.)*"/
+QUOTE: "\""
+STRING_TEXT: /(?:[^"\\$\n]|\\.|\\$(?!\{))+/
+INTERP_OPEN: "${"
 CHAR: /'(?:[^'\\]|\\.)'/
 
 COMMENT: "//" /[^\n]*/

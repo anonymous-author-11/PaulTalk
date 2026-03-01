@@ -813,6 +813,58 @@ class StringLiteral(Expression):
         pass
 
 @dataclass
+class InterpolatedStringLiteral(Expression):
+    parts: tuple[Expression]
+
+    def codegen(self, scope):
+        part_ids = []
+        total_bytes = IntegerLiteral(NodeInfo.from_info(self.info, "interp_capacity"), 0, 32)
+
+        for i, part in enumerate(self.parts):
+            part_name = f"{self.info.id}_interp_part_{i}"
+            part_id = Identifier(NodeInfo.from_info(self.info, f"interp_part_{i}"), part_name)
+            part_assign = Assignment(NodeInfo.from_info(self.info, f"interp_assign_part_{i}"), part_id, part)
+            part_assign.codegen(scope)
+            part_ids.append(part_id)
+
+            if isinstance(part, StringLiteral):
+                n_bytes = len(part.value.encode("utf-8"))
+                part_bytes = IntegerLiteral(NodeInfo.from_info(self.info, f"interp_part_bytes_{i}"), n_bytes, 32)
+            else:
+                bytes_info = NodeInfo.from_info(self.info, f"interp_part_bytes_{i}")
+                part_bytes = MethodCall(bytes_info, part_id, "byte_length", [])
+
+            total_info = NodeInfo.from_info(self.info, f"interp_total_bytes_{i}")
+            total_bytes = Arithmetic(total_info, total_bytes, "ADD", part_bytes)
+
+        total_name = f"{self.info.id}_interp_total_bytes"
+        total_id = Identifier(NodeInfo.from_info(self.info, "interp_total_id"), total_name)
+        total_assign = Assignment(NodeInfo.from_info(self.info, "interp_total_assign"), total_id, total_bytes)
+        total_assign.codegen(scope)
+
+        string_name = f"{self.info.id}_interp_string"
+        string_id = Identifier(NodeInfo.from_info(self.info, "interp_string_id"), string_name)
+        string = ObjectCreation(NodeInfo.from_info(self.info, "interp_string"), string_name, self.exprtype(scope), [total_id])
+        string_assign = Assignment(NodeInfo.from_info(self.info, "interp_string_assign"), string_id, string)
+        string_assign.codegen(scope)
+
+        for i, part_id in enumerate(part_ids):
+            extend_info = NodeInfo.from_info(self.info, f"interp_extend_{i}")
+            extend = MethodCall(extend_info, string_id, "extend", [part_id])
+            extend.codegen(scope)
+
+        return string_id.codegen(scope)
+
+    def exprtype(self, scope):
+        # parser will have inserted implicit casts to String
+        for part in self.parts: part.exprtype(scope)
+        string_type = FatPtr.basic("String")
+        return scope.type_env.validated_type(self.info, string_type)
+
+    def typeflow(self, scope):
+        pass
+
+@dataclass
 class CharLiteral(Expression):
     value: str
 

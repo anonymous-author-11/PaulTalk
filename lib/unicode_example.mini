@@ -20,3 +20,5 @@ ary.append(1);
 ary.append(2.0);
 
 IO.print(100 into Character into String);
+
+IO.print("a ${5 + 1} b");
