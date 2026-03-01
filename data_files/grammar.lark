@@ -65,7 +65,7 @@ region_variable_list: region_variable ("," region_variable)*
 
 equality_chain: region_variable (EQ region_variable)+
 
-region_variable: ((ident | FIELD) ("." (ident | FIELD))*)? 
+region_variable: (ident | FIELD) ("." (ident | FIELD))*
 
 method_param: param | field_param
 param: ident ":" typ

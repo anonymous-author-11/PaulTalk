@@ -1,4 +1,4 @@
-from lark import Transformer, v_args, Lark
+from lark import Transformer, v_args, Lark, Token
 import lark_cython
 from AST import *
 from hi import *
@@ -262,7 +262,8 @@ class CSTTransformer(Transformer):
         return {(l, "<", rhs) for l in lhs_list}
 
     def equality_chain(self, *items):
-        region_vars = [item for item in items if isinstance(item, str)]
+        # Lark Token inherits from str, so exclude EQ tokens explicitly.
+        region_vars = [item for item in items if isinstance(item, str) and not isinstance(item, Token)]
         constraints = set()
         for i in range(len(region_vars) - 1):
             lhs = region_vars[i]
