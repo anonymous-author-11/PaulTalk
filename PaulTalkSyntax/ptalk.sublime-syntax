@@ -115,8 +115,46 @@ contexts:
     - meta_scope: string.quoted.double.mini
     - match: '\\.'
       scope: constant.character.escape.mini
+    - match: '\$\{'
+      scope: punctuation.section.interpolation.begin.mini
+      push: interpolation
     - match: '"'
       pop: true
+
+  interpolation:
+    - meta_scope: meta.interpolation.mini
+    - match: '\}'
+      scope: punctuation.section.interpolation.end.mini
+      pop: true
+    - match: '\{'
+      scope: punctuation.section.braces.begin.mini
+      push: interpolation-brace
+    - include: interpolation-common
+
+  interpolation-brace:
+    - match: '\}'
+      scope: punctuation.section.braces.end.mini
+      pop: true
+    - match: '\{'
+      scope: punctuation.section.braces.begin.mini
+      push: interpolation-brace
+    - include: interpolation-common
+
+  interpolation-common:
+    - include: comments
+    - include: keywords
+    - include: cf-keywords
+    - include: operators
+    - include: word-operators
+    - include: modifiers
+    - include: types
+    - include: strings
+    - include: chars
+    - include: numbers
+    - include: booleans
+    - include: function-calls
+    - include: field-access
+    - include: class-names
 
   char:
     - meta_scope: string.quoted.single.mini
