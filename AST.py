@@ -1353,7 +1353,9 @@ class As(Expression):
         to_typ = self.exprtype(scope)
         operand_type = self.operand.exprtype(scope)
 
-        if (isinstance(operand_type, Integer) or operand_type == Float() or operand_type == Nil()) and to_typ == FatPtr.basic("String"):
+        stringable = isinstance(operand_type, Integer) or operand_type == Float() or operand_type == Nil()
+
+        if stringable and to_typ == FatPtr.basic("String"):
             return Format(self.info, self.operand).codegen(scope)
 
         if self.conform_integer_literal(to_typ):
@@ -2291,6 +2293,12 @@ class Format(Expression):
 
         if arg_type == Nil():
             return StringLiteral(self.info, "nil").codegen(scope)
+
+        if isinstance(self.arg, IntegerLiteral):
+            return StringLiteral(self.info, f"{self.arg.value}").codegen(scope)
+
+        if isinstance(self.arg, BoolLiteral):
+            return StringLiteral(self.info, ["true", "false"][arg.value]).codegen(scope)
 
         # Future: add branch for Bool operand
 

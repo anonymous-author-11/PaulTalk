@@ -533,13 +533,7 @@ class CSTTransformer(Transformer):
         return DoubleLiteral(node_info, float(token.value.replace("_","")))
 
     def string_text(self, token):
-        try:
-            # STRING_TEXT excludes outer quotes, so add them back for escape handling.
-            value = ast.literal_eval(f"\"{token.value}\"")
-        except Exception as e:
-            print(token)
-            print(token.value)
-            raise Exception(token)
+        value = ast.literal_eval(f"\"{token.value}\"")
         node_info = NodeInfo(None, self.file_path, line_number(token))
         return StringLiteral(node_info, value)
 
