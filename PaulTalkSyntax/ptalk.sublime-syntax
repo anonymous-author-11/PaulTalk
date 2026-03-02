@@ -113,6 +113,8 @@ contexts:
 
   string:
     - meta_scope: string.quoted.double.mini
+    - match: '\\\$\{'
+      scope: constant.character.escape.mini
     - match: '\\.'
       scope: constant.character.escape.mini
     - match: '\$\{'

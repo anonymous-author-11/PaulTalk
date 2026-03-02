@@ -40,6 +40,17 @@ class CompilerPositiveTestsMixin:
         expected_output = ""
         self.compile_and_run(mini_code, expected_output, "while_condition_string_literal_codegen_regression")
 
+    def test_string_interpolation_marker_can_be_escaped(self):
+        mini_code = """
+            import std;
+
+            name = "Paul";
+            IO.print("foo \\${bar} baz");
+            IO.print("name: \\${name}, value: ${name}");
+        """
+        expected_output = "foo ${bar} baz\nname: ${name}, value: Paul"
+        self.compile_and_run(mini_code, expected_output, "string_interpolation_marker_can_be_escaped")
+
     def test_paultalk_parser_class_method_and_setter_smoke(self):
         mini_code = """
             import std;

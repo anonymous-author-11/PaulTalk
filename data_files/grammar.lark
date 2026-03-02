@@ -172,6 +172,7 @@ primary: "(" expression ")" -> paren_expr
 string_literal: QUOTE string_part* QUOTE
 
 string_part: STRING_TEXT             -> string_text
+           | ESCAPED_INTERP_OPEN     -> escaped_interp_open
            | INTERP_OPEN expression "}"    -> string_interp
 
 expression_list: (expression ("," expression)*)?
@@ -248,7 +249,8 @@ INT:   /[0-9]+(_[0-9]+)*/
 HEX:   /0x[0-9a-fA-F]+(_[0-9a-fA-F]+)*/
 FLOAT: /[0-9]+(_[0-9]+)*\.[0-9]+(_[0-9]+)*/
 QUOTE: "\""
-STRING_TEXT: /(?:[^"\\$\n]|\\.|\\$(?!\{))+/
+STRING_TEXT: /(?:[^"\\$\n]|\\(?!\$\{).|\\$(?!\{))+/
+ESCAPED_INTERP_OPEN: /\\\$\{/
 INTERP_OPEN: "${"
 CHAR: /'(?:[^'\\]|\\.)'/
 

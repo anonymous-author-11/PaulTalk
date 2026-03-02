@@ -537,6 +537,10 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, line_number(token))
         return StringLiteral(node_info, value)
 
+    def escaped_interp_open(self, token):
+        node_info = NodeInfo(None, self.file_path, line_number(token))
+        return StringLiteral(node_info, "${")
+
     def string_interp(self, interp_open, expr):
         if isinstance(expr, StringLiteral):
             return expr
