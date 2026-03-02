@@ -718,8 +718,11 @@ TODO:
 - Add interpolation to syntax highlighting [check!]
 - Update lib/paultalk_parser.mini with interpolation [check!]
 
-- paultalk_parser line 151, type inference bug
-- Use paultalk_parser.mini as the actual parser
+- Consider compiling both release and debug bitcodes
+	- Release bitcode not super helpful if dependencies are opaque
+	- After bitcodes are compiled separately, you'd compile linked+optimized version of each file
+	- You'd still want to go in reverse topological order, and avoid repeat optimization
+
 - If method has no arguments, use a different behavior wrapper
 	- Avoids passing poison argument which seems to limit inlining
 - Might want to actually fix Self type
@@ -753,13 +756,9 @@ TODO:
 - Might want to work on intrinsics
 	- intrinsic("llvm.sin").call()
 	- How to know result type?
-
-- Bug in primesieve.mini where I was able to insert a NaiveSieve into the map without making it extend PrimeSieve
-	- Must be something wrong in behavior.applicable
+	- Declare as extern def? Or special "intrinsic" def?
 
 - Allow indexing tuples with tuples
-
-- Union involving Tuple is clearly broken
 
 - Also have special vector lowerings for tuple cast where it could be an arith.extsi etc.
 	- Basically have to rewrite those casts (widen, truncate, floatify) to accept vectors
@@ -786,8 +785,6 @@ TODO:
 - Why not work on namespacing now?
 	- Adding dots to grammar
 		- Whether something is a type depends on its rightmost element (parsed last)
-	- We could use :: instead of .
-		- Easier to implement, but I don't like it
 
 - Release 0.9.0
 	- Implement i32.max() et. al. [check!]
@@ -818,8 +815,6 @@ TODO:
 		- File name extensions: .mini -> .ptk
 		- MLIR dialect: mini. -> mid. [check!]
 	- 'ptalk build init [name]' could create a minimal manifest.yaml in the cwd
-
-- Obviously there is an issue with nil-initialized buffer in swiss_table.mini.
 
 - Is it right to "re-create" nonlocal regions?
 	- The paper with region protection does not do this
@@ -893,7 +888,7 @@ TODO:
 			- retured value
 
 - Contract: each method / function has "freeing responsibilities"
-	- Which are limited to the static knowledge is has, from the POV of the caller
+	- Which are limited to the static knowledge it has, from the POV of the caller
 	- I.e. types in signature + annotations
 	- Overrides only have the freeing responsibilities of the overidden method
 	- Anything not covered by the freeing responsibility of the callee must be handled by the caller
@@ -904,8 +899,6 @@ TODO:
 
 - I shouldn't have to have empty bodies for methods
 	- But I would like one required if there are constraints
-
-- Pair.swapped leads to infinite recursion in type substitution
 
 - Add a SizedIterator
 	- Do NOT guarantee a SizedIterator from a Collection
@@ -987,15 +980,6 @@ TODO:
 - @current_coroutine will break if two coroutines call each other
 	- We should instead maintain a stack of coroutines
 
-- Array[i32 | f64] is not working correctly
-	- A small union (128 bits) which is stored inside of its fatptr
-
-- Check if a method's definition has different param base types than its behavior
-	- ['a','b','c'].filter( ... ) into String
-	- Will invoke List.extend(iterable) whose signature will mismatch the behavior
-
-- You could probably see what's going wrong with O0 by seeing the asm for passing a fatptr vs type-param
-
 - I think I could have stuff like "x : Addable & Comparable" in signatures
 	- Before using a method we must cast to the particular required supertype
 	- File.iterator() -> ConstantTimeIterator[i8] & Writer[i8] & Seeker[i32]
@@ -1036,14 +1020,6 @@ TODO:
 			- Files / export lists used for symbol visibility control; classes for data accessibility
 			- What is encapsulated is static (symbol visibility) vs dynamic (data accessibility)
 
-- Formatted string literals
-	- Just special-case .repr for builtins
-	- You can use s(n)printf or something
-		- Blocked on variadic extern defs
-	- Or you can implement a builtin format() like the builtin print()
-		- Is it a good idea to go further down that road?
-		- No, probably not
-
 - Should probably unify ExternDef and FunctionDef (and FunctionLiteral) logic
 	- Should probably make them responsible for determining applicability
 		- So that extern defs can handle variadicity
@@ -1062,7 +1038,6 @@ TODO:
 
 - I should be able to declare variadic extern defs
 	- e.g. "extern def printf(Buffer[i8], ...) -> i32"
-- Why does it crash at O0?
 - GEP inbounds could help optimization on dynamic geps
 - I should add real type checking for call/yield
 
@@ -1155,10 +1130,8 @@ TODO:
 - Cast literals when passing as arguments
 	- A little bit involved
 - Implement user-exposed getters
-	- Shouldn't be technically difficult
-	- Will significantly improve ergonomics
-	- Especially now with lifetime annotations
-	- May actually technically be more efficient
+	- Could actually technically be more efficient
+	- I.e. expose the raw underlying getter
 	- Not needing to cast self twice
 - Add multi-line strings
 - Split MLIR dialect into hi, mid, and lo dialects
@@ -1211,9 +1184,6 @@ TODO:
 - Implement more precise lifetimes for tuples
 	- Use .1, .2, .3 pseudo-fields
 - Make sure regions and fields don't have conflicting names
-- Minimize number of behaviors
-	- Do we really need to generate all-new behaviors for every new subclass?
-	- Why not just new behaviors for the ones that have actually changed?
 - Reduce number of redundant type fields
 - Think about how actually to handle union type parameters
 - Make sure that type bounds are applied generally
@@ -1245,6 +1215,25 @@ TODO:
 	- Then textual substitution can happen after
 
 # --- Known Bugs ---
+
+- paultalk_parser line 213, type inference bug
+	- Should be able to return @tokens.append(...) directly
+- Why does it crash at O0?
+- You could probably see what's going wrong with O0 by seeing the asm for passing a fatptr vs type-param
+- Pair.swapped leads to infinite recursion in type substitution
+- Bug in primesieve.mini where I was able to insert a NaiveSieve into the map without making it extend PrimeSieve
+	- Must be something wrong in behavior.applicable
+- Union involving Tuple is clearly broken
+- Obviously there is an issue with nil-initialized buffer in swiss_table.mini.
+- Check if a method's definition has different param base types than its behavior
+	- ['a','b','c'].filter( ... ) into String
+	- Will invoke List.extend(iterable) whose signature will mismatch the behavior
+		- In particular, Iterable base type is {ptr, ptr, ptr, i32}
+		- while (Iterable | Collection) base type is {ptr, i160}
+		- Original method has the former signature; override has the latter
+	- Could be fixed by generating an override with the updated signature
+- Array[i32 | f64] is not working correctly
+	- A small union (128 bits) which is stored inside of its fatptr
 
 - Complications when Self is used as return type
 	- Overrides could be re-checked
@@ -1351,11 +1340,6 @@ o’s region."
 	- Now it doesn't matter if target region was aliased with any others
 	- Memory leak is a fine result for a non-annotated program
 
-- Give option to specify either "alias[x < y, z == q]" or "no_alias[x < y, z != q]"
-	- Also for class contstraints
-	- Sometimes one or the other is more concise
-	- Rename "alias" to "uses" for type aliases
-
 - I kind of prefer this syntax:
 
 def foo(a : Foo, b : Bar) -> Baz {
@@ -1364,12 +1348,9 @@ def foo(a : Foo, b : Bar) -> Baz {
 
 { @elems_reg holds first.elems_reg, second.elems_reg }
 
-- Cool bonus feature: you can now specify constraints in function types
-	- (x : T) -> U yields Y ~> { ret == x }
-	- Except that's not a function type...
-		- Would be (T) -> U yields Y ~> { ret == T.0 }
-		- That could work honestly
-	- I guess I mean fn literals
+- Specify alias constraints in function types
+	- Would be (T) -> U yields Y ~> { ret == T.0 }
+	- That could work honestly
 
 - A holds B could by-default imply that B == A.all_fields
 	- This makes overriding easier but regions less precise
@@ -1387,46 +1368,17 @@ def foo(a : Foo, b : Bar) -> Baz {
 		- append(value) ~> { collection.put_region holds value }
 		- take() ~> { collection.get_region holds value, value holds collection.put_region}
 
-- You could allow people to define region classes and operations on them
-
-region Elements {
-	@in : Region
-	@out : Region
-
-	def put(reg : Region) ~> {
-		@in -> reg,
-		reg -> @out
-	}
-
-	def get(ret : Region) ~> {
-		ret -> @in,
-		@out -> ret
-	}
-}
-
-class Collection {
-	@elements : Elements
-}
-
-def put(value) ~> { collection.elements.put(value) }
-def get() ~> { collection.elements.get(ret) }
-
-But that is going too far. Not going to happen.
-
-Instead, we could define operators for more complex operations.
-
-"a from b" ~> {a holds b.0, b.1 holds a}
-"a marries b" ~> { a.0 == b.0, a.1 == b.1 }
-
-- Can you even think of an example where you wouldn't want .chain et al to merge regions?
-	- Not really
-	- What about:
-		- Chain a and b
-		- Call function with chained as argument
-			- Function goes through all elements and prints them
-			- Returns
-		- Now chained collection is never used again
-		- We'd like a and b to be in different regions
+- Can you think of an example where you wouldn't want .chain et al to merge regions?
+	- Chain a and b
+	- Call function (foo) with chained as argument
+		- Function goes through all elements and prints them
+		- Returns
+	- Now chained collection is never used again
+	- We'd like a and b to be in different regions
+	- Foo can be no_alias here
+	- From the outer perspective, it's like elements were never read
+	- Inferred: chained.elems_reg holds a, chained.elems_reg holds b
+	- a and b can still be separate regions
 
 - The current design is a sweet spot, no need for change
 
@@ -1442,7 +1394,7 @@ Instead, we could define operators for more complex operations.
 		- "A conservative approximation in which the given relations do not appear"
 		- Which is exactly what is very hard to produce
 
-- Rationale
+- Region alias syntax rationale
 	- It leads with the method name
 	- This is exactly why we avoided "public static void main"
 	- It uses an otherwise unused line (the closing brace line)
@@ -1454,6 +1406,7 @@ Instead, we could define operators for more complex operations.
 	- Necessary for downcast safety
 	- Imagine bar.foo(); if bar is Subtype { ... }
 		- bar.x and bar.y become aliased by .foo(), then are not known to be aliased in the following block
+	- Actually, this is better handled by forcing downcast to alias all fields
 
 - If a virtual region is not bound to a field, it should default to the region of 'self'
 
@@ -1469,17 +1422,6 @@ Instead, we could define operators for more complex operations.
 
 - Assume call return value offsets
 - Expect reciever static types
-
-- could have a way to load and store tuples from a buffer of non-tuples
-	- tuple_load(buf : Buffer[T], start : i32, len : int_literal) -> Tuple[T x len]
-	- tuple_store(buf : Buffer[T], start : i32, tuple : Tuple[T x len])
-	- Or even sugar for this?
-		- buf.[start, len] (= tuple)
-		- I kinda like this
-	- Could even support predicated loads / stores
-		- vector.maskedload / vector.maskedstore
-		- buf.[start, len, mask, passthru] ?
-		- buf.[start, len].mask(mask, passthru) ?
 
 - Could parameterize String over its encoding
 	- alias str = String[UTF8]
