@@ -716,14 +716,12 @@ TODO:
 	- "a ${5 + 3} b" syntax [check!]
 - Use interpolation in the stdlib [check!]
 - Add interpolation to syntax highlighting [check!]
+- Update lib/paultalk_parser.mini with interpolation [check!]
 
+- paultalk_parser line 151, type inference bug
 - Use paultalk_parser.mini as the actual parser
-
-- Update lib/paultalk_parser.mini with interpolation
-
 - If method has no arguments, use a different behavior wrapper
 	- Avoids passing poison argument which seems to limit inlining
-- paultalk_parser line 151, type inference bug
 - Might want to actually fix Self type
 	- Constructing an instance of Self
 	- Casting to Self
@@ -789,6 +787,7 @@ TODO:
 	- Adding dots to grammar
 		- Whether something is a type depends on its rightmost element (parsed last)
 	- We could use :: instead of .
+		- Easier to implement, but I don't like it
 
 - Release 0.9.0
 	- Implement i32.max() et. al. [check!]
@@ -839,6 +838,7 @@ TODO:
 		- Maybe just a flat array of all the regions that have ever existed
 		- Store region_from_box in vtable
 		- Use region_from_box for getting field regions
+		- Winner!
 
 - Add my_buffer.realloc(size); does not return anything
 

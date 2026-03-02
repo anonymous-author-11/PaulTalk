@@ -1,0 +1,28 @@
+class Promoter {
+
+    def init() {}
+
+    def step(x : i32) -> f64 { return 0.0; }
+    def step(x : f64) -> Bool { return true; }
+    def step(x : Bool) -> String { return "ok"; }
+    def step(x : String) -> String { return x; }
+}
+
+def demo() -> i32 {
+
+    p = Promoter{};
+
+    x = 0;   // i32
+    i = 0;   // i32
+
+    while i < 3 {
+        x = p.step(x);
+        i = i + 1;
+    }
+
+    // If inference reached the real loop fixed point, this is possible.
+    // With the current 2-round loop analysis, it can be rejected as impossible.
+    if x is String { return 0; }
+
+    return 1;
+}

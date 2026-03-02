@@ -1038,7 +1038,7 @@ class PaulTalkParser {
         start = 1;
         finish = lexeme.byte_length() - 1;
         text = lexeme.bytes().slice(start, finish).to_string();
-        if not text.contains("${") { return literal; }
+        if not text.contains("\${") { return literal; }
 
         node = ParseNode{"string_literal", "", token.line(), token.column()};
         size = text.byte_length();

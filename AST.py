@@ -3337,9 +3337,16 @@ class Behavior(Statement):
 
     def specialized_return_type(self, rec_typ, arg_types, scope):
         temp_env = self.abstract_temp_env()
-        all_return_types = [method.specialized_return_type(rec_typ, arg_types, scope) for method in self.methods if method.definition.return_type()]
-        #debug_print(all_return_types)
-        all_return_types = [t for t in all_return_types if t]
+        arg_type_sets = [arg_t.types.data if isinstance(arg_t, Union) else [arg_t] for arg_t in arg_types]
+        all_arg_combinations = product(*arg_type_sets) if len(arg_type_sets) > 0 else [()]
+        all_return_types = []
+
+        # Resolve each union-typed argument path independently, then merge.
+        for combo in all_arg_combinations:
+            concrete_arg_types = [*combo]
+            returns = [method.specialized_return_type(rec_typ, concrete_arg_types, scope) for method in self.methods if method.definition.return_type()]
+            all_return_types.extend(t for t in returns if t)
+
         if len(all_return_types) == 0: return None
         result = temp_env.simplify(Union.from_list(all_return_types))
         #print(f"specialized return type of {self.cls.name}.{self.name} with rec_typ {rec_typ} and arg types {arg_types} is {result}")
