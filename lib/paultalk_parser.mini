@@ -1009,6 +1009,8 @@ class PaulTalkParser {
             token.lexeme() == "false" or token.lexeme() == "nil";
         if is_literal {
             self.advance();
+            is_string = token is StringLiteral;
+            if is_string { return self.parse_string_literal_primary(token); }
             return self.make_token_node("literal", token);
         }
         if token is Field {
@@ -1027,6 +1029,182 @@ class PaulTalkParser {
         }
         self.fail("Expected expression.");
         return ParseNode{"unreachable"};
+    }
+
+    def parse_string_literal_primary(token : StringLiteral) -> ParseNode {
+        literal = self.make_token_node("literal", token);
+        lexeme = token.lexeme();
+        if lexeme.byte_length() < 2 { return literal; }
+        start = 1;
+        finish = lexeme.byte_length() - 1;
+        text = lexeme.bytes().slice(start, finish).to_string();
+        if not text.contains("${") { return literal; }
+
+        node = ParseNode{"string_literal", "", token.line(), token.column()};
+        size = text.byte_length();
+        cursor = 0;
+        chunk_start = 0;
+        found_interp = false;
+        while cursor < size {
+            is_escape = text.unchecked_index(cursor) == ('\\' as i8);
+            if is_escape { cursor = cursor + 2; }
+            if is_escape { continue; }
+            is_open = self.is_interp_open(text, cursor, size);
+            if not is_open { cursor = cursor + 1; }
+            if not is_open { continue; }
+
+            self.add_chunk(node, text, chunk_start, cursor, token);
+
+            expr_start = cursor + 2;
+            expr_end = self.find_interp_end(text, expr_start);
+            bad_interp = expr_end < 0;
+            if bad_interp { self.report_unterminated_interp(token); }
+            if bad_interp { return node; }
+
+            found_interp = true;
+            expr = text.bytes().slice(expr_start, expr_end).to_string();
+            node.add(self.parse_string_interp(expr, token));
+            cursor = expr_end + 1;
+            chunk_start = cursor;
+        }
+
+        if not found_interp { return literal; }
+        self.add_chunk(node, text, chunk_start, size, token);
+        return node;
+    }
+
+    def find_interp_end(text : String, start : i32) -> i32 {
+        size = text.byte_length();
+        depth = 1;
+        cursor = start;
+        while cursor < size {
+            byte = text.unchecked_index(cursor);
+            is_escape = byte == ('\\' as i8);
+            if is_escape { cursor = cursor + 2; }
+            if is_escape { continue; }
+            quote_skip = self.quote_skip_target(text, cursor, byte);
+            has_quote = quote_skip >= 0;
+            if has_quote { cursor = quote_skip; }
+            if has_quote { continue; }
+            comment_skip = self.comment_skip_target(text, cursor, size);
+            has_comment = comment_skip >= 0;
+            if has_comment { cursor = comment_skip; }
+            if has_comment { continue; }
+            is_open = byte == ('{' as i8);
+            if is_open { depth = depth + 1; }
+            if is_open { cursor = cursor + 1; }
+            if is_open { continue; }
+            is_close = byte == ('}' as i8);
+            if not is_close { cursor = cursor + 1; }
+            if not is_close { continue; }
+            depth = depth - 1;
+            if depth == 0 { return cursor; }
+            cursor = cursor + 1;
+        }
+        return -1;
+    }
+
+    def is_interp_open(text : String, cursor : i32, size : i32) -> Bool {
+        if text.unchecked_index(cursor) != ('$' as i8) { return false; }
+        if cursor + 1 >= size { return false; }
+        return text.unchecked_index(cursor + 1) == ('{' as i8);
+    }
+
+    def add_chunk(n : ParseNode, s : String, a : i32, b : i32, t : Token) {
+        if a >= b { return; }
+        chunk = s.bytes().slice(a, b).to_string();
+        n.add(ParseNode{"string_text", chunk, t.line(), t.column()});
+    }
+
+    def quote_skip_target(text : String, cursor : i32, byte : i8) -> i32 {
+        if byte == ('"' as i8) {
+            return self.skip_quoted(text, cursor, '"' as i8);
+        }
+        if byte == ('\'' as i8) {
+            return self.skip_quoted(text, cursor, '\'' as i8);
+        }
+        return -1;
+    }
+
+    def comment_skip_target(text : String, cursor : i32, size : i32) -> i32 {
+        if cursor + 1 >= size { return -1; }
+        if text.unchecked_index(cursor) != ('/' as i8) { return -1; }
+        next = text.unchecked_index(cursor + 1);
+        if next == ('/' as i8) {
+            return self.skip_line_comment(text, cursor + 2);
+        }
+        if next == ('*' as i8) {
+            return self.skip_block_comment(text, cursor + 2);
+        }
+        return -1;
+    }
+
+    def skip_quoted(text : String, start : i32, quote : i8) -> i32 {
+        size = text.byte_length();
+        cursor = start + 1;
+        while cursor < size {
+            byte = text.unchecked_index(cursor);
+            is_escape = byte == ('\\' as i8);
+            if is_escape { cursor = cursor + 2; }
+            if is_escape { continue; }
+            if byte == quote { return cursor + 1; }
+            cursor = cursor + 1;
+        }
+        return size;
+    }
+
+    def skip_line_comment(text : String, start : i32) -> i32 {
+        size = text.byte_length();
+        cursor = start;
+        while cursor < size {
+            if text.unchecked_index(cursor) == ('\n' as i8) { return cursor; }
+            cursor = cursor + 1;
+        }
+        return size;
+    }
+
+    def skip_block_comment(text : String, start : i32) -> i32 {
+        size = text.byte_length();
+        cursor = start;
+        while cursor + 1 < size {
+            left = text.unchecked_index(cursor);
+            right = text.unchecked_index(cursor + 1);
+            is_end = left == ('*' as i8) and right == ('/' as i8);
+            if is_end { return cursor + 2; }
+            cursor = cursor + 1;
+        }
+        return size;
+    }
+
+    def parse_string_interp(expr_text : String, token : Token) -> ParseNode {
+        node = ParseNode{"string_interp", "", token.line(), token.column()};
+        lexer = PaulTalkLexer{expr_text};
+        parser = PaulTalkParser{lexer.tokenize()};
+        node.add(parser.parse_expression());
+        for error in lexer.errors() {
+            self.add_string_parse_error(error.message(), token);
+        }
+        for error in parser.errors() {
+            self.add_string_parse_error(error.message(), token);
+        }
+        if not parser.is_at_end() {
+            message = "Invalid interpolation expression.";
+            self.add_string_parse_error(message, token);
+        }
+        return node;
+    }
+
+    def add_string_parse_error(message : String, token : Token) {
+        @errors.append(ParseError{
+            "In string interpolation: ${message}",
+            token.line(),
+            token.column()
+        });
+    }
+
+    def report_unterminated_interp(token : Token) {
+        message = "Unterminated string interpolation.";
+        self.add_string_parse_error(message, token);
     }
 
     def parse_function_literal() -> ParseNode {
