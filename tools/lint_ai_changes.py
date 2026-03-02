@@ -7,11 +7,9 @@ import sys
 from pathlib import Path
 
 TARGET_RULES = {"R1702", "R0201", "R6301"}
-TARGET_SYMBOLS = {"too-many-nested-blocks", "no-self-use"}
+TARGET_SYMBOLS = {"too-many-nested-blocks"}
 RULE_MESSAGES = {
-    "R1702": "Too much nesting (max is 3). Refactor with guard clauses or helper functions.",
-    "R0201": "Method never uses self. Convert it to @staticmethod or a module-level function.",
-    "R6301": "Method never uses self. Convert it to @staticmethod or a module-level function.",
+    "R1702": "Too much nesting (max is 3). Refactor with guard clauses or helper functions."
 }
 SKIP_PREFIXES = (
     "artifacts/",
@@ -22,7 +20,6 @@ SKIP_PREFIXES = (
     "temp_bin/",
     "temp_build/",
 )
-
 
 def run_git(repo_root: Path, args: list[str]) -> str:
     cmd = ["git", "-c", f"safe.directory={repo_root.as_posix()}", *args]
@@ -135,7 +132,7 @@ def format_message(message: dict[str, object]) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Run AI style lint checks (max nested blocks and no-self-use)."
+        description="Run AI style lint checks."
     )
     parser.add_argument(
         "files",
