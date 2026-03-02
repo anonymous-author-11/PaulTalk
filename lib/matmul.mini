@@ -190,7 +190,7 @@ def benchmark_matrix_multiplication() {
     time_taken = end_time - start_time;
     
     IO.print("Matrix multiplication");
-    IO.print("${size} x ${size");
+    IO.print("${size} x ${size}");
     IO.print("Time taken: ${time_taken}");
     sum = 0.0;
     for i in 0..size { sum = sum + result.[0, i]; }
