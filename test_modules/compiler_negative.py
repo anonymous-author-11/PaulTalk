@@ -34,7 +34,7 @@ class CompilerNegativeTestsMixin:
                 x = void_return(); // void_return() returns void
             }
             """
-            self.compile_fails(mini_code, "Assignment impossible: right hand side expression does not return anything.", "assign_void_expression")
+            self.compile_fails(mini_code, "Assignment impossible: right hand side expression returns None.", "assign_void_expression")
 
     def test_binary_op_different_types(self):
             mini_code = """

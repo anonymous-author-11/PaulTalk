@@ -4035,7 +4035,7 @@ class Assignment(Statement):
     def basic_typeflow(self, scope):
         value_type = self.value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
-            raise Exception(f"{self.info}: Assignment impossible: right hand side expression does not return anything.")
+            raise Exception(f"{self.info}: Assignment impossible: right hand side expression returns {value_type}.")
         if not is_value_type(value_type):
             scope.points_to_facts.add((self.target.info.id, "==", self.value.info.id))
         if(not isinstance(self.target, Identifier)):
