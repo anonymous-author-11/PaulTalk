@@ -1196,7 +1196,8 @@ class OutOfBoundsDetails {
 
 def report_exception(current_coroutine : Coroutine[() -> Exception]) {
     exception = current_coroutine.result();
-    if exception is Exception { exception.report(); }
+    if exception is Nil { return; }
+    exception.report();
 }
 
 // A slice is a constant-length indexable collection

@@ -334,6 +334,7 @@ class CompilationJob:
 
         # use the correct main function
         utils_ir = utils_ir.replace(f"_main_{clean_name(self.input.path.stem)}", "main")
+        utils_ir = remove_invariant_on_globals(utils_ir)
         self.write_side_ir(self.build.out_utils, utils_ir)
 
         # using --only-needed cuts out a lot of unnecessary imports
@@ -354,7 +355,14 @@ class CompilationJob:
 
         optimized_dbg_ir = run_checked(self.settings.opt_pipeline, input_text=linked_dbg_ir, shell=True)
 
+        optimized_dbg_ir = remove_invariant_on_globals(optimized_dbg_ir)
+
         self.write_side_ir(self.build.out_optimized_dbg, optimized_dbg_ir)
+
+        # Remove a hell of a lot of binary size
+        if self.output_path and self.output_path.suffix == ".exe":
+            optimized_dbg_ir = remove_fluff(optimized_dbg_ir, self.build.out_optimized_dbg)
+            self.write_side_ir(self.build.out_optimized, optimized_dbg_ir)
 
         optimized_ir = run_checked((OPT_PATH, "-S", "-", "--strip-debug"), input_text=optimized_dbg_ir)
         self.write_side_ir(self.build.out_optimized, optimized_ir)
@@ -817,9 +825,24 @@ def defined_funcs(file: Path):
         funcs.add(sym_name)
     return funcs
 
+# remove @llvm.invarant.start operations on constant globals
+def remove_invariant_on_globals(ir_string):
+    pattern = re.compile(
+        r'^\s*(?:[%@][\w$.]+\s*=\s*)?'
+        r'(?:tail\s+|musttail\s+|notail\s+)?call\b.*?'
+        r'@llvm\.invariant\.start(?:\.p\d+)?\s*'
+        r'\([^,\n]*,\s*ptr\b.*@(?:"[^"]+"|[A-Za-z$._][\w$.-]*)\s*\)'
+        r'\s*(?:#\d+)?(?:\s*,\s*![A-Za-z_.$-]+\s+![0-9]+)*\s*(?:;.*)?$'
+    )
+    kept = [line for line in ir_string.splitlines(keepends=True) if not pattern.match(line)]
+    return "".join(kept)
+
+# extract main, and link back in only symbols referenced therein
 def remove_fluff(ir_string, out_linked):
-    extract = f"llvm-extract -S - -func=main -o - | llvm-link - {out_linked} --only-needed"
-    return subprocess.run(extract, shell=True, text=True, input=ir_string, capture_output=True, check=True).stdout
+    extract = f"llvm-extract -S - -func=main -o - | llvm-link -S - {out_linked} --only-needed"
+    new_ir = subprocess.run(extract, shell=True, text=True, input=ir_string, capture_output=True, check=True).stdout
+    if not new_ir: raise Exception(new_ir)
+    return new_ir
 
 def _make_gen(reader):
     b = reader(1024 * 1024)
