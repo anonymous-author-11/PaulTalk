@@ -420,7 +420,7 @@ class OptimizationSettings:
         # inline everything in release, and nothing in debug. let the machine outliner undo some of it later, if requested
         if self.debug_mode:
             return "--inline-threshold=-10000 --inline-enable-cost-benefit-analysis"
-        return "--inline-threshold=1400 --inline-enable-cost-benefit-analysis"
+        return "--inline-threshold=1000 --inline-enable-cost-benefit-analysis"
 
     @property
     def devirt(self):
@@ -781,6 +781,45 @@ def run_pdl_lowering(module_str, side_output_path) -> str:
     with open(side_output_path, "w", encoding="utf-8") as outfile:
         outfile.write(module_str)
     return module_str
+
+# overwrite every fn defined in bitcode_file with its optimized version in optimized_module
+# unused currently, may be used down the line
+def optimize_bitcode(bitcode_file: Path, optimized_module: Path):
+
+    symbol_file = optimized_module.parent / f"{bitcode_file.stem}.rsp"
+    pruned_path = optimized_module.parent / f"{bitcode_file.stem}.pruned.bc"
+    out_path = optimized_module.parent / f"{bitcode_file.stem}.optimized.ll"
+
+    bc_funcs = defined_funcs(bitcode_file)
+    opt_funcs = defined_funcs(optimized_module)
+    funcs = set.intersection(bc_funcs, opt_funcs)
+
+    with open(symbol_file, "w", encoding="utf-8", newline="\n") as f:
+        f.write("\n".join(f"-func={name}" for name in funcs) + "\n")
+
+    extract = ["llvm-extract", f"@{symbol_file}", f"{optimized_module}", "-o", f"{pruned_path}"]
+    subprocess.run(extract, check=True)
+    link = ["llvm-link", "-S", f"{bitcode_file}", "--override", f"{pruned_path}", "-o", f"{out_path}"]
+    subprocess.run(link, check=True)
+
+# Return a set of the functions defined in this llvm file
+def defined_funcs(file: Path):
+    llvm_nm = f"llvm-nm --format=posix --defined-only {file}"
+    if file.suffix == ".ll": llvm_nm = f"llvm-as {file} -o - | llvm-nm - --format=posix --defined-only"
+    nm_out = subprocess.run(llvm_nm, capture_output=True, text=True, check=True, shell=True).stdout
+
+    funcs = set()
+    for line in nm_out.splitlines():
+        parts = line.split()
+        if len(parts) < 2: continue
+        sym_name, sym_kind = parts[0], parts[1]
+        if sym_kind not in {"T", "t"}: continue
+        funcs.add(sym_name)
+    return funcs
+
+def remove_fluff(ir_string, out_linked):
+    extract = f"llvm-extract -S - -func=main -o - | llvm-link - {out_linked} --only-needed"
+    return subprocess.run(extract, shell=True, text=True, input=ir_string, capture_output=True, check=True).stdout
 
 def _make_gen(reader):
     b = reader(1024 * 1024)

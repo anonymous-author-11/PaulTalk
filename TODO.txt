@@ -722,6 +722,20 @@ TODO:
 	- Release bitcode not super helpful if dependencies are opaque
 	- After bitcodes are compiled separately, you'd compile linked+optimized version of each file
 	- You'd still want to go in reverse topological order, and avoid repeat optimization
+	- Ooh, what you could do is llvm-link the globally optimized IR into the bitcodes
+	- But then you'd get duplicate definitions
+	- What you want is what thinLTO does, where it imports definitions then excises the imports
+	- Ooh, we could do some llvm-link magic with --override
+	- Override with the optimized, then override again with just the extern declarations
+	- Actually, you might not even need to do that; just use --override in the global opt as well
+
+- What if we replace "internal" right after we prune using internalize, so llvm-link doesn't mangle
+- Could llvm-extract main and then --link-only-needed from there
+- I know there's a difference between llvm-link-ing a .lib vs the .bc files separately
+
+- Approach A: try to delete extra symbols from pruned module
+	- Extra symbols == (all_symbols - defined_symbols)
+- Either just extract the defined symbols or delete the undefined ones
 
 - If method has no arguments, use a different behavior wrapper
 	- Avoids passing poison argument which seems to limit inlining
