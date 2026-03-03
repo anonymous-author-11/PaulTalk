@@ -33,6 +33,7 @@ STANDALONE_OPT_PATH = DIST_FOLDER / "executables/standalone-opt.exe"
 MLIR_OPT_PATH = DIST_FOLDER / "executables/mlir-opt.exe"
 MLIR_TRANSLATE_PATH = DIST_FOLDER / "executables/mlir-translate.exe"
 LLVM_AR_PATH = DIST_FOLDER / "executables/llvm-ar.exe"
+LLVM_EXTRACT_PATH = DIST_FOLDER / "executables/llvm-extract.exe"
 LLVM_LINK_PATH = DIST_FOLDER / "executables/llvm-link.exe"
 OPT_PATH = DIST_FOLDER / "executables/opt.exe"
 LLC_PATH = DIST_FOLDER / "executables/llc.exe"
@@ -845,7 +846,7 @@ def remove_invariant_on_globals(ir_string):
 
 # extract main, and link back in only symbols referenced therein
 def remove_fluff(ir_string, out_linked):
-    extract = f"llvm-extract -S - -func=main -o - | llvm-link -S - {out_linked} --only-needed"
+    extract = f"{LLVM_EXTRACT_PATH} -S - -func=main -o - | {LLVM_LINK_PATH} -S - {out_linked} --only-needed"
     new_ir = subprocess.run(extract, shell=True, text=True, input=ir_string, capture_output=True, check=True).stdout
     if not new_ir: raise Exception(new_ir)
     return new_ir
