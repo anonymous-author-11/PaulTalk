@@ -356,20 +356,24 @@ class CompilationJob:
         optimized_dbg_ir = run_checked(self.settings.opt_pipeline, input_text=linked_dbg_ir, shell=True)
 
         optimized_dbg_ir = remove_invariant_on_globals(optimized_dbg_ir)
-
         self.write_side_ir(self.build.out_optimized_dbg, optimized_dbg_ir)
 
-        # Remove a hell of a lot of binary size
-        if self.output_path and self.output_path.suffix == ".exe":
-            optimized_dbg_ir = remove_fluff(optimized_dbg_ir, self.build.out_optimized_dbg)
-            self.write_side_ir(self.build.out_optimized, optimized_dbg_ir)
+        if self.settings.debug_mode:
+            self.record_time("after_opt")
+            self.time_printer.print(f'Time to optimize: {self.time_between("after_llvm_link", "after_opt")} seconds')
+            return optimized_dbg_ir
 
         optimized_ir = run_checked((OPT_PATH, "-S", "-", "--strip-debug"), input_text=optimized_dbg_ir)
         self.write_side_ir(self.build.out_optimized, optimized_ir)
 
+        # Remove a hell of a lot of binary size
+        if self.output_path and self.output_path.suffix == ".exe":
+            optimized_ir = remove_fluff(optimized_ir, self.build.out_optimized)
+            self.write_side_ir(self.build.out_optimized, optimized_ir)
+
         self.record_time("after_opt")
         self.time_printer.print(f'Time to optimize: {self.time_between("after_llvm_link", "after_opt")} seconds')
-        return optimized_dbg_ir
+        return optimized_ir
 
     def record_all_passes(self):
         #clang = "clang -x ir out_linked.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
@@ -385,7 +389,7 @@ class CompilationJob:
         opt_out = subprocess.run(opt, capture_output=True, text=True)
         with open(self.build.opt_passes, "w") as outfile: outfile.write(opt_out.stderr)
 
-    def run_llc(self, optimized_dbg_ir: str):
+    def run_llc(self, optimized_ir: str):
 
         # overrides the target triple specified in the IR
         target_triple = "-mtriple=x86_64-pc-windows-msvc"
@@ -399,7 +403,7 @@ class CompilationJob:
 
         self.record_time("before_llc")
         llc = (LLC_PATH, "-filetype=obj", "-", *self.settings.llc_options, target_triple, exception_model, "-o", self.obj_path)
-        run_checked(llc, input_text=optimized_dbg_ir)
+        run_checked(llc, input_text=optimized_ir)
 
         self.record_time("after_llc")
         self.time_printer.print(f'Time to llc: {self.time_between("before_llc", "after_llc")} seconds')
