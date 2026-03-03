@@ -355,6 +355,8 @@ class CompilationJob:
 
         optimized_dbg_ir = run_checked(self.settings.opt_pipeline, input_text=linked_dbg_ir, shell=True)
 
+        # the hot-cold split generates internal defs which interact poorly with llvm-extract
+        optimized_dbg_ir = optimized_dbg_ir.replace("internal ", "")
         optimized_dbg_ir = remove_invariant_on_globals(optimized_dbg_ir)
         self.write_side_ir(self.build.out_optimized_dbg, optimized_dbg_ir)
 
