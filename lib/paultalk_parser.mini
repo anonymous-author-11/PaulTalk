@@ -1009,8 +1009,7 @@ class PaulTalkParser {
             token.lexeme() == "false" or token.lexeme() == "nil";
         if is_literal {
             self.advance();
-            is_string = token is StringLiteral;
-            if is_string { return self.parse_string_literal_primary(token); }
+            if token is StringLiteral { return self.parse_str_lit(token); }
             return self.make_token_node("literal", token);
         }
         if token is Field {
@@ -1031,7 +1030,7 @@ class PaulTalkParser {
         return ParseNode{"unreachable"};
     }
 
-    def parse_string_literal_primary(token : StringLiteral) -> ParseNode {
+    def parse_str_lit(token : StringLiteral) -> ParseNode {
         literal = self.make_token_node("literal", token);
         lexeme = token.lexeme();
         if lexeme.byte_length() < 2 { return literal; }
