@@ -101,7 +101,8 @@ class CompilationJob:
             return self.finish()
 
         linked_dbg_ir = self.llvm_link()
-        optimized_dbg_ir = self.run_opt(linked_dbg_ir)
+        #optimized_dbg_ir = self.run_opt(linked_dbg_ir)
+        optimized_dbg_ir = self.run_lto(linked_dbg_ir)
         #self.record_all_passes()
         self.run_llc(optimized_dbg_ir)
 
@@ -307,14 +308,15 @@ class CompilationJob:
         # Since we are not inlining, I don't mind using --attributor-enable=all here
         # The LTO pre-link pipeline is generally a good fit for this stage
         passes = "--passes=\"lto-pre-link<O1>,vector-combine\""
-        opt = f"{OPT_PATH} {passes} {self.settings.vec} {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
+        link_layout = f"{LLVM_LINK_PATH} - {LAYOUT_PATH}"
+        opt = f"{OPT_PATH} {passes} --thinlto-bc --unified-lto {self.settings.vec} {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
         
         #subprocess.run(f"{reg2mem} | {opt}", text=True, shell=True, input=section)
         #link_layout = f"{LLVM_LINK_PATH} {job.input.bc_file} {LAYOUT_PATH} -o {job.input.bc_file}"
         #subprocess.run(link_layout, shell=True)
 
         # Open a process, write input, and return the process *without* waiting for it to complete
-        process = subprocess.Popen(f"{reg2mem} | {opt}", text=True, shell=True, stdin=subprocess.PIPE)
+        process = subprocess.Popen(f"{reg2mem} | {link_layout} | {opt}", text=True, shell=True, stdin=subprocess.PIPE)
         process.stdin.write(section)
         process.stdin.close()
         return process
@@ -335,13 +337,15 @@ class CompilationJob:
 
         # use the correct main function
         utils_ir = utils_ir.replace(f"_main_{clean_name(self.input.path.stem)}", "main")
+        utils_ir = clean_lto_metadata(utils_ir)
         utils_ir = remove_invariant_on_globals(utils_ir)
         self.write_side_ir(self.build.out_utils, utils_ir)
 
         # using --only-needed cuts out a lot of unnecessary imports
-        flags = ("--only-needed", "--suppress-warnings")
-        link_imports = (LLVM_LINK_PATH, "-S", "-", self.build.out_lib, *flags)
-        linked_ir = run_checked(link_imports, input_text=utils_ir)
+        #flags = ("--only-needed", "--suppress-warnings")
+        #link_imports = (LLVM_LINK_PATH, "-S", "-", self.build.out_lib, *flags)
+        #linked_ir = run_checked(link_imports, input_text=utils_ir)
+        linked_ir = utils_ir
 
         # Add debug metadata to the IR, before any inlining
         linked_dbg_ir = self.run_debugir(linked_ir)
@@ -376,6 +380,44 @@ class CompilationJob:
 
         self.record_time("after_opt")
         self.time_printer.print(f'Time to optimize: {self.time_between("after_llvm_link", "after_opt")} seconds')
+        return optimized_ir
+
+    def run_lto(self, linked_dbg_ir):
+
+        thin_paths = [str(self.build.dir.joinpath(f"bitcodes/{path.stem}.bc")) for path in self.dependencies.list]
+
+        out_thin_path = self.build.dir / "out_thin.bc"
+
+        subprocess.run((OPT_PATH, self.build.out_linked, "--thinlto-bc", "--unified-lto", "-o", out_thin_path))
+
+        # Run the regular O3 pipeline
+        passes = f"--lto-newpm-passes=default<O3>"
+
+        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} --enable-lto-internalization=false"
+        mllvm_options = (f"--mllvm={s}" for s in settings.split(" "))
+
+        # lld with -flavor gnu is equivalent to ld.lld
+        command = (
+            LLD_PATH, "-flavor", "gnu", out_thin_path,
+            f"--thinlto-single-module={out_thin_path}",
+            "--start-lib", *thin_paths, "--end-lib",
+            "--lto=thin", passes, "--save-temps", "--lto-emit-llvm",
+            "-o", "out_lto.bc", *mllvm_options
+        )
+        subprocess.run(command, cwd=self.build.dir)
+        lto_file = self.build.dir / "out_lto.bc"
+
+        #for i in range(10):
+        #    optimized_ir = run_checked((OPT_PATH, lto_file, "-S", "--strip-debug"))
+        #    run_checked((OPT_PATH, "--thinlto-bc", "--unified-lto", "-o", out_thin_path), input_text=clean_lto_metadata(optimized_ir))
+        #    subprocess.run(command, cwd=self.build.dir)
+        
+        optimized_ir = run_checked((OPT_PATH, lto_file, "-S", "--strip-debug"))
+        self.write_side_ir(self.build.out_optimized, optimized_ir)
+
+        self.record_time("after_lto")
+        self.time_printer.print(f'Time to lto: {self.time_between("after_llvm_link", "after_lto")} seconds')
+
         return optimized_ir
 
     def record_all_passes(self):
@@ -850,6 +892,12 @@ def remove_fluff(ir_string, out_linked):
     new_ir = subprocess.run(extract, shell=True, text=True, input=ir_string, capture_output=True, check=True).stdout
     if not new_ir: raise Exception(new_ir)
     return new_ir
+
+def clean_lto_metadata(llvm_string):
+    llvm_string = llvm_string.replace("!llvm.module.flags = !{!0, !1, !2}","")
+    llvm_string = llvm_string.replace("!1 = !{i32 1, !\"EnableSplitLTOUnit\", i32 0}", "")
+    llvm_string = llvm_string.replace("!2 = !{i32 1, !\"UnifiedLTO\", i32 1}", "")
+    return llvm_string
 
 def _make_gen(reader):
     b = reader(1024 * 1024)
