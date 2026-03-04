@@ -375,7 +375,7 @@ class CompilationJob:
 
         # Remove a hell of a lot of binary size
         if self.output_path and self.output_path.suffix == ".exe":
-            optimized_ir = remove_fluff(optimized_ir, self.build.out_optimized)
+            optimized_ir = remove_fluff(optimized_ir, [self.build.out_optimized])
             self.write_side_ir(self.build.out_optimized, optimized_ir)
 
         self.record_time("after_opt")
@@ -387,28 +387,30 @@ class CompilationJob:
         thin_paths = [str(self.build.dir.joinpath(f"bitcodes/{path.stem}.bc")) for path in self.dependencies.list]
 
         out_thin_path = self.build.dir / "out_thin.bc"
+        out_thin_path_2 = self.build.dir / "out_thin2.bc"
 
         subprocess.run((OPT_PATH, self.build.out_linked, "--thinlto-bc", "--unified-lto", "-o", out_thin_path))
+        subprocess.run((OPT_PATH, self.build.out_linked, "--thinlto-bc", "--unified-lto", "-o", out_thin_path_2))
 
         # Run the regular O3 pipeline
         passes = f"--lto-newpm-passes=default<O3>"
 
-        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} --compute-dead=false --enable-lto-internalization=false --force-import-all"
+        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} --compute-dead=false --enable-lto-internalization=false --import-instr-limit=1000000"
         mllvm_options = (f"--mllvm={s}" for s in settings.split(" "))
 
         # lld with -flavor gnu is equivalent to ld.lld
-        command = (
+        lto_single_module = (
             LLD_PATH, "-flavor", "gnu", out_thin_path,
             f"--thinlto-single-module={out_thin_path}",
             "--start-lib", *thin_paths, "--end-lib",
-            "--lto=thin", passes, "--save-temps", "--lto-emit-llvm",
+            "--lto=thin", passes, "--lto-emit-llvm",
             "-o", "out_lto.bc", *mllvm_options
         )
-        subprocess.run(command, cwd=self.build.dir)
+        subprocess.run(lto_single_module, cwd=self.build.dir)
         lto_file = self.build.dir / "out_lto.bc"
         ir_len = 0
 
-        for i in range(10):
+        while True:
             optimized_ir = run_checked((OPT_PATH, lto_file, "-S", "--strip-debug"))
             optimized_ir = remove_invariant_on_globals(optimized_ir)
             optimized_ir = clean_lto_metadata(optimized_ir)
@@ -416,17 +418,30 @@ class CompilationJob:
             if new_len == ir_len: break
             ir_len = len(optimized_ir)
             run_checked((OPT_PATH, "--thinlto-bc", "--unified-lto", "-o", out_thin_path), input_text=optimized_ir)
-            subprocess.run(command, cwd=self.build.dir)
+            subprocess.run(lto_single_module, cwd=self.build.dir)
+
+        self.write_side_ir(self.build.dir / "after_lto.ll", optimized_ir)
+
+        lto_all_files = (
+            LLD_PATH, "-flavor", "gnu", out_thin_path_2,
+            "--start-lib", *thin_paths, "--end-lib",
+            "--lto=thin", passes, "--save-temps", "--lto-emit-llvm",
+            "-o", "out_lto2.bc", *mllvm_options
+        )
+        subprocess.run(lto_all_files, cwd=self.build.dir)
 
         opt_paths = [f"{path}.4.opt.bc" for path in thin_paths]
-        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", self.build.out_optimized, *opt_paths, "--only-needed"), input_text=optimized_ir)
+        opt_paths = [path for path in opt_paths if Path(path).exists()]
 
-        self.write_side_ir(self.build.out_optimized, optimized_ir)
+        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", UTILS_PATH, OS_UTILS_PATH, "--only-needed"), input_text=optimized_ir)
+        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", *opt_paths, "--only-needed"), input_text=optimized_ir)
+        self.write_side_ir(self.build.dir / "after_link.ll", optimized_ir)
 
         # Remove a hell of a lot of binary size
         if self.output_path and self.output_path.suffix == ".exe":
-            optimized_ir = remove_fluff(optimized_ir, self.build.out_optimized)
-            self.write_side_ir(self.build.out_optimized, optimized_ir)
+            optimized_ir = remove_fluff(optimized_ir, [self.build.dir / "after_link.ll"])
+
+        self.write_side_ir(self.build.out_optimized, optimized_ir)
 
         self.record_time("after_lto")
         self.time_printer.print(f'Time to lto: {self.time_between("after_llvm_link", "after_lto")} seconds')
@@ -900,16 +915,25 @@ def remove_invariant_on_globals(ir_string):
     return "".join(kept)
 
 # extract main, and link back in only symbols referenced therein
-def remove_fluff(ir_string, out_linked):
-    extract = f"{LLVM_EXTRACT_PATH} -S - -func=main -o - | {LLVM_LINK_PATH} -S - {out_linked} --only-needed"
+def remove_fluff(ir_string, paths):
+    paths_str = " ".join(f"{path}" for path in paths)
+    extract = f"{LLVM_EXTRACT_PATH} -S - -func=main -o - | {LLVM_LINK_PATH} -S - {paths_str} --only-needed"
     new_ir = subprocess.run(extract, shell=True, text=True, input=ir_string, capture_output=True, check=True).stdout
     if not new_ir: raise Exception(new_ir)
     return new_ir
 
 def clean_lto_metadata(llvm_string):
+    if "EnableSplitLTOUnit" not in llvm_string: return llvm_string
     llvm_string = llvm_string.replace("!llvm.module.flags = !{!0, !1, !2}","")
     llvm_string = llvm_string.replace("!1 = !{i32 1, !\"EnableSplitLTOUnit\", i32 0}", "")
-    llvm_string = llvm_string.replace("!2 = !{i32 1, !\"UnifiedLTO\", i32 1}", "")
+    llvm_string = llvm_string.replace("!2 = !{i32 1, !\"UnifiedLTO\", i32 0}", "")
+    if "EnableSplitLTOUnit" not in llvm_string: return llvm_string
+    llvm_string = llvm_string.replace("!llvm.module.flags = !{!0, !1}","")
+    llvm_string = llvm_string.replace("!0 = !{i32 1, !\"EnableSplitLTOUnit\", i32 0}", "")
+    llvm_string = llvm_string.replace("!1 = !{i32 1, !\"UnifiedLTO\", i32 1}", "")
+    if "EnableSplitLTOUnit" in llvm_string:
+        print("\n".join(llvm_string.splitlines()[-40:]))
+        raise Exception()
     return llvm_string
 
 def _make_gen(reader):
