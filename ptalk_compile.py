@@ -396,14 +396,14 @@ class CompilationJob:
         passes = f"--lto-newpm-passes=default<O3>"
 
         settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} --compute-dead=false --enable-lto-internalization=false --import-instr-limit=1000000"
-        mllvm_options = (f"--mllvm={s}" for s in settings.split(" "))
+        mllvm_options = tuple(f"--mllvm={option}" for option in settings.split())
 
         # lld with -flavor gnu is equivalent to ld.lld
         lto_single_module = (
             LLD_PATH, "-flavor", "gnu", out_thin_path,
             f"--thinlto-single-module={out_thin_path}",
             "--start-lib", *thin_paths, "--end-lib",
-            "--lto=thin", passes, "--lto-emit-llvm",
+            "--lto=thin", passes, "--lto-emit-llvm", "--export-dynamic",
             "-o", "out_lto.bc", *mllvm_options
         )
         subprocess.run(lto_single_module, cwd=self.build.dir)
@@ -425,7 +425,7 @@ class CompilationJob:
         lto_all_files = (
             LLD_PATH, "-flavor", "gnu", out_thin_path_2,
             "--start-lib", *thin_paths, "--end-lib",
-            "--lto=thin", passes, "--save-temps", "--lto-emit-llvm",
+            "--lto=thin", passes, "--save-temps", "--lto-emit-llvm", "--export-dynamic",
             "-o", "out_lto2.bc", *mllvm_options
         )
         subprocess.run(lto_all_files, cwd=self.build.dir)
@@ -433,7 +433,10 @@ class CompilationJob:
         opt_paths = [f"{path}.4.opt.bc" for path in thin_paths]
         opt_paths = [path for path in opt_paths if Path(path).exists()]
 
+        print(opt_paths)
+
         optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", UTILS_PATH, OS_UTILS_PATH, "--only-needed"), input_text=optimized_ir)
+        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", *opt_paths, "--only-needed"), input_text=optimized_ir)
         optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", *opt_paths, "--only-needed"), input_text=optimized_ir)
         self.write_side_ir(self.build.dir / "after_link.ll", optimized_ir)
 
