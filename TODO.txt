@@ -718,16 +718,12 @@ TODO:
 - Add interpolation to syntax highlighting [check!]
 - Update lib/paultalk_parser.mini with interpolation [check!]
 
-- Consider compiling both release and debug bitcodes
-	- Release bitcode not super helpful if dependencies are opaque
-	- After bitcodes are compiled separately, you'd compile linked+optimized version of each file
-	- You'd still want to go in reverse topological order, and avoid repeat optimization
-	- Ooh, what you could do is llvm-link the globally optimized IR into the bitcodes
-	- But then you'd get duplicate definitions
-	- What you want is what thinLTO does, where it imports definitions then excises the imports
-	- Ooh, we could do some llvm-link magic with --override
-	- Override with the optimized, then override again with just the extern declarations
-	- Actually, you might not even need to do that; just use --override in the global opt as well
+- Here's the plan for integrating LTO
+	- We can generate optimized versions of all the bitcodes with ld.lld --lto=full
+	- We can optimize the input file with ld.lld --thinlto-single-module=input --lto=thin
+	- For that, we link in the pre-optimized bitcodes generated from fullLTO
+	- e.g. --start-lib foo.bc.4.opt.bc bar.bc.4.opt.bc --end-lib
+	- Annoying complication: we have to refresh lto metadata in foo.bc.4.opt.bc et al
 
 - What if we replace "internal" right after we prune using internalize, so llvm-link doesn't mangle
 - Could llvm-extract main and then --link-only-needed from there

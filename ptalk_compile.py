@@ -393,7 +393,7 @@ class CompilationJob:
         # Run the regular O3 pipeline
         passes = f"--lto-newpm-passes=default<O3>"
 
-        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} --enable-lto-internalization=false"
+        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} --compute-dead=false --enable-lto-internalization=false --force-import-all"
         mllvm_options = (f"--mllvm={s}" for s in settings.split(" "))
 
         # lld with -flavor gnu is equivalent to ld.lld
@@ -406,14 +406,27 @@ class CompilationJob:
         )
         subprocess.run(command, cwd=self.build.dir)
         lto_file = self.build.dir / "out_lto.bc"
+        ir_len = 0
 
-        #for i in range(10):
-        #    optimized_ir = run_checked((OPT_PATH, lto_file, "-S", "--strip-debug"))
-        #    run_checked((OPT_PATH, "--thinlto-bc", "--unified-lto", "-o", out_thin_path), input_text=clean_lto_metadata(optimized_ir))
-        #    subprocess.run(command, cwd=self.build.dir)
-        
-        optimized_ir = run_checked((OPT_PATH, lto_file, "-S", "--strip-debug"))
+        for i in range(10):
+            optimized_ir = run_checked((OPT_PATH, lto_file, "-S", "--strip-debug"))
+            optimized_ir = remove_invariant_on_globals(optimized_ir)
+            optimized_ir = clean_lto_metadata(optimized_ir)
+            new_len = len(optimized_ir)
+            if new_len == ir_len: break
+            ir_len = len(optimized_ir)
+            run_checked((OPT_PATH, "--thinlto-bc", "--unified-lto", "-o", out_thin_path), input_text=optimized_ir)
+            subprocess.run(command, cwd=self.build.dir)
+
+        opt_paths = [f"{path}.4.opt.bc" for path in thin_paths]
+        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", self.build.out_optimized, *opt_paths, "--only-needed"), input_text=optimized_ir)
+
         self.write_side_ir(self.build.out_optimized, optimized_ir)
+
+        # Remove a hell of a lot of binary size
+        if self.output_path and self.output_path.suffix == ".exe":
+            optimized_ir = remove_fluff(optimized_ir, self.build.out_optimized)
+            self.write_side_ir(self.build.out_optimized, optimized_ir)
 
         self.record_time("after_lto")
         self.time_printer.print(f'Time to lto: {self.time_between("after_llvm_link", "after_lto")} seconds')
