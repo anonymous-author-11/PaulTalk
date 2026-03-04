@@ -395,7 +395,7 @@ class CompilationJob:
         # Run the regular O3 pipeline
         passes = f"--lto-newpm-passes=default<O3>"
 
-        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} --compute-dead=false --enable-lto-internalization=false --import-instr-limit=1000000"
+        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} --compute-dead=false --enable-lto-internalization=false --import-instr-limit=10000000"
         mllvm_options = tuple(f"--mllvm={option}" for option in settings.split())
 
         # lld with -flavor gnu is equivalent to ld.lld
@@ -403,7 +403,7 @@ class CompilationJob:
             LLD_PATH, "-flavor", "gnu", out_thin_path,
             f"--thinlto-single-module={out_thin_path}",
             "--start-lib", *thin_paths, "--end-lib",
-            "--lto=thin", passes, "--lto-emit-llvm", "--export-dynamic",
+            "--lto=thin", passes, "--lto-emit-llvm",
             "-o", "out_lto.bc", *mllvm_options
         )
         subprocess.run(lto_single_module, cwd=self.build.dir)
@@ -425,7 +425,7 @@ class CompilationJob:
         lto_all_files = (
             LLD_PATH, "-flavor", "gnu", out_thin_path_2,
             "--start-lib", *thin_paths, "--end-lib",
-            "--lto=thin", passes, "--save-temps", "--lto-emit-llvm", "--export-dynamic",
+            "--lto=thin", passes, "--save-temps", "--lto-emit-llvm",
             "-o", "out_lto2.bc", *mllvm_options
         )
         subprocess.run(lto_all_files, cwd=self.build.dir)
@@ -433,11 +433,11 @@ class CompilationJob:
         opt_paths = [f"{path}.4.opt.bc" for path in thin_paths]
         opt_paths = [path for path in opt_paths if Path(path).exists()]
 
-        print(opt_paths)
+        make_archive = (LLVM_AR_PATH, "cr", self.build.dir / "out2.lib", *opt_paths)
+        run_checked(make_archive)
 
         optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", UTILS_PATH, OS_UTILS_PATH, "--only-needed"), input_text=optimized_ir)
-        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", *opt_paths, "--only-needed"), input_text=optimized_ir)
-        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", *opt_paths, "--only-needed"), input_text=optimized_ir)
+        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", self.build.dir / "out2.lib", "--only-needed"), input_text=optimized_ir)
         self.write_side_ir(self.build.dir / "after_link.ll", optimized_ir)
 
         # Remove a hell of a lot of binary size
@@ -507,8 +507,8 @@ class OptimizationSettings:
     def inlining(self):
         # inline everything in release, and nothing in debug. let the machine outliner undo some of it later, if requested
         if self.debug_mode:
-            return "--inline-threshold=-10000 --inline-enable-cost-benefit-analysis"
-        return "--inline-threshold=1000 --inline-enable-cost-benefit-analysis"
+            return "--inline-threshold=-10000 --inline-enable-cost-benefit-analysis --inline-cold-callsite-threshold=-10000"
+        return "--inline-threshold=1000 --inline-cold-callsite-threshold=1000 --inline-enable-cost-benefit-analysis"
 
     @property
     def devirt(self):
