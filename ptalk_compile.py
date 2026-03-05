@@ -305,13 +305,13 @@ class CompilationJob:
 
         self.record_time("before_lto_pre")
 
-        # Run the regular O3 pipeline
+        # Run the regular O3 pipeline, which is strictly better than the lto<O3> pipeline
         passes = f"--lto-newpm-passes=default<O3>"
         bc_paths = [job.input.bc_file for job in jobs if not job.input.path.samefile(self.input.path)]
 
         out_thin_path = self.build.dir / "out_thin.bc"
 
-        # lld with -flavor gnu is equivalent to ld.lld
+        # optimize all the files in parallel and save the optimized versions
         lto_all_files = (
             LLD_PATH, "-flavor", "gnu", out_thin_path, *bc_paths,
             "--lto=thin", passes, "--save-temps", "--lto-emit-llvm",
@@ -414,7 +414,7 @@ class CompilationJob:
         opt_paths = [f"{path}.4.opt.bc" for path in thin_paths]
         opt_paths = [path for path in opt_paths if Path(path).exists()]
         
-        # lld with -flavor gnu is equivalent to ld.lld
+        # single-module makes this fast(er)
         lto_single_module = (
             LLD_PATH, "-flavor", "gnu", out_thin_path,
             f"--thinlto-single-module={out_thin_path}",
@@ -424,8 +424,13 @@ class CompilationJob:
         )
         subprocess.run(lto_single_module, cwd=self.build.dir)
         lto_file = self.build.dir / "out_lto.bc"
-        ir_len = 0
 
+        # ThinLTO is basically stupid and doesn't care to import non-static calls
+        # I.e. anything devirtualized is not imported and can't be inlined
+        # So we just run thinLTO again and again until it stops changing
+        # This effectively gets around the bottleneck, though it is hacky
+        ir_len = 0
+        iterations = 0
         while True:
             optimized_ir = run_checked((OPT_PATH, lto_file, "-S", "--strip-debug"))
             optimized_ir = remove_invariant_on_globals(optimized_ir)
@@ -435,6 +440,9 @@ class CompilationJob:
             ir_len = len(optimized_ir)
             run_checked((OPT_PATH, "--thinlto-bc", "--unified-lto", "-o", out_thin_path), input_text=optimized_ir)
             subprocess.run(lto_single_module, cwd=self.build.dir)
+            iterations = iterations + 1
+
+        self.status_printer.print(f"did {iterations} iterations of lto")
 
         self.write_side_ir(self.build.dir / "after_lto.ll", optimized_ir)
 
@@ -458,6 +466,7 @@ class CompilationJob:
 
         return optimized_ir
 
+    # Extract all the global constant parameterizations into one file to link back in
     def build_parameterizations_bitcode(self, bitcode_paths: list[str]):
         big_link = shell_join((LLVM_LINK_PATH, *bitcode_paths, "-o", "-"))
         extract = f"{LLVM_EXTRACT_PATH} -rglob=_parameterization_.* -o {self.build.params_bc}"
