@@ -1,9 +1,6 @@
 [MASTER]
 persistent = no
 
-[MESSAGES CONTROL]
-disable = all
-
 [DESIGN]
 max-nested-blocks = 3
 

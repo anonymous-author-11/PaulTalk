@@ -6,10 +6,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-TARGET_RULES = {"R1702", "R0201", "R6301"}
+TARGET_RULES = {"R1702"}
 TARGET_SYMBOLS = {"too-many-nested-blocks"}
 RULE_MESSAGES = {
-    "R1702": "Too much nesting (max is 3). Refactor with guard clauses or helper functions."
+    "too-many-nested-blocks": "Too much nesting (max is 3). Refactor with guard clauses or helper functions.",
 }
 SKIP_PREFIXES = (
     "artifacts/",
@@ -92,9 +92,12 @@ def run_pylint(repo_root: Path, files: list[Path]) -> tuple[int, list[dict[str, 
         "pylint",
         "--rcfile",
         str(rcfile),
+        "--disable=all",
+        "--enable",
+        "too-many-nested-blocks",
         "--output-format=json",
-        *[str(path) for path in files],
     ]
+    cmd.extend(str(path) for path in files)
     proc = subprocess.run(
         cmd,
         cwd=repo_root,
@@ -123,8 +126,11 @@ def format_message(message: dict[str, object]) -> str:
     details = str(message.get("message", "")).strip()
     if msg_id in TARGET_RULES or symbol in TARGET_SYMBOLS:
         shame_text = RULE_MESSAGES.get(
-            msg_id,
-            "Style rule violation. Refactor to satisfy AI style constraints.",
+            symbol,
+            RULE_MESSAGES.get(
+                msg_id,
+                "Style rule violation. Refactor to satisfy AI style constraints.",
+            ),
         )
         return f"SHAME [{msg_id}] {path}:{line}:{column} {shame_text} ({details})"
     return f"LINT [{msg_id}] {path}:{line}:{column} {details}"

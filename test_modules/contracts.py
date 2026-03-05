@@ -137,3 +137,4 @@ class LintContractTests(unittest.TestCase):
         result = self._run_ptalk_lint("a(); b();\n")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("R2-one-semicolon", result.stdout)
+        
