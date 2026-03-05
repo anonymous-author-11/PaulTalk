@@ -407,6 +407,7 @@ class CompilationJob:
 
         thin_paths = [str(self.build.dir.joinpath(f"bitcodes/{path.stem}.bc")) for path in self.dependencies.list]
         out_thin_path = self.build.dir / "out_thin.bc"
+        self.build_parameterizations_bitcode(thin_paths)
 
         # Run the regular O3 pipeline
         passes = f"--lto-newpm-passes=default<O3>"
@@ -442,8 +443,8 @@ class CompilationJob:
         make_archive = (LLVM_AR_PATH, "cr", out2_path, *opt_paths)
         run_checked(make_archive)
 
-        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", UTILS_PATH, OS_UTILS_PATH, "--only-needed"), input_text=optimized_ir)
         optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", self.build.dir / "out2.lib", "--only-needed"), input_text=optimized_ir)
+        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", self.build.params_bc, "--only-needed"), input_text=optimized_ir)
         self.write_side_ir(self.build.dir / "after_link.ll", optimized_ir)
 
         # Remove a hell of a lot of binary size
@@ -456,6 +457,11 @@ class CompilationJob:
         self.time_printer.print(f'Time to lto: {self.time_between("after_llvm_link", "after_lto")} seconds')
 
         return optimized_ir
+
+    def build_parameterizations_bitcode(self, bitcode_paths: list[str]):
+        big_link = shell_join((LLVM_LINK_PATH, *bitcode_paths, "-o", "-"))
+        extract = f"{LLVM_EXTRACT_PATH} -rglob=_parameterization_.* -o {self.build.params_bc}"
+        subprocess.run(f"{big_link} | {extract}", shell=True)
 
     def record_all_passes(self):
         #clang = "clang -x ir out_linked.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
@@ -664,6 +670,10 @@ class BuildDirectory:
     @property
     def opt_passes(self):
         return self.dir / "opt_passes.txt"
+
+    @property
+    def params_bc(self):
+        return self.dir / "parameterizations.bc"
 
 class Dependencies:
     graph: nx.DiGraph

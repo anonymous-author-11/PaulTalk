@@ -720,6 +720,8 @@ TODO:
 - Minimize binary size by extracting main() and linking in only needed symbols [check!]
 	- Hello world now 36kb instead of 923kb [check!]
 
+- Fix linter
+
 - Here's the plan for integrating LTO
 	- We can generate optimized versions of all the bitcodes with ld.lld --save-temps
 	- We can optimize the input file with ld.lld --thinlto-single-module=input
@@ -727,8 +729,10 @@ TODO:
 	- Annoying complication: we have to refresh lto metadata in foo.bc.4.opt.bc et al
 	- Going to have to hoist allocas after h2s
 	- We need to handle debug info correctly
-	- We need to optimize all files in the input set, not only those reachable from root
 	- Need to ensure that input file bitcode is still optimized
+	- What I probably should do is create lto bitcode versionf of utils, layout, etc
+	- Then link those directly into the lto optimization
+	- And dispose of out_linked entirely
 
 - What if we replace "internal" right after we prune using internalize, so llvm-link doesn't mangle
 - Could llvm-extract main and then --link-only-needed from there

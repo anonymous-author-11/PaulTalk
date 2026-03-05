@@ -945,10 +945,11 @@ class LowerParameterization(RewritePattern):
 
         # all components of parameterization statically known, can be a static global
         glob = GlobalOp(
-                sym_name=name,
-                global_type=typ,
-                linkage=llvm.LinkageAttr("linkonce_odr"),
-                constant=True
+            sym_name=name,
+            global_type=typ,
+            linkage=llvm.LinkageAttr("weak_odr"),
+            unnamed_addr=1,
+            constant=True
         )
         ary = llvm.UndefOp(typ)
         glob_block = Block([ary])
