@@ -100,9 +100,8 @@ class CompilationJob:
         if not self.output_path:
             return self.finish()
 
-        linked_dbg_ir = self.llvm_link()
         #optimized_dbg_ir = self.run_opt(linked_dbg_ir)
-        optimized_dbg_ir = self.run_lto(linked_dbg_ir)
+        optimized_dbg_ir = self.run_lto()
         #self.record_all_passes()
         self.run_llc(optimized_dbg_ir)
 
@@ -188,7 +187,9 @@ class CompilationJob:
         self.time_printer.print(f'Time to type check: {self.time_between("after_parse", "after_typeflow")} seconds')
         
         # All bitcodes are already perfect; return early
-        if len(modules) == 0: return
+        if len(modules) == 0:
+            self.llvm_link()
+            return
 
         # Only relevant if there were more than 0 modules
         self.time_printer.print(f'Time to codegen: {self.time_between("parse_dependencies", "codegen_done")} seconds')
@@ -196,6 +197,8 @@ class CompilationJob:
         module_str = self.lower_mlir(modules)
         llvm_string = self.lower_to_llvm(module_str)
         self.make_bitcodes(jobs, llvm_string)
+        self.llvm_link()
+        self.lto_pre(jobs)
 
     def parse_dependencies(self, jobs):
         # by construction, all of these asts should already be in the parsed cache
@@ -298,6 +301,23 @@ class CompilationJob:
         self.record_time("lower_to_llvm")
         self.time_printer.print(f'Time to generate bitcodes: {self.time_between("after_mlir_translate", "lower_to_llvm")} seconds')
 
+    def lto_pre(self, jobs):
+
+        # Run the regular O3 pipeline
+        passes = f"--lto-newpm-passes=default<O3>"
+        bc_paths = [job.input.bc_file for job in jobs if not job.input.path.samefile(self.input.path)]
+
+        out_thin_path = self.build.dir / "out_thin.bc"
+
+        # lld with -flavor gnu is equivalent to ld.lld
+        lto_all_files = (
+            LLD_PATH, "-flavor", "gnu", out_thin_path, *bc_paths,
+            "--lto=thin", passes, "--save-temps", "--lto-emit-llvm",
+            "-o", self.build.dir / "dumb_lto.bc", *self.settings.lto_options
+        )
+
+        subprocess.run(lto_all_files, cwd=self.build.dir, check=True)
+
     def pre_link_opt(self, job, section):
 
         # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
@@ -327,11 +347,6 @@ class CompilationJob:
 
         self.record_time("before_llvm_link")
 
-        if self.build.out_lib.exists(): os.remove(self.build.out_lib)
-        bitcode_files = self.build.bitcode_files([path.stem for path in self.dependencies.list])
-        make_archive = (LLVM_AR_PATH, "cr", self.build.out_lib, *bitcode_files)
-        run_checked(make_archive)
-
         link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, LAYOUT_PATH, "-S")
         utils_ir = run_checked(link_utils)
 
@@ -341,16 +356,15 @@ class CompilationJob:
         utils_ir = remove_invariant_on_globals(utils_ir)
         self.write_side_ir(self.build.out_utils, utils_ir)
 
-        # using --only-needed cuts out a lot of unnecessary imports
-        #flags = ("--only-needed", "--suppress-warnings")
-        #link_imports = (LLVM_LINK_PATH, "-S", "-", self.build.out_lib, *flags)
-        #linked_ir = run_checked(link_imports, input_text=utils_ir)
         linked_ir = utils_ir
 
         # Add debug metadata to the IR, before any inlining
         linked_dbg_ir = self.run_debugir(linked_ir)
         self.write_side_ir(self.build.out_linked, linked_ir)
         self.write_side_ir(self.build.out_linked_dbg, linked_dbg_ir)
+
+        out_thin_path = self.build.dir / "out_thin.bc"
+        subprocess.run((OPT_PATH, self.build.out_linked, "--thinlto-bc", "--unified-lto", "-o", out_thin_path))
 
         self.record_time("after_llvm_link")
         self.time_printer.print(f'Time to llvm-link: {self.time_between("before_llvm_link", "after_llvm_link")} seconds')
@@ -382,29 +396,23 @@ class CompilationJob:
         self.time_printer.print(f'Time to optimize: {self.time_between("after_llvm_link", "after_opt")} seconds')
         return optimized_ir
 
-    def run_lto(self, linked_dbg_ir):
+    def run_lto(self):
 
         thin_paths = [str(self.build.dir.joinpath(f"bitcodes/{path.stem}.bc")) for path in self.dependencies.list]
-
         out_thin_path = self.build.dir / "out_thin.bc"
-        out_thin_path_2 = self.build.dir / "out_thin2.bc"
-
-        subprocess.run((OPT_PATH, self.build.out_linked, "--thinlto-bc", "--unified-lto", "-o", out_thin_path))
-        subprocess.run((OPT_PATH, self.build.out_linked, "--thinlto-bc", "--unified-lto", "-o", out_thin_path_2))
 
         # Run the regular O3 pipeline
         passes = f"--lto-newpm-passes=default<O3>"
-
-        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} --compute-dead=false --enable-lto-internalization=false --import-instr-limit=10000000"
-        mllvm_options = tuple(f"--mllvm={option}" for option in settings.split())
-
+        opt_paths = [f"{path}.4.opt.bc" for path in thin_paths]
+        opt_paths = [path for path in opt_paths if Path(path).exists()]
+        
         # lld with -flavor gnu is equivalent to ld.lld
         lto_single_module = (
             LLD_PATH, "-flavor", "gnu", out_thin_path,
             f"--thinlto-single-module={out_thin_path}",
             "--start-lib", *thin_paths, "--end-lib",
             "--lto=thin", passes, "--lto-emit-llvm",
-            "-o", "out_lto.bc", *mllvm_options
+            "-o", "out_lto.bc", *self.settings.lto_options
         )
         subprocess.run(lto_single_module, cwd=self.build.dir)
         lto_file = self.build.dir / "out_lto.bc"
@@ -422,18 +430,9 @@ class CompilationJob:
 
         self.write_side_ir(self.build.dir / "after_lto.ll", optimized_ir)
 
-        lto_all_files = (
-            LLD_PATH, "-flavor", "gnu", out_thin_path_2,
-            "--start-lib", *thin_paths, "--end-lib",
-            "--lto=thin", passes, "--save-temps", "--lto-emit-llvm",
-            "-o", "out_lto2.bc", *mllvm_options
-        )
-        subprocess.run(lto_all_files, cwd=self.build.dir)
-
-        opt_paths = [f"{path}.4.opt.bc" for path in thin_paths]
-        opt_paths = [path for path in opt_paths if Path(path).exists()]
-
-        make_archive = (LLVM_AR_PATH, "cr", self.build.dir / "out2.lib", *opt_paths)
+        out2_path = self.build.dir / "out2.lib"
+        if out2_path.exists(): os.remove(out2_path)
+        make_archive = (LLVM_AR_PATH, "cr", out2_path, *opt_paths)
         run_checked(make_archive)
 
         optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", UTILS_PATH, OS_UTILS_PATH, "--only-needed"), input_text=optimized_ir)
@@ -561,6 +560,15 @@ class OptimizationSettings:
         ))
 
         return pipeline
+
+    @property
+    def lto_options(self):
+        no_dce = "--compute-dead=false"
+        no_internalize = "--enable-lto-internalization=false"
+        import_all = "--import-instr-limit=10000000"
+        settings = f"{self.devirt} {self.inlining} {self.attributor()} {no_dce} {no_internalize} {import_all}"
+        mllvm_options = tuple(f"--mllvm={option}" for option in settings.split())
+        return mllvm_options
 
     @property
     def llc_options(self):
