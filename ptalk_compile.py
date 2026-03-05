@@ -303,6 +303,8 @@ class CompilationJob:
 
     def lto_pre(self, jobs):
 
+        self.record_time("before_lto_pre")
+
         # Run the regular O3 pipeline
         passes = f"--lto-newpm-passes=default<O3>"
         bc_paths = [job.input.bc_file for job in jobs if not job.input.path.samefile(self.input.path)]
@@ -318,6 +320,9 @@ class CompilationJob:
 
         subprocess.run(lto_all_files, cwd=self.build.dir, check=True)
 
+        self.record_time("after_lto_pre")
+        self.time_printer.print(f'Time to LTO bitcodes: {self.time_between("before_lto_pre", "after_lto_pre")} seconds')
+
     def pre_link_opt(self, job, section):
 
         # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
@@ -329,20 +334,22 @@ class CompilationJob:
         # The LTO pre-link pipeline is generally a good fit for this stage
         passes = "--passes=\"lto-pre-link<O1>,vector-combine\""
         link_layout = f"{LLVM_LINK_PATH} - {LAYOUT_PATH}"
-        opt = f"{OPT_PATH} {passes} --thinlto-bc --unified-lto {self.settings.vec} {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
-        
+        opt = f"{OPT_PATH} {passes} {self.settings.vec} {self.settings.attributor('all')} --inline-threshold=-10000"
+        hoist_allocas = f"{OPT_PATH} --bugpoint-enable-legacy-pm --alloca-hoisting"
+        inject_lto_metadata = f"{OPT_PATH} --thinlto-bc --unified-lto -o {job.input.bc_file}"
+
         #subprocess.run(f"{reg2mem} | {opt}", text=True, shell=True, input=section)
         #link_layout = f"{LLVM_LINK_PATH} {job.input.bc_file} {LAYOUT_PATH} -o {job.input.bc_file}"
         #subprocess.run(link_layout, shell=True)
 
         # Open a process, write input, and return the process *without* waiting for it to complete
-        process = subprocess.Popen(f"{reg2mem} | {link_layout} | {opt}", text=True, shell=True, stdin=subprocess.PIPE)
+        command = f"{reg2mem} | {link_layout} | {opt} | {hoist_allocas} | {inject_lto_metadata}"
+        process = subprocess.Popen(command, text=True, shell=True, stdin=subprocess.PIPE)
         process.stdin.write(section)
         process.stdin.close()
         return process
 
-    # merge all the .bc files into one big .ll file for optimization
-    # kind of like LTO but no pretense of being at "link-time"
+    # link utils and layout into the main module
     def llvm_link(self) -> str:
 
         self.record_time("before_llvm_link")

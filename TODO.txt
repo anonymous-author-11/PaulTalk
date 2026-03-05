@@ -728,6 +728,7 @@ TODO:
 	- Going to have to hoist allocas after h2s
 	- We need to handle debug info correctly
 	- We need to optimize all files in the input set, not only those reachable from root
+	- Need to ensure that input file bitcode is still optimized
 
 - What if we replace "internal" right after we prune using internalize, so llvm-link doesn't mangle
 - Could llvm-extract main and then --link-only-needed from there
