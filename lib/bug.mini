@@ -1,3 +1,0 @@
-import io;
-
-IO.print(100 into Character into String);
