@@ -4294,6 +4294,7 @@ class Branch(Statement):
             new_typ = main_scope.simplify(Union.from_list(all_types))
             #print(f"{self.info}: merged {key} from {all_types} to {new_typ}")
             if new_typ == value: continue
+            if new_typ == Nothing(): continue
             cast = CastOp.make(main_scope.symbol_table[key], value, new_typ)
             main_scope.symbol_table[key] = cast.results[0]
             main_scope.type_table[key] = new_typ
@@ -4600,8 +4601,10 @@ class Return(Statement):
 
     def untype_variables(self, scope):
         # early returns in control-flow branches should affect type inference
-        for key in scope.type_table.keys():
-            if "@" not in key: scope.type_table[key] = Nothing()
+        for key, value in scope.type_table.items():
+            if "@" in key: continue
+            if isinstance(value, ReifiedType): continue
+            scope.type_table[key] = Nothing()
 
         # x : i32 | Nil;
         # if x is Nil { return nil; }
@@ -4747,8 +4750,10 @@ class CoYield(Expression):
         yields_exception = scope.subtype(arg_type, exception_type)
         if not yields_exception: return
         # yielded exceptions in control-flow branches should affect type inference
-        for key in scope.type_table.keys():
-            if "@" not in key: scope.type_table[key] = Nothing()
+        for key, value in scope.type_table.items():
+            if "@" in key: continue
+            if isinstance(value, ReifiedType): continue
+            scope.type_table[key] = Nothing()
 
         # x : i32 | Nil;
         # if x is Nil { yield(Exception{}); }
@@ -4777,8 +4782,10 @@ class Break(Statement):
 
     def untype_variables(self, scope):
         # early returns in control-flow branches should affect type inference
-        for key in scope.type_table.keys():
-            if "@" not in key: scope.type_table[key] = Nothing()
+        for key, value in scope.type_table.items():
+            if "@" in key: continue
+            if isinstance(value, ReifiedType): continue
+            scope.type_table[key] = Nothing()
 
 @dataclass
 class Continue(Statement):
@@ -4800,8 +4807,10 @@ class Continue(Statement):
 
     def untype_variables(self, scope):
         # early returns in control-flow branches should affect type inference
-        for key in scope.type_table.keys():
-            if "@" not in key: scope.type_table[key] = Nothing()
+        for key, value in scope.type_table.items():
+            if "@" in key: continue
+            if isinstance(value, ReifiedType): continue
+            scope.type_table[key] = Nothing()
 
 @dataclass
 class CreateBuffer(Expression):

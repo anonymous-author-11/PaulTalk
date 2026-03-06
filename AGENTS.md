@@ -19,7 +19,7 @@ python tests.py --suite perf --build-dir temp_build
 python tests.py --suite all --build-dir temp_build
 
 # Run single test (replace TestName with specific test method)
-python -m unittest tests.CompilerTests.test_end_to_end --build-dir temp_build
+python tests.py tests.CompilerTests.test_end_to_end --build-dir temp_build
 
 # Lint changed Python files for AI style rules
 python tools/lint_ai_changes.py

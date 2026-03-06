@@ -40,6 +40,29 @@ class CompilerPositiveTestsMixin:
         expected_output = ""
         self.compile_and_run(mini_code, expected_output, "while_condition_string_literal_codegen_regression")
 
+    def test_generic_method_branch_return_codegen_regression(self):
+        mini_code = """
+            import std;
+
+            class Probe {
+                def init() {}
+
+                def pick[T](flag : Bool, value : T) -> i32 {
+                    if flag {
+                        return 1;
+                    } else {
+                        return 2;
+                    }
+                }
+            }
+
+            probe = Probe{};
+            IO.print(probe.pick(true, "x"));
+            IO.print(probe.pick(false, 99));
+        """
+        expected_output = "1\n2"
+        self.compile_and_run(mini_code, expected_output, "generic_method_branch_return_codegen_regression")
+
     def test_string_interpolation_marker_can_be_escaped(self):
         mini_code = """
             import std;
