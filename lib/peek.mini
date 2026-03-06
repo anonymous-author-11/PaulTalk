@@ -1,0 +1,34 @@
+import iteration;
+
+class Peeker[T] extends Iterator[T] {
+    @iterator : Iterator[T]
+    @peeked : T?
+
+    regions {
+        @elems_reg == @iterator.elems_reg,
+        @peeker holds @elems_reg,
+        @iterator holds @peeked
+    }
+
+    def Self.from_iterator(iterator : Iterator[T]) -> Peeker[T] {
+        return Peeker{iterator};
+    } ~> { ret.iterator == iterator }
+
+    // No need to wrap if the iterator is already a Peeker
+    def Self.from_iterator(iterator : Peeker[T]) -> Peeker[T] {
+        return iterator;
+    } ~> { ret == iterator }
+    
+    def init(@iterator : Iterator[T]) {}
+
+    def next() -> T? {
+        peeked = @peeked;
+        if peeked is Nil { return @iterator.next(); }
+        @peeked = nil;
+        return peeked;
+    } ~> { ret == @peeked }
+    def peek() -> T? {
+        if @peeked is Nil { @peeked = @iterator.next(); }
+        return @peeked;
+    } ~> { ret == @peeked }
+}

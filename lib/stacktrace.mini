@@ -1,19 +1,19 @@
-import std;
+import builtins;
 
-def foo() {
-	bar();
+extern def capture_backtrace(max_frames : i64, backtrace : Buffer[i64]) -> i64
+extern def print_backtrace(backtrace : Buffer[i64], n_frames : i64)
+
+class Stacktrace {
+    @stacktrace : Buffer[i64]
+    @n_frames : i64
+
+    def init() {
+        @stacktrace = Buffer[i64].new(100);
+        @n_frames = capture_backtrace(100 as i64, @stacktrace);
+    }
+
+    def print() {
+        print_backtrace(@stacktrace, @n_frames);
+    }
+
 }
-
-def bar() {
-	baz();
-}
-
-def baz() {
-	qux();
-}
-
-def qux() {
-	yield(Exception{});
-}
-
-foo();

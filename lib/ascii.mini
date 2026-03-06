@@ -1,0 +1,37 @@
+import builtins;
+
+class ASCII {
+    def Self.is_whitespace(byte : i8) -> Bool {
+        if byte == (32 as i8) { return true; }
+        if byte == (9 as i8) { return true; }
+        if byte == (10 as i8) { return true; }
+        if byte == (11 as i8) { return true; }
+        if byte == (12 as i8) { return true; }
+        if byte == (13 as i8) { return true; }
+        return false;
+    }
+
+    def Self.is_alpha(byte : i8) -> Bool {
+        code = byte as i32;
+        if code >= 65 and code <= 90 { return true; }
+        if code >= 97 and code <= 122 { return true; }
+        return false;
+    }
+
+    def Self.is_digit(byte : i8) -> Bool {
+        code = byte as i32;
+        return code >= 48 and code <= 57;
+    }
+
+    def Self.is_alnum(byte : i8) -> Bool {
+        return ASCII.is_alpha(byte) or ASCII.is_digit(byte);
+    }
+
+    def Self.is_hex(byte : i8) -> Bool {
+        if ASCII.is_digit(byte) { return true; }
+        code = byte as i32;
+        if code >= 65 and code <= 70 { return true; }
+        if code >= 97 and code <= 102 { return true; }
+        return false;
+    }
+}

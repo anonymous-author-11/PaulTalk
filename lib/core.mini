@@ -1,93 +1,15 @@
 import stack;
 import indexable;
 import range;
-
-extern def capture_backtrace(max_frames : i64, backtrace : Buffer[i64]) -> i64
-extern def print_backtrace(backtrace : Buffer[i64], n_frames : i64)
+import ascii;
+import unicode;
+import peek;
+import stacktrace;
 
 class SizedIterator[T] extends Iterator[T] {
 
     // how many items are remaining to be returned by .next?
     abstract def remaining() -> i32 {}
-}
-
-class ASCII {
-    def Self.is_whitespace(byte : i8) -> Bool {
-        if byte == (32 as i8) { return true; }
-        if byte == (9 as i8) { return true; }
-        if byte == (10 as i8) { return true; }
-        if byte == (11 as i8) { return true; }
-        if byte == (12 as i8) { return true; }
-        if byte == (13 as i8) { return true; }
-        return false;
-    }
-
-    def Self.is_alpha(byte : i8) -> Bool {
-        code = byte as i32;
-        if code >= 65 and code <= 90 { return true; }
-        if code >= 97 and code <= 122 { return true; }
-        return false;
-    }
-
-    def Self.is_digit(byte : i8) -> Bool {
-        code = byte as i32;
-        return code >= 48 and code <= 57;
-    }
-
-    def Self.is_alnum(byte : i8) -> Bool {
-        return ASCII.is_alpha(byte) or ASCII.is_digit(byte);
-    }
-
-    def Self.is_hex(byte : i8) -> Bool {
-        if ASCII.is_digit(byte) { return true; }
-        code = byte as i32;
-        if code >= 65 and code <= 70 { return true; }
-        if code >= 97 and code <= 102 { return true; }
-        return false;
-    }
-}
-
-class UTF8 {
-
-    // returns (codepoint_seed, bytes_needed)
-    def Self.classify_lead(b1 : i32) -> Tuple[i32, i32] {
-
-        // these bit patterns are mutually exclusive
-        // LLVM will see that the conditions are disjoint
-
-        if (b1 bit_and 0x80) == 0 { return (b1, 1); } // 0xxxxxxx
-        if (b1 bit_and 0xE0) == 0xC0 { return (b1 bit_and 0x1F, 2); } // 110xxxxx
-        if (b1 bit_and 0xF0) == 0xE0 { return (b1 bit_and 0x0F, 3); } // 1110xxxx
-        if (b1 bit_and 0xF8) == 0xF0 { return (b1 bit_and 0x07, 4); } // 11110xxx
-        return (0, 0);
-    }
-
-    def Self.is_continuation(b : i32) -> Bool {
-        return (b bit_and 0xC0) == 0x80;
-    }
-
-    def Self.accumulate(codepoint : i32, b_next : i32) -> i32 {
-        return (codepoint << 6) bit_or (b_next bit_and 0x3F);
-    }
-
-    // Check for overlong encodings and other invalid sequences
-    def Self.is_valid_codepoint(codepoint : i32, bytes_needed : i32) -> Bool {
-        return (bytes_needed != 2 or codepoint >= 0x80) and
-           (bytes_needed != 3 or codepoint >= 0x800) and
-           (bytes_needed != 4 or codepoint >= 0x10000) and
-           (codepoint < 0xD800 or codepoint > 0xDFFF) and
-           (codepoint <= 0x10FFFF);
-    }
-
-    // Returns 0 for invalid codepoints.
-    def Self.encoded_width(codepoint : i32) -> i32 {
-        if codepoint <= 0x7F { return 1; }
-        if codepoint <= 0x7FF { return 2; }
-        if codepoint <= 0xFFFF { return 3; }
-        if codepoint <= 0x10FFFF { return 4; }
-        return 0;
-    }
-
 }
 
 /*
@@ -116,39 +38,6 @@ class PushIterator[T] extends Iterator[T] {
 // my_ary = [1,2,3];
 // byte_yielder = UTF8Encoder{YieldWriter{}};
 // utf8_bytes = PushIterator{my_ary.iterator(), byte_yielder};
-
-class Peeker[T] extends Iterator[T] {
-    @iterator : Iterator[T]
-    @peeked : T?
-
-    regions {
-        @elems_reg == @iterator.elems_reg,
-        @peeker holds @elems_reg,
-        @iterator holds @peeked
-    }
-
-    def Self.from_iterator(iterator : Iterator[T]) -> Peeker[T] {
-        return Peeker{iterator};
-    } ~> { ret.iterator == iterator }
-
-    // No need to wrap if the iterator is already a Peeker
-    def Self.from_iterator(iterator : Peeker[T]) -> Peeker[T] {
-        return iterator;
-    } ~> { ret == iterator }
-    
-    def init(@iterator : Iterator[T]) {}
-
-    def next() -> T? {
-        peeked = @peeked;
-        if peeked is Nil { return @iterator.next(); }
-        @peeked = nil;
-        return peeked;
-    } ~> { ret == @peeked }
-    def peek() -> T? {
-        if @peeked is Nil { @peeked = @iterator.next(); }
-        return @peeked;
-    } ~> { ret == @peeked }
-}
 
 class Representable {
     def repr() -> String { return "Object"; }
@@ -1090,21 +979,6 @@ class UTF8Decoder extends ConstantTimeIterator[i32] {
 
         return codepoint;
     }
-}
-
-class Stacktrace {
-    @stacktrace : Buffer[i64]
-    @n_frames : i64
-
-    def init() {
-        @stacktrace = Buffer[i64].new(100);
-        @n_frames = capture_backtrace(100 as i64, @stacktrace);
-    }
-
-    def print() {
-        print_backtrace(@stacktrace, @n_frames);
-    }
-
 }
 
 class Exception {

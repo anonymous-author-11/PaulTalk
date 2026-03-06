@@ -53,7 +53,7 @@ def parse(file_path) -> AST:
         special_files = (
             "builtins.mini", "iteration.mini", "collection.mini", "writer.mini",
             "list.mini", "stack.mini", "range.mini", "indexable.mini",
-            "core.mini"
+            "ascii.mini", "unicode.mini", "peek.mini", "stacktrace.mini", "core.mini"
         )
         if file_path.name not in special_files:
             import_text = "import core;\n\n" + import_text

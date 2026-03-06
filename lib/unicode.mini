@@ -1,0 +1,44 @@
+import builtins;
+
+class UTF8 {
+
+    // returns (codepoint_seed, bytes_needed)
+    def Self.classify_lead(b1 : i32) -> Tuple[i32, i32] {
+
+        // these bit patterns are mutually exclusive
+        // LLVM will see that the conditions are disjoint
+
+        if (b1 bit_and 0x80) == 0 { return (b1, 1); } // 0xxxxxxx
+        if (b1 bit_and 0xE0) == 0xC0 { return (b1 bit_and 0x1F, 2); } // 110xxxxx
+        if (b1 bit_and 0xF0) == 0xE0 { return (b1 bit_and 0x0F, 3); } // 1110xxxx
+        if (b1 bit_and 0xF8) == 0xF0 { return (b1 bit_and 0x07, 4); } // 11110xxx
+        return (0, 0);
+    }
+
+    def Self.is_continuation(b : i32) -> Bool {
+        return (b bit_and 0xC0) == 0x80;
+    }
+
+    def Self.accumulate(codepoint : i32, b_next : i32) -> i32 {
+        return (codepoint << 6) bit_or (b_next bit_and 0x3F);
+    }
+
+    // Check for overlong encodings and other invalid sequences
+    def Self.is_valid_codepoint(codepoint : i32, bytes_needed : i32) -> Bool {
+        return (bytes_needed != 2 or codepoint >= 0x80) and
+           (bytes_needed != 3 or codepoint >= 0x800) and
+           (bytes_needed != 4 or codepoint >= 0x10000) and
+           (codepoint < 0xD800 or codepoint > 0xDFFF) and
+           (codepoint <= 0x10FFFF);
+    }
+
+    // Returns 0 for invalid codepoints.
+    def Self.encoded_width(codepoint : i32) -> i32 {
+        if codepoint <= 0x7F { return 1; }
+        if codepoint <= 0x7FF { return 2; }
+        if codepoint <= 0xFFFF { return 3; }
+        if codepoint <= 0x10FFFF { return 4; }
+        return 0;
+    }
+
+}

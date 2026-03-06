@@ -45,6 +45,7 @@ python ptalk_build.py
 	- Don't contort your code to work around the bug
 - Reuse a build directory (temp_build) so that compilation can use cached artifacts
 	- Don't recompile the entire stdlib every time you want to compile a single file
+- When asked to analyze or evaluate, "genuine" and "real" are banned as adjectives
 
 ## Code Style Guidelines
 
