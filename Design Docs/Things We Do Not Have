@@ -10,7 +10,7 @@ Closure functionality can still be achieved using coroutines, by passing variabl
 
 2. Enums, switches, currying, and pattern matching
 
-These are other aspects of functional-style programming which are not supported. If you are wanting to switch on an enum, do a virtual method call instead. First-class functions (and other callables) are called with .call(), so you cannot have foo()()()(). There is flow-sensitive type-narrowing via "if _ is _" statements, but this is not pattern-matching and is not intended to be used like pattern-matching. If you find yourself writing a series of such statements, use a multimethod instead.
+These are other aspects of functional-style programming which are not supported. If you are wanting to switch on an enum, do a virtual method call instead. First-class functions (and other callables) are called with .call(), so you cannot have foo()()()(). There is flow-sensitive type-narrowing via "if _ is _" statements, but this is not pattern-matching and is not intended to be used like pattern-matching. If you find yourself writing a series of such statements, use a multimethod or virtual call instead.
 
 When dictionary literals are implemented, it is plausible that it will be idiomatic to index into a dictionary literal where you would otherwise reach for a switch statement. (If so, we would also guarantee sane optimizations of this idiom)
 

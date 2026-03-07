@@ -727,12 +727,24 @@ TODO:
 	- We can optimize the input file with ld.lld --thinlto-single-module=input
 	- Then we llvm-link in the pre-optimized bitcodes generated from --save-temps
 	- Annoying complication: we have to refresh lto metadata in foo.bc.4.opt.bc et al
-	- Going to have to hoist allocas after h2s
+	- Going to have to hoist allocas after h2s [check!]
 	- We need to handle debug info correctly
 	- Need to ensure that input file bitcode is still optimized
 	- What I probably should do is create lto bitcode versionf of utils, layout, etc
 	- Then link those directly into the lto optimization
 	- And dispose of out_linked entirely
+
+- How should we ideally treat debug/release under the new LTO system
+	- We want debug metadata preserved in debug mode
+	- We don't want inlining in debug mode
+	- We do still need to inline always-inline helpers in debug mode
+	- We should replace the "pre-link opt" with a lighter lto step
+	- Then in debug mode we should skip entirely the later lto step
+	- We should pass --strip-debug to lto
+
+- Be more specific with --save-temps
+- See if linking non-recompile dependencies as --start-lib avoids their being optimized
+- Consider using preoptimized versions for non-recompile dependencies
 
 - What if we replace "internal" right after we prune using internalize, so llvm-link doesn't mangle
 - Could llvm-extract main and then --link-only-needed from there

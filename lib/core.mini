@@ -130,7 +130,7 @@ class String extends List[Character], Representable {
         new_b_len = old_b_len + other_b_len;
         self.reserve(new_b_len);
         for i in 0..other_b_len {
-            self.unchecked_insert(i + old_b_len, other.unchecked_index(i));
+            @bytes.[i + old_b_len] = other.unchecked_index(i);
         }
         @byte_length = new_b_len;
         @char_length = @char_length + other.size();
@@ -279,9 +279,6 @@ class String extends List[Character], Representable {
     }
     def unchecked_index(x : i32) -> i8 {
         return @bytes.[x];
-    }
-    def unchecked_insert(x : i32, value : i8) {
-        @bytes.[x] = value;
     }
     def copy() -> Self {
         new_buf = Buffer[i8].new(@byte_length);
@@ -470,11 +467,6 @@ class StringBytes extends List[i8] {
     def [](indices : i32) -> i8 yields OutOfBounds {
         self.bounds_check(indices);
         return @str.unchecked_index(indices);
-    }
-
-    def []=(index : i32, value : i8) yields OutOfBounds {
-        self.bounds_check(index);
-        @str.unchecked_insert(index, value);
     }
 
     def slice(start : i32, end_exclusive : i32) -> StringBytesView yields OutOfBounds {

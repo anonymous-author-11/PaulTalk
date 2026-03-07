@@ -95,6 +95,7 @@ class CompilationJob:
         ast = self.run_parse()
         self.run_typeflow(ast)
         self.lower_all(ast)
+        self.llvm_link()
 
         # not creating an output file
         if not self.output_path:
@@ -187,9 +188,7 @@ class CompilationJob:
         self.time_printer.print(f'Time to type check: {self.time_between("after_parse", "after_typeflow")} seconds')
         
         # All bitcodes are already perfect; return early
-        if len(modules) == 0:
-            self.llvm_link()
-            return
+        if len(modules) == 0: return
 
         # Only relevant if there were more than 0 modules
         self.time_printer.print(f'Time to codegen: {self.time_between("parse_dependencies", "codegen_done")} seconds')
@@ -197,7 +196,6 @@ class CompilationJob:
         module_str = self.lower_mlir(modules)
         llvm_string = self.lower_to_llvm(module_str)
         self.make_bitcodes(jobs, llvm_string)
-        self.llvm_link()
         self.lto_pre(jobs)
 
     def parse_dependencies(self, jobs):
@@ -307,14 +305,20 @@ class CompilationJob:
 
         # Run the regular O3 pipeline, which is strictly better than the lto<O3> pipeline
         passes = f"--lto-newpm-passes=default<O3>"
-        bc_paths = [job.input.bc_file for job in jobs if not job.input.path.samefile(self.input.path)]
+        to_optimize = [f"{job.input.bc_file}" for job in jobs]
+        all_dependencies = [str(self.build.dir.joinpath(f"bitcodes/{path.stem}.bc")) for path in self.dependencies.list]
+        already_optimized = [bc_file for bc_file in all_dependencies if bc_file not in to_optimize]
 
-        out_thin_path = self.build.dir / "out_thin.bc"
+        self.build_parameterizations_bitcode(all_dependencies)
+
+        if len(jobs) == 1:
+            to_optimize = [jobs[0].input.bc_file, f"--thinlto-single-module={jobs[0].input.bc_file}"]
 
         # optimize all the files in parallel and save the optimized versions
         lto_all_files = (
-            LLD_PATH, "-flavor", "gnu", out_thin_path, *bc_paths,
-            "--lto=thin", passes, "--save-temps", "--lto-emit-llvm",
+            LLD_PATH, "-flavor", "gnu", self.build.utils_bc, self.build.params_bc,
+            *to_optimize, *already_optimized,
+            "--lto=thin", passes, "--save-temps=opt", "--lto-emit-llvm",
             "-o", self.build.dir / "dumb_lto.bc", *self.settings.lto_options
         )
 
@@ -354,7 +358,8 @@ class CompilationJob:
 
         self.record_time("before_llvm_link")
 
-        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, LAYOUT_PATH, "-S")
+        input_optimized = self.build.dir / "bitcodes" / f"{self.input.bc_file.stem}.bc.4.opt.bc"
+        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, input_optimized, LAYOUT_PATH, "-S")
         utils_ir = run_checked(link_utils)
 
         # use the correct main function
@@ -407,7 +412,6 @@ class CompilationJob:
 
         thin_paths = [str(self.build.dir.joinpath(f"bitcodes/{path.stem}.bc")) for path in self.dependencies.list]
         out_thin_path = self.build.dir / "out_thin.bc"
-        self.build_parameterizations_bitcode(thin_paths)
 
         # Run the regular O3 pipeline
         passes = f"--lto-newpm-passes=default<O3>"
@@ -438,8 +442,12 @@ class CompilationJob:
             new_len = len(optimized_ir)
             if new_len == ir_len: break
             ir_len = len(optimized_ir)
-            run_checked((OPT_PATH, "--thinlto-bc", "--unified-lto", "-o", out_thin_path), input_text=optimized_ir)
+            hoist_allocas = f"{OPT_PATH} --bugpoint-enable-legacy-pm --alloca-hoisting"
+            inject_lto_metadata = f"{OPT_PATH} --thinlto-bc --unified-lto -o {out_thin_path}"
+            run_checked(f"{hoist_allocas} | {inject_lto_metadata}", input_text=optimized_ir, shell=True)
             subprocess.run(lto_single_module, cwd=self.build.dir)
+            if self.settings.debug_mode: break
+            if iterations == 100: raise Exception("too many iterations")
             iterations = iterations + 1
 
         self.status_printer.print(f"did {iterations} iterations of lto")
@@ -451,7 +459,7 @@ class CompilationJob:
         make_archive = (LLVM_AR_PATH, "cr", out2_path, *opt_paths)
         run_checked(make_archive)
 
-        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", self.build.dir / "out2.lib", "--only-needed"), input_text=optimized_ir)
+        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", out2_path, "--only-needed"), input_text=optimized_ir)
         optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", self.build.params_bc, "--only-needed"), input_text=optimized_ir)
         self.write_side_ir(self.build.dir / "after_link.ll", optimized_ir)
 
@@ -469,8 +477,9 @@ class CompilationJob:
     # Extract all the global constant parameterizations into one file to link back in
     def build_parameterizations_bitcode(self, bitcode_paths: list[str]):
         big_link = shell_join((LLVM_LINK_PATH, *bitcode_paths, "-o", "-"))
-        extract = f"{LLVM_EXTRACT_PATH} -rglob=_parameterization_.* -o {self.build.params_bc}"
+        extract = f"{LLVM_EXTRACT_PATH} -S -rglob=_parameterization_.* -o {self.build.params_bc}"
         subprocess.run(f"{big_link} | {extract}", shell=True)
+        refresh_bc_metadata(self.build.params_bc)
 
     def record_all_passes(self):
         #clang = "clang -x ir out_linked.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
@@ -588,7 +597,9 @@ class OptimizationSettings:
         no_dce = "--compute-dead=false"
         no_internalize = "--enable-lto-internalization=false"
         import_all = "--import-instr-limit=10000000"
-        settings = f"{self.devirt} {self.inlining} {self.attributor()} {no_dce} {no_internalize} {import_all}"
+        inlining = "--inline-threshold=1000 --inline-cold-callsite-threshold=1000 --inline-enable-cost-benefit-analysis"
+        attributor = self.attributor().replace("--max-heap-to-stack-size=0", "--max-heap-to-stack-size=1024")
+        settings = f"{self.devirt} {inlining} {attributor} {no_dce} {no_internalize} {import_all}"
         mllvm_options = tuple(f"--mllvm={option}" for option in settings.split())
         return mllvm_options
 
@@ -675,6 +686,15 @@ class BuildDirectory:
     @property
     def out_optimized_dbg(self):
         return self.dir / "out_optimized.dbg.ll"
+
+    @property
+    def utils_bc(self):
+        bc_path = self.dir / "utils.bc"
+        if bc_path.exists(): return bc_path
+        link = f"{LLVM_LINK_PATH} {UTILS_PATH} {OS_UTILS_PATH} {LAYOUT_PATH} -o -"
+        opt = f"{OPT_PATH} - --thinlto-bc --unified-lto -o {bc_path}"
+        subprocess.run(f"{link} | {opt}", shell=True)
+        return bc_path
 
     @property
     def opt_passes(self):
@@ -972,6 +992,10 @@ def clean_lto_metadata(llvm_string):
         print("\n".join(llvm_string.splitlines()[-40:]))
         raise Exception()
     return llvm_string
+
+def refresh_bc_metadata(bc_file):
+    ir_string = run_checked((OPT_PATH, bc_file, "-S", "--bugpoint-enable-legacy-pm", "--alloca-hoisting", "-o", "-"))
+    run_checked((OPT_PATH, "-", "-o", bc_file, "--thinlto-bc", "--unified-lto"), input_text=clean_lto_metadata(ir_string))
 
 def _make_gen(reader):
     b = reader(1024 * 1024)

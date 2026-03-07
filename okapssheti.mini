@@ -1,0 +1,18 @@
+
+            import core;
+            import io;
+
+            text = "电脑abc电脑";
+
+            idx1 = text.byte_index_of("电");
+            if idx1 is i32 { IO.print(idx1); } else { IO.print("nil"); }
+
+            idx2 = text.byte_index_of("abc");
+            if idx2 is i32 { IO.print(idx2); } else { IO.print("nil"); }
+
+            idx3 = text.byte_index_of("脑a");
+            if idx3 is i32 { IO.print(idx3); } else { IO.print("nil"); }
+
+            idx4 = text.byte_index_of("xyz");
+            if idx4 is i32 { IO.print(idx4); } else { IO.print("nil"); }
+        

@@ -30,6 +30,14 @@ Stackful over Stackless Coroutines
 	- Does not require a default runtime scheduler / event loop
 	- Coroutine schedulers may be implemented in libraries
 
+Virtual-memory based coroutine stacks
+
+	- Don't need to switch to a different stack to call C functions
+	- Don't need to insert morestack preludes
+	- No 'hot split' problem with segmented stacks, no copying stacks
+	- We don't intend to support 32bit platforms anyway
+	- Only allocates a 4kb page initially
+
 Word operators for bitwise 'and/or/xor' operations
 
 	- bit_and, bit_or, bit_xor
