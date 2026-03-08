@@ -313,8 +313,8 @@ class CompilationJob:
 
         # optimize all the files in parallel and save the optimized versions
         lto_all_files = (
-            LLD_PATH, "-flavor", "gnu", self.build.utils_bc, *to_optimize,
-            *singles, *already_optimized,
+            LLD_PATH, "-flavor", "gnu", self.build.utils_bc,
+            *to_optimize, *singles, *already_optimized,
             "--lto=thin", passes, "--save-temps=opt", "--lto-emit-llvm",
             "-o", self.build.dir / "dumb_lto.bc", *self.settings.lto_options
         )

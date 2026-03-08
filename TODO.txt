@@ -720,7 +720,33 @@ TODO:
 - Minimize binary size by extracting main() and linking in only needed symbols [check!]
 	- Hello world now 36kb instead of 923kb [check!]
 
-- Fix linter
+- Have codex investigate some longstanding quandaries
+	- Why does it crash at O0?
+	- Why the aarch64 layout?
+
+- Delete run_opt
+- Delete llvm_link
+- Inject debug metadata 
+- Turn get_offset et al into IR operations
+- Don't do any final LTO in debug mode
+
+- Big todos
+	- Namespaces and qualification
+	- Region system
+	- Exceptions / effect system
+	- Closures
+	- Records
+
+- Deduplicate behaviors
+	- If all methods in the behavior are inherited from the same class, reuse that behavior
+	- I believe behaviors encode absolute vtable offsets so this would not work out of the box
+	- Would have to add the fatptr offset within the behavior before loading the method fptr
+
+- Records
+	- Idea: casting between these works seamlessly, unlike tuples
+	- Their allocated size is dynamic
+	- Blocker: Indexing would need to run specialized code to calculate the offset
+	- Will require a utility method for finding field offsets for generic records
 
 - Here's the plan for integrating LTO
 	- We can generate optimized versions of all the bitcodes with ld.lld --save-temps
@@ -729,10 +755,11 @@ TODO:
 	- Annoying complication: we have to refresh lto metadata in foo.bc.4.opt.bc et al
 	- Going to have to hoist allocas after h2s [check!]
 	- We need to handle debug info correctly
-	- Need to ensure that input file bitcode is still optimized
-	- What I probably should do is create lto bitcode versionf of utils, layout, etc
-	- Then link those directly into the lto optimization
+	- Need to ensure that input file bitcode is still optimized [check!]
+	- What I probably should do is create lto bitcode versionf of utils, layout, etc [check!]
+	- Then link those directly into the lto optimization [check!]
 	- And dispose of out_linked entirely
+	- Be more specific with --save-temps=opt [check!]
 
 - How should we ideally treat debug/release under the new LTO system
 	- We want debug metadata preserved in debug mode
@@ -742,13 +769,8 @@ TODO:
 	- Then in debug mode we should skip entirely the later lto step
 	- We should pass --strip-debug to lto
 
-- Be more specific with --save-temps
-- See if linking non-recompile dependencies as --start-lib avoids their being optimized
 - Consider using preoptimized versions for non-recompile dependencies
-
-- What if we replace "internal" right after we prune using internalize, so llvm-link doesn't mangle
-- Could llvm-extract main and then --link-only-needed from there
-- I know there's a difference between llvm-link-ing a .lib vs the .bc files separately
+	- This seems to produce worse codegen, so it is doable but not advisable
 
 - If method has no arguments, use a different behavior wrapper
 	- Avoids passing poison argument which seems to limit inlining
@@ -784,6 +806,10 @@ TODO:
 	- intrinsic("llvm.sin").call()
 	- How to know result type?
 	- Declare as extern def? Or special "intrinsic" def?
+		- Can intrinsics be passed around as fptrs? Not generally.
+	- Let me have periods in extern def names
+	- Extern def llvm.sqrt.i64(x : i64) -> i64
+	- Might go in hand with namespacing dot syntax update
 
 - Allow indexing tuples with tuples
 
@@ -1053,16 +1079,6 @@ TODO:
 	- Currently calls can have more arguments than the function has parameters
 		- Which should not be the case
 
-- Deduplicate behaviors
-	- If all methods in the behavior are inherited from the same class, reuse that behavior
-	- I believe behaviors encode absolute vtable offsets so this would not work out of the box
-	- Would have to add the fatptr offset within the behavior before loading the method fptr
-
-- Records: why not?
-	- Idea: casting between these works seamlessly, unlike tuples
-	- Their allocated size is dynamic
-	- Blocker: Indexing would need to run specialized code to calculate the offset
-
 - I should be able to declare variadic extern defs
 	- e.g. "extern def printf(Buffer[i8], ...) -> i32"
 - GEP inbounds could help optimization on dynamic geps
@@ -1176,15 +1192,8 @@ TODO:
 	- "alias Foo[A] = Bar[A, i32];"
 	- This is more complex
 
-- Implement Records
-	- Will require a utility method for finding field offsets for generic records
 - Dispatch on parameterizations
 	- Would need to pass parameterizations into the behavior call
-- Make intrinsics better
-	- Let me have periods in extern def names
-	- Externally declare intrinsics
-	- Extern def llvm.sqrt.i64(x : i64) -> i64
-		- Can intrinsics be passed around as fptrs?
 - Add asserts
 	- There's mlir functionality (cf.assert) for this
 	- Compile to llvm.assume in release; branch to abort in debug
