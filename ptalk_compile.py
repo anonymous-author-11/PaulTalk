@@ -309,15 +309,12 @@ class CompilationJob:
         all_dependencies = [str(self.build.dir.joinpath(f"bitcodes/{path.stem}.bc")) for path in self.dependencies.list]
         already_optimized = [bc_file for bc_file in all_dependencies if bc_file not in to_optimize]
 
-        self.build_parameterizations_bitcode(all_dependencies)
-
-        if len(jobs) == 1:
-            to_optimize = [jobs[0].input.bc_file, f"--thinlto-single-module={jobs[0].input.bc_file}"]
+        singles = [f"--thinlto-single-module={path}" for path in to_optimize]
 
         # optimize all the files in parallel and save the optimized versions
         lto_all_files = (
-            LLD_PATH, "-flavor", "gnu", self.build.utils_bc, self.build.params_bc,
-            *to_optimize, *already_optimized,
+            LLD_PATH, "-flavor", "gnu", self.build.utils_bc, *to_optimize,
+            *singles, *already_optimized,
             "--lto=thin", passes, "--save-temps=opt", "--lto-emit-llvm",
             "-o", self.build.dir / "dumb_lto.bc", *self.settings.lto_options
         )
@@ -412,6 +409,7 @@ class CompilationJob:
 
         thin_paths = [str(self.build.dir.joinpath(f"bitcodes/{path.stem}.bc")) for path in self.dependencies.list]
         out_thin_path = self.build.dir / "out_thin.bc"
+        self.build_parameterizations_bitcode(thin_paths)
 
         # Run the regular O3 pipeline
         passes = f"--lto-newpm-passes=default<O3>"
@@ -475,7 +473,7 @@ class CompilationJob:
         return optimized_ir
 
     # Extract all the global constant parameterizations into one file to link back in
-    def build_parameterizations_bitcode(self, bitcode_paths: list[str]):
+    def build_parameterizations_bitcode(self, bitcode_paths):
         big_link = shell_join((LLVM_LINK_PATH, *bitcode_paths, "-o", "-"))
         extract = f"{LLVM_EXTRACT_PATH} -S -rglob=_parameterization_.* -o {self.build.params_bc}"
         subprocess.run(f"{big_link} | {extract}", shell=True)

@@ -1704,7 +1704,7 @@ class LowerGlobalStr(RewritePattern):
             sym_name=op.sym_name,
             global_type=op.str_type,
             value=llvm.StringAttr(op.value.data),
-            linkage=llvm.LinkageAttr("linkonce_odr"),
+            linkage=llvm.LinkageAttr("external"),
             constant=True
         )
         rewriter.replace_matched_op(global_string)
