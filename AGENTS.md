@@ -89,6 +89,7 @@ python ptalk_build.py
 	- Repeated `getattr(..., "type", None)` / `hasattr(...)` style branching is a smell; normalize inputs earlier or use real variants
 - Don't add compatibility behavior unless it is requested
 - No using semicolons to put two statements on one line
+- No using walrus := operator
 
 ### PaulTalk (.mini) Code
 - Standard library design rules can be found in `Standard Library Design Rules.txt`
