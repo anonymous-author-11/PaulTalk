@@ -1,10 +1,10 @@
 # Things We Do Not Have
 
-Mini is a language with many features, but equally important are the features which are left out of the language. This document enumerates some features which were left out, and the reasons for those decisions.
+PaulTalk is a language with many features, but equally important are the features which are left out of the language. This document enumerates some features which were left out, and the reasons for those decisions.
 
 1. Closures
 
-Mini has first-class functions, but they do not capture their environment. This is because closures are complicated to implement, interact poorly with many other implementation details, and most importantly, Mini is not a functional language and does not want to encourage functional patterns that rely heavily on closures.
+PaulTalk has first-class functions, but they do not capture their environment. This is because closures are complicated to implement, interact poorly with many other implementation details, and most importantly, PaulTalk is not a functional language and does not want to encourage functional patterns that rely heavily on closures.
 
 Closure functionality can still be achieved using coroutines, by passing variables at coroutine creation time. Or, you can just use a class to store state.
 
