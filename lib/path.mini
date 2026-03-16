@@ -16,15 +16,15 @@ class Path extends Representable {
     }
 
     def Self.separator_byte() -> i8 {
-        return 47 as i8;
+        return '/' as i8;
     }
 
     def Self.alt_separator_byte() -> i8 {
-        return 92 as i8;
+        return '\\' as i8;
     }
 
     def Self.dot_byte() -> i8 {
-        return 46 as i8;
+        return '.' as i8;
     }
 
     def Self.is_separator_byte(byte : i8) -> Bool {
