@@ -29,7 +29,7 @@ class ParserContractTests(unittest.TestCase):
         finally:
             source_path.unlink(missing_ok=True)
 
-    def test_parser_error_line_is_user_source_line(self):
+    def test_parser_error_uses_source_line(self):
         source_path = self._write_temp_source("x = 5;\nif {\n")
         try:
             with self.assertRaises(Exception) as cm:
@@ -113,15 +113,78 @@ class LintContractTests(unittest.TestCase):
         finally:
             source_path.unlink(missing_ok=True)
 
-    def test_ptalk_lint_ignores_semicolon_inside_fn_literal(self):
+    @staticmethod
+    def _run_ai_lint(source: str) -> subprocess.CompletedProcess[str]:
+        repo_root = Path(__file__).resolve().parent.parent
+        with tempfile.NamedTemporaryFile("w", suffix=".py", dir=repo_root, delete=False, encoding="utf-8") as tmp:
+            tmp.write(source)
+            source_path = Path(tmp.name)
+
+        try:
+            command = [
+                sys.executable,
+                "tools/lint_ai_changes.py",
+                str(source_path),
+            ]
+            return subprocess.run(command, capture_output=True, text=True, encoding="utf-8", cwd=repo_root)
+        finally:
+            source_path.unlink(missing_ok=True)
+
+    def test_ptalk_lint_ignores_fn_semicolon(self):
         result = self._run_ptalk_lint(
             "operations.contains((a : String, b : String) => { a == b; });\n"
         )
         self.assertEqual(result.returncode, 0, msg=result.stdout + result.stderr)
         self.assertIn("PASS", result.stdout)
 
-    def test_ptalk_lint_flags_two_semicolons_outside_fn_literal(self):
+    def test_ptalk_lint_flags_two_semicolons(self):
         result = self._run_ptalk_lint("a(); b();\n")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("R2-one-semicolon", result.stdout)
-        
+
+    def test_ai_lint_flags_hidden_function_import(self):
+        result = self._run_ai_lint(
+            "def load():\n"
+            "    import json\n"
+            "    return json.loads('{}')\n"
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("AIIMPORT", result.stdout)
+
+    def test_ai_lint_allows_top_imports(self):
+        result = self._run_ai_lint(
+            "import json\n\n"
+            "def load():\n"
+            "    return json.loads('{}')\n"
+        )
+        self.assertEqual(result.returncode, 0, msg=result.stdout + result.stderr)
+        self.assertIn("AI style lint passed.", result.stdout)
+
+    def test_ai_lint_flags_semicolon(self):
+        result = self._run_ai_lint(
+            "def load():\n"
+            "    x = 1; y = 2\n"
+            "    return x + y\n"
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("AISEMI", result.stdout)
+
+    def test_ai_lint_flags_missing_blank_line(self):
+        result = self._run_ai_lint(
+            "def first():\n"
+            "    return 1\n"
+            "def second():\n"
+            "    return 2\n"
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("AIBLANK", result.stdout)
+
+    def test_ai_lint_flags_walrus(self):
+        result = self._run_ai_lint(
+            "def load(items):\n"
+            "    if (count := len(items)) > 0:\n"
+            "        return count\n"
+            "    return 0\n"
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("AIWALRUS", result.stdout)

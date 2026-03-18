@@ -16,6 +16,9 @@ RULE_MESSAGES = {
     "too-many-nested-blocks": "Too much nesting (max is 3). Refactor with guard clauses or helper functions.",
     "deep-indentation": "Indentation is too deep (max is 3 levels). Refactor with guard clauses or helper functions.",
     "hidden-import": "Imports must be unconditional top-level statements at the start of the file.",
+    "semicolon-statement": "Semicolons are not allowed in Python code.",
+    "missing-blank-line": "Keep an empty line between methods, classes, and functions.",
+    "walrus-operator": "Walrus operator is not allowed.",
 }
 INDENT_LEVEL_LIMIT = 3
 INDENT_WIDTH = 4
@@ -241,6 +244,43 @@ def hidden_import_message(rel_path: str, line: int, column: int, detail: str) ->
     }
 
 
+def style_message(msg_id: str, symbol: str, rel_path: str, line: int, column: int, detail: str) -> dict[str, object]:
+    return {
+        "message-id": msg_id,
+        "symbol": symbol,
+        "path": rel_path,
+        "line": line,
+        "column": column,
+        "message": detail,
+        "type": "refactor",
+    }
+
+
+def collect_file_token_style_messages(path: Path, repo_root: Path) -> list[dict[str, object]]:
+    rel_path = path.relative_to(repo_root).as_posix()
+    source = path.read_text(encoding="utf-8")
+    messages: list[dict[str, object]] = []
+
+    for token in tokenize.generate_tokens(io.StringIO(source).readline):
+        if token.type != tokenize.OP:
+            continue
+        if token.string == ";":
+            detail = "Replace multiple statements on one line with separate lines."
+            messages.append(style_message("AISEMI", "semicolon-statement", rel_path, token.start[0], token.start[1] + 1, detail))
+        if token.string == ":=":
+            detail = "Use an ordinary assignment before the expression instead."
+            messages.append(style_message("AIWALRUS", "walrus-operator", rel_path, token.start[0], token.start[1] + 1, detail))
+
+    return messages
+
+
+def collect_token_style_messages(repo_root: Path, files: list[Path]) -> list[dict[str, object]]:
+    messages: list[dict[str, object]] = []
+    for path in files:
+        messages.extend(collect_file_token_style_messages(path, repo_root))
+    return messages
+
+
 def has_module_docstring(module: ast.Module) -> bool:
     if not module.body:
         return False
@@ -315,6 +355,70 @@ def collect_hidden_import_messages(repo_root: Path, files: list[Path]) -> list[d
     return messages
 
 
+def node_start_line(node: ast.AST) -> int:
+    lines = [node.lineno, *(decorator.lineno for decorator in getattr(node, "decorator_list", ()))]
+    return min(lines)
+
+
+def collect_body_blank_line_messages(
+    body: list[ast.stmt],
+    rel_path: str,
+    source_lines: list[str],
+) -> list[dict[str, object]]:
+    messages: list[dict[str, object]] = []
+    defs = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
+    previous: ast.stmt | None = None
+
+    for stmt in body:
+        if not isinstance(stmt, defs):
+            previous = None
+            continue
+        if not previous:
+            previous = stmt
+            continue
+        start = node_start_line(stmt)
+        gap = source_lines[previous.end_lineno:start - 1]
+        if any(not line.strip() for line in gap):
+            previous = stmt
+            continue
+        detail = "Add a blank line before this definition."
+        messages.append(style_message("AIBLANK", "missing-blank-line", rel_path, start, 1, detail))
+        previous = stmt
+
+    return messages
+
+
+def collect_blank_line_messages_from_node(
+    node: ast.AST,
+    rel_path: str,
+    source_lines: list[str],
+) -> list[dict[str, object]]:
+    messages: list[dict[str, object]] = []
+    body = getattr(node, "body", None)
+    if isinstance(body, list):
+        messages.extend(collect_body_blank_line_messages(body, rel_path, source_lines))
+        for child in body:
+            messages.extend(collect_blank_line_messages_from_node(child, rel_path, source_lines))
+    return messages
+
+
+def collect_file_blank_line_messages(path: Path, repo_root: Path) -> list[dict[str, object]]:
+    rel_path = path.relative_to(repo_root).as_posix()
+    source = path.read_text(encoding="utf-8")
+    try:
+        module = ast.parse(source, filename=str(path))
+    except SyntaxError:
+        return []
+    return collect_blank_line_messages_from_node(module, rel_path, source.splitlines())
+
+
+def collect_blank_line_messages(repo_root: Path, files: list[Path]) -> list[dict[str, object]]:
+    messages: list[dict[str, object]] = []
+    for path in files:
+        messages.extend(collect_file_blank_line_messages(path, repo_root))
+    return messages
+
+
 def normalize_message_path(raw_path: str, repo_root: Path) -> str:
     path = raw_path.replace("\\", "/")
     if path:
@@ -353,7 +457,7 @@ def format_message(message: dict[str, object]) -> str:
     line = int(message.get("line", 0))
     column = int(message.get("column", 0))
     details = str(message.get("message", "")).strip()
-    if msg_id in TARGET_RULES or symbol in TARGET_SYMBOLS or symbol in {"deep-indentation", "hidden-import"}:
+    if msg_id in TARGET_RULES or symbol in TARGET_SYMBOLS or symbol in {"deep-indentation", "hidden-import", "semicolon-statement", "missing-blank-line", "walrus-operator"}:
         shame_text = RULE_MESSAGES.get(
             symbol,
             RULE_MESSAGES.get(
@@ -399,6 +503,8 @@ def main() -> int:
     return_code, messages, stderr = run_pylint(repo_root, files)
     indent_messages = collect_indent_messages(repo_root, files)
     hidden_import_messages = collect_hidden_import_messages(repo_root, files)
+    token_style_messages = collect_token_style_messages(repo_root, files)
+    blank_line_messages = collect_blank_line_messages(repo_root, files)
     if "No module named pylint" in stderr:
         print(
             "pylint is not installed. Install dependencies with `pip install -r requirements-ci.txt`.",
@@ -408,7 +514,7 @@ def main() -> int:
     if stderr:
         print(stderr, file=sys.stderr)
 
-    if not messages and not indent_messages and not hidden_import_messages:
+    if not messages and not indent_messages and not hidden_import_messages and not token_style_messages and not blank_line_messages:
         if return_code == 0:
             print("AI style lint passed.")
             return 0
@@ -429,6 +535,8 @@ def main() -> int:
 
     relevant_messages.extend(indent_messages)
     relevant_messages.extend(hidden_import_messages)
+    relevant_messages.extend(token_style_messages)
+    relevant_messages.extend(blank_line_messages)
     relevant_messages = filter_messages_to_changed_lines(relevant_messages, changed_lines)
     other_errors = filter_messages_to_changed_lines(other_errors, changed_lines)
 
