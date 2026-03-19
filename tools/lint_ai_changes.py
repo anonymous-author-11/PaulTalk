@@ -457,7 +457,14 @@ def format_message(message: dict[str, object]) -> str:
     line = int(message.get("line", 0))
     column = int(message.get("column", 0))
     details = str(message.get("message", "")).strip()
-    if msg_id in TARGET_RULES or symbol in TARGET_SYMBOLS or symbol in {"deep-indentation", "hidden-import", "semicolon-statement", "missing-blank-line", "walrus-operator"}:
+    extra_symbols = {
+        "deep-indentation",
+        "hidden-import",
+        "semicolon-statement",
+        "missing-blank-line",
+        "walrus-operator",
+    }
+    if msg_id in TARGET_RULES or symbol in TARGET_SYMBOLS or symbol in extra_symbols:
         shame_text = RULE_MESSAGES.get(
             symbol,
             RULE_MESSAGES.get(
@@ -514,7 +521,7 @@ def main() -> int:
     if stderr:
         print(stderr, file=sys.stderr)
 
-    if not messages and not indent_messages and not hidden_import_messages and not token_style_messages and not blank_line_messages:
+    if not any((messages, indent_messages, hidden_import_messages, token_style_messages, blank_line_messages)):
         if return_code == 0:
             print("AI style lint passed.")
             return 0
