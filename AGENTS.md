@@ -104,6 +104,7 @@ python ptalk_build.py
 - Keep `tests.py` as the suite entrypoint and test selector
 - Add compiler behavior tests in `test_modules/compiler_negative.py` or `test_modules/compiler_positive.py`
 - Add parser/CLI/cache contract tests in `test_modules/contracts.py`
+- Do not couple tests to implementation details!
 - Add perf cases by creating a `.mini` file in `test_modules/perf_cases/` and registering it in `test_modules/perf_cases/manifest.json`
 - Shared harness utilities live in `test_modules/base_case.py` (`CompilerTestCase`)
 - Test both successful compilation and error cases
