@@ -3571,7 +3571,7 @@ class Method:
         ret_type = self.return_type()
         param_types = self.param_types()
         if is_named_fatptr(self.definition._return_type, "Self"):
-            return self.cls.type()
+            return rec_typ
         formal_types = [self.cls.type(), *param_types]
         arg_ancestors = []
         for arg_t, param_t in zip(arg_types, param_types):

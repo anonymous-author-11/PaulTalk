@@ -210,8 +210,7 @@ class PaulTalkLexer {
             if handled { continue; }
             self.scan_symbol(line, column, start);
         }
-        @tokens.append(EOF{"<eof>", @line, @column});
-        return @tokens;
+        return @tokens.append(EOF{"<eof>", @line, @column});
     }
 
     def scan_token(byte : i8, line : i32, column : i32, start : i32) -> Bool {

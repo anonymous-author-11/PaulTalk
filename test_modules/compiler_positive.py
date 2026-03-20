@@ -62,6 +62,27 @@ class CompilerPositiveTestsMixin:
         expected_output = "1\n2"
         self.compile_and_run(mini_code, expected_output, "generic_method_branch_return_codegen_regression")
 
+    def test_generic_self_return(self):
+        mini_code = """
+            import std;
+
+            class Box[T] {
+                @value : T
+
+                def init(@value : T) {}
+                def same() -> Self { return self; }
+                def value() -> T { return @value; }
+            }
+
+            def keep(box : Box[i32]) -> Box[i32] {
+                return box.same();
+            }
+
+            IO.print(keep(Box[i32]{7}).value());
+        """
+        expected_output = "7"
+        self.compile_and_run(mini_code, expected_output, "generic_self_return")
+
     def test_string_interpolation_escape(self):
         mini_code = """
             import std;
