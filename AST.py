@@ -3583,10 +3583,21 @@ class Method:
         result = scope.type_env.validated_type(self.definition.info, result)
         return result
 
-    def applicable_for(self, rec_typ, i, t, scope):
-        specialized_param = self.specialized_param_type_for(rec_typ, i, t, scope)
-        if not specialized_param: return False
-        return scope.subtype(t, specialized_param)
+    def applicable_for(self, rec_typ, arg_types, scope):
+        param_types = self.param_types()
+        formal_types = [self.cls.type(), *param_types]
+        concrete_types = [rec_typ]
+
+        for arg_type, param_type in zip(arg_types, param_types):
+            ancestor = next((anc for anc in scope.ancestors(arg_type) if scope.matches(anc, param_type)), None)
+            if not ancestor: return False
+            concrete_types.append(ancestor)
+
+        for arg_type, param_type in zip(arg_types, param_types):
+            specialized = scope.specialize(formal_types, concrete_types, param_type)
+            if not scope.subtype(arg_type, specialized): return False
+
+        return True
 
     def overridden_methods(self):
         if self._overridden_methods: return self._overridden_methods
@@ -3809,16 +3820,14 @@ class Behavior(Statement):
 
     def applicable(self, rec_typ, scope, name, arg_types):
         if name != self.name or len(arg_types) != self.arity: return False
-        for i, arg_type in enumerate(arg_types):
-            types = [arg_type] if not isinstance(arg_type, Union) else arg_type.types.data
-            for t in types:
-                applicable_methods = [m for m in self.methods if m.applicable_for(rec_typ, i, t, scope)]
-                for j, type_j in enumerate(arg_types):
-                    #if j == i: continue
-                    types_j = {type_j} if not isinstance(type_j, Union) else {*type_j.types.data}
-                    accepted_types = {*chain.from_iterable([m.specialized_param_type_for(rec_typ, j, jt, scope) for jt in types_j] for m in applicable_methods)}
-                    workable = {x for x in types_j if any(scope.subtype(x, at) for at in accepted_types)}
-                    if len(workable) == 0: return False
+
+        arg_sets = [arg_type.types.data if isinstance(arg_type, Union) else [arg_type] for arg_type in arg_types]
+        combos = product(*arg_sets) if arg_sets else [()]
+
+        for combo in combos:
+            if any(method.applicable_for(rec_typ, combo, scope) for method in self.methods): continue
+            return False
+
         return True
 
     def remove_superfluous_methods(self):

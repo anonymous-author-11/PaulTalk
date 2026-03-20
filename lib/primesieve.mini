@@ -23,11 +23,7 @@ class SimplePrimeSieve extends PrimeSieve {
 
     def init(@size : i32) {
         @sieve = Buffer[Bool].new(@size + 1);
-        i = 0;
-        while i <= @size {
-            @sieve.[i] = true;
-            i = i + 1;
-        }
+        for i in 0..@size { @sieve.[i] = true; }
         @sieve.[0] = false;
         @sieve.[1] = false;
     }
@@ -37,12 +33,14 @@ class SimplePrimeSieve extends PrimeSieve {
         
         i = 3;
         while i <= sqrt_size {
-            if @sieve.[i] {
-                j = i * i;
-                while j <= @size {
-                    @sieve.[j] = false;
-                    j = j + i + i;
-                }
+            if not @sieve.[i] {
+                i = i + 2;
+                continue;
+            }
+            j = i * i;
+            while j <= @size {
+                @sieve.[j] = false;
+                j = j + i + i;
             }
             i = i + 2;
         }
@@ -69,11 +67,7 @@ class CacheOptimizedSieve extends PrimeSieve {
 
     def init(@size : i32) {
         @sieve = Buffer[Bool].new(@size + 1);
-        i = 0;
-        while i <= @size {
-            @sieve.[i] = true;
-            i = i + 1;
-        }
+        for i in 0..@size { @sieve.[i] = true; }
         @sieve.[0] = false;
         @sieve.[1] = false;
     }
@@ -85,18 +79,20 @@ class CacheOptimizedSieve extends PrimeSieve {
 
             factor = 3;
             while factor * factor <= segment_high {
-                if @sieve.[factor] {
-                    current_multiple = max(factor * factor, (segment_low + factor - 1) / factor * factor);
+                if not @sieve.[factor] {
+                    factor = factor + 2;
+                    continue;
+                }
+                current_multiple = max(factor * factor, (segment_low + factor - 1) / factor * factor);
 
-                    if current_multiple % 2 == 0 {
-                        current_multiple = current_multiple + factor;
-                    }
+                if current_multiple % 2 == 0 {
+                    current_multiple = current_multiple + factor;
+                }
 
-                    j = current_multiple;
-                    while j <= segment_high {
-                        @sieve.[j] = false;
-                        j = j + factor + factor;
-                    }
+                j = current_multiple;
+                while j <= segment_high {
+                    @sieve.[j] = false;
+                    j = j + factor + factor;
                 }
                 factor = factor + 2;
             }
@@ -216,9 +212,7 @@ class CacheOptimizedBitpackedSieve extends PrimeSieve {
         count = 1; // For prime '2'
         i = 3;
         while i <= @size {
-            if not self.is_marked_composite(i) {
-                count = count + 1;
-            }
+            if not self.is_marked_composite(i) { count = count + 1; }
             i = i + 2; // Only check odd numbers
         }
         return count;
@@ -231,41 +225,37 @@ class NaiveSieveWithCollection extends PrimeSieve {
     @primes_list : Array[i32] // To store the collected primes
 
     def init(@size : i32) {
-        // @size = @size; // shorthand from your style
         @sieve_flags = Buffer[Bool].new(@size + 1);
         @primes_list = [] of i32;
-        i = 0;
-        while i <= @size {
-            @sieve_flags.[i] = true;
-            i = i + 1;
-        }
+        for i in 0..@size { @sieve_flags.[i] = true; }
         if @size >= 0 { @sieve_flags.[0] = false; }
         if @size >= 1 { @sieve_flags.[1] = false; }
     }
 
     def generate_primes() {
-        // 1. Sieving process (Rust/Zig style)
+        // 1. Sieving process
         p = 2;
         while p * p <= @size {
-            if @sieve_flags.[p] { // If p is prime
-                index = p * p;
-                while index <= @size {
-                    @sieve_flags.[index] = false; // Mark multiple as not prime
-                    index = index + p;          // Increment by p
-                }
+            // If p is not prime
+            if not @sieve_flags.[p] {
+                p = p + 1;
+                continue;
+            }
+            // If p is prime
+            index = p * p;
+            while index <= @size {
+                @sieve_flags.[index] = false; // Mark multiple as not prime
+                index = index + p;          // Increment by p
             }
             p = p + 1; // Increment p by 1
         }
 
         // Allocate and fill the primes_list
         result_idx = 0;
-        i_collect = 2; // Start collecting actual primes from 2
-        while i_collect <= @size {
-            if @sieve_flags.[i_collect] {
-                @primes_list.append(i_collect);
-                result_idx = result_idx + 1;
-            }
-            i_collect = i_collect + 1;
+        for i_collect in 2..@size {     // Start collecting actual primes from 2
+            if not @sieve_flags.[i_collect] { continue; }
+            @primes_list.append(i_collect);
+            result_idx = result_idx + 1;
         }
     }
 

@@ -550,6 +550,38 @@ class CompilerNegativeTestsMixin:
             """
             self.compile_fails(mini_code, "receiver type i32 for method call .method is not an object", "method_call_invalid_receiver_type")
 
+    def test_box_put_bad_type(self):
+            mini_code = """
+            class Animal {
+                def init() {}
+            }
+            class Car {
+                def init() {}
+            }
+            class Box[T] {
+                def init() {}
+                def put(value : T) {}
+            }
+            def test() {
+                box = Box[Animal].new();
+                box.put(Car{});
+            }
+            """
+            self.compile_fails(mini_code, "there exists no overload of method Box[Animal].put compatible with argument types", "box_put_bad_type")
+
+    def test_same_arg_types(self):
+            mini_code = """
+            class Probe {
+                def init() {}
+                def same[T](left : T, right : T) {}
+            }
+            def test() {
+                probe = Probe{};
+                probe.same(1, "x");
+            }
+            """
+            self.compile_fails(mini_code, "there exists no overload of method Probe.same compatible with argument types", "same_arg_types")
+
     def test_class_method_call_abstract_method(self):
             mini_code = """
             class Animal {
