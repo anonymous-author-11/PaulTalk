@@ -1122,6 +1122,9 @@ class CompilerPositiveTestsMixin:
             pair1 = Pair{5, 7.0};
             t = pair1.second();
             IO.print(t);
+            swapped1 = pair1.swapped();
+            IO.print(swapped1.first());
+            IO.print(swapped1.second());
 
             pair2 = Pair{7.0, 9};
             t = pair2.second();
@@ -1144,7 +1147,7 @@ class CompilerPositiveTestsMixin:
             b = FancyPair{(1.0, 2.0, 3.0, 4.0), 5.0};
             IO.print(b.second());
         """
-        expected_output = "7.000000\n9\n4.000000\n5.000000"
+        expected_output = "7.000000\n7.000000\n5\n9\n4.000000\n5.000000"
         self.run_mini_code(mini_code, expected_output, "pair")
 
     def test_array_iteration(self):

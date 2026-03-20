@@ -2757,12 +2757,10 @@ class ObjectCreation(Expression):
     def parameterizations(self, created_cls, self_type, scope):
         if self_type.type_params == NoneAttr(): return []
 
-        temp_scope = Scope(scope)
-        for t1, t2 in zip(created_cls.type_parameters, self_type.type_params.data): temp_scope.type_env.add_alias(t1, t2)
-
         parameterizations = []
+        formal_type = created_cls.type()
         for new_instance_type_field in created_cls.stored_type_fields():
-            field_formal_type = temp_scope.simplify(new_instance_type_field.declaration.type_param)
+            field_formal_type = scope.specialize([formal_type], [self_type], new_instance_type_field.declaration.type_param)
             parameterizations.append(scope.get_parameterization(field_formal_type))
 
         return parameterizations
