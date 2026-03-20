@@ -83,6 +83,7 @@ python ptalk_build.py
 - Naming: snake_case for functions/variables, PascalCase for classes
 - Types: Add type hints where appropriate, use Python 3.10+ features
 - Error handling: Use specific exceptions, prefer context managers
+- Use itertools instead of writing dumb loops
 - Prefer direct names for helpers
 	- Avoid bloated names for simple operations; name things by what they are, not by ceremony
 - Avoid broad dynamic introspection when normal typing will do
