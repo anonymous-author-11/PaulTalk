@@ -49,7 +49,7 @@ python ptalk_build.py
 - Reuse a build directory (temp_build) so that compilation can use cached artifacts
 	- Don't recompile the entire stdlib every time you want to compile a single file
 - When asked to analyze or evaluate, "genuine" and "real" are banned as adjectives
-- If I ask you to review code, I am not just asking for a bug report
+- If I ask you to analyze code, I am not just asking for a bug report
 	- If you don't report boilerplate, bad abstractions, dead code, that is a failure
 - The fast test suite will take more than 120s to run, so don't set a 120s timeout
 
