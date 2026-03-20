@@ -4,6 +4,8 @@ statement: function_def
          | extern_def
          | class_def
          | import_statement ";"
+         | export_statement ";"
+         | no_export_statement ";"
          | var_decl ";"
          | assignment ";"
          | alias ";"
@@ -16,8 +18,11 @@ statement: function_def
          | expression_statement
          | block -> new_scope
 
-import_statement: "import" ident ("." ident)*
-alias: ALIAS basic_type "=" typ
+import_statement: "import" qualified_ident
+export_statement: "export" qualified_ident ("," qualified_ident)*
+no_export_statement: "no_export" qualified_ident ("," qualified_ident)*
+alias: ALIAS (ident | SELF_TYPE) "=" typ
+qualified_ident: ident ("." ident)*
 
 expression_statement: expression ";"
 
@@ -73,16 +78,12 @@ field_param: FIELD ":" typ -> param
 
 var_decl: ident ":" typ ["=" expression]
 field_decl: FIELD ":" typ
-assignment: assignable "=" expression
+assignment: postfix_target "=" expression
+postfix_target: primary_atom postfix_part*
 
-assignable: ident -> identifier
-          | FIELD -> identifier
-          | "(" assignable ")" -> paren_expr
-          | function_call
-          | method_call
-          | object_creation
-          | indexation
-          | tuple_literal
+postfix_part: "(" expression_list ")" -> call_suffix
+            | "." ident -> attr_suffix
+            | "." "[" expression_list "]" -> index_suffix
 
 if_statement: "if" expression block ("else" block)?
 while_statement: "while" expression block
@@ -92,16 +93,16 @@ break_statement: BREAK
 continue_statement: CONTINUE
 
 typ: basic_type
-    | union_type
-    | parameterized_type
-    | function_type
-    | nilable_type
+   | union_type
+   | parameterized_type
+   | function_type
+   | nilable_type
 
 type_list: (typ ("," typ)*)?
 type_count: INT "x" typ
-basic_type: ident
+basic_type: ident | SELF_TYPE | QUALIFIED_TYPE
 union_type: typ "|" typ
-parameterized_type: ident "[" (type_list | type_count) "]"
+parameterized_type: (ident | QUALIFIED_TYPE) "[" (type_list | type_count) "]"
 function_type: "(" type_list ")" ["->" typ] ["yields" typ]
 nilable_type: typ "?"
 
@@ -153,21 +154,29 @@ factor: primary -> factor_single
       | MINUS factor -> neg_op
       | NOT factor -> not_op
 
-primary: "(" expression ")" -> paren_expr
-       | INT -> int_literal
-       | HEX -> hex_literal
-       | FLOAT -> float_literal
-       | TRUE -> bool_literal
-       | FALSE -> bool_literal
-       | NIL -> nil_literal
-       | CHAR -> char_literal
-       | string_literal
-       | function_literal
-       | array_literal
-       | dictionary_literal
-       | sizeof_call
-       | yield_call
-       | assignable
+primary: postfix_expr
+
+postfix_expr: primary_atom postfix_part*
+primary_atom: "(" expression ")" -> paren_expr
+           | INT -> int_literal
+           | HEX -> hex_literal
+           | FLOAT -> float_literal
+           | TRUE -> bool_literal
+           | FALSE -> bool_literal
+           | NIL -> nil_literal
+           | CHAR -> char_literal
+           | string_literal
+           | function_literal
+           | array_literal
+           | dictionary_literal
+           | sizeof_call
+           | yield_call
+           | tuple_literal
+           | ident -> identifier
+           | SELF_TYPE -> identifier
+           | FIELD -> identifier
+           | parameterized_type | QUALIFIED_TYPE
+           | object_creation
 
 string_literal: QUOTE string_part* QUOTE
 
@@ -185,10 +194,7 @@ tuple_literal: "(" expression "," expression ("," expression)* ")"
 dictionary_literal: LBRACE kv_pair ("," kv_pair)* "}"
 sizeof_call: "sizeof" "(" typ ")"
 yield_call: YIELD "(" [expression] ")"
-function_call: ident "(" (expression ("," expression)*)? ")"
-method_call: (primary | parameterized_type) "." ident "(" (expression ("," expression)*)? ")"
-object_creation: (CAPITAL_IDENT | parameterized_type) LBRACE (expression ("," expression)*)? "}"
-indexation: primary "." "[" (expression ("," expression)*)? "]"
+object_creation: (CAPITAL_IDENT | SELF_TYPE | QUALIFIED_TYPE | parameterized_type) LBRACE (expression ("," expression)*)? "}"
 ident: CAPITAL_IDENT | LOWERCASE_IDENT
 
 operator: PLUS | MINUS | TIMES | DIVIDE
@@ -244,6 +250,7 @@ SELF_TYPE.3: "Self"
 SETTER: /[a-zA-Z][a-zA-Z0-9_]*=/
 FIELD: /@[a-zA-Z][a-zA-Z0-9_]*/
 CAPITAL_IDENT.2: /[A-Z][a-zA-Z0-9_]*/
+QUALIFIED_TYPE.2: /[a-z_][a-zA-Z0-9_]*(?:\.[a-z_][a-zA-Z0-9_]*)*\.[A-Z][a-zA-Z0-9_]*/
 LOWERCASE_IDENT: /[a-z_][a-zA-Z0-9_]*/
 INT:   /[0-9]+(_[0-9]+)*/
 HEX:   /0x[0-9a-fA-F]+(_[0-9a-fA-F]+)*/

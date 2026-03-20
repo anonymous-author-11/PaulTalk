@@ -1,5 +1,4 @@
 class CompilerNegativeTestsMixin:
-
     def test_duplicate_class_definition(self):
             mini_code = """
             class Animal {}
@@ -128,6 +127,32 @@ class CompilerNegativeTestsMixin:
             }"""
             self.compile_fails(mini_code, "argument type f64 not subtype of declared parameter type i32", "function_call_arg_not_subtype")
 
+    def test_call_extra_arg(self):
+            mini_code = """
+            def foo(x : i32) {}
+            def test() {
+                foo(1, 2);
+            }"""
+            self.compile_fails(mini_code, "Wrong number of arguments for foo", "call_extra_arg")
+
+    def test_call_missing_arg(self):
+            mini_code = """
+            def foo(x : i32) {}
+            def test() {
+                foo();
+            }"""
+            self.compile_fails(mini_code, "Wrong number of arguments for foo", "call_missing_arg")
+
+    #def test_type_params_distinct(self):
+    #        mini_code = """
+    #        class Box[A, B] {
+    #            @x : B
+    #            def init(@x : B) {}
+    #            def bad() -> A { return @x; }
+    #        }
+    #        """
+    #        self.compile_fails(mini_code, "returned value of invalid type", "type_params_distinct")
+
     def test_break_statement_outside_loop(self):
             mini_code = """
             def test() {
@@ -150,7 +175,331 @@ class CompilerNegativeTestsMixin:
                 nonExistentFunction(); // Function not declared
             }
             """
-            self.compile_fails(mini_code, "function name nonExistentFunction not found", "function_call_function_not_declared")
+            self.compile_fails(mini_code, "Function nonExistentFunction has not been declared.", "function_call_function_not_declared")
+
+    def test_namespace_exports(self):
+        cases = [
+            (
+                "cross_kind",
+                {
+                    "main.mini": "class Box { def init() {} }\nalias Box = i32;\nvalue : Box = 1;\n",
+                },
+                "Box is ambiguous in namespace main.",
+            ),
+            (
+                "entity_parent",
+                {
+                    "inner.mini": "def answer() -> i32 { return 1; }\n",
+                    "main.mini": "import inner.answer;\nvalue = inner.answer();\n",
+                },
+                "identifier inner not previously declared",
+            ),
+            (
+                "hide_local",
+                {
+                    "helper.mini": "no_export hidden;\ndef visible() -> i32 { return 1; }\ndef hidden() -> i32 { return 2; }\n",
+                    "main.mini": "import helper;\nvisible();\nhidden();\n",
+                },
+                "Function hidden has not been declared.",
+            ),
+            (
+                "hide_import",
+                {
+                    "inner.mini": "def answer() -> i32 { return 42; }\n",
+                    "wrapper.mini": "import inner;\nno_export answer;\n",
+                    "main.mini": "import wrapper;\nanswer();\n",
+                },
+                "Function answer has not been declared.",
+            ),
+            (
+                "entity_ambiguous",
+                {
+                    "a.mini": "def dup() -> i32 { return 1; }\n",
+                    "b.mini": "def dup() -> i32 { return 2; }\n",
+                    "wrapper.mini": "import a;\nimport b;\n",
+                    "main.mini": "import wrapper.dup;\n",
+                },
+                "multiple exported entities named dup",
+            ),
+            (
+                "export_missing_target",
+                {"main.mini": "export missing;\ndef answer() -> i32 { return 1; }\n"},
+                "missing is not visible here and cannot be exported.",
+            ),
+            (
+                "dotted_readd",
+                {
+                    "inner.mini": "def answer() -> i32 { return 42; }\n",
+                    "wrapper.mini": "import inner;\nexport inner.answer;\ndef answer() -> i32 { return 1; }\n",
+                    "main.mini": "import wrapper;\nanswer();\n",
+                },
+                "Function answer has multiple declarations",
+            ),
+            (
+                "export_ambiguous",
+                {
+                    "a.mini": "def dup() -> i32 { return 1; }\n",
+                    "b.mini": "def dup() -> i32 { return 2; }\n",
+                    "main.mini": "import a;\nimport b;\nexport dup;\n",
+                },
+                "dup is ambiguous and cannot be exported without qualification.",
+            ),
+            (
+                "no_export_missing_target",
+                {"main.mini": "no_export missing;\ndef answer() -> i32 { return 1; }\n"},
+                "missing is not visible here and cannot be exported.",
+            ),
+        ]
+        self.assert_project_fail_cases(cases)
+
+    def test_namespace_imports(self):
+        cases = [
+            (
+                "import_after_export",
+                {
+                    "util.mini": "def helper() -> i32 { return 1; }\n",
+                    "main.mini": "export answer;\nimport util;\ndef answer() -> i32 { return 1; }\n",
+                },
+                "import declarations must appear before export declarations and other top-level statements.",
+            ),
+            (
+                "import_after_body",
+                {
+                    "util.mini": "def helper() -> i32 { return 1; }\n",
+                    "main.mini": "alias Count = i32;\nimport util;\n",
+                },
+                "import declarations must appear before export declarations and other top-level statements.",
+            ),
+            (
+                "export_after_body",
+                {"main.mini": "def answer() -> i32 { return 1; }\nexport answer;\n"},
+                "export declarations must appear after imports and before other top-level statements.",
+            ),
+            (
+                "root_conflict",
+                {
+                    "util.mini": "def helper() -> i32 { return 1; }\n",
+                    "main.mini": "import util;\ndef util() -> i32 { return 1; }\n",
+                },
+                "conflicts with imported namespace util",
+            ),
+            (
+                "nested_conflict",
+                {
+                    "pkg/types.mini": "class Box { def init() {} }\n",
+                    "main.mini": "import pkg.types;\ndef pkg() -> i32 { return 1; }\n",
+                },
+                "conflicts with imported namespace pkg",
+            ),
+            (
+                "sibling_closed",
+                {
+                    "pkg/types.mini": "def keep() -> i32 { return 1; }\n",
+                    "pkg/other.mini": "def escape() -> i32 { return 2; }\n",
+                    "main.mini": "import pkg.types;\nvalue = pkg.other.escape();\n",
+                },
+                "pkg.other is not an imported namespace here.",
+            ),
+            (
+                "local_shadow_blocks_qual",
+                {
+                    "pkg/types.mini": "def make() -> i32 { return 1; }\n",
+                    "main.mini": "import pkg.types;\npkg = 0;\nvalue = pkg.types.make();\n",
+                },
+                "Unsupported dotted access on value pkg.",
+            ),
+            (
+                "dotted_noexport",
+                {
+                    "inner.mini": "def answer() -> i32 { return 42; }\n",
+                    "wrapper.mini": "import inner;\nno_export answer;\n",
+                    "main.mini": "import wrapper;\nvalue = wrapper.inner.answer();\n",
+                },
+                "has no exported entity named inner",
+            ),
+            (
+                "file_folder",
+                {
+                    "foo.mini": "def value() -> i32 { return 1; }\n",
+                    "foo/bar.mini": "def other() -> i32 { return 2; }\n",
+                    "main.mini": "import foo;\n",
+                },
+                "both a file and folder exist",
+            ),
+        ]
+        self.assert_project_fail_cases(cases)
+
+    def test_namespace_folders(self):
+        cases = [
+            (
+                "index_hide",
+                {
+                    "pkg/visible.mini": "def visible() -> i32 { return 1; }\n",
+                    "pkg/hidden.mini": "def hidden() -> i32 { return 2; }\n",
+                    "pkg/index.mini": "no_export hidden;\n",
+                    "main.mini": "import pkg;\nvisible();\nhidden();\n",
+                },
+                "Function hidden has not been declared.",
+            ),
+            (
+                "index_ambiguous",
+                {
+                    "pkg/a.mini": "def dup() -> i32 { return 1; }\n",
+                    "pkg/index.mini": "no_export dup;\ndef dup() -> i32 { return 2; }\n",
+                    "main.mini": "import pkg;\n",
+                },
+                "dup is ambiguous and cannot be exported without qualification.",
+            ),
+            (
+                "folder_hide",
+                {
+                    "pkg/visible.mini": "def visible() -> i32 { return 1; }\n",
+                    "pkg/hidden.mini": "def hidden() -> i32 { return 2; }\n",
+                    "pkg/index.mini": "no_export hidden;\n",
+                    "main.mini": "import pkg;\nvalue = pkg.hidden();\n",
+                },
+                "has no exported entity named hidden",
+            ),
+            (
+                "child_closed",
+                {
+                    "pkg/sub/deep.mini": "def deep() -> i32 { return 2; }\n",
+                    "main.mini": "import pkg;\nvalue = pkg.sub.deep();\n",
+                },
+                "has no exported entity named sub",
+            ),
+            (
+                "index_closed",
+                {
+                    "pkg/index.mini": "def hidden() -> i32 { return 2; }\n",
+                    "main.mini": "import pkg;\nvalue = pkg.index.hidden();\n",
+                },
+                "has no exported entity named index",
+            ),
+            (
+                "folder_ambiguous",
+                {
+                    "pkg/a.mini": "def dup() -> i32 { return 1; }\n",
+                    "pkg/b.mini": "def dup() -> i32 { return 2; }\n",
+                    "main.mini": "import pkg;\nvalue = pkg.dup();\n",
+                },
+                "ambiguous in Folder namespace pkg.",
+            ),
+            (
+                "value_ambiguous",
+                {
+                    "pkg/a.mini": "def dup() -> i32 { return 1; }\n",
+                    "pkg/b.mini": "def dup() -> i32 { return 2; }\n",
+                    "main.mini": "import pkg;\nprint(pkg.dup.call());\n",
+                },
+                "ambiguous in Folder namespace pkg.",
+            ),
+            (
+                "alias_ambiguous",
+                {
+                    "pkg/a.mini": "alias Num = i32;\n",
+                    "pkg/b.mini": "alias Num = i64;\n",
+                    "main.mini": "import pkg;\nvalue : pkg.Num = 1;\n",
+                },
+                "ambiguous in Folder namespace pkg.",
+            ),
+        ]
+        self.assert_project_fail_cases(cases)
+
+    def test_namespace_types(self):
+        cases = [
+            (
+                "alias_arguments",
+                {
+                    "pkg/types.mini": "alias Num = i32;\n",
+                    "main.mini": "import pkg.types;\nvalue : pkg.types.Num[i64] = 1;\n",
+                },
+                "does not take type parameters",
+            ),
+            (
+                "type_value",
+                {
+                    "util.mini": "class Box { def init() {} }\n",
+                    "main.mini": "import util;\nvalue = util.Box;\n",
+                },
+                "Bare type reference is not an expression",
+            ),
+            (
+                "alias_arity",
+                {
+                    "pkg/types.mini": "class Box[T] { def init() {} }\n",
+                    "main.mini": "import pkg.types;\nalias Bad = pkg.types.Box[i32, i64];\n",
+                },
+                "Wrong number of type parameters for Box: expected 1.",
+            ),
+            (
+                "bound_arity",
+                {
+                    "pkg/types.mini": "class Box[T] { def init() {} }\n",
+                    "main.mini": "import pkg.types;\nclass Holder[T] where T <: pkg.types.Box[i32, i64] { def init() {} }\n",
+                },
+                "Wrong number of type parameters for Box: expected 1.",
+            ),
+            (
+                "super_arity",
+                {
+                    "pkg/types.mini": "class Box[T] { def init() {} }\n",
+                    "main.mini": "import pkg.types;\nclass Child extends pkg.types.Box[i32, i64] { def init() {} }\n",
+                },
+                "Wrong number of type parameters for Box: expected 1.",
+            ),
+            (
+                "alias_parent",
+                {
+                    "pkg/types.mini": "alias Num = i32;\n",
+                    "main.mini": "import pkg.types;\nclass Child extends pkg.types.Num { def init() {} }\n",
+                },
+                "Cannot extend non-class type i32.",
+            ),
+            (
+                "split_assign",
+                {
+                    "a/box.mini": "class Box { @x : i32 def init(@x : i32) {} }\n",
+                    "b/box.mini": "class Box { @x : i32 def init(@x : i32) {} }\n",
+                    "main.mini": "import a.box;\nimport b.box;\nfirst : a.box.Box = a.box.Box{1};\nsecond : b.box.Box = first;\n",
+                },
+                "Can't cast Box to Box",
+            ),
+            (
+                "other_string",
+                {
+                    "pkg/text.mini": "class String { def init() {} }\n",
+                    "main.mini": "import pkg.text;\nvalue : pkg.text.String = 1 as pkg.text.String;\n",
+                },
+                "Can't cast i32 to String",
+            ),
+            (
+                "reserved_buffer_name",
+                {"main.mini": "class Buffer[T] { def init() {} }\n"},
+                "Class name Buffer is reserved.",
+            ),
+            (
+                "reserved_coroutine_name",
+                {"main.mini": "class Coroutine { def init() {} }\n"},
+                "Class name Coroutine is reserved.",
+            ),
+            (
+                "reserved_self_class",
+                {"main.mini": "class Self { def init() {} }\n"},
+                "Class name Self is reserved.",
+            ),
+            (
+                "reserved_self_alias",
+                {"main.mini": "alias Self = i32;\n"},
+                "Alias name Self is reserved.",
+            ),
+            (
+                "reserved_tuple_name",
+                {"main.mini": "class Tuple[T] { def init() {} }\n"},
+                "Class name Tuple is reserved.",
+            ),
+        ]
+        self.assert_project_fail_cases(cases)
 
     def test_buffer_indexation_invalid_index_type(self):
             mini_code = """
@@ -292,7 +641,7 @@ class CompilerNegativeTestsMixin:
             """
             self.compile_fails(mini_code, "init should not return anything", "init_returns_value")
 
-    def test_function_literal_call_invalid_arg_type(self):
+    def test_function_literal_invalid_arg_type(self):
             mini_code = """
             import core;
             def test_func(x : i32) {}
@@ -335,7 +684,7 @@ class CompilerNegativeTestsMixin:
             }"""
             self.compile_fails(mini_code, "Coroutine.call() expects a", "coroutine_call_invalid_arg_type")
 
-    def test_method_def_override_invalid_param_type(self):
+    def test_override_invalid_param_type(self):
             mini_code = """
             class Animal {
                 def speak(volume : f64) {}
@@ -355,7 +704,7 @@ class CompilerNegativeTestsMixin:
             }"""
             self.compile_fails(mini_code, "Coroutine.call() takes only one argument.", "coroutine_call_too_many_args")
 
-    def test_method_def_override_invalid_return_type_present(self):
+    def test_override_unexpected_return_type(self):
             mini_code = """
             class Animal {
                 def speak() {}
@@ -374,7 +723,7 @@ class CompilerNegativeTestsMixin:
             }"""
             self.compile_fails(mini_code, "number of arguments to .call() (0) incompatible with reciever type Function", "function_literal_call_too_few_args")
 
-    def test_method_def_override_invalid_return_type_missing(self):
+    def test_override_missing_return_type(self):
             mini_code = """
             class Animal {
                 def speak() -> i32 { return 0; }
@@ -385,7 +734,7 @@ class CompilerNegativeTestsMixin:
             """
             self.compile_fails(mini_code, "Overriding method Dog.speak should have a return type.", "override_invalid_return_type_missing")
 
-    def test_method_def_override_invalid_return_type_subtype(self):
+    def test_override_return_type_not_subtype(self):
             mini_code = """
             class Animal {
                 def speak() -> f64 { return 0.0; }
@@ -450,7 +799,7 @@ class CompilerNegativeTestsMixin:
             """
             self.compile_fails(mini_code, "Range literals take i32 arguments, not f64 and i32", "range_literal_invalid_arg_type")
 
-    def test_if_statement_union_type_check_not_allowed(self):
+    def test_if_union_type_check_not_allowed(self):
             mini_code = """
             def test() {
                 x : i32 | f64 = 5;
@@ -458,7 +807,7 @@ class CompilerNegativeTestsMixin:
             }"""
             self.compile_fails(mini_code, "Cannot type-check i32 | f64 yet.", "if_statement_union_type_check_not_allowed")
 
-    def test_method_def_init_field_not_initialized(self):
+    def test_init_field_not_initialized(self):
             mini_code = """
             class Test {
                 @x : i32
@@ -519,3 +868,17 @@ class CompilerNegativeTestsMixin:
                 while x { IO.print(7); }
             """
             self.compile_fails(mini_code, "condition of while-statement must be a Bool, not i32", "invalid_while_condition")
+
+    def test_invalid_assignment_target(self):
+        mini_code = """
+            def foo() -> i32 { return 1; }
+            foo() = 2;
+        """
+        self.compile_fails(mini_code, "Invalid assignment target", "invalid_assignment_target")
+
+    def test_invalid_assignment_target_qualified(self):
+        files = {
+            "util.mini": "class Box { def init() {} }\n",
+            "main.mini": "import util;\nutil.Box = 1;\n",
+        }
+        self.compile_project_fails(files, "Invalid assignment target", "invalid_assignment_target_qualified")

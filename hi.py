@@ -16,6 +16,7 @@ from xdsl import traits
 from xdsl.traits import SymbolOpInterface
 from xdsl.printer import Printer
 from pathlib import Path
+from qualified_names import type_symbol_name
 
 # Return type size in bits
 def type_size(typ: TypeAttribute) -> int:
@@ -56,11 +57,13 @@ class TypeParameter(ParametrizedAttribute, TypeAttribute):
     label: ParameterDef[StringAttr]
     bound: ParameterDef[TypeAttribute]
     defining_class: ParameterDef[StringAttr]
+    owner_id: ParameterDef[StringAttr]
 
     @classmethod
-    def make(cls, label, defining_class, bound=None):
+    def make(cls, label, defining_class, bound=None, defining_path=None):
         while isinstance(bound, TypeParameter): bound = bound.bound
-        return TypeParameter([StringAttr(label), bound or Any(), StringAttr(defining_class)])
+        owner_id = defining_class if not defining_path else type_symbol_name(Path(defining_path), defining_class)
+        return TypeParameter([StringAttr(label), bound or Any(), StringAttr(defining_class), StringAttr(owner_id)])
 
     def base_typ(self):
         return llvm.LLVMStructType.from_type_list([
@@ -77,13 +80,11 @@ class TypeParameter(ParametrizedAttribute, TypeAttribute):
         return result
 
     def __format__(self, format_spec):
-        result = f"{self.defining_class.data}.{self.label.data}"
-        result = f"{result} <: {self.bound}"
-        return result
+        return self.__repr__()
 
     def __eq__(self, other):
         if not isinstance(other, TypeParameter): return False
-        result = self.label == other.label and self.bound == other.bound and self.defining_class == other.defining_class
+        result = self.label == other.label and self.bound == other.bound and self.owner_id == other.owner_id
         return result
 
 @irdl_attr_definition
@@ -167,6 +168,37 @@ fatptr_cache = {}
 path_indexed_cache = {}
 
 @irdl_attr_definition
+class QualifiedType(ParametrizedAttribute, TypeAttribute):
+    name = "hi.qualified_type"
+    current_path: ParameterDef[StringAttr]
+    parts: ParameterDef[ArrayAttr[StringAttr]]
+    type_params: ParameterDef[ArrayAttr[TypeAttribute] | NoneAttr]
+
+    @classmethod
+    def make(cls, current_path, parts, type_params=None):
+        path_text = str(current_path)
+        part_attrs = ArrayAttr([StringAttr(part) for part in parts])
+        params = NoneAttr() if type_params is None else ArrayAttr(type_params)
+        return QualifiedType([StringAttr(path_text), part_attrs, params])
+
+    @property
+    def qualified_parts(self):
+        return tuple(part.data for part in self.parts.data)
+
+    def text(self):
+        return ".".join(self.qualified_parts)
+
+    def base_typ(self):
+        raise Exception(f"QualifiedType {self.text()} should be resolved before codegen.")
+
+    def __repr__(self):
+        type_param_string = f"{[*self.type_params.data]}" if self.type_params != NoneAttr() else ""
+        return f"{self.text()}{type_param_string}"
+
+    def __format__(self, format_spec):
+        return self.__repr__()
+
+@irdl_attr_definition
 class FatPtr(ParametrizedAttribute, TypeAttribute):
     name = "hi.fatptr"
     cls: ParameterDef[StringAttr]
@@ -184,11 +216,12 @@ class FatPtr(ParametrizedAttribute, TypeAttribute):
     def with_path(cls, fatptr, path):
         if isinstance(path, NoneAttr): return fatptr
         if isinstance(path, StringAttr): path = path.data
+        path = f"{path}"
         if fatptr.type_params != NoneAttr():
-            return FatPtr([fatptr.cls, fatptr.type_params, StringAttr(f"{path}")])
+            return FatPtr([fatptr.cls, fatptr.type_params, StringAttr(path)])
         if (fatptr.cls.data, path) in path_indexed_cache:
             return path_indexed_cache[(fatptr.cls.data, path)]
-        result = FatPtr([fatptr.cls, fatptr.type_params, StringAttr(f"{path}")])
+        result = FatPtr([fatptr.cls, fatptr.type_params, StringAttr(path)])
         path_indexed_cache[(fatptr.cls.data, path)] = result
         return result
 
@@ -206,26 +239,32 @@ class FatPtr(ParametrizedAttribute, TypeAttribute):
         ])
 
     def symbol(self):
-        return self.cls
+        if self.path == NoneAttr():
+            return self.cls
+        path_text = str(getattr(self.path, "data", self.path))
+        return StringAttr(type_symbol_name(Path(path_text), self.cls.data))
 
     def __repr__(self):
-        namespace = f"{Path(self.path.data).stem}." if self.path != NoneAttr() else ""
         type_param_string = (f"{[*self.type_params.data]}") if not isinstance(self.type_params, NoneAttr) else ""
         return f"{self.cls.data}" + type_param_string
 
     def __format__(self, format_spec):
-        namespace = f"{Path(self.path.data).stem}." if self.path != NoneAttr() else ""
         type_param_string = (f"{[*self.type_params.data]}") if not isinstance(self.type_params, NoneAttr) else ""
         return f"{self.cls.data}" + type_param_string
 
     def __eq__(self, other):
         if not isinstance(other, FatPtr): return False
         if self.cls != other.cls: return False
+        if self.path != other.path: return False
         if self.type_params == NoneAttr() and other.type_params == NoneAttr(): return True
         if self.type_params == NoneAttr() and other.type_params != NoneAttr(): return False
         if self.type_params != NoneAttr() and other.type_params == NoneAttr(): return False
         zipped = zip(self.type_params.data, other.type_params.data)
-        return all((a == b) if (not isinstance(a, TypeParameter) or not isinstance(b, TypeParameter)) else (a.label == b.label and a.bound == b.bound) for (a,b) in zipped)
+        return all(a == b for (a, b) in zipped)
+
+    def __hash__(self):
+        params = None if self.type_params == NoneAttr() else tuple(self.type_params.data)
+        return hash((self.cls, self.path, params))
 
     def print_parameters(self, printer: Printer) -> None:
         printer.print_string("<")
@@ -241,6 +280,9 @@ class ReifiedType(ParametrizedAttribute, TypeAttribute):
 
     def base_typ(self):
         return llvm.LLVMPointerType.opaque()
+
+def is_named_fatptr(typ, name: str) -> bool:
+    return isinstance(typ, FatPtr) and typ.cls.data == name
 
 @irdl_attr_definition
 class Tuple(ParametrizedAttribute, TypeAttribute):
@@ -590,6 +632,7 @@ Hi = Dialect(
         Integer,
         Float,
         Bool,
+        QualifiedType,
         FatPtr,
         ReifiedType,
         Tuple,

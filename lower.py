@@ -298,8 +298,8 @@ class LowerCast(RewritePattern):
 
         type_param_base = TypeParameter.make("", "").base_typ()
         tp_like = lambda t: t.base_typ() == type_param_base or t.base_typ() == Union.from_list([FatPtr.basic("")]).base_typ()
-        should_box = (isinstance(to_typ, TypeParameter) or to_typ == FatPtr.basic("Object")) and (not isinstance(from_typ, FatPtr)) and not tp_like(from_typ)
-        should_unbox = (isinstance(from_typ, TypeParameter) or from_typ == FatPtr.basic("Object")) and (not isinstance(to_typ, FatPtr)) and not tp_like(to_typ)
+        should_box = (isinstance(to_typ, TypeParameter) or is_named_fatptr(to_typ, "Object")) and (not isinstance(from_typ, FatPtr)) and not tp_like(from_typ)
+        should_unbox = (isinstance(from_typ, TypeParameter) or is_named_fatptr(from_typ, "Object")) and (not isinstance(to_typ, FatPtr)) and not tp_like(to_typ)
         
         if should_box:
             attr_dict["from_typ_size"] = IntegerAttr.from_int_and_width(type_size(from_typ), 32)

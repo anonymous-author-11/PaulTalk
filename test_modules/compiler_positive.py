@@ -1,5 +1,4 @@
 class CompilerPositiveTestsMixin:
-
     def test_end_to_end(self):
         with open("lib/tests.mini", "r") as f: mini_code = f.read()
         with open("test_expected.txt", "r") as f: expected_output = f.read()
@@ -21,7 +20,7 @@ class CompilerPositiveTestsMixin:
         expected_output = "nil"
         self.run_mini_code(mini_code, expected_output, "type_inference_break_stmt")
 
-    def test_while_condition_string_literal_codegen_regression(self):
+    def test_while_condition_string_codegen(self):
         mini_code = """
             import std;
 
@@ -40,7 +39,7 @@ class CompilerPositiveTestsMixin:
         expected_output = ""
         self.compile_and_run(mini_code, expected_output, "while_condition_string_literal_codegen_regression")
 
-    def test_generic_method_branch_return_codegen_regression(self):
+    def test_generic_method_branch_return_codegen(self):
         mini_code = """
             import std;
 
@@ -63,7 +62,7 @@ class CompilerPositiveTestsMixin:
         expected_output = "1\n2"
         self.compile_and_run(mini_code, expected_output, "generic_method_branch_return_codegen_regression")
 
-    def test_string_interpolation_marker_can_be_escaped(self):
+    def test_string_interpolation_escape(self):
         mini_code = """
             import std;
 
@@ -74,7 +73,7 @@ class CompilerPositiveTestsMixin:
         expected_output = "foo ${bar} baz\nname: ${name}, value: Paul"
         self.compile_and_run(mini_code, expected_output, "string_interpolation_marker_can_be_escaped")
 
-    def test_paultalk_parser_class_method_and_setter_smoke(self):
+    def test_paultalk_parser_class_method_setter(self):
         mini_code = """
             import std;
             import paultalk_parser;
@@ -87,6 +86,263 @@ class CompilerPositiveTestsMixin:
         """
         expected_output = "program\n1\nclass_def"
         self.compile_and_run(mini_code, expected_output, "paultalk_parser_class_method_and_setter_smoke")
+
+    def test_namespace_typechecks(self):
+        cases = [
+            (
+                "deep_import_root_collision",
+                {
+                    "pkg/types.mini": "class Box { def init() {} }\n",
+                    "main.mini": "import pkg.types;\nvalue : pkg.types.Box = pkg.types.Box{};\n",
+                },
+                [{"pkg/other.mini": "def other() -> i32 { return 1; }\n"}],
+            ),
+            (
+                "alias_type",
+                {
+                    "types.mini": "alias number = i32;\n",
+                    "main.mini": "import types;\nvalue : number = 1;\n",
+                },
+            ),
+            (
+                "hide_conflict",
+                {
+                    "classes.mini": "class Count { def init() {} }\n",
+                    "aliases.mini": "alias Count = i32;\n",
+                    "wrapper.mini": "import classes;\nimport aliases;\nno_export aliases.Count;\n",
+                    "main.mini": "import wrapper;\nvalue : Count = Count{};\n",
+                },
+            ),
+            (
+                "dotted_alias",
+                {
+                    "pkg/types.mini": "class Box { def init() {} }\n",
+                    "main.mini": "import pkg;\nimport pkg.types;\nalias MaybeBox = pkg.types.Box?;\nvalue : MaybeBox = nil;\n",
+                },
+            ),
+            (
+                "dotted_new",
+                {
+                    "types.mini": "class Box { @x : i32 def init(@x : i32) {} }\n",
+                    "main.mini": "import types;\nvalue : types.Box = types.Box{1};\n",
+                },
+            ),
+            (
+                "dotted_wins",
+                {
+                    "pkg/types.mini": "class Box { def init() {} }\n",
+                    "main.mini": "import pkg.types;\nalias Box = i32;\nvalue : pkg.types.Box = pkg.types.Box{};\n",
+                },
+            ),
+            (
+                "local_shadow",
+                {
+                    "util.mini": "def Box() -> i32 { return 1; }\n",
+                    "main.mini": "import util;\nclass Box { def init() {} }\nvalue : Box = Box{};\n",
+                },
+            ),
+            (
+                "dotted_hide",
+                {
+                    "inner.mini": "def answer() -> i32 { return 42; }\n",
+                    "wrapper.mini": "import inner;\nno_export inner.answer;\ndef answer() -> i32 { return 1; }\n",
+                    "main.mini": "import wrapper;\nvalue = answer();\n",
+                },
+            ),
+            (
+                "deep_dotted",
+                {
+                    "pkg/sub/types.mini": "class Box { def init() {} }\n",
+                    "main.mini": "import pkg.sub.types;\nvalue : pkg.sub.types.Box = pkg.sub.types.Box{};\n",
+                },
+            ),
+            (
+                "reexport",
+                {
+                    "inner.mini": "def answer() -> i32 { return 42; }\n",
+                    "wrapper.mini": "import inner;\nexport wrapper_value;\ndef wrapper_value() -> i32 { return 1; }\n",
+                    "main.mini": "import wrapper;\nwrapper_value();\nanswer();\n",
+                },
+            ),
+            (
+                "dotted_export",
+                {
+                    "inner.mini": "class Box { @x : i32 def init(@x : i32) {} }\n",
+                    "wrapper.mini": "import inner;\nexport inner.Box;\n",
+                    "main.mini": "import wrapper;\nvalue : Box = Box{1};\n",
+                },
+            ),
+            (
+                "dotted_call",
+                {
+                    "util.mini": "def make() -> i32 { return 1; }\n",
+                    "main.mini": "import util;\nvalue = util.make();\n",
+                },
+            ),
+            (
+                "folder_index",
+                {
+                    "pkg/visible.mini": "def visible() -> i32 { return 1; }\n",
+                    "pkg/sub/deep.mini": "def deep() -> i32 { return 2; }\n",
+                    "pkg/index.mini": "import sub.deep;\nexport deep;\n",
+                    "main.mini": "import pkg;\nvisible();\ndeep();\n",
+                },
+            ),
+            (
+                "index_show",
+                {
+                    "pkg/visible.mini": "def visible() -> i32 { return 1; }\n",
+                    "pkg/index.mini": "no_export visible;\nexport visible;\n",
+                    "main.mini": "import pkg;\nvisible();\n",
+                },
+            ),
+            (
+                "dotted_generic",
+                {
+                    "pkg/types.mini": "class Box[T] { @value : T def init(@value : T) {} }\n",
+                    "main.mini": "import pkg.types;\nvalue : pkg.types.Box[i32] = pkg.types.Box[i32]{1};\n",
+                },
+            ),
+            (
+                "dotted_super",
+                {
+                    "pkg/types.mini": "class Box[T] { def init() {} }\n",
+                    "main.mini": "import pkg.types;\nclass Child extends pkg.types.Box[i32] { def init() {} }\n",
+                },
+            ),
+            (
+                "split_bases",
+                {
+                    "a/box.mini": "class Box[T] { abstract def left() -> T {} }\n",
+                    "b/box.mini": "class Box[T] { abstract def right() -> T {} }\n",
+                    "main.mini": "import a.box;\nimport b.box;\nclass Child extends a.box.Box[i32], b.box.Box[String] {}\ndef test(x : Child) { i : i32 = x.left(); s : String = x.right(); }\n",
+                },
+            ),
+            (
+                "yield_alias",
+                {
+                    "util.mini": "no_export YieldVal;\nalias YieldVal = i32;\ndef work() yields YieldVal { yield(1); }\n",
+                    "main.mini": "import util;\nco = Coroutine.new(work);\nco.call(1);\n",
+                },
+            ),
+            (
+                "string_key",
+                {
+                    "util.mini": "def make() -> String { return \"x\"; }\n",
+                    "other.mini": "class String { def init() {} }\n",
+                    "main.mini": "import std;\nimport util;\nimport other;\nvalue = util.make();\nd = {value: 1};\n",
+                },
+            ),
+        ]
+        self.assert_project_typecheck_cases(cases)
+
+    def test_namespace_runs(self):
+        cases = [
+            (
+                "alias_show",
+                {
+                    "inner.mini": "class Box { @x : i32 def init(@x : i32) {} def value() -> i32 { return @x; } }\n",
+                    "wrapper.mini": "import inner;\nno_export Box;\nalias Exported = Box;\n",
+                    "main.mini": "import wrapper;\nvalue : Exported = Exported{41};\nprint(value.value());\n",
+                },
+                "41",
+            ),
+            (
+                "direct_alias",
+                {
+                    "pkg/types.mini": "class Box { @x : i32 def init(@x : i32) {} def value() -> i32 { return @x; } }\n",
+                    "main.mini": "import pkg.types;\nalias Exported = pkg.types.Box;\nvalue : Exported = Exported{5};\nprint(value.value());\n",
+                },
+                "5",
+            ),
+            (
+                "dotted_method",
+                {
+                    "pkg/types.mini": "class Box { @x : i32 def init(@x : i32) {} def value() -> i32 { return @x; } def Self.empty() -> Self { return Self{7}; } def Self.make() -> i32 { return Self.empty().value(); } }\n",
+                    "main.mini": "import pkg.types;\nprint(pkg.types.Box.make());\n",
+                },
+                "7",
+            ),
+            (
+                "exact_method",
+                {
+                    "util.mini": "class Box { @x : i32 def init(@x : i32) {} def value() -> i32 { return @x; } def Self.make() -> i32 { return Self{7}.value(); } }\n",
+                    "main.mini": "import util;\nprint(util.Box.make());\n",
+                },
+                "7",
+            ),
+            (
+                "alias_builtin",
+                {
+                    "pkg/types.mini": "alias Num = i32;\n",
+                    "main.mini": "import pkg.types;\nprint(pkg.types.Num.max());\n",
+                },
+                "2147483647",
+            ),
+            (
+                "exact_alias",
+                {
+                    "util.mini": "alias Num = i32;\n",
+                    "main.mini": "import util;\nprint(util.Num.max());\n",
+                },
+                "2147483647",
+            ),
+            (
+                "hide_link",
+                {
+                    "helper.mini": "def helper() -> i32 { return 40; }\n",
+                    "inner.mini": "def answer() -> i32 { return 2; }\n",
+                    "wrapper.mini": "import inner;\nimport helper;\nno_export helper;\ndef wrapper_value() -> i32 { return helper(); }\n",
+                    "main.mini": "import wrapper;\nprint(answer());\nprint(wrapper_value());\n",
+                },
+                "2\n40",
+            ),
+            (
+                "dotted_local",
+                {
+                    "inner.mini": "def answer() -> i32 { return 1; }\n",
+                    "wrapper.mini": "import inner;\ndef answer() -> i32 { return 2; }\n",
+                    "main.mini": "import wrapper;\nprint(wrapper.answer());\n",
+                },
+                "2",
+            ),
+            (
+                "dotted_value",
+                {
+                    "util.mini": "def make() -> i32 { return 1; }\n",
+                    "main.mini": "import util;\nprint(util.make.call());\nf = util.make;\nprint(f.call());\n",
+                },
+                "1\n1",
+            ),
+            (
+                "path_types",
+                {
+                    "util.mini": "class Box { @x : i32 def init(@x : i32) {} def value() -> i32 { return @x; } }\ndef make() -> Box { return Box{7}; }\ndef same(x : Box) -> Box { return x; }\n",
+                    "b/box.mini": "class Box { def init() {} }\n",
+                    "main.mini": "import util;\nimport b.box;\nvalue : util.Box = util.make();\nvalue = util.same(value);\nf = util.same;\nvalue = f.call(value);\nprint(value.value());\n",
+                },
+                "7",
+            ),
+            (
+                "split_class",
+                {
+                    "a/box.mini": "class Box { @x : i32 def init(@x : i32) {} def value() -> i32 { return @x; } }\n",
+                    "b/box.mini": "class Box { @x : i32 def init(@x : i32) {} def value() -> i32 { return @x; } }\n",
+                    "main.mini": "import a.box;\nimport b.box;\nfirst : a.box.Box = a.box.Box{1};\nsecond : b.box.Box = b.box.Box{2};\nprint(first.value());\nprint(second.value());\n",
+                },
+                "1\n2",
+            ),
+            (
+                "split_fields",
+                {
+                    "a/box.mini": "class Box[T] { @x : T def init(@x : T) {} def only_a() -> i32 { return 1; } }\n",
+                    "b/box.mini": "class Box[T] { @x : T def init(@x : T) {} def only_b() -> i32 { return 2; } }\n",
+                    "main.mini": "import a.box;\nimport b.box;\nclass Duo[A, B] { @first : A @second : B def init(@first : A, @second : B) {} def first() -> A { return @first; } def second() -> B { return @second; } }\nvalue = Duo[a.box.Box[i32], b.box.Box[i32]]{a.box.Box[i32]{1}, b.box.Box[i32]{2}};\nprint(value.first().only_a());\nprint(value.second().only_b());\n",
+                },
+                "1\n2",
+            ),
+        ]
+        self.assert_project_run_cases(cases)
 
     def test_paultalk_parser_resilient_recovery(self):
         mini_code = """
@@ -109,7 +365,7 @@ class CompilerPositiveTestsMixin:
         expected_output = "true\ntrue"
         self.compile_and_run(mini_code, expected_output, "paultalk_parser_resilient_recovery")
 
-    def test_paultalk_parser_formats_errors_with_source_context(self):
+    def test_paultalk_parser_error_context(self):
         mini_code = """
             import std;
             import paultalk_parser;
@@ -256,7 +512,7 @@ class CompilerPositiveTestsMixin:
         expected_output = "2\n2\nAC\n65\n67"
         self.run_mini_code(mini_code, expected_output, "file_writer_and_iterator")
 
-    def test_hex_literals_unsigned_and_forced_signed_cast(self):
+    def test_hex_literals_and_signed_cast(self):
         mini_code = """
             import std;
 
@@ -384,7 +640,7 @@ class CompilerPositiveTestsMixin:
         expected_output = "0\n6\n3\nnil"
         self.run_mini_code(mini_code, expected_output, "string_byte_index_of")
 
-    def test_string_bytes_view_slice_and_into_string(self):
+    def test_string_bytes_view_slice(self):
         mini_code = """
             import std;
 

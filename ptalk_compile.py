@@ -2,9 +2,10 @@ import time
 
 start_time = time.time()
 
-from parser import CSTTransformer, parse, source_directories
+from parser import parse, source_directories
 from AST import silent, AST
-from utils import clean_name
+from program_repository import ProgramRepository
+from qualified_names import main_symbol_name, qualified_file_stem
 from xdsl.dialects.builtin import ModuleOp, StringAttr
 from xdsl.context import MLContext
 from xdsl.printer import Printer
@@ -61,6 +62,7 @@ class CompilationJob:
     time_printer: "OptionalPrinter"
     status_printer: "OptionalPrinter"
     metrics: "Metrics"
+    repository: ProgramRepository
 
     @property
     def obj_path(self):
@@ -82,6 +84,7 @@ class CompilationJob:
         self.time_printer = OptionalPrinter(not no_timings)
         self.status_printer = OptionalPrinter(not silent[0])
         self.settings = OptimizationSettings(debug_mode)
+        self.repository = ProgramRepository(parse)
 
         self.output_path = None
         if not output_path: return
@@ -142,7 +145,7 @@ class CompilationJob:
 
     def run_parse(self):
         program = parse(self.input.path)
-        ast = AST(program)
+        ast = AST(program, self.repository)
         if self.output_path and self.output_path.suffix == ".exe":
             ast.global_scope.comp_unit.main = self.input.path
         self.record_time("after_parse")
@@ -161,13 +164,14 @@ class CompilationJob:
 
     def lower_all(self, own_ast):
 
-        sorted_dependencies = [path for path in self.dependencies.recompile_list if not path.samefile(self.input.path)]
+        sorted_dependencies = self.dependencies.recompiled_dependencies(self.input.path)
 
         self.metrics.source_lines += line_count(self.input.path)
         for path in sorted_dependencies: self.metrics.source_lines += line_count(path)
 
         if len(sorted_dependencies) > 0:
-            dependencies_string = ', '.join([x.stem for  x in sorted_dependencies])
+            labels = self.dependencies.shortest_unique_labels(self.dependencies.recompiled_dependencies(self.input.path))
+            dependencies_string = ", ".join(labels)
             self.status_printer.print(f"Recompiling dependencies: {dependencies_string}")
 
         jobs = [CompilationJob(dependency, build_dir=self.build.dir, no_timings=True) for dependency in sorted_dependencies]
@@ -306,7 +310,7 @@ class CompilationJob:
         # Run the regular O3 pipeline, which is strictly better than the lto<O3> pipeline
         passes = f"--lto-newpm-passes=default<O3>"
         to_optimize = [f"{job.input.bc_file}" for job in jobs]
-        all_dependencies = [str(self.build.dir.joinpath(f"bitcodes/{path.stem}.bc")) for path in self.dependencies.list]
+        all_dependencies = [str(SourceFile(path, self.build).bc_file) for path in self.dependencies.list]
         already_optimized = [bc_file for bc_file in all_dependencies if bc_file not in to_optimize]
 
         singles = [f"--thinlto-single-module={path}" for path in to_optimize]
@@ -360,7 +364,8 @@ class CompilationJob:
         utils_ir = run_checked(link_utils)
 
         # use the correct main function
-        utils_ir = utils_ir.replace(f"_main_{clean_name(self.input.path.stem)}", "main")
+        main_symbol = main_symbol_name(self.input.path)
+        utils_ir = utils_ir.replace(main_symbol, "main")
         utils_ir = clean_lto_metadata(utils_ir)
         utils_ir = remove_invariant_on_globals(utils_ir)
         self.write_side_ir(self.build.out_utils, utils_ir)
@@ -407,7 +412,7 @@ class CompilationJob:
 
     def run_lto(self):
 
-        thin_paths = [str(self.build.dir.joinpath(f"bitcodes/{path.stem}.bc")) for path in self.dependencies.list]
+        thin_paths = [str(SourceFile(path, self.build).bc_file) for path in self.dependencies.list]
         out_thin_path = self.build.dir / "out_thin.bc"
         self.build_parameterizations_bitcode(thin_paths)
 
@@ -424,7 +429,7 @@ class CompilationJob:
             "--lto=thin", passes, "--lto-emit-llvm",
             "-o", "out_lto.bc", *self.settings.lto_options
         )
-        subprocess.run(lto_single_module, cwd=self.build.dir)
+        subprocess.run(lto_single_module, cwd=self.build.dir, check=True)
         lto_file = self.build.dir / "out_lto.bc"
 
         # ThinLTO is basically stupid and doesn't care to import non-static calls
@@ -443,7 +448,7 @@ class CompilationJob:
             hoist_allocas = f"{OPT_PATH} --bugpoint-enable-legacy-pm --alloca-hoisting"
             inject_lto_metadata = f"{OPT_PATH} --thinlto-bc --unified-lto -o {out_thin_path}"
             run_checked(f"{hoist_allocas} | {inject_lto_metadata}", input_text=optimized_ir, shell=True)
-            subprocess.run(lto_single_module, cwd=self.build.dir)
+            subprocess.run(lto_single_module, cwd=self.build.dir, check=True)
             if self.settings.debug_mode: break
             if iterations == 100: raise Exception("too many iterations")
             iterations = iterations + 1
@@ -638,9 +643,6 @@ class BuildDirectory:
         self.debug_mode = debug_mode
         with open(self.dir / ".gitignore", "w") as f: f.write("*")
 
-    def bitcode_files(self, stems):
-        return [str(self.bitcodes_folder / f"{stem}.bc") for stem in stems]
-
     @property
     def final_ir(self):
         return self.out_optimized_dbg
@@ -748,6 +750,30 @@ class Dependencies:
         print("Dependency graph:")
         self.graph.print()
 
+    def recompiled_dependencies(self, input_path):
+        input_path = input_path.resolve()
+        return [path for path in self.recompile_list if path != input_path]
+
+    def shortest_unique_labels(self, paths):
+        path_parts = {path: path.with_suffix("").parts for path in paths}
+        max_depth = max(len(parts) for parts in path_parts.values())
+        labels = self.first_unique_labels(path_parts, len(paths), 1, max_depth)
+        if labels:
+            return [labels[path] for path in paths]
+        return [str(path.with_suffix("")) for path in paths]
+
+    @staticmethod
+    def labels_at_depth(path_parts, depth):
+        return {path: "/".join(parts[-depth:]) for path, parts in path_parts.items()}
+
+    def first_unique_labels(self, path_parts, num_paths, depth, max_depth):
+        if depth > max_depth:
+            return None
+        labels = self.labels_at_depth(path_parts, depth)
+        if len(set(labels.values())) == num_paths:
+            return labels
+        return self.first_unique_labels(path_parts, num_paths, depth + 1, max_depth)
+
 @dataclass
 class SourceFile:
     path: Path
@@ -766,11 +792,11 @@ class SourceFile:
 
     @property
     def bc_file(self):
-        return self.build.bitcodes_folder / f"{self.path.stem}.bc"
+        return self.build.bitcodes_folder / f"{qualified_file_stem(self.path)}.bc"
 
     @property
     def hash_file(self):
-        return self.build.hashes_folder / f"{self.path.stem}.hash"
+        return self.build.hashes_folder / f"{qualified_file_stem(self.path)}.hash"
 
     def source_hash(self) -> bytes:
         hashes = []
@@ -856,6 +882,7 @@ def shell_join(command) -> str:
     return shlex.join(parts)
 
 def add_source_directories(input_path):
+    source_directories.clear()
 
     # Immediate parent directory of the file being compiled
     source_directories[input_path.parent] = input_path.parent

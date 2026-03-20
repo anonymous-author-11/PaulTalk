@@ -4,14 +4,17 @@ It includes classes for representing various language constructs and provides
 methods for type checking and code generation.
 """
 
-from dataclasses import dataclass
-from typing import List, Optional, Dict, Tuple, Set
+from dataclasses import dataclass, field
+from typing import List, Optional
+from export_surface import ExportSurface, ResolvedAliasExport, ResolvedClassExport, ResolvedFunctionExport
 from hi import *
 from mid import *
 import hi
 import mid
 from utils import *
-from scope import Scope, Constraints, TypeEnvironment, ScopeExit, PointsToGraph, build_hashtable, build_offset_table
+from scope import (
+    Scope, Constraints, TypeEnvironment, ScopeExit, PointsToGraph, build_hashtable, build_offset_table
+)
 from method_dispatch import *
 from xdsl.dialects import llvm, arith, builtin, memref, cf, func
 from xdsl.ir import Block, Region, TypeAttribute
@@ -21,10 +24,14 @@ from xdsl.dialects.builtin import (
 )
 from itertools import product, chain, combinations
 from functools import cmp_to_key
-import graph_utils as nx
 from pathlib import Path
+import sys
+from qualified_names import (
+    class_member_symbol_name, main_symbol_name, path_hash, qualified_file_stem, safe_name_part, type_symbol_name
+)
 
 silent = [False]
+INTEGER_RECEIVERS = {"i8": 8, "i16": 16, "i32": 32, "i64": 64, "i128": 128}
 
 def debug_print(message):
     if silent[0]: return
@@ -36,9 +43,12 @@ class AST:
     typed: bool
     root: "Program"
 
-    def __init__(self, root):
+    def __init__(self, root, repository):
         self.root = root
         self.global_scope = Scope()
+        self.global_scope.comp_unit.repository = repository
+        self.global_scope.type_env.comp_unit = self.global_scope.comp_unit
+        repository.remember_program(root, self.global_scope)
         self.typed = False
 
     def typeflow(self):
@@ -49,7 +59,6 @@ class AST:
         if not self.typed: self.root.typeflow(self.global_scope)
         self.global_scope.type_table = {}
         self.global_scope.symbol_table = {}
-        #debug_print("typechecking complete")
         self.root.codegen(self.global_scope)
         #debug_print("codegen complete")
         func_ops = [op.parent_block().detach_op(op) for op in self.global_scope.comp_unit.toplevel_ops]
@@ -101,12 +110,13 @@ class AST:
                 "size_fn":data_size_fn_name
             }
             typ_ops.append(TypeDefOp.create(attributes=attr_dict))
+        module_name = StringAttr(qualified_file_stem(self.root.info.filepath))
         if self.global_scope.comp_unit.main and self.root.info.filepath.samefile(self.global_scope.comp_unit.main):
-            main_name = StringAttr("_main_" + clean_name(self.root.info.filepath.stem))
+            main_name = StringAttr(main_symbol_name(self.root.info.filepath))
             main = MainOp.create(regions=[self.global_scope.region], attributes={"main_name":main_name})
-            module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops, main], {"sym_name":StringAttr(self.root.info.filepath.stem)})
+            module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops, main], {"sym_name":module_name})
         else:
-            module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops], {"sym_name":StringAttr(self.root.info.filepath.stem)})
+            module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops], {"sym_name":module_name})
         return module
 
 @dataclass
@@ -137,6 +147,8 @@ class NodeInfo:
     @property
     def source_line(self):
         with open(self.filepath, "r") as f: lines = f.readlines()
+        if self.line < 1 or self.line > len(lines):
+            return ""
         return lines[self.line - 1]
 
     def __repr__(self):
@@ -144,6 +156,59 @@ class NodeInfo:
 
     def __format__(self, format_spec):
         return f"{self.source_line}\n\nFile {self.filepath.name}, line {self.line}"
+
+@dataclass(frozen=True)
+class QualifiedName:
+    parts: tuple[str, ...]
+    line_number: int
+
+    def text(self) -> str:
+        return ".".join(self.parts)
+
+@dataclass(frozen=True)
+class ImportTarget:
+    path: Path
+
+    def opens_namespace(self):
+        return True
+
+    def compute_surface(self, import_stmt: "Import", scope):
+        raise NotImplementedError
+
+    def resolve_namespace(self, comp_unit, node_info, parts):
+        raise NotImplementedError
+
+@dataclass(frozen=True)
+class FileImportTarget(ImportTarget):
+
+    def compute_surface(self, import_stmt: "Import", scope):
+        return scope.comp_unit.repository.file_export_surface(scope.comp_unit, self.path, import_stmt.info)
+
+    def resolve_namespace(self, comp_unit, node_info, parts):
+        return comp_unit.repository.resolve_in_file_namespace(comp_unit, node_info, self.path, parts)
+
+@dataclass(frozen=True)
+class FolderImportTarget(ImportTarget):
+
+    def compute_surface(self, import_stmt: "Import", scope):
+        return scope.comp_unit.repository.folder_export_surface(scope.comp_unit, self.path, import_stmt.info)
+
+    def resolve_namespace(self, comp_unit, node_info, parts):
+        return comp_unit.repository.resolve_in_folder_namespace(comp_unit, node_info, self.path, parts)
+
+@dataclass(frozen=True)
+class EntityImportTarget(ImportTarget):
+    entity_name: str
+
+    def opens_namespace(self):
+        return False
+
+    def compute_surface(self, import_stmt: "Import", scope):
+        file_surface = scope.comp_unit.repository.file_export_surface(scope.comp_unit, self.path, import_stmt.info)
+        return file_surface.select(import_stmt.info, self.entity_name)
+
+    def resolve_namespace(self, comp_unit, node_info, parts):
+        raise Exception(f"{node_info}: Cannot qualify into non-namespace target {self.entity_name}.")
 
 @dataclass
 class Node:
@@ -208,17 +273,107 @@ class NewScope(BlockNode, Statement):
             scope.symbol_table.pop(k)
 
 @dataclass
+class ProgramNamespace:
+    program: "Program"
+    validated: bool = field(default=False, init=False, repr=False, compare=False)
+
+    def statements_of(self, *types):
+        return [stmt for stmt in self.program.statements if isinstance(stmt, types)]
+
+    def imports(self):
+        return self.statements_of(Import)
+
+    def validate_declarations(self):
+        if self.validated: return
+        phase = "imports"
+        for stmt in self.program.statements: phase = self.next_declaration_phase(stmt, phase)
+        roots = {imp.qualified_name.parts[0] for imp in self.imports() if imp.target.opens_namespace()}
+        conflict = next((stmt for stmt in self.statements_of(ClassDef, FunctionDef, ExternDef, Alias) if stmt.name in roots), None)
+        if conflict: raise Exception(f"{conflict.info}: Top-level declaration {conflict.name} conflicts with imported namespace {conflict.name}.")
+        self.validated = True
+
+    def next_declaration_phase(self, stmt, phase):
+        if isinstance(stmt, Import):
+            self.check_import_phase(stmt, phase)
+            return phase
+        if isinstance(stmt, (ExportList, NoExportList)):
+            self.check_export_phase(stmt, phase)
+            return "exports"
+        return "body"
+
+    def check_import_phase(self, stmt, phase):
+        if phase != "imports": raise Exception(f"{stmt.info}: import declarations must appear before export declarations and other top-level statements.")
+
+    def check_export_phase(self, stmt, phase):
+        if phase == "body": raise Exception(f"{stmt.info}: export declarations must appear after imports and before other top-level statements.")
+
+    def export_surface(self, scope) -> ExportSurface:
+        self.validate_declarations()
+        surface = self.raw_visible_surface(scope)
+        self.apply_visibility_controls(surface, scope)
+        surface.validate_kinds(self.surface_info(), f"namespace {self.program.info.filepath.stem}")
+        return surface
+
+    def surface_info(self):
+        return next((stmt.info for stmt in self.program.statements if stmt.info.source_line), self.program.info)
+
+    def raw_visible_surface(self, scope):
+        surface = ExportSurface()
+        for imp in self.imports():
+            surface.merge(imp.target.compute_surface(imp, scope))
+        for name in self.local_names():
+            surface.remove_name(name)
+        for cls in self.statements_of(ClassDef):
+            surface.add_class(cls)
+        for fn in self.statements_of(FunctionDef, ExternDef):
+            surface.add_function(fn)
+        for alias in self.statements_of(Alias):
+            meaning = scope.type_env.declared_aliases[alias.name][alias.info.filepath]
+            surface.add_alias(alias.name, alias.info.filepath, meaning)
+        return surface
+
+    def apply_visibility_controls(self, surface, scope):
+        lookup = ExportSurface()
+        lookup.merge(surface)
+        hidden_exports = ((stmt.info, name) for stmt in self.statements_of(NoExportList) for name in stmt.names)
+        for info, name in hidden_exports:
+            resolved = self.resolved_export(scope, info, name, lookup)
+            surface.remove(resolved)
+        explicit_exports = ((stmt.info, name) for stmt in self.statements_of(ExportList) for name in stmt.names)
+        for info, name in explicit_exports:
+            resolved = self.resolved_export(scope, info, name, lookup)
+            resolved.add_to(surface)
+
+    def local_names(self):
+        return {stmt.name for stmt in self.statements_of(ClassDef, FunctionDef, ExternDef, Alias)}
+
+    def resolved_export(self, scope, info, name, surface=None):
+        if len(name.parts) != 1: return scope.comp_unit.repository.resolve_qualified_exportable_symbol(scope.comp_unit, scope, info, name.parts)
+        if not surface: return scope.comp_unit.repository.resolve_exportable_symbol(scope, info, name.parts[0])
+        matches = list(set(surface.matches(name.parts[0])))
+        if len(matches) == 1: return matches[0]
+        if len(matches) == 0: raise Exception(f"{info}: {name.parts[0]} is not visible here and cannot be exported.")
+        raise Exception(f"{info}: {name.parts[0]} is ambiguous and cannot be exported without qualification.")
+
+@dataclass
 class Program(BlockNode):
     statements: List[Statement]
+    namespace: ProgramNamespace = field(init=False, repr=False, compare=False)
+
+    def __post_init__(self):
+        self.namespace = ProgramNamespace(self)
 
     def codegen(self, scope):
         for stmt in self.statements: stmt.codegen(scope)
 
     def interface_codegen(self, scope):
-        for stmt in self.statements: stmt.interface_codegen(scope)
+        for stmt in self.statements:
+            if isinstance(stmt, (Import, ExportList, NoExportList)): continue
+            stmt.interface_codegen(scope)
 
     # Find top-level entities (including imported ones) and record them without any further analysis
     def name_resolution(self, scope):
+        self.namespace.validate_declarations()
 
         classes = [stmt for stmt in self.statements if isinstance(stmt, ClassDef)]
         functions = (stmt for stmt in self.statements if isinstance(stmt, FunctionDef) or isinstance(stmt, ExternDef))
@@ -230,22 +385,16 @@ class Program(BlockNode):
         for imp in imports:
             imp.name_resolution(scope)
         for alias in aliases:
-            if alias.alias in scope.functions:
-                raise Exception(f"{alias.info}: Alias conflicts with function named {alias.alias}")
-            if isinstance(alias.meaning, FatPtr) and alias.meaning.type_params == NoneAttr():
-                meaning = scope.get_class(alias.info, alias.meaning).type()
-                if meaning.type_params != NoneAttr():
-                    meaning = FatPtr([meaning.cls, NoneAttr(), meaning.path])
-            else:
-                meaning = scope.type_env.validated_type(alias.info, alias.meaning)
-            scope.type_env.add_alias(alias.alias, meaning)
+            meaning = scope.type_env.alias_meaning(alias.info, alias.meaning)
+            scope.type_env.add_declared_alias(alias.name, alias.info.filepath, meaning)
         for cls in classes:
             if not cls._type_env: cls.register_type_env(scope.type_env)
 
     def typeflow(self, scope):
         self.name_resolution(scope)
+        self.namespace.export_surface(scope)
         for stmt in self.statements:
-            if isinstance(stmt, Import): continue
+            if isinstance(stmt, Import) or isinstance(stmt, ExportList) or isinstance(stmt, NoExportList): continue
             stmt.typeflow(scope)
         #G0, var_mapping0 = create_constraint_graph(scope.points_to_facts._set)
         #G0, var_mapping0 = transform_until_stable(G0, var_mapping0, set())
@@ -696,7 +845,7 @@ class ArrayLiteral(Expression):
         temp_info = NodeInfo.from_info(self.info, "temp_buf")
         temp_var = Identifier(temp_info, temp_info.id)
         assign = Assignment(NodeInfo.from_info(self.info, "assign"), temp_var, buf)
-        assign.codegen(scope);
+        assign.codegen(scope)
         for i, elem in enumerate(self.elements):
             iliteral = IntegerLiteral(NodeInfo.from_info(self.info, f"integer_{i}"), i, 32)
             indexation = MethodCall(NodeInfo.from_info(self.info, f"index_{i}"), temp_var, "_set_index", [iliteral, elem])
@@ -708,16 +857,16 @@ class ArrayLiteral(Expression):
         if len(self.elements) == 0 and not self.specified_elem_type:
             raise Exception(f"{self.info}: An empty array literal must specify its element type, like '[] of i32'")
         if len(self.elements) == 0:
-            array_type = FatPtr.generic("Array", [scope.simplify(self.specified_elem_type)])
-            return scope.type_env.validated_type(self.info, array_type)
+            elem_type = scope.simplify(self.specified_elem_type)
+            return scope.visible_fatptr(self.info, "Array", [elem_type])
         elem_types = [elem.exprtype(scope) for elem in self.elements]
         inferred_elem_type = scope.simplify(Union.from_list(elem_types)) if len(elem_types) > 0 else Integer(32)
-        if not self.specified_elem_type: return FatPtr.generic("Array", [inferred_elem_type])
+        if not self.specified_elem_type:
+            return scope.visible_fatptr(self.info, "Array", [inferred_elem_type])
         specified_elem_type = scope.simplify(self.specified_elem_type)
         if not scope.subtype(inferred_elem_type, specified_elem_type):
             raise Exception(f"{self.info}: Inferred element type of array literal ({inferred_elem_type}) is not a subtype of specified type ({specified_elem_type})")
-        array_type = FatPtr.generic("Array", [specified_elem_type])
-        return scope.type_env.validated_type(self.info, array_type)
+        return scope.visible_fatptr(self.info, "Array", [specified_elem_type])
 
     def typeflow(self, scope):
         for elem in self.elements: elem.typeflow(scope)
@@ -735,8 +884,8 @@ class DictionaryLiteral(Expression):
         key_type = self_type.type_params.data[0]
         value_type = self_type.type_params.data[1]
 
-        hasher = self.get_hasher(key_type)
-        eq = self.get_eq(key_type)
+        hasher = self.get_hasher(scope, key_type)
+        eq = self.get_eq(scope, key_type)
 
         dict_obj = ObjectCreation(self.info, self.info.id + "_dict_literal", self_type, [hasher, eq])
         dict_var = Identifier(self.info, self.info.id + "_dict_literal_var")
@@ -749,16 +898,19 @@ class DictionaryLiteral(Expression):
 
         return dict_var.codegen(scope)
 
-    def get_hasher(self, key_type):
+    def is_string_key(self, scope, key_type):
+        return is_named_fatptr(key_type, "String")
+
+    def get_hasher(self, scope, key_type):
         if key_type == Integer(32):
             return FunctionIdentifier(NodeInfo.from_info(self.info, "hasher"), "i32_hasher")
-        if key_type == FatPtr.basic("String"):
+        if self.is_string_key(scope, key_type):
             return FunctionIdentifier(NodeInfo.from_info(self.info, "hasher"), "string_hasher")
 
-    def get_eq(self, key_type):
+    def get_eq(self, scope, key_type):
         if key_type == Integer(32):
             return FunctionIdentifier(NodeInfo.from_info(self.info, "eq"), "i32_eq")
-        if key_type == FatPtr.basic("String"):
+        if self.is_string_key(scope, key_type):
             return FunctionIdentifier(NodeInfo.from_info(self.info, "eq"), "string_eq")
 
     def exprtype(self, scope):
@@ -770,10 +922,10 @@ class DictionaryLiteral(Expression):
         inferred_key_type = scope.simplify(Union.from_list(key_types))
         inferred_value_type = scope.simplify(Union.from_list(value_types))
 
-        if inferred_key_type not in (FatPtr.basic("String"), Integer(32)):
+        if not (self.is_string_key(scope, inferred_key_type) or inferred_key_type == Integer(32)):
             raise Exception(f"Currently only support i32 and String as dictionary key type, not {inferred_key_type}")
-
-        return FatPtr.generic("SwissTable", [inferred_key_type, inferred_value_type])
+        
+        return scope.visible_fatptr(self.info, "SwissTable", [inferred_key_type, inferred_value_type])
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -793,7 +945,7 @@ class StringLiteral(Expression):
         temp_info = NodeInfo.from_info(self.info, "temp_buf")
         temp_var = Identifier(temp_info, temp_info.id)
         assign = Assignment(NodeInfo.from_info(self.info, "assign"), temp_var, buf)
-        assign.codegen(scope);
+        assign.codegen(scope)
         llvmtype = llvm.LLVMArrayType.from_size_and_type(n_bytes, IntegerType(8))
         lit = LiteralOp.create(attributes={"typ":llvmtype, "value":BytesAttr(self.value.encode('utf-8'))}, result_types=[llvm.LLVMPointerType.opaque()])
         attr_dict = {"typ":IntegerType(32), "value":IntegerAttr.from_int_and_width(0, 32)}
@@ -806,8 +958,7 @@ class StringLiteral(Expression):
         return string.codegen(scope)
 
     def exprtype(self, scope):
-        string_type = FatPtr.basic("String")
-        return scope.type_env.validated_type(self.info, string_type)
+        return scope.visible_fatptr(self.info, "String")
 
     def typeflow(self, scope):
         pass
@@ -858,8 +1009,7 @@ class InterpolatedStringLiteral(Expression):
     def exprtype(self, scope):
         # parser will have inserted implicit casts to String
         for part in self.parts: part.exprtype(scope)
-        string_type = FatPtr.basic("String")
-        return scope.type_env.validated_type(self.info, string_type)
+        return scope.visible_fatptr(self.info, "String")
 
     def typeflow(self, scope):
         pass
@@ -889,8 +1039,7 @@ class CharLiteral(Expression):
     def exprtype(self, scope):
         if self.n_codepoints != 1:
             raise Exception(f"{self.info}: Character literal '{self.value}' is not a single Unicode codepoint; it is {self.n_codepoints}")
-        char_type = FatPtr.basic("Character")
-        return scope.type_env.validated_type(self.info, char_type)
+        return scope.visible_fatptr(self.info, "Character")
 
     def typeflow(self, scope):
         pass
@@ -1002,7 +1151,7 @@ class FunctionLiteral(Expression):
         attr_dict = {
             "func_name":StringAttr(self.name),
             "result_type":self.return_type().base_typ() if self.return_type() else llvm.LLVMVoidType(),
-            "yield_type":self.yield_type
+            "yield_type":scope.simplify(self.yield_type)
         }
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
         scope.comp_unit.toplevel_ops.append(func_op)
@@ -1063,7 +1212,7 @@ class FunctionLiteral(Expression):
         self.body.typeflow(body_scope)
         self.insert_implicit_return(body_scope)
         return_type = self.return_type() if self.return_type() else Nothing()
-        return Function([ArrayAttr(param_types), self.yield_type, return_type])
+        return Function([ArrayAttr(param_types), scope.simplify(self.yield_type), return_type])
 
 @dataclass
 class Identifier(Expression):
@@ -1084,10 +1233,6 @@ class Identifier(Expression):
     def ensure_previously_declared(self, scope):
         if (self.name not in scope.type_table) and (self.name not in scope.functions):
             raise Exception(f"{self.info}: identifier {self.name} not previously declared!")
-
-    def ensure_no_alias_conflicts(self, scope):
-        if self.name in scope.type_env.aliases:
-            raise Exception(f"{self.info}: Identifier {self.name} conflicts with existing alias of the same name")
 
     def exprtype(self, scope):
         self.disallow_self_in_init(scope)
@@ -1132,21 +1277,32 @@ class FieldIdentifier(Identifier):
 
 @dataclass
 class FunctionIdentifier(Identifier):
+    function_path: Optional[Path] = None
 
     def codegen(self, scope):
-        addr_of = AddrOfOp.from_string(self.name)
+        func = scope.get_function(self.info, self.name, self.function_path)
+        addr_of = AddrOfOp.from_string(func.symbol_name())
         wrap = WrapOp.make(addr_of.results[0])
         scope.region.last_block.add_ops([addr_of, wrap])
         return wrap.results[0]
 
     def exprtype(self, scope):
-        func = scope.get_function(self.info, self.name)
-        return_type = func.return_type() if func.return_type() else Nothing()
-        return Function([ArrayAttr([param.type(scope.type_env) for param in func.params]), func.yield_type, return_type])
+        func = scope.get_function(self.info, self.name, self.function_path)
+        type_env = scope.comp_unit.repository.current_program_context(scope.comp_unit, current_path=func.info.filepath)[1].type_env
+        return_type = type_env.simplify(func.return_type()) if func.return_type() else Nothing()
+        return Function([ArrayAttr([param.type(type_env) for param in func.params]), type_env.simplify(func.yield_type), return_type])
+
+@dataclass
+class ExportList(Statement):
+    names: tuple[QualifiedName, ...]
+
+@dataclass
+class NoExportList(Statement):
+    names: tuple[QualifiedName, ...]
 
 @dataclass
 class Alias(Statement):
-    alias: TypeAttribute
+    name: str
     meaning: TypeAttribute
 
 @dataclass
@@ -1322,8 +1478,7 @@ class TupleToArray(Expression):
     def exprtype(self, scope):
         tuple_type = self.tupl.exprtype(scope)
         elem_type = self.elem_type(tuple_type, scope)
-        array_type = scope.type_env.validated_type(self.info, FatPtr.generic("Array", [elem_type]))
-        return array_type
+        return scope.visible_fatptr(self.info, "Array", [elem_type])
 
 @dataclass
 class As(Expression):
@@ -1348,6 +1503,13 @@ class As(Expression):
         self.operand.signed = to_signed
         return True
 
+    def string_unambiguous(self, scope):
+        try:
+            scope.visible_fatptr(self.info, "String")
+            return True
+        except:
+            return False
+
     def codegen(self, scope):
 
         to_typ = self.exprtype(scope)
@@ -1355,9 +1517,9 @@ class As(Expression):
 
         stringable = isinstance(operand_type, Integer) or operand_type == Float() or operand_type == Nil()
 
-        if stringable and to_typ == FatPtr.basic("String"):
+        if stringable and is_named_fatptr(to_typ, "String") and self.string_unambiguous(scope):
             return Format(self.info, self.operand).codegen(scope)
-
+            
         if self.conform_integer_literal(to_typ):
             operand = self.operand.codegen(scope)
             return operand
@@ -1380,7 +1542,8 @@ class As(Expression):
         if not operand_type or operand_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Cannot cast Nothing to {to_typ}.")
         to_typ = scope.type_env.validated_type(self.info, to_typ)
-        if (isinstance(operand_type, Integer) or operand_type == Float() or operand_type == Nil()) and to_typ == FatPtr.basic("String"):
+        stringable = isinstance(operand_type, Integer) or operand_type == Float() or operand_type == Nil()
+        if stringable and is_named_fatptr(to_typ, "String") and self.string_unambiguous(scope):
             return Format(self.info, self.operand).exprtype(scope)
         if self.conform_integer_literal(to_typ):
             return self.operand.exprtype(scope)
@@ -1543,10 +1706,13 @@ class Ramp(Expression):
 class FunctionCall(Expression):
     function: str
     arguments: List[Expression]
-
+    function_path: Optional[Path] = None
     @property
     def subexpressions(self):
         return [*self.arguments]
+
+    def resolved_function(self, scope):
+        return scope.get_function(self.info, self.function, self.function_path)
 
     def codegen(self, scope):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -1557,23 +1723,24 @@ class FunctionCall(Expression):
             args[i] = unwrap.results[0]
         ret_typ = self.exprtype(scope)
         ret_schema = ret_typ.base_typ() if ret_typ else llvm.LLVMVoidType()
-        attr_dict = {"func_name":StringAttr(self.function), "ret_type":ret_schema}
+        func = self.resolved_function(scope)
+        attr_dict = {"func_name":StringAttr(func.symbol_name()), "ret_type":ret_schema}
         result_types = [ret_typ] if ret_typ else []
         call_op = FunctionCallOp.create(operands=args, attributes=attr_dict, result_types=result_types)
         scope.region.last_block.add_op(call_op)
         return call_op.results[0] if len(call_op.results) > 0 else None
 
-    def ensure_declared(self, scope):
-        if self.function not in scope.functions:
-            raise Exception(f"{self.info}: function name {self.function} not found!") 
-
-    def ensure_valid_arg_types(self, scope):
-        for i, param in enumerate(scope.get_function(self.info, self.function).params):
-            if(scope.subtype(self.arguments[i].exprtype(scope), param.type(scope.type_env))): continue
-            raise Exception(f"{self.info}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param.type(scope.type_env)} for parameter {param.name}")
+    def ensure_valid_arg_types(self, scope, func):
+        if len(self.arguments) != func.arity: raise Exception(f"{self.info}: Wrong number of arguments for {func.name}: expected {func.arity}, got {len(self.arguments)}.")
+        type_env = scope.comp_unit.repository.current_program_context(scope.comp_unit, current_path=func.info.filepath)[1].type_env
+        for arg, param in zip(self.arguments, func.params):
+            arg_type = arg.exprtype(scope)
+            param_type = param.type(type_env)
+            if scope.subtype(arg_type, param_type): continue
+            raise Exception(f"{self.info}: argument type {arg_type} not subtype of declared parameter type {param_type} for parameter {param.name}")
 
     def apply_constraints(self, scope, ret_type):
-        func = scope.get_function(self.info, self.function)
+        func = self.resolved_function(scope)
         formal_constraints = func.constraints
         mapping = {param.name:arg.info.id for param, arg in zip(func.params, self.arguments)} | {"ret":self.info.id}
         formal_constraints = formal_constraints.map(mapping)
@@ -1591,14 +1758,162 @@ class FunctionCall(Expression):
         scope.points_to_facts = scope.points_to_facts.union(formal_constraints)
 
     def exprtype(self, scope):
-        self.ensure_declared(scope)
-        self.ensure_valid_arg_types(scope)
-        ret_type = scope.get_function(self.info, self.function).return_type()
+        func = self.resolved_function(scope)
+        self.ensure_valid_arg_types(scope, func)
+        type_env = scope.comp_unit.repository.current_program_context(scope.comp_unit, current_path=func.info.filepath)[1].type_env
+        ret_type = type_env.simplify(func.return_type()) if func.return_type() else None
         self.apply_constraints(scope, ret_type)
         return ret_type
 
     def typeflow(self, scope):
         self.exprtype(scope)
+
+@dataclass
+class DeferredNameAccessCall(Expression):
+    base_name: str
+    attrs: tuple[str, ...]
+    arguments: List[Expression]
+    resolved: Optional[Expression] = None
+
+    @property
+    def subexpressions(self):
+        return [*self.arguments]
+
+    def resolve(self, scope):
+        if self.resolved: return self.resolved
+        receiver_parts = (self.base_name, *self.attrs[:-1])
+        prefer_value = self.base_name in scope.type_table or self.base_name in scope.functions
+        has_prefix = scope.comp_unit.repository.imported_prefix_len(scope.comp_unit, self.info, receiver_parts) > 0
+        resolvers = (self.resolve_type_receiver, self.resolve_value_receiver, self.resolve_namespace_function) if (not prefer_value) and has_prefix else (self.resolve_value_receiver, self.resolve_type_receiver, self.resolve_namespace_function)
+        for resolve in resolvers:
+            self.resolved = resolve(scope)
+            if self.resolved: return self.resolved
+        imports = scope.comp_unit.repository.current_program_context(scope.comp_unit, self.info)[0].namespace.imports()
+        if any(imp.target.opens_namespace() and imp.qualified_name.parts[0] == self.base_name for imp in imports):
+            scope.comp_unit.repository.resolve_qualified_exportable_symbol(scope.comp_unit, scope, self.info, (self.base_name, *self.attrs))
+        raise Exception(f"{self.info}: identifier {self.base_name} not previously declared!")
+
+    def resolve_value_receiver(self, scope):
+        if self.base_name in scope.type_table or self.base_name in scope.functions:
+            if len(self.attrs) != 1: raise Exception(f"{self.info}: Unsupported dotted access on value {self.base_name}.")
+            return MethodCall(self.info, Identifier(self.info, self.base_name), self.attrs[0], self.arguments)
+        if len(self.attrs) < 2: return None
+        prefix_len = scope.comp_unit.repository.imported_prefix_len(scope.comp_unit, self.info, (self.base_name, *self.attrs[:-1]))
+        if prefix_len == 0: return None
+        receiver = DeferredNameAccessValue(self.info, self.base_name, self.attrs[:-1]).resolve_namespace_value(scope)
+        return MethodCall(self.info, receiver, self.attrs[-1], self.arguments) if receiver else None
+
+    def resolve_type_receiver(self, scope):
+        receiver = self.receiver_type(scope)
+        if not receiver:
+            return None
+        method = self.attrs[-1]
+        if isinstance(receiver, Integer):
+            return self.integer_receiver(receiver, method)
+        if receiver == Float():
+            return self.float_receiver(method)
+        if method != "new":
+            return ClassMethodCall(self.info, receiver, method, self.arguments)
+        if isinstance(receiver, Buffer):
+            info = NodeInfo(None, self.info.filepath, self.arguments[0].info.line_number)
+            return CreateBuffer(info, receiver, self.arguments[0])
+        if isinstance(receiver, FatPtr) and receiver.cls.data == "Coroutine":
+            return CoCreate(self.info, "coroutine_" + random_letters(10), self.arguments)
+        return ObjectCreation(self.info, random_letters(10), receiver, self.arguments)
+
+    def receiver_type(self, scope):
+        parts = (self.base_name, *self.attrs[:-1])
+        if len(parts) != 1:
+            return self.qualified_receiver_type(scope, parts)
+        name = parts[0]
+        width = INTEGER_RECEIVERS.get(name)
+        if width:
+            return Integer(width)
+        if name == "f64":
+            return Float()
+        if name == "Coroutine":
+            return FatPtr.basic(name)
+        typ = FatPtr.basic(name)
+        if name == "Self" or name[0].isupper():
+            return scope.type_env.validated_type(self.info, typ)
+        try:
+            return scope.type_env.validated_type(self.info, typ)
+        except Exception:
+            return None
+
+    def qualified_receiver_type(self, scope, parts):
+        prefix_len = scope.comp_unit.repository.imported_prefix_len(scope.comp_unit, self.info, parts)
+        if prefix_len == 0 or prefix_len == len(parts): return None
+        resolved = scope.comp_unit.repository.resolve_qualified_exportable_symbol(scope.comp_unit, scope, self.info, parts)
+        if isinstance(resolved, ResolvedAliasExport):
+            return scope.simplify(resolved.meaning)
+        if isinstance(resolved, ResolvedClassExport):
+            return FatPtr.with_path(FatPtr.basic(resolved.definition.name), resolved.path)
+        return None
+
+    def integer_receiver(self, int_type, method):
+        if method == "max":
+            return IntegerLiteral(self.info, int_type.value_range()[1] - 1, int_type.bitwidth)
+        if method == "min":
+            return IntegerLiteral(self.info, int_type.value_range()[0], int_type.bitwidth)
+        raise Exception(f"{self.info}: {int_type}.{method} is not a valid builtin class method.")
+
+    def float_receiver(self, method):
+        if method == "max":
+            return DoubleLiteral(self.info, sys.float_info.max)
+        if method == "min":
+            return DoubleLiteral(self.info, -1 * sys.float_info.max)
+        raise Exception(f"{self.info}: f64.{method} is not a valid builtin class method.")
+
+    def resolve_namespace_function(self, scope):
+        qualified_name = (self.base_name, *self.attrs)
+        prefix_len = scope.comp_unit.repository.imported_prefix_len(scope.comp_unit, self.info, qualified_name)
+        if prefix_len == 0 or prefix_len == len(qualified_name): return None
+        resolved = scope.comp_unit.repository.resolve_qualified_exportable_symbol(scope.comp_unit, scope, self.info, qualified_name)
+        if not isinstance(resolved, ResolvedFunctionExport):
+            raise Exception(f"{self.info}: {'.'.join(qualified_name)} does not name a function.")
+        return FunctionCall(self.info, resolved.definition.name, self.arguments, resolved.path)
+
+    def codegen(self, scope): return self.resolve(scope).codegen(scope)
+
+    def exprtype(self, scope): return self.resolve(scope).exprtype(scope)
+
+    def typeflow(self, scope): self.resolve(scope).typeflow(scope)
+
+@dataclass
+class DeferredNameAccessValue(Expression):
+    base_name: str
+    attrs: tuple[str, ...]
+    resolved: Optional[Expression] = None
+
+    def resolve(self, scope):
+        if self.resolved:
+            return self.resolved
+        self.resolved = self.resolve_namespace_value(scope)
+        if self.resolved:
+            return self.resolved
+        imports = scope.comp_unit.repository.current_program_context(scope.comp_unit, self.info)[0].namespace.imports()
+        if any(imp.target.opens_namespace() and imp.qualified_name.parts[0] == self.base_name for imp in imports):
+            scope.comp_unit.repository.resolve_qualified_exportable_symbol(scope.comp_unit, scope, self.info, (self.base_name, *self.attrs))
+        raise Exception(f"{self.info}: Unsupported dotted value access {self.base_name}.{'.'.join(self.attrs)}.")
+
+    def resolve_namespace_value(self, scope):
+        qualified_name = (self.base_name, *self.attrs)
+        prefix_len = scope.comp_unit.repository.imported_prefix_len(scope.comp_unit, self.info, qualified_name)
+        if prefix_len == 0 or prefix_len == len(qualified_name): return None
+        resolved = scope.comp_unit.repository.resolve_qualified_exportable_symbol(scope.comp_unit, scope, self.info, qualified_name)
+        if not isinstance(resolved, ResolvedFunctionExport):
+            raise Exception(f"{self.info}: {'.'.join(qualified_name)} does not name a value.")
+        return FunctionIdentifier(self.info, resolved.definition.name, resolved.path)
+
+    def codegen(self, scope):
+        return self.resolve(scope).codegen(scope)
+
+    def exprtype(self, scope):
+        return self.resolve(scope).exprtype(scope)
+
+    def typeflow(self, scope):
+        self.resolve(scope).typeflow(scope)
 
 @dataclass
 class MethodCall(Expression):
@@ -2120,10 +2435,11 @@ class ClassMethodCall(MethodCall):
     def subexpressions(self):
         return [*self.arguments]
 
+    def resolved_receiver(self, scope):
+        return scope.type_env.validated_type(self.info, scope.simplify(self.receiver))
+
     def codegen(self, scope):
-        if "Intrinsic" in self.receiver.cls.data:
-            return IntrinsicCall(self.info, self.receiver.cls.data, self.method, self.arguments).codegen(scope)
-        rec_typ = scope.simplify(self.receiver)
+        rec_typ = self.resolved_receiver(scope)
         rec_class = scope.get_class(self.info, rec_typ)
 
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -2143,8 +2459,12 @@ class ClassMethodCall(MethodCall):
         vptrs = ArrayAttr([t.symbol() if not isinstance(t, FatPtr) else NoneAttr() for t in arg_types])
         ret_schema = broad.base_typ() if broad else llvm.LLVMVoidType()
         attr_dict = {
-            "offset":offset,"vptrs":vptrs, "vtable_size":vtable_size,
-            "ret_type":ret_schema, "ret_type_unq":ret_schema, "class_name":rec_typ.cls
+            "offset":offset,
+            "vptrs":vptrs,
+            "vtable_size":vtable_size,
+            "ret_type":ret_schema,
+            "ret_type_unq":ret_schema,
+            "class_name":StringAttr(rec_class.symbol_name()),
         }
         result_types = [broad] if broad else []
         ary_type = llvm.LLVMArrayType.from_size_and_type(len(args), llvm.LLVMPointerType.opaque())
@@ -2172,7 +2492,7 @@ class ClassMethodCall(MethodCall):
         # for each passed argument, add a parameterization representing its static type to the parameterizations array
         parameterizations = [scope.get_parameterization(t) for t in arg_types]
 
-        rec_typ = scope.simplify(self.receiver)
+        rec_typ = self.resolved_receiver(scope)
         if rec_typ.type_params != NoneAttr():
             for t in rec_typ.type_params:
                 parameterizations.append(scope.get_parameterization(t))
@@ -2185,9 +2505,7 @@ class ClassMethodCall(MethodCall):
         return { "ret":self.info.id }
 
     def simple_exprtype(self, scope):
-        
-        rec_typ = scope.simplify(self.receiver)
-        rec_typ = scope.type_env.validated_type(self.info, rec_typ)
+        rec_typ = self.resolved_receiver(scope)
         rec_class = scope.get_class(self.info, rec_typ)
 
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -2205,8 +2523,7 @@ class ClassMethodCall(MethodCall):
         return broad, specialized
 
     def exprtype(self, scope):
-        if "Intrinsic" in self.receiver.cls.data:
-            return IntrinsicCall(self.info, self.receiver.cls.data, self.method, self.arguments).exprtype(scope)
+        rec_typ = self.resolved_receiver(scope)
         broad, specialized = self.simple_exprtype(scope)
         return specialized
 
@@ -2245,7 +2562,7 @@ class PrintCall(Expression):
     def codegen(self, scope):
         arg_type = self.args[0].exprtype(scope)
         attr_dict = {"typ":arg_type.base_typ()}
-        if arg_type == FatPtr.basic("String"):
+        if is_named_fatptr(arg_type, "String"):
             c_string = MethodCall(NodeInfo.from_info(self.info, "c_string"), self.args[0], "c_string", [])
             operands = [c_string.codegen(scope)]
             attr_dict = {"typ":c_string.exprtype(scope).base_typ()}
@@ -2328,7 +2645,7 @@ class Format(Expression):
 
     def exprtype(self, scope):
         self.arg.exprtype(scope)
-        return FatPtr.basic("String")
+        return scope.visible_fatptr(self.info, "String")
 
 @dataclass
 class CttzCall(Expression):
@@ -2419,7 +2736,8 @@ class ObjectCreation(Expression):
         parameterizations = self.parameterizations(cls, self_type, scope)
         num_data_fields = IntegerAttr.from_int_and_width(n_data_fields, 32)
         region_name = scope.region_mapping[self.info.id] if self.info.id in scope.region_mapping else ""
-        new_op = NewOp.make(parameterizations, cls.base_typ(), self_type.cls, num_data_fields, region_name, self_type)
+        class_name = StringAttr(cls.symbol_name())
+        new_op = NewOp.make(parameterizations, cls.base_typ(), class_name, num_data_fields, region_name, self_type)
         scope.region.last_block.add_op(new_op)
         scope.symbol_table[self.anon_name] = new_op.results[0]
         scope.type_table[self.anon_name] = self_type
@@ -2484,9 +2802,9 @@ class ObjectCreation(Expression):
         return deduced_candidates[0]
 
     def exprtype(self, scope):
-        if self.type.cls.data == "Buffer":
-            raise Exception(f"{self.info}: Buffer type must be parameterized, like Buffer[i8] or Buffer[f64]")
         simplified_type = scope.type_env.qualify(self.type, self.info)
+        if isinstance(simplified_type, FatPtr) and simplified_type.cls.data == "Buffer":
+            raise Exception(f"{self.info}: Buffer type must be parameterized, like Buffer[i8] or Buffer[f64]")
         cls = scope.get_class(self.info, simplified_type)
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         if simplified_type.type_params == NoneAttr() and len(cls.type_parameters) > 0:
@@ -2518,17 +2836,21 @@ class ExternDef(Statement):
     _return_type: TypeAttribute
     yield_type: TypeAttribute
 
+    def symbol_name(self):
+        return self.name
+
     def codegen(self, scope):
-        if self.name in scope.comp_unit.codegenned: return
+        symbol_name = self.symbol_name()
+        if symbol_name in scope.comp_unit.codegenned: return
         if self.name == "printf":
-            scope.comp_unit.codegenned.add(self.name)
+            scope.comp_unit.codegenned.add(symbol_name)
             return
         arg_types = [param.type(scope.type_env).base_typ() for param in self.params]
         result_type = self.return_type().base_typ() if self.return_type() else llvm.LLVMVoidType()
-        func = llvm.FuncOp(self.name, llvm.LLVMFunctionType(arg_types, result_type), llvm.LinkageAttr("external"))
+        func = llvm.FuncOp(symbol_name, llvm.LLVMFunctionType(arg_types, result_type), llvm.LinkageAttr("external"))
         scope.comp_unit.toplevel_ops.append(func)
         scope.region.last_block.add_op(func)
-        scope.comp_unit.codegenned.add(self.name)
+        scope.comp_unit.codegenned.add(symbol_name)
 
     def interface_codegen(self, scope):
         self.codegen(scope)
@@ -2554,8 +2876,14 @@ class FunctionDef(Statement):
     def definition(self):
         return self
 
+    def symbol_name(self):
+        if self.name == "report_exception":
+            return self.name
+        return f"_fn_{path_hash(self.info.filepath)}_{safe_name_part(self.name)}"
+
     def codegen(self, scope):
-        if self.name in scope.comp_unit.codegenned: return
+        symbol_name = self.symbol_name()
+        if symbol_name in scope.comp_unit.codegenned: return
         body_scope = Scope(scope, method=self)
         body_scope.type_table = {}
         body_scope.symbol_table = {}
@@ -2564,24 +2892,25 @@ class FunctionDef(Statement):
         result_type = self.return_type()
         result_type = scope.simplify(result_type).base_typ() if result_type else llvm.LLVMVoidType()
         attr_dict = {
-            "func_name":StringAttr(self.name),
+            "func_name":StringAttr(symbol_name),
             "result_type":result_type,
-            "yield_type":self.yield_type
+            "yield_type":scope.simplify(self.yield_type)
         }
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
         scope.comp_unit.toplevel_ops.append(func_op)
         scope.region.last_block.add_op(func_op)
-        scope.comp_unit.codegenned.add(self.name)
+        scope.comp_unit.codegenned.add(symbol_name)
 
     def interface_codegen(self, scope):
-        if self.name in scope.comp_unit.codegenned: return
+        symbol_name = self.symbol_name()
+        if symbol_name in scope.comp_unit.codegenned: return
         arg_types = [param.type(scope.type_env).base_typ() for param in self.params]
         result_type = self.return_type()
         result_type = scope.simplify(result_type).base_typ() if result_type else llvm.LLVMVoidType()
-        func = llvm.FuncOp(self.name, llvm.LLVMFunctionType(arg_types, result_type), llvm.LinkageAttr("external"))
+        func = llvm.FuncOp(symbol_name, llvm.LLVMFunctionType(arg_types, result_type), llvm.LinkageAttr("external"))
         scope.comp_unit.toplevel_ops.append(func)
         scope.region.last_block.add_op(func)
-        scope.comp_unit.codegenned.add(self.name)
+        scope.comp_unit.codegenned.add(symbol_name)
 
     def return_type(self):
         return self._return_type
@@ -2669,7 +2998,7 @@ class MethodDef(Statement):
         attr_dict = {
             "func_name":StringAttr(self.qualified_name()),
             "result_type":result_type,
-            "yield_type":self.yield_type
+            "yield_type":scope.simplify(self.yield_type)
         }
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
         scope.comp_unit.toplevel_ops.append(func_op)
@@ -2687,7 +3016,7 @@ class MethodDef(Statement):
         scope.comp_unit.codegenned.add(self.qualified_name())
 
     def qualified_name(self):
-        return self.defining_class.name+"_"+self.mangled_name
+        return class_member_symbol_name(self.info.filepath, self.defining_class.name, self.mangled_name)
 
     def return_type(self):
         return self.defining_class.type_env.simplify(self._return_type)
@@ -2983,7 +3312,7 @@ class ClassMethodDef(MethodDef):
         attr_dict = {
             "func_name":StringAttr(self.qualified_name()),
             "result_type":result_type,
-            "yield_type":self.yield_type
+            "yield_type":scope.simplify(self.yield_type)
         }
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
         scope.comp_unit.toplevel_ops.append(func_op)
@@ -3243,7 +3572,7 @@ class Method:
     def specialized_return_type(self, rec_typ, arg_types, scope):
         ret_type = self.return_type()
         param_types = self.param_types()
-        if self.definition._return_type == FatPtr.basic("Self"):
+        if is_named_fatptr(self.definition._return_type, "Self"):
             return self.cls.type()
         formal_types = [self.cls.type(), *param_types]
         arg_ancestors = []
@@ -3296,7 +3625,7 @@ class Method:
         return True
 
     def __hash__(self):
-        return hash(self.definition.mangled_name + str(self.offset))
+        return hash((self.definition.qualified_name(), self.offset))
 
     def __repr__(self):
         return self.definition.parent_repr() + f"{self.offset})"
@@ -3379,7 +3708,8 @@ class Behavior(Statement):
         return SymbolRefAttr(self.qualified_name())
 
     def qualified_name(self):
-        return self.cls.name + "_B_" + "_".join(meth.definition.mangled_name for meth in self.methods)
+        names = "__".join(meth.definition.mangled_name for meth in self.methods)
+        return class_member_symbol_name(self.cls.info.filepath, self.cls.name, "B", names)
         
     def codegen(self, scope):
         if self.qualified_name() in scope.comp_unit.codegenned: return
@@ -3531,7 +3861,7 @@ class ClassBehavior(Behavior):
         return None
 
     def vptr(self, fat_ptr):
-        return AddrOfOp.from_string(self.cls.name)
+        return AddrOfOp.from_string(self.cls.symbol_name())
 
     def get_offset(self, fat_ptr):
         return llvm.ConstantOp(IntegerAttr.from_int_and_width(vtable_buffer_size(), 32), IntegerType(32))
@@ -3582,10 +3912,11 @@ class ClassDef(Statement):
         return self._type_env
 
     def codegen(self, scope):
-        if self.name in scope.comp_unit.codegenned: return
+        class_name = self.symbol_name()
+        if class_name in scope.comp_unit.codegenned: return
 
         fields_types = ArrayAttr([t.base_typ() if not isinstance(t, TypeParameter) else IntegerAttr.from_int_and_width(self.type_parameters.index(t), 64) for t in self.fields_types()])
-        data_size_fn_name = StringAttr("_data_size_" + self.name)
+        data_size_fn_name = StringAttr(self.data_size_symbol_name())
         data_size_fn = DataSizeDefOp.create(attributes={"meth_name":data_size_fn_name,"types":fields_types})
         scope.region.last_block.add_op(data_size_fn)
         scope.comp_unit.toplevel_ops.append(data_size_fn)
@@ -3598,10 +3929,10 @@ class ClassDef(Statement):
         combined = ArrayAttr([]) if not_instantiable else ArrayAttr([thing.symbol() for thing in self.vtable()])
         hash_tbl, prime = build_hashtable(scope, self.type())
         offset_tbl = build_offset_table(scope, self.type())
-        hashid = IntegerAttr.from_int_and_width(hash_id(self.name), 64)
-        class_name = StringAttr(self.name)
+        hashid = IntegerAttr.from_int_and_width(hash_id(self.type().symbol().data), 64)
+        class_name_attr = StringAttr(class_name)
         attr_dict = {
-            "class_name":class_name, "methods":combined, "hash_tbl":hash_tbl,"offset_tbl":offset_tbl,
+            "class_name":class_name_attr, "methods":combined, "hash_tbl":hash_tbl,"offset_tbl":offset_tbl,
             "prime":prime, "hash_id":hashid, "base_typ":self.base_typ(),
             "data_size_fn":data_size_fn_name, "box_fn":StringAttr("_box_Default"),
             "unbox_fn":StringAttr("_unbox_Default"), "size_fn":StringAttr("_size_Default")
@@ -3616,7 +3947,7 @@ class ClassDef(Statement):
         for elem in self.vtable():
             if isinstance(elem, Behavior): elem.codegen(self_scope)
         scope.merge_ops(self_scope)
-        scope.comp_unit.codegenned.add(self.name)
+        scope.comp_unit.codegenned.add(class_name)
 
     def self_scope(self, scope):
         self_scope = Scope(scope, cls=self)
@@ -3626,13 +3957,14 @@ class ClassDef(Statement):
         return self_scope
 
     def interface_codegen(self, scope):
-        if self.name in scope.comp_unit.codegenned: return
+        class_name = self.symbol_name()
+        if class_name in scope.comp_unit.codegenned: return
         #not_instantiable = any(isinstance(elem.definition, AbstractMethodDef) for elem in self.vtable() if isinstance(elem, Method))
         #vtable_size = 0 if not_instantiable else self.vtable_size()
-        attr_dict = {"class_name":StringAttr(self.name)}
+        attr_dict = {"class_name":StringAttr(class_name)}
         class_def = ExternalTypeDefOp.create(attributes=attr_dict)
         scope.region.last_block.add_op(class_def)
-        scope.comp_unit.codegenned.add(self.name)
+        scope.comp_unit.codegenned.add(class_name)
 
     def typeflow(self, scope):
         if not self.name[0].isupper():
@@ -3651,20 +3983,27 @@ class ClassDef(Statement):
 
     def register_type_env(self, type_env):
         self._type_env = TypeEnvironment(type_env)
+        self.type_parameters = [
+            self.validated_type_parameter(type_param)
+            for type_param in self.type_parameters
+        ]
         for t in self.type_parameters:
             self._type_env.add_alias(FatPtr.basic(t.label.data), t)
+
+    def validated_type_parameter(self, type_param):
+        if not isinstance(type_param.bound, (FatPtr, QualifiedType)): return type_param
+        bound = self._type_env.validated_type(self.info, type_param.bound)
+        return TypeParameter.make(type_param.label.data, self.name, bound, self.info.filepath)
     
     def compute_aliases(self):
         if len(self.ancestors()) < 2: return
         ancestors = [anc for anc in self.ancestors()[1:] if anc != Any()]
-        for anc in ancestors:
-            if anc.type_params == NoneAttr(): continue
-            for i, t in enumerate(anc.type_params.data):
-                types = [t.type_params.data[i] for t in ancestors if t.cls.data == anc.cls.data]
-                anc_class = self._type_env.get_class(self.info, anc)
-                old_tp = anc_class.type_parameters[i]
-                t = self._type_env.simplify(Union.from_list(types))
-                self._type_env.add_alias(old_tp, t)
+        generic_ancestors = [anc for anc in ancestors if anc.type_params != NoneAttr()]
+        for anc in generic_ancestors:
+            matches = [other.type_params.data for other in generic_ancestors if other.cls == anc.cls and other.path == anc.path]
+            anc_class = self._type_env.get_class(self.info, anc)
+            merged = [self._type_env.simplify(Union.from_list([params[i] for params in matches])) for i in range(len(anc.type_params.data))]
+            for old_tp, t in zip(anc_class.type_parameters, merged): self._type_env.add_alias(old_tp, t)
         for t in self.type_parameters: self._type_env.add_alias(FatPtr.basic(t.label.data), t)
         self._type_env.add_alias(FatPtr.basic("Self"), self.type())
 
@@ -3697,12 +4036,14 @@ class ClassDef(Statement):
     def all_type_parameters(self):
         ancestors = [anc for anc in self.ancestors() if anc != Any()]
         flat_list = []
-        for anc in ancestors:
-            if anc.type_params == NoneAttr(): continue
-            for i, t in enumerate(anc.type_params.data):
-                types = [t.type_params.data[i] for t in ancestors if t.cls.data == anc.cls.data]
-                t = self._type_env.simplify(Union.from_list(types))
-                flat_list.append(t)
+        generic_ancestors = [anc for anc in ancestors if anc.type_params != NoneAttr()]
+        for anc in generic_ancestors:
+            matches = [other.type_params.data for other in generic_ancestors if other.cls == anc.cls and other.path == anc.path]
+            merged = [
+                self._type_env.simplify(Union.from_list([params[i] for params in matches]))
+                for i in range(len(anc.type_params.data))
+            ]
+            flat_list.extend(merged)
         return flat_list
 
     def type_fields(self):
@@ -3715,7 +4056,10 @@ class ClassDef(Statement):
         return [field.type() for field in self.fields() if field.needs_storage()]
 
     def direct_supertypes(self):
-        return [self._type_env.simplify(t) for t in self._direct_supertypes]
+        supertypes = [self._type_env.validated_type(self.info, t) for t in self._direct_supertypes]
+        offender = next((sup for sup in supertypes if sup != Any() and not isinstance(sup, FatPtr)), None)
+        if offender: raise Exception(f"{self.info}: Cannot extend non-class type {offender}.")
+        return supertypes
 
     def vtable_size(self):
         return len(self.vtable())
@@ -3728,6 +4072,12 @@ class ClassDef(Statement):
     def type(self) -> TypeAttribute:
         typ = FatPtr.generic(self.name, self.type_parameters)
         return FatPtr.with_path(typ, self.info.filepath)
+
+    def symbol_name(self):
+        return type_symbol_name(self.info.filepath, self.name)
+
+    def data_size_symbol_name(self):
+        return f"_data_size_{self.symbol_name()}"
 
     def c3_linearization(self, type_params) -> List[TypeAttribute]:
 
@@ -3848,9 +4198,10 @@ class ClassDef(Statement):
     def marginal_vtable_size(self):
         return len([*self.all_field_declarations(), *self.behaviors, *[*chain.from_iterable(behavior.methods for behavior in self.behaviors)]])
 
-    def offset_to(self, class_name):
+    def offset_to(self, target_type):
         my_ordering = self.my_ordering()
-        idx = [self.name, *[cls.name for cls in my_ordering]].index(class_name)
+        target_class = self.type_env.get_class(None, target_type)
+        idx = [self, *my_ordering].index(target_class)
         vtbl_sizes = [self.marginal_vtable_size(), *[cls.vtable_size() for cls in my_ordering]]
         return sum(vtbl_sizes[:idx])
 
@@ -3869,7 +4220,7 @@ class ClassDef(Statement):
         return self == other or other.exprtype() in self.ancestors()
 
     def __hash__(self):
-        return hash(self.name)
+        return hash(self.symbol_name())
 
 @dataclass
 class ClassMock:
@@ -3951,7 +4302,7 @@ class TypeFieldDecl(FieldDecl):
         return
 
     def scoped_name(self, type_env):
-        return clean_name(f"{type_env.simplify(self.type_param)}").lower()
+        return type_name(type_env.simplify(self.type_param)).lower()
 
 @dataclass
 class Field:
@@ -3960,10 +4311,9 @@ class Field:
     declaration: FieldDecl
 
     def codegen(self, scope):
-        
-        accessor_name = StringAttr(self.cls.name + "_field_" + self.declaration.name.replace("@",""))
-        getter_name = StringAttr(self.cls.name + "_getter_" + self.declaration.name.replace("@",""))
-        setter_name = StringAttr(self.cls.name + "_setter_" + self.declaration.name.replace("@",""))
+        accessor_name = StringAttr(self.accessor_name())
+        getter_name = StringAttr(self.getter_name())
+        setter_name = StringAttr(self.setter_name())
         original_type = self.declaration.type(scope.type_env)
         specialized = self.type()
         struct_type = self.cls.base_typ()
@@ -4002,7 +4352,19 @@ class Field:
         return result
 
     def symbol(self):
-        return SymbolRefAttr(self.cls.name + "_field_" + self.declaration.name.replace("@",""))
+        return SymbolRefAttr(self.accessor_name())
+
+    def accessor_name(self):
+        field_name = self.declaration.name.replace("@", "")
+        return class_member_symbol_name(self.cls.info.filepath, self.cls.name, "field", field_name)
+
+    def getter_name(self):
+        field_name = self.declaration.name.replace("@", "")
+        return class_member_symbol_name(self.cls.info.filepath, self.cls.name, "getter", field_name)
+
+    def setter_name(self):
+        field_name = self.declaration.name.replace("@", "")
+        return class_member_symbol_name(self.cls.info.filepath, self.cls.name, "setter", field_name)
 
 @dataclass
 class Assignment(Statement):
@@ -4848,39 +5210,27 @@ class CreateBuffer(Expression):
 
 @dataclass
 class Import(Statement):
-    import_filepath: Path
-    program: Program
-    type_env: TypeEnvironment
+    qualified_name: QualifiedName
+    target: ImportTarget
 
     def name_resolution(self, scope):
-        scope.comp_unit.dependency_graph.add_edge(self.info.filepath, self.import_filepath)
-        self.ensure_acyclic_imports(scope.comp_unit.dependency_graph)
-        sandbox = Scope()
-        sandbox.comp_unit = scope.comp_unit
-        self.type_env = sandbox.type_env
-        self.program.name_resolution(sandbox)
-        for name, classes in self.type_env.classes.items():
-            for path, definition in classes.items():
-                if name in scope.classes and path in scope.classes[name]: continue
-                scope.add_class(definition)
-        for name, functions in self.type_env.functions.items():
-            for path, definition in functions.items():
-                if name in scope.functions and path in scope.functions[name]: continue
-                scope.add_function(definition)
-
-    def ensure_acyclic_imports(self, import_graph):
-        dependency_cycle = next(import_graph.simple_cycles(), None)
-        if dependency_cycle:
-            print("Dependency graph:")
-            print(nx.generate_network_text(import_graph))
-            raise Exception(f"{self.info}: Import of {self.import_filepath} from {self.info.filepath} creates a cycle in the dependency graph.")
+        surface = self.target.compute_surface(self, scope)
+        program = scope.comp_unit.repository.current_program_context(scope.comp_unit, self.info)[0]
+        scope.add_surface(surface, program.namespace.local_names())
 
     def codegen(self, scope):
-        sandbox = Scope()
-        sandbox.comp_unit = scope.comp_unit
-        sandbox.type_env = self.type_env
-        self.program.interface_codegen(sandbox)
-        scope.merge_ops(sandbox)
+        if self.target in scope.comp_unit.processed_imports:
+            return
+        surface = self.target.compute_surface(self, scope)
+        scope.comp_unit.processed_imports.add(self.target)
+        for path in scope.comp_unit.repository.interface_paths(surface):
+            program, sandbox_scope = scope.comp_unit.repository.load_program_context(scope.comp_unit, path)
+            sandbox = Scope()
+            sandbox.adopt_compilation_unit(scope.comp_unit)
+            sandbox.type_env = sandbox_scope.type_env
+            sandbox.type_env.comp_unit = scope.comp_unit
+            program.interface_codegen(sandbox)
+            scope.merge_ops(sandbox)
 
     def interface_codegen(self, scope):
         self.codegen(scope)

@@ -1,11 +1,12 @@
 from lark import Transformer, v_args, Lark, Token
+from lark_cython.lark_cython import Token as CythonToken
 import lark_cython
 from AST import *
 from hi import *
 from mid import *
 from lark.exceptions import UnexpectedToken
 from xdsl.ir import Block, Region
-from xdsl.dialects.builtin import IntegerType, IntegerAttr, StringAttr, NoneAttr, Signedness
+from xdsl.dialects.builtin import IntegerType, IntegerAttr, NoneAttr, Signedness, ArrayAttr
 from utils import *
 from pathlib import Path
 import ast
@@ -35,16 +36,74 @@ parser = get_parser()
 source_directories = {}
 parsed = {}
 
-def find_path(short_path, from_path) -> Path:
+def import_roots(from_path) -> list[Path]:
     local_path = from_path.parent.resolve()
     extended_sources = {local_path:local_path} | source_directories
-    for dir in extended_sources.keys():
-        putative_path = dir.joinpath(short_path)
-        if not putative_path.exists(): continue
-        return putative_path.resolve()
-    return None
+    return [root.resolve() for root in extended_sources.keys()]
+
+def resolve_file_import(file_path: Path, parts: tuple[str, ...], index: int, node_info) -> ImportTarget:
+    if index == len(parts) - 1:
+        return FileImportTarget(file_path.resolve())
+    remaining = parts[index + 1:]
+    if len(remaining) == 1:
+        return EntityImportTarget(file_path.resolve(), remaining[0])
+    raise Exception(f"{node_info}: Imports through file namespaces support only one trailing entity segment for now.")
+
+def resolve_import_in_root(root: Path, parts: tuple[str, ...], node_info) -> ImportTarget | None:
+    current = root
+    index = 0
+    while index < len(parts):
+        name = parts[index]
+        file_path = current / f"{name}.mini"
+        folder_path = current / name
+        has_file = file_path.is_file()
+        has_folder = folder_path.is_dir()
+
+        if has_file and has_folder:
+            raise Exception(f"{node_info}: Import path component {name} is ambiguous because both a file and folder exist.")
+
+        if has_folder:
+            current = folder_path
+            index = index + 1
+            continue
+
+        if has_file:
+            return resolve_file_import(file_path, parts, index, node_info)
+
+        return None
+
+    return FolderImportTarget(current.resolve())
+
+def resolve_import_target(parts: tuple[str, ...], from_path: Path, node_info) -> ImportTarget:
+    matches = []
+    for root in import_roots(from_path):
+        target = resolve_import_in_root(root, parts, node_info)
+        if not target:
+            continue
+        matches.append(target)
+    if len(matches) == 0:
+        raise Exception(f"{node_info}: Could not find import {'.'.join(parts)} in available source directories")
+    unique_matches = set(matches)
+    if len(unique_matches) > 1:
+        raise Exception(f"{node_info}: Import {'.'.join(parts)} is ambiguous across available source directories")
+    return next(iter(unique_matches))
+
+def make_qualified_type(name: QualifiedName, file_path: Path, types=None):
+    return QualifiedType.make(file_path, name.parts, types)
+
+@dataclass(frozen=True)
+class PostfixChain:
+    base: object
+    attrs: tuple[str, ...] = ()
+
+def resolve_basic_type(type_name, type_map):
+    return type_map.get(type_name.value, FatPtr.basic(type_name.value))
+
+def is_token_type(value, token_type: str) -> bool:
+    return isinstance(value, (Token, CythonToken)) and value.type == token_type
 
 def parse(file_path) -> AST:
+    file_path = Path(file_path).resolve()
     try:
         if file_path in parsed: return (parsed[file_path])
         with open(file_path, encoding='utf-8') as f: import_text = f.read()
@@ -165,25 +224,29 @@ class CSTTransformer(Transformer):
         return ty(node_info, "_Self_" + name.value, body, params, constraints, type_params, return_type, yield_type)
 
     def class_def(self, cls, name, supertype_list, bound_list, fields, region_constraints, methods):
+        if isinstance(name, QualifiedType):
+            raise Exception(f"Line {line_number(cls)}: Class names cannot be qualified.")
+        if type(name) in (Buffer, Coroutine, Tuple): raise Exception(f"Line {line_number(cls)}: Class name {type(name).__name__} is reserved.")
         if not isinstance(name, FatPtr):
             raise Exception(f"Line {line_number(cls)}: Invalid class name.")
         class_name = name.cls.data
+        if class_name in {"Buffer", "Coroutine", "Self", "Tuple"}: raise Exception(f"Line {line_number(cls)}: Class name {class_name} is reserved.")
         if not isinstance(name.type_params, NoneAttr) and any(not isinstance(t, FatPtr) for t in name.type_params.data):
             offender = next(t for t in name.type_params.data if not isinstance(t, FatPtr))
             raise Exception(f"Line {line_number(cls)}: Cannot use {offender} as a type parameter")
         type_parameters = []
         if not isinstance(name.type_params, NoneAttr):
-            for t in name.type_params:
-                if not bound_list or t.cls.data not in bound_list:
-                    type_parameters.append(TypeParameter.make(t.cls.data, class_name))
-                    continue
-                type_parameters.append(TypeParameter([t.cls, bound_list[t.cls.data], name.cls]))
-        if supertype_list and any(not isinstance(t, FatPtr) for t in supertype_list):
-            offender = next(t for t in supertype_list if not isinstance(t, FatPtr))
-            raise Exception(f"Line {line_number(cls)}: Cannot extend {t}")
+            type_parameters = [
+                TypeParameter.make(t.cls.data, class_name, None if not bound_list or t.cls.data not in bound_list else bound_list[t.cls.data], self.file_path)
+                for t in name.type_params
+            ]
+        valid_supertype = lambda typ: isinstance(typ, FatPtr) or isinstance(typ, QualifiedType)
+        if supertype_list and any(not valid_supertype(typ) for typ in supertype_list):
+            offender = next(typ for typ in supertype_list if not valid_supertype(typ))
+            raise Exception(f"Line {line_number(cls)}: Cannot extend {offender}")
         region_constraints = region_constraints if region_constraints else Constraints()
-        regions = [f.name for f in fields if f._type == FatPtr.basic("Region")]
-        fields = [f for f in fields if f._type != FatPtr.basic("Region")]
+        regions = [f.name for f in fields if is_named_fatptr(f._type, "Region")]
+        fields = [f for f in fields if not is_named_fatptr(f._type, "Region")]
         
         direct_supertypes = [typ for typ in supertype_list] if supertype_list else [FatPtr.basic("Object")]
         if class_name == "Object": direct_supertypes = [Any()]
@@ -195,7 +258,7 @@ class CSTTransformer(Transformer):
 
         for method in methods:
             method.defining_class = class_def
-            method.type_params = [TypeParameter.make(ident.value, class_name) for ident in method.type_params]
+            method.type_params = [TypeParameter.make(ident.value, class_name, None, self.file_path) for ident in method.type_params]
             if isinstance(method, Getter):
                 field_name = "@" + method.name
                 m_fields = [field for field in fields if field.name == field_name]
@@ -282,17 +345,21 @@ class CSTTransformer(Transformer):
 
     def alias(self, alias, name, meaning):
         node_info = NodeInfo(None, self.file_path, line_number(alias))
-        return Alias(node_info, name, meaning)
+        if name.value == "Self": raise Exception(f"Line {line_number(alias)}: Alias name Self is reserved.")
+        return Alias(node_info, name.value, meaning)
 
-    def import_statement(self, *names):
-        node_info = NodeInfo(None, self.file_path, line_number(names[0]))
-        path_components = [*(name.value for name in names[:-1]), f"{names[-1].value}.mini"]
-        path = Path(*path_components)
-        full_path = find_path(path, self.file_path)
-        if not full_path: raise Exception(f"{node_info}: Could not find import {path} in available source directories")
-        if self.file_path == full_path: raise Exception(f"{node_info}: A file should never import itself")
-        program = parse(full_path)
-        return Import(node_info, full_path, program, None)
+    def import_statement(self, qualified_name):
+        node_info = NodeInfo(None, self.file_path, qualified_name.line_number)
+        target = resolve_import_target(qualified_name.parts, self.file_path, node_info)
+        return Import(node_info, qualified_name, target)
+
+    def export_statement(self, first_name, *rest_names):
+        node_info = NodeInfo(None, self.file_path, first_name.line_number)
+        return ExportList(node_info, (first_name, *rest_names))
+
+    def no_export_statement(self, first_name, *rest_names):
+        node_info = NodeInfo(None, self.file_path, first_name.line_number)
+        return NoExportList(node_info, (first_name, *rest_names))
 
     def ident_list(self, *ids):
         return list(ids)
@@ -301,7 +368,7 @@ class CSTTransformer(Transformer):
         return token
 
     def qualified_ident(self, *idents):
-        return idents[-1]
+        return QualifiedName(tuple(ident.value for ident in idents), line_number(idents[0]))
 
     def param(self, name, typ):
         node_info = NodeInfo(None, self.file_path, line_number(name))
@@ -323,7 +390,9 @@ class CSTTransformer(Transformer):
         return FieldDecl(node_info, name.value, typ, None)
 
     def assignment(self, target, value):
-        node_info = NodeInfo(None, self.file_path, target.info.line_number)
+        node_info = self.chain_info(target)
+        if not isinstance(target, (Identifier, MethodCall, TupleLiteral)):
+            raise Exception(f"{node_info}: Invalid assignment target.")
         if isinstance(target, MethodCall) and not isinstance(target, Indexation):
             if target.method == "_index": 
                 target.method = "_set" + target.method
@@ -391,8 +460,16 @@ class CSTTransformer(Transformer):
             "Any":Any(),
             "Nil":Nil()
         }
-        if type_name.value in type_map: return type_map[type_name.value]
-        return FatPtr.basic(type_name.value)
+        qualified_name = self.qualified_type_name(type_name)
+        if qualified_name:
+            return self.qualified_basic_type(qualified_name, type_map)
+        return resolve_basic_type(type_name, type_map)
+
+    def qualified_basic_type(self, type_name, type_map):
+        if len(type_name.parts) == 1:
+            name = type_name.parts[0]
+            return type_map.get(name, FatPtr.basic(name))
+        return make_qualified_type(type_name, self.file_path)
 
     def union_type(self, left, right):
         return Union.from_list([left, right])
@@ -404,13 +481,17 @@ class CSTTransformer(Transformer):
         if any(not isinstance(t, TypeAttribute) for t in types):
             offender = next(t for t in types if not isinstance(t, TypeAttribute))
             raise Exception(f"Line {line_number(type_name)}: Type parameter {offender} is not a type")
-        if type_name == "Coroutine":
+        qualified_name = self.qualified_type_name(type_name)
+        type_name_text = qualified_name.parts[-1] if qualified_name else type_name.value
+        if type_name_text == "Coroutine":
             return Coroutine([types[0].param_types, types[0].yield_type, types[0].return_type])
-        if type_name == "Tuple":
+        if type_name_text == "Tuple":
             return Tuple.make(types)
-        if type_name == "Buffer":
+        if type_name_text == "Buffer":
             return Buffer([types[0]])
-        return FatPtr.generic(type_name.value, types)
+        if qualified_name and len(qualified_name.parts) > 1:
+            return make_qualified_type(qualified_name, self.file_path, types)
+        return FatPtr.generic(type_name_text, types)
 
     def function_type(self, type_list, return_type, yield_type):
         return Function([ArrayAttr(type_list), yield_type if yield_type else Any(), return_type if return_type else Nothing()])
@@ -437,8 +518,142 @@ class CSTTransformer(Transformer):
     def expression(self, expr):
         return expr
 
-    def assignable(self, expr):
-        return expr
+    def postfix_target(self, base, *parts):
+        current = PostfixChain(base)
+        for part in parts:
+            current = self.apply_target_postfix_part(current, part)
+        return self.finish_target_chain(current)
+
+    def postfix_expr(self, base, *parts):
+        current = PostfixChain(base)
+        for part in parts:
+            current = self.apply_postfix_part(current, part)
+        return self.finish_postfix_chain(current)
+
+    def call_suffix(self, args=()):
+        return "call", args
+
+    def attr_suffix(self, name):
+        return "attr", name.value
+
+    def index_suffix(self, args=()):
+        return "index", args
+
+    def apply_postfix_part(self, current, part):
+        kind, value = part
+        if kind == "attr":
+            return self.append_attr(current, value)
+        if kind == "call":
+            return self.apply_call_part(current, value)
+        return self.apply_index_part(current, value)
+
+    def apply_target_postfix_part(self, current, part):
+        kind, value = part
+        if kind == "call":
+            return self.apply_target_call_part(current, value)
+        return self.apply_postfix_part(current, part)
+
+    def append_attr(self, current, name):
+        if isinstance(current, PostfixChain):
+            return PostfixChain(current.base, (*current.attrs, name))
+        return PostfixChain(current, (name,))
+
+    def apply_call_part(self, current, args):
+        if not isinstance(current, PostfixChain):
+            raise Exception("Calls should always apply to a postfix chain.")
+        if len(current.attrs) == 0:
+            return self.call_from_base(current.base, args)
+        return self.call_from_attr_chain(current, args)
+
+    def apply_target_call_part(self, current, args):
+        if not isinstance(current, PostfixChain):
+            raise Exception("Invalid assignment target.")
+        if len(current.attrs) == 0:
+            raise Exception(f"{self.chain_info(current)}: Invalid assignment target.")
+        return self.call_target_from_attr_chain(current, args)
+
+    def call_target_from_attr_chain(self, chain, args):
+        info = self.postfix_info(chain, chain.attrs[-1])
+        if len(chain.attrs) == 1 and isinstance(chain.base, Identifier):
+            return MethodCall(info, chain.base, chain.attrs[0], args)
+        if len(chain.attrs) == 1 and isinstance(chain.base, Expression):
+            return MethodCall(info, chain.base, chain.attrs[0], args)
+        raise Exception(f"{info}: Invalid assignment target.")
+
+    def call_from_base(self, base, args):
+        info = self.postfix_info(base, "call")
+        if isinstance(base, Identifier):
+            return self.bare_function_call(info, base.name, args)
+        raise Exception(f"{info}: Cannot call non-function target {base}.")
+
+    def call_from_attr_chain(self, chain, args):
+        info = self.postfix_info(chain, chain.attrs[-1])
+        if len(chain.attrs) == 1 and isinstance(chain.base, ParametrizedAttribute):
+            return self.type_method_call(info, chain.base, chain.attrs[-1], args)
+        if len(chain.attrs) == 1 and isinstance(chain.base, QualifiedName):
+            return DeferredNameAccessCall(info, chain.base.parts[0], (*chain.base.parts[1:], chain.attrs[0]), args)
+        if isinstance(chain.base, Identifier) and chain.base.name == "Intrinsic":
+            return self.intrinsic_call(info, chain.attrs[0], args)
+        if isinstance(chain.base, Identifier):
+            return DeferredNameAccessCall(info, chain.base.name, chain.attrs, args)
+        if len(chain.attrs) == 1 and isinstance(chain.base, Expression):
+            return MethodCall(info, chain.base, chain.attrs[0], args)
+        raise Exception(f"{info}: Unsupported dotted call target {chain}.")
+
+    def apply_index_part(self, current, args):
+        if isinstance(current, PostfixChain):
+            return self.index_postfix_chain(current, args)
+        info = self.postfix_info(current, "index")
+        return MethodCall(info, current, "_index", [*args])
+
+    def index_postfix_chain(self, current, args):
+        if current.attrs:
+            raise Exception(f"{self.chain_info(current)}: Indexed dotted access is not supported.")
+        if not isinstance(current.base, Expression):
+            raise Exception(f"{self.chain_info(current)}: Indexation target is not an expression.")
+        info = self.postfix_info(current, "index")
+        return MethodCall(info, current.base, "_index", [*args])
+
+    def finish_postfix_chain(self, current):
+        if not isinstance(current, PostfixChain):
+            return current
+        if current.attrs:
+            return self.dotted_value_access(current)
+        if isinstance(current.base, (ParametrizedAttribute, QualifiedName)):
+            raise Exception(f"{self.chain_info(current)}: Bare type reference is not an expression.")
+        return current.base
+
+    def finish_target_chain(self, current):
+        if not isinstance(current, PostfixChain):
+            return current
+        if len(current.attrs) == 0:
+            return current.base
+        return self.assignment_target_access(current)
+
+    def assignment_target_access(self, current):
+        if len(current.attrs) != 1:
+            raise Exception(f"{self.chain_info(current)}: Invalid assignment target.")
+        if not isinstance(current.base, Expression):
+            raise Exception(f"{self.chain_info(current)}: Invalid assignment target.")
+        info = self.postfix_info(current, current.attrs[0])
+        return MethodCall(info, current.base, current.attrs[0], [])
+
+    def dotted_value_access(self, current):
+        if isinstance(current.base, Identifier):
+            return DeferredNameAccessValue(self.chain_info(current), current.base.name, current.attrs)
+        raise Exception(f"{self.chain_info(current)}: Standalone dotted access is not supported.")
+
+    def chain_info(self, current):
+        base = current.base if isinstance(current, PostfixChain) else current
+        if isinstance(base, Node):
+            return base.info
+        if isinstance(base, QualifiedName):
+            return NodeInfo(None, self.file_path, base.line_number)
+        return NodeInfo(None, self.file_path, 0)
+
+    def postfix_info(self, current, name):
+        info = self.chain_info(current)
+        return NodeInfo(None, info.filepath, info.line_number)
 
     def comparison_single(self, arithmetic):
         return arithmetic
@@ -602,11 +817,17 @@ class CSTTransformer(Transformer):
     def primary(self, literal):
         return literal
 
-    def identifier(self, token):
-        node_info = NodeInfo(None, self.file_path, line_number(token))
-        return Identifier(node_info, token.value)
+    def primary_atom(self, value):
+        return self.qualified_type_name(value) or value
 
-    def field(self, token):
+    def qualified_type_name(self, value):
+        if isinstance(value, QualifiedName):
+            return value
+        if not is_token_type(value, "QUALIFIED_TYPE"):
+            return None
+        return QualifiedName(tuple(value.value.split(".")), line_number(value))
+
+    def identifier(self, token):
         node_info = NodeInfo(None, self.file_path, line_number(token))
         return Identifier(node_info, token.value)
 
@@ -614,74 +835,50 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, 0)
         return SizeOfCall(node_info, typ)
 
-    def function_call(self, func_name, *args):
-        node_info = NodeInfo(None, self.file_path, line_number(func_name))
-        if func_name.value == "print":
-            return PrintCall(node_info, args)
-        if func_name.value == "printf":
-            return PrintFCall(node_info, args)
-        if func_name.value == "cttz":
-            return CttzCall(node_info, args)
-        if func_name.value == "blsr":
-            return BlsrCall(node_info, args)
-        return FunctionCall(node_info, func_name.value, args)
-
-    def method_call(self, receiver, meth_name, *args):
-        node_info = NodeInfo(None, self.file_path, line_number(meth_name))
-
-        # i32.max() or i32.min() for example
-        if isinstance(receiver, Identifier) and receiver.name in ("i8", "i16", "i32", "i64", "i128"):
-            int_type = Integer({"i8":8, "i16":16, "i32":32, "i64":64, "i128":128}[receiver.name])
-            if meth_name == "max":
-                return IntegerLiteral(node_info, int_type.value_range()[1] - 1, int_type.bitwidth)
-            if meth_name == "min":
-                return IntegerLiteral(node_info, int_type.value_range()[0], int_type.bitwidth)
-
-        # f64.max() and f64.min()
-        if isinstance(receiver, Identifier) and receiver.name == "f64":
-            if meth_name == "max":
-                return DoubleLiteral(node_info, sys.float_info.max)
-            if meth_name == "min":
-                return DoubleLiteral(node_info, -1 * sys.float_info.max)
-
-        # Foo.bar()
-        if isinstance(receiver, Identifier) and receiver.name[0].isupper():
-            if receiver.name == "Coroutine" and meth_name == "new":
-                return CoCreate(node_info, "coroutine_" + random_letters(10), args)
-            if meth_name == "new":
-                return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.name), args)
-            return ClassMethodCall(node_info, FatPtr.basic(receiver.name), meth_name.value, args)
-
-        # Foo[T, U].bar()
-        if isinstance(receiver, ParametrizedAttribute):
-            if isinstance(receiver, Buffer) and meth_name == "new":
-                node_info = NodeInfo(None, self.file_path, args[0].info.line_number)
-                return CreateBuffer(node_info, receiver, args[0])
-            if meth_name == "new":
-                return ObjectCreation(node_info, random_letters(10), receiver, args)
-            return ClassMethodCall(node_info, receiver, meth_name.value, args)
-
-        # foo.bar()
-        return MethodCall(node_info, receiver, meth_name.value, args)
-
     def object_creation(self, receiver, lbrace, *args):
         node_info = NodeInfo(None, self.file_path, line_number(lbrace))
+        if isinstance(receiver, QualifiedType):
+            return self.construct_type(node_info, receiver, args)
+        qualified_name = self.qualified_type_name(receiver)
+        if qualified_name:
+            receiver_type = make_qualified_type(qualified_name, self.file_path)
+            return self.construct_type(node_info, receiver_type, args)
         if isinstance(receiver, Identifier) and receiver.name[0].isupper():
             if receiver.name == "Coroutine":
                 return CoCreate(node_info, "coroutine_" + random_letters(10), args)
             return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.name), args)
         if isinstance(receiver, ParametrizedAttribute):
-            if isinstance(receiver, Buffer):
-                node_info = NodeInfo(None, self.file_path, args[0].info.line_number)
-                return CreateBuffer(node_info, receiver, args[0])
-            return ObjectCreation(node_info, random_letters(10), receiver, args)
+            return self.construct_type(node_info, receiver, args)
         if receiver.value == "Coroutine":
             return CoCreate(node_info, "coroutine_" + random_letters(10), args)
         return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.value), args)
 
-    def indexation(self, receiver, *indices):
-        node_info = NodeInfo(None, self.file_path, receiver.info.line_number)
-        return MethodCall(node_info, receiver, "_index", [*indices])
+    def type_method_call(self, node_info, receiver_type, method_name, args):
+        if isinstance(receiver_type, Buffer) and method_name == "new":
+            node_info = NodeInfo(None, self.file_path, args[0].info.line_number)
+            return CreateBuffer(node_info, receiver_type, args[0])
+        if isinstance(receiver_type, FatPtr) and receiver_type.cls.data == "Coroutine" and method_name == "new":
+            return CoCreate(node_info, "coroutine_" + random_letters(10), args)
+        if method_name == "new":
+            return ObjectCreation(node_info, random_letters(10), receiver_type, args)
+        return ClassMethodCall(node_info, receiver_type, method_name, args)
+
+    def intrinsic_call(self, node_info, method_name, args):
+        return IntrinsicCall(node_info, "Intrinsic", method_name, args)
+
+    def bare_function_call(self, node_info, function_name, args):
+        if function_name == "print":
+            return PrintCall(node_info, args)
+        if function_name == "printf":
+            return PrintFCall(node_info, args)
+        if function_name == "cttz":
+            return CttzCall(node_info, args)
+        if function_name == "blsr":
+            return BlsrCall(node_info, args)
+        return FunctionCall(node_info, function_name, args)
+
+    def construct_type(self, node_info, receiver_type, args):
+        return self.type_method_call(node_info, receiver_type, "new", args)
 
     def yield_call(self, word, expression):
         node_info = NodeInfo(None, self.file_path, line_number(word))

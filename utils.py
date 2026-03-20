@@ -1,12 +1,12 @@
 from hi import *
 from mid import *
 from itertools import product, chain, combinations
-from hashlib import sha256
 from xdsl.ir import Block, Region
 from xdsl.dialects import cf
 import random
 import re
 from collections import defaultdict
+from qualified_names import hash_id
 
 def duplicates(mylist):
     D = defaultdict(list)
@@ -17,14 +17,11 @@ def duplicates(mylist):
 
 def type_index(outer_type, inner_type):
     if outer_type == inner_type: return []
-    if not (isinstance(outer_type, FatPtr) or isinstance(outer_type, Tuple) or isinstance(outer_type, Union) or isinstance(outer_type, Function)):
-            raise Exception(f"{inner_type} is not in {outer_type}")
-    if isinstance(outer_type, FatPtr):
-        i, t = next((i, t) for (i, t) in enumerate(outer_type.type_params.data) if f"{inner_type}" in f"{t}")
-    if isinstance(outer_type, Tuple) or isinstance(outer_type, Union):
-        i, t = next((i, t) for (i, t) in enumerate(outer_type.types.data) if f"{inner_type}" in f"{t}")
-    if isinstance(outer_type, Function):
-        i, t = next((i, t) for (i, t) in enumerate([outer_type.return_type, *outer_type.param_types.data]) if f"{inner_type}" in f"{t}")
+    if isinstance(outer_type, FatPtr): items = outer_type.type_params.data
+    elif isinstance(outer_type, Tuple) or isinstance(outer_type, Union): items = outer_type.types.data
+    elif isinstance(outer_type, Function): items = [outer_type.return_type, *outer_type.param_types.data]
+    else: raise Exception(f"{inner_type} is not in {outer_type}")
+    i, t = next((i, t) for (i, t) in enumerate(items) if inner_type in get_nested_type_parameters(t))
     #print(f"index of {inner_type} in {outer_type} is {[i, *type_index(t, inner_type)]}")
     return [i, *type_index(t, inner_type)]
 
@@ -53,21 +50,27 @@ def id_hierarchy(typ, ambient_types):
         return ArrayAttr([typ.symbol()])
     return ArrayAttr([typ.symbol(), *[id_hierarchy(t, ambient_types) for t in typ.type_params.data]])
 
+def type_name(typ):
+    if isinstance(typ, TypeParameter): return clean_name(f"{typ.owner_id.data}_{typ.label.data}_subtype_{type_name(typ.bound)}")
+    if isinstance(typ, FatPtr): return clean_name("_".join([typ.symbol().data, *([] if typ.type_params == NoneAttr() else [type_name(t) for t in typ.type_params.data])]))
+    if isinstance(typ, Buffer): return clean_name(f"{typ.symbol().data}_{type_name(typ.elem_type)}")
+    if isinstance(typ, Function) or isinstance(typ, Coroutine):
+        return clean_name("_".join([typ.symbol().data, type_name(typ.return_type), *[type_name(t) for t in typ.param_types.data]]))
+    if isinstance(typ, Union) or isinstance(typ, Tuple): return clean_name("_".join([typ.symbol().data, *[type_name(t) for t in typ.types.data]]))
+    return clean_name(f"{typ}")
+
 def name_hierarchy(typ):
     if isinstance(typ, Union) or isinstance(typ, Tuple):
-        return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in typ.types.data]])
-    if isinstance(typ, Buffer):
-        return ArrayAttr([StringAttr(clean_name(f"{typ}")), name_hierarchy(typ.elem_type)])
+        return ArrayAttr([StringAttr(type_name(typ)), *[name_hierarchy(t) for t in typ.types.data]])
+    if isinstance(typ, Buffer): return ArrayAttr([StringAttr(type_name(typ)), name_hierarchy(typ.elem_type)])
     if isinstance(typ, Function):
         types = [typ.return_type, *typ.param_types.data]
-        return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in types]])
-    if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr():
-        return ArrayAttr([StringAttr(clean_name(f"{typ}"))])
-    return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in typ.type_params.data]])
+        return ArrayAttr([StringAttr(type_name(typ)), *[name_hierarchy(t) for t in types]])
+    if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr(): return ArrayAttr([StringAttr(type_name(typ))])
+    return ArrayAttr([StringAttr(type_name(typ)), *[name_hierarchy(t) for t in typ.type_params.data]])
 
 def clean_param_names(params):
-    joined = "_".join([f"{param.name}{param._type.__repr__()}" for param in params])
-    return clean_name(joined)
+    return clean_name("_".join(f"{param.name}{type_name(param._type)}" for param in params))
 
 replacements = {" ":"_", "@":"","[":"","]":"",",":".","->":"to","|":"or","(":"_",")":"_","<:":"subtype","\\":"_bslash_","C:":"C"}
 repl_pattern = re.compile('|'.join(f'(?:{re.escape(k)})' for k in replacements))
@@ -77,9 +80,6 @@ def clean_name(name):
 
 def random_letters(n):
     return "".join(random.choices('abcdefghijklmnopqrstuvwxyz', k=n))
-
-def hash_id(typ_name: str) -> int:
-    return int.from_bytes(sha256(typ_name.encode('utf-8')).digest()[:8], 'little')
 
 def vtable_buffer_size():
     return 10
