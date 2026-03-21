@@ -41,6 +41,7 @@ python ptalk_build.py
 
 - There are a fair number of random / temporary / old files in this project
 - Stuff in the "Design Docs" folder is more likely to be outdated or speculative
+- Don't run multiple invocations of the compiler in parallel
 - Git may reject commands in this environment because of the safe-directory ownership check
 	- Use command-local overrides like `git -c safe.directory=C:/Users/PaulK/OneDrive/Documents/PL/PyPL ...`
 	- Do not change global Git config
