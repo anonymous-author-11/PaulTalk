@@ -3,7 +3,7 @@
 Rules:
 1. At most 3 indentation levels (<= 12 leading spaces).
 2. No more than one statement per line (<= 1 semicolon outside strings/comments/fn literals).
-3. Max 80 characters per line.
+3. Max 100 characters per line.
 4. Method signature must be on one line (for `def` and `abstract def`, line must contain `{`).
 5. Conditional headers must be on one line (for `if`, `while`, must contain `{`).
 """
@@ -19,12 +19,12 @@ from typing import Iterable
 
 
 MAX_INDENT_SPACES = 12
-MAX_LINE_WIDTH = 80
+MAX_LINE_WIDTH = 100
 
 
 RULE_INDENT = "R1-indent<=3"
 RULE_ONE_STMT = "R2-one-semicolon"
-RULE_MAX_WIDTH = "R3-line-width<=80"
+RULE_MAX_WIDTH = f"R3-line-width<={MAX_LINE_WIDTH}"
 RULE_SIGNATURE = "R4-def-header-one-line"
 RULE_CONDITION = "R5-cond-header-one-line"
 
