@@ -18,8 +18,8 @@ python tests.py --suite perf --build-dir temp_build
 # Run every suite including perf
 python tests.py --suite all --build-dir temp_build
 
-# Run single test (replace TestName with specific test method)
-python tests.py tests.CompilerTests.test_end_to_end --build-dir temp_build
+# Run select tests (replace TestName with specific test method)
+python tests.py tests.CompilerTests.test_a tests.CompilerTests.test_b --build-dir temp_build
 
 # Lint changed Python files for AI style rules
 python tools/lint_ai_changes.py
@@ -42,6 +42,7 @@ python ptalk_build.py
 - There are a fair number of random / temporary / old files in this project
 - Stuff in the "Design Docs" folder is more likely to be outdated or speculative
 - Don't run multiple invocations of the compiler in parallel
+	- That includes tests, which invoke the compiler
 - Git may reject commands in this environment because of the safe-directory ownership check
 	- Use command-local overrides like `git -c safe.directory=C:/Users/PaulK/OneDrive/Documents/PL/PyPL ...`
 	- Do not change global Git config
