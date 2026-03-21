@@ -11,39 +11,6 @@ import unicode;
 import peek;
 import stacktrace;
 
-class SizedIterator[T] extends Iterator[T] {
-
-    // how many items are remaining to be returned by .next?
-    abstract def remaining() -> i32 {}
-}
-
-/*
-class YieldWriter[T] extends Writer[T] {
-    def write(value : T) yields T? {
-        yield(value);
-    }
-}
-
-class PushIterator[T] extends Iterator[T] {
-    @coro : Coroutine[() yields T?]
-
-    def init(source : Iterator[T], writer : Writer[T]) {
-        fn = (source : Iterator[T], writer : Writer[T]) => { writer.write_from(source); };
-        @coro = Coroutine{fn, source, writer};
-    }
-
-    def next() -> T? {
-        yielded = @coro.call();
-        if yielded is T { return yielded; }
-        return nil;
-    }
-}
-*/
-
-// my_ary = [1,2,3];
-// byte_yielder = UTF8Encoder{YieldWriter{}};
-// utf8_bytes = PushIterator{my_ary.iterator(), byte_yielder};
-
 class Representable {
     def repr() -> String { return "Object"; }
 }

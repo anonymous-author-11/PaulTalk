@@ -401,3 +401,9 @@ class Productizer[T, U] extends Iterator[Pair[T, U]] {
         return nil;
     }
 }
+
+class SizedIterator[T] extends Iterator[T] {
+
+    // how many items are remaining to be returned by .next?
+    abstract def remaining() -> i32 {}
+}
