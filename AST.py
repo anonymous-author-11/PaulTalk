@@ -3560,10 +3560,10 @@ class Method:
 
     def specialized_param_type_for(self, rec_typ, i, t, scope):
         param_type = self.param_types()[i]
-        formal_types = [self.cls.type(), param_type]
+        formal_types = [param_type, self.cls.type()]
         arg_ancestor = next((anc for anc in scope.ancestors(t) if scope.matches(anc, param_type)), None)
         if not arg_ancestor: return None
-        concrete_types = [rec_typ, arg_ancestor]
+        concrete_types = [arg_ancestor, rec_typ]
         result = scope.specialize(formal_types, concrete_types, param_type)
         return result
 
@@ -3572,26 +3572,27 @@ class Method:
         param_types = self.param_types()
         if is_named_fatptr(self.definition._return_type, "Self"):
             return rec_typ
-        formal_types = [self.cls.type(), *param_types]
+        formal_types = [*param_types, self.cls.type()]
         arg_ancestors = []
         for arg_t, param_t in zip(arg_types, param_types):
             nxt_ancestor = next((anc for anc in scope.ancestors(arg_t) if scope.matches(anc, param_t)), None)
             if not nxt_ancestor: return False
             arg_ancestors.append(nxt_ancestor)
-        concrete_types = [rec_typ, *arg_ancestors]
+        concrete_types = [*arg_ancestors, rec_typ]
         result = scope.specialize(formal_types, concrete_types, ret_type)
         result = scope.type_env.validated_type(self.definition.info, result)
         return result
 
     def applicable_for(self, rec_typ, arg_types, scope):
         param_types = self.param_types()
-        formal_types = [self.cls.type(), *param_types]
-        concrete_types = [rec_typ]
+        formal_types = [*param_types, self.cls.type()]
+        concrete_types = []
 
         for arg_type, param_type in zip(arg_types, param_types):
             ancestor = next((anc for anc in scope.ancestors(arg_type) if scope.matches(anc, param_type)), None)
             if not ancestor: return False
             concrete_types.append(ancestor)
+        concrete_types.append(rec_typ)
 
         for arg_type, param_type in zip(arg_types, param_types):
             specialized = scope.specialize(formal_types, concrete_types, param_type)

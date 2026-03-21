@@ -327,7 +327,6 @@ class TypeEnvironment:
         if not self.matches(new, old):
             raise Exception(F'{new} does not match {old}')
         if isinstance(old, TypeParameter):
-            if old in self.aliases: return {}
             rand_name = FatPtr.basic(random_letters(10))
             self.add_alias(old, rand_name)
             return {rand_name:new}
