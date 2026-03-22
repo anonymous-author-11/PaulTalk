@@ -121,7 +121,7 @@ The compiler driver can be found in [ptalk_compile.py](https://github.com/anonym
 
 ## Standard Library (Minimal)
 
-The standard library (located in the [lib](https://github.com/anonymous-author-11/PaulTalk/blob/main/lib) folder) is currently very basic and includes modules like:
+The standard library ([std](https://github.com/anonymous-author-11/PaulTalk/blob/main/lib/std.mini)) is currently very basic and includes modules like:
 
 *   `iteration.mini`
 *	`collection.mini`
@@ -133,10 +133,6 @@ The standard library (located in the [lib](https://github.com/anonymous-author-1
 *   `channel.mini`
 *   `files.mini`
 *	`map.mini`
-*	`open_addressing.mini`
-*	`linear_probe.mini`
-*	`quadratic_probe.mini`
-*	`cuckoo.mini`
 
 ## Near-Future Work
 

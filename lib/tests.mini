@@ -1,5 +1,6 @@
 
 import std;
+import exhibits.channel;
 
 extern def clock() -> i64
 extern def getchar() -> i32

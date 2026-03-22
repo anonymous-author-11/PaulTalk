@@ -2,8 +2,11 @@ import core;
 import math;
 import range;
 import io;
-import channel;
 import array;
 import files;
 import path;
-import swiss_table_v4;
+
+import hashmaps.map;
+import hashmaps.swiss_table_v4;
+
+alias DefaultMap = SwissTable;

@@ -1,4 +1,4 @@
-import primesieve;
+import exhibits.primesieve;
 
 limit = 2_000_000;
 sieve = CacheOptimizedSieve{limit};

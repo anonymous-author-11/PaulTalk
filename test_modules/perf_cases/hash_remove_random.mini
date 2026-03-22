@@ -1,5 +1,5 @@
 import std;
-import hash_perf_utils;
+import hashmaps.hash_perf_utils;
 
 n = 600_000;
 table = SwissTable[i32, i32].new(i32_hasher, i32_eq);

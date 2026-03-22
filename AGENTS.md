@@ -123,6 +123,6 @@ python ptalk_build.py
 
 ### Project Structure
 - Compiler pipeline: parse → type check → MLIR gen → optimize → LLVM gen → link
-- Standard library in `lib/` directory with `.mini` extension
+- Source code paultalk files in `lib/` directory with `.mini` extension
 - LLVM utilities in `data_files/` with `.ll` extension
 - Grammar definition in `data_files/grammar.lark`

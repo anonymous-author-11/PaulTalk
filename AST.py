@@ -925,7 +925,7 @@ class DictionaryLiteral(Expression):
         if not (self.is_string_key(scope, inferred_key_type) or inferred_key_type == Integer(32)):
             raise Exception(f"Currently only support i32 and String as dictionary key type, not {inferred_key_type}")
         
-        return scope.visible_fatptr(self.info, "SwissTable", [inferred_key_type, inferred_value_type])
+        return scope.type_env.validated_type(self.info, FatPtr.generic("DefaultMap", [inferred_key_type, inferred_value_type]))
 
     def typeflow(self, scope):
         self.exprtype(scope)

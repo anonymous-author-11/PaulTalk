@@ -580,15 +580,15 @@ class CompilerPositiveTestsMixin:
             IO.print(clean.with_extension(".zip").to_string());
 
             base = Path{"foo/bar"};
-            IO.print(base.join("/abs//x").to_string());
+            IO.print(base.join("/base//leaf").to_string());
 
-            rooted = Path{"/tmp//logs/"};
+            rooted = Path{"/base//branch/"};
             IO.print(rooted.to_string());
             IO.print(rooted.parent().to_string());
 
             IO.print(Path{"../../a/../b"}.to_string());
         """
-        expected_output = "alpha/gamma.tar.gz\nalpha\ngamma.tar.gz\nalpha/gamma.tar.bin\nalpha/gamma.tar.zip\n/abs/x\n/tmp/logs\n/tmp\n../../b"
+        expected_output = "alpha/gamma.tar.gz\nalpha\ngamma.tar.gz\nalpha/gamma.tar.bin\nalpha/gamma.tar.zip\n/base/leaf\n/base/branch\n/base\n../../b"
         self.run_mini_code(mini_code, expected_output, "path_object_components_and_join")
 
     def test_path_special_extension(self):
@@ -600,8 +600,8 @@ class CompilerPositiveTestsMixin:
             IO.print(Path{"/"}.with_extension("txt").to_string());
             IO.print(Path{".."}.basename());
             IO.print(Path{".."}.dirname().to_string());
-            IO.print(Path{"/tmp"}.basename());
-            IO.print(Path{"/tmp"}.dirname().to_string());
+            IO.print(Path{"/base"}.basename());
+            IO.print(Path{"/base"}.dirname().to_string());
             IO.print(Path{"foo/bar"}.join("../baz").to_string());
             IO.print(Path{".gitignore"}.stem());
 
@@ -610,7 +610,7 @@ class CompilerPositiveTestsMixin:
 
             IO.print(Path{"foo.tar.gz"}.with_extension("").to_string());
         """
-        expected_output = ".\n..\n/\n..\n.\ntmp\n/\nfoo/baz\n.gitignore\nnil\nfoo.tar"
+        expected_output = ".\n..\n/\n..\n.\nbase\n/\nfoo/baz\n.gitignore\nnil\nfoo.tar"
         self.run_mini_code(mini_code, expected_output, "path_special_extension")
 
     def test_mutated_branch(self):
@@ -1107,7 +1107,7 @@ class CompilerPositiveTestsMixin:
 
     def test_matmul(self):
         mini_code = """
-            import matmul;
+            import exhibits.matmul;
 
             size = 512;
 
@@ -1134,7 +1134,7 @@ class CompilerPositiveTestsMixin:
 
     def test_prime_sieves(self):
         mini_code = """
-            import primesieve;
+            import exhibits.primesieve;
 
             limit = 10_000_000;
 

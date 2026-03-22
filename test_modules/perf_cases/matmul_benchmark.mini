@@ -1,4 +1,4 @@
-import matmul;
+import exhibits.matmul;
 
 size = 512;
 matrix1 = Matrix.new(size, size);
