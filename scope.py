@@ -163,12 +163,19 @@ class TypeEnvironment:
             return meaning
         return FatPtr([meaning.cls, NoneAttr(), meaning.path])
 
+    def instantiate_alias(self, node_info, alias_name, meaning, type_params):
+        meaning = self.simplify(meaning)
+        if type_params == NoneAttr():
+            return meaning
+        if not isinstance(meaning, FatPtr) or meaning.type_params != NoneAttr():
+            raise Exception(f"{node_info}: Alias {alias_name} does not take type parameters.")
+        return self.simplify(FatPtr([meaning.cls, type_params, meaning.path]))
+
     def validated_type(self, node_info, typ):
         if isinstance(typ, QualifiedType): typ = self.simplify_qualified_type(node_info, typ)
         if isinstance(typ, FatPtr) and typ.path == NoneAttr() and typ.cls.data in self.declared_aliases:
-            self.ensure_no_type_args(node_info, typ.cls.data, typ.type_params)
             _, meaning = self.get_declared_alias_definition(node_info, typ.cls.data)
-            return self.simplify(meaning)
+            typ = self.instantiate_alias(node_info, typ.cls.data, meaning, typ.type_params)
         typ = self.simplify(typ)
         if not isinstance(typ, FatPtr): return typ
         cls = self.get_class(node_info, typ)
@@ -185,14 +192,8 @@ class TypeEnvironment:
     def simplify_qualified_type(self, node_info, typ):
         resolved = self.comp_unit.repository.qualified_type_export(self.comp_unit, node_info, typ)
         if isinstance(resolved, ResolvedAliasExport):
-            self.ensure_no_type_args(node_info, typ.text(), typ.type_params)
-            return self.simplify(resolved.meaning)
+            return self.instantiate_alias(node_info, typ.text(), resolved.meaning, typ.type_params)
         return FatPtr([resolved.definition.type().cls, typ.type_params, StringAttr(str(resolved.path))])
-    
-    def ensure_no_type_args(self, node_info, alias_name, type_params):
-        if type_params == NoneAttr():
-            return
-        raise Exception(f"{node_info}: Alias {alias_name} does not take type parameters.")
 
     def subtype_inner(self, left, right):
         if self.simplify(left) != left:
@@ -460,9 +461,8 @@ class TypeEnvironment:
             return self.simplify_qualified_type(None, typ)
 
         if isinstance(typ, FatPtr) and typ.path == NoneAttr() and typ.cls.data in self.declared_aliases:
-            self.ensure_no_type_args(None, typ.cls.data, typ.type_params)
             _, meaning = self.get_declared_alias_definition(None, typ.cls.data)
-            return self.simplify(meaning)
+            return self.instantiate_alias(None, typ.cls.data, meaning, typ.type_params)
 
         if isinstance(typ, FatPtr) and FatPtr.basic(typ.cls.data) in self.aliases:
             meaning = self.aliases[FatPtr.basic(typ.cls.data)]
