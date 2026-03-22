@@ -33,7 +33,8 @@ class String extends List[Character], Representable {
     def Self.from_bytes(source_bytes: Collection[i8]) -> String yields InvalidUTF8Error {
         result = String{source_bytes.size()};    // Pre-allocate
         validator = UTF8BytesValidator{result.bytes().writer()};
-        validator.write_codepoints_from(source_bytes.iterator());
+        n_chars = validator.write_codepoints_from(source_bytes.iterator());
+        result.increment_chars(n_chars);
         return result;
     } ~> { ret.elems_reg holds source_bytes.elems_reg }
 
@@ -42,7 +43,8 @@ class String extends List[Character], Representable {
     def Self.from_bytes_lossy(source_bytes: Collection[i8]) -> String {
         result = String{source_bytes.size()};    // Pre-allocate
         validator = UTF8BytesValidator.lossy(result.bytes().writer());
-        validator.write_codepoints_from(source_bytes.iterator());
+        n_chars = validator.write_codepoints_from(source_bytes.iterator());
+        result.increment_chars(n_chars);
         return result;
     } ~> { ret.elems_reg holds source_bytes.elems_reg }
 
@@ -123,42 +125,24 @@ class String extends List[Character], Representable {
         return true;
     }
     def !=(other : String) -> Bool {
-        if @byte_length != other.byte_length() { return true; }
-        for i in 0..@byte_length {
-            if @bytes.[i] != other.unchecked_index(i) { return true; }
-        }
-        return false;
+        return not (self == other);
     }
     def starts_with(prefix : String) -> Bool {
         prefix_len = prefix.byte_length();
         if prefix_len > @byte_length { return false; }
-        return self.bytes_match_at(prefix, 0);
+        return self.bytes().match_at(prefix, 0);
     }
     def ends_with(suffix : String) -> Bool {
         suffix_len = suffix.byte_length();
         if suffix_len > @byte_length { return false; }
         offset = @byte_length - suffix_len;
-        return self.bytes_match_at(suffix, offset);
-    }
-    def bytes_match_at(needle : String, start : i32) -> Bool {
-        needle_len = needle.byte_length();
-        for i in 0..needle_len {
-            if @bytes.[start + i] != needle.unchecked_index(i) { return false; }
-        }
-        return true;
-    } ~> no_alias
-    def byte_index_of(needle : String) -> i32? {
-        needle_len = needle.byte_length();
-        if needle_len == 0 { return 0; }
-        if needle_len > @byte_length { return nil; }
-        last_start = @byte_length - needle_len;
-        for start in 0..(last_start + 1) {
-            if self.bytes_match_at(needle, start) { return start; }
-        }
-        return nil;
+        return self.bytes().match_at(suffix, offset);
     }
     def contains(needle : String) -> Bool {
-        return self.byte_index_of(needle) is i32;
+        return self.bytes().contains(needle);
+    }
+    def slice_bytes(start : i32, end : i32) -> String {
+        return self.bytes().slice(start, end).to_string();
     }
     def lead_whitespace() -> i32 {
         for i in 0..@byte_length {
@@ -203,13 +187,9 @@ class String extends List[Character], Representable {
         return String{copied, slice_len, chars, slice_len};
     }
     def repeat(times : i32) -> String {
-        if times <= 0 { return String.empty(); }
+        if times <= 0 { return ""; }
         result = String{@byte_length * times};
-        repeat_index = 0;
-        while repeat_index < times {
-            result.extend(self);
-            repeat_index = repeat_index + 1;
-        }
+        for i in 0..times { result.extend(self); }
         return result;
     }
     def join(parts : Iterable[String]) -> String {
@@ -279,8 +259,8 @@ class String extends List[Character], Representable {
     def codepoints() -> StringCodePoints {
         return StringCodePoints{self};
     } ~> { ret.str == self }
-    def bytes() -> StringBytes {
-        return StringBytes{self};
+    def bytes() -> StringBytesList {
+        return StringBytesList{self};
     } ~> { ret.str == self }
     def iterator() -> ConstantTimeIterator[Character] {
         return StringIterator{self};
@@ -318,22 +298,20 @@ class SplitStringIterator extends Iterator[String] {
         bytes = Buffer[i8].new(n_bytes);
         n_chars = 0;
 
-        i = 0;
-        while i < n_bytes {
+        for i in 0..n_bytes {
             byte = @source.unchecked_index(start + i);
             bytes.[i] = byte;
-            if not UTF8.is_continuation(byte as i32) { n_chars = n_chars + 1; }
-            i = i + 1;
+            if UTF8.is_continuation(byte) { continue; }
+            n_chars = n_chars + 1;
         }
 
         return String{bytes, n_bytes, n_chars, n_bytes};
     } ~> no_alias
 
     def find_delimiter(last_start : i32) -> i32? {
-        scan = @cursor;
-        while scan <= last_start {
-            if @source.bytes_match_at(@delimiter, scan) { return scan; }
-            scan = scan + 1;
+        source = @source.bytes();
+        for scan in @cursor...last_start {
+            if source.match_at(@delimiter, scan) { return scan; }
         }
         return nil;
     } ~> no_alias
@@ -398,7 +376,118 @@ class StringCodePoints extends List[i32] {
     } ~> { ret.string == @str, ret.dest_reg == @elems_reg }
 }
 
-class StringBytes extends List[i8] {
+class StringBytes extends Collection[i8] {
+    abstract def source() -> String {}
+    abstract def start() -> i32 {}
+    abstract def end() -> i32 {}
+
+    def size() -> i32 {
+        return self.end() - self.start();
+    }
+
+    def iterator() -> ConstantTimeIterator[i8] {
+        return StringBytesIterator{self};
+    } ~> { ret.bytes == self }
+
+    def bounds_check(index : i32) yields OutOfBounds {
+        length = self.size();
+        if index < 0 or index >= length {
+            yield(OutOfBounds.new(length, index));
+        }
+    }
+
+    def unchecked_index(index : i32) -> i8 {
+        return self.source().unchecked_index(self.start() + index);
+    }
+
+    def [](indices : i32) -> i8 yields OutOfBounds {
+        self.bounds_check(indices);
+        return self.unchecked_index(indices);
+    }
+
+    def [](indices : Range) -> StringBytes {
+        iterator = indices.iterator();
+        first = iterator.next();
+        if first is not i32 { return self.slice(0, 0); }
+
+        last = first;
+        next = iterator.next();
+        while next is i32 {
+            if next != last + 1 { yield(InvalidSliceRange{}); }
+            last = next;
+            next = iterator.next();
+        }
+        return self.slice(first, last + 1);
+    }
+
+    def slice(start : i32, end_exclusive : i32) -> StringBytes yields OutOfBounds {
+        length = self.size();
+        if start < 0 or start > length {
+            yield(OutOfBounds.new(length, start));
+        }
+        if end_exclusive < start or end_exclusive > length {
+            yield(OutOfBounds.new(length, end_exclusive));
+        }
+        base = self.start();
+        source = self.source();
+        return StringBytesView{source, base + start, base + end_exclusive};
+    }
+
+    def match_at(needle : String, start : i32) -> Bool {
+        if start < 0 { return false; }
+        needle_len = needle.byte_length();
+        if start + needle_len > self.size() { return false; }
+        for i in 0..needle_len {
+            left = self.unchecked_index(start + i);
+            if left != needle.unchecked_index(i) { return false; }
+        }
+        return true;
+    } ~> no_alias
+
+    def contains(needle : String) -> Bool {
+        return self.index_of(needle) is i32;
+    }
+
+    def index_of(needle : String) -> i32? {
+        needle_len = needle.byte_length();
+        if needle_len == 0 { return 0; }
+        length = self.size();
+        if needle_len > length { return nil; }
+        last_start = length - needle_len;
+        for start in 0..(last_start + 1) {
+            if self.match_at(needle, start) { return start; }
+        }
+        return nil;
+    }
+
+    def to_string() -> String yields InvalidUTF8Error {
+        source = self.source();
+        start = self.start();
+        end_exclusive = self.end();
+        source_len = source.byte_length();
+
+        if start < source_len {
+            start_byte = source.unchecked_index(start);
+            if UTF8.is_continuation(start_byte) { yield(InvalidUTF8Error{}); }
+        }
+        if end_exclusive < source_len {
+            end_byte = source.unchecked_index(end_exclusive);
+            if UTF8.is_continuation(end_byte) { yield(InvalidUTF8Error{}); }
+        }
+
+        n_bytes = self.size();
+        bytes = Buffer[i8].new(n_bytes);
+        n_chars = 0;
+        for i in 0..n_bytes {
+            byte = self.unchecked_index(i);
+            bytes.[i] = byte;
+            if not UTF8.is_continuation(byte) { n_chars = n_chars + 1; }
+        }
+        return String{bytes, n_bytes, n_chars, n_bytes};
+    }
+}
+
+class StringBytesList extends StringBytes, List[i8] {
     @str : String
 
     regions { @elems_reg == @str.elems_reg }
@@ -411,11 +500,14 @@ class StringBytes extends List[i8] {
     }
     def init(@str : String) {
     }
-    def size() -> i32 {
-        return @str.byte_length();
+    def source() -> String {
+        return @str;
     }
-    def iterator() -> ConstantTimeIterator[i8] {
-        return StringBytesIterator{@str};
+    def start() -> i32 {
+        return 0;
+    }
+    def end() -> i32 {
+        return @str.byte_length();
     }
     def append(x : i8) -> Self {
         self.writer().write(x);
@@ -428,124 +520,26 @@ class StringBytes extends List[i8] {
     def writer() -> Writer[i8] {
         return StringByteWriter{@str};
     } ~> { ret.string == @str, ret.dest_reg == @elems_reg }
-
-    def bounds_check(index : i32) yields OutOfBounds {
-        length = @str.byte_length();
-        if index < 0 or index >= length {
-            yield(OutOfBounds.new(length, index));
-        }
-    }
-
-    def [](indices : i32) -> i8 yields OutOfBounds {
-        self.bounds_check(indices);
-        return @str.unchecked_index(indices);
-    }
-
-    def slice(start : i32, end_exclusive : i32) -> StringBytesView yields OutOfBounds {
-        length = @str.byte_length();
-        if start < 0 or start > length { yield(OutOfBounds.new(length, start)); }
-        if end_exclusive < start or end_exclusive > length {
-            yield(OutOfBounds.new(length, end_exclusive));
-        }
-        return StringBytesView{@str, start, end_exclusive};
-    }
-
-    def [](indices : Range) -> StringBytesView {
-        iterator = indices.iterator();
-        first = iterator.next();
-        if first is not i32 { return self.slice(0, 0); }
-
-        last = first;
-        next = iterator.next();
-        while next is i32 {
-            if next != last + 1 { yield(InvalidSliceRange{}); }
-            last = next;
-            next = iterator.next();
-        }
-        return self.slice(first, last + 1);
-    }
-
 }
 
-class StringBytesView extends Collection[i8] {
+class StringBytesView extends StringBytes {
     @str : String
     @start : i32
     @end_exclusive : i32
 
     regions { @elems_reg == @str.elems_reg }
 
-    getters @str, @start, @end_exclusive
+    getter @start
 
     def init(@str : String, @start : i32, @end_exclusive : i32) {
     }
 
-    def size() -> i32 {
-        return @end_exclusive - @start;
+    def source() -> String {
+        return @str;
     }
-
-    def iterator() -> ConstantTimeIterator[i8] {
-        return StringBytesViewIterator{self};
+    def end() -> i32 {
+        return @end_exclusive;
     }
-
-    def bounds_check(index : i32) yields OutOfBounds {
-        length = self.size();
-        if index < 0 or index >= length {
-            yield(OutOfBounds.new(length, index));
-        }
-    }
-
-    def [](indices : i32) -> i8 yields OutOfBounds {
-        self.bounds_check(indices);
-        return @str.unchecked_index(@start + indices);
-    }
-
-    def [](indices : Range) -> StringBytesView {
-        iterator = indices.iterator();
-        first = iterator.next();
-        if first is not i32 { return self.slice(0, 0); }
-
-        last = first;
-        next = iterator.next();
-        while next is i32 {
-            if next != last + 1 { yield(InvalidSliceRange{}); }
-            last = next;
-            next = iterator.next();
-        }
-        return self.slice(first, last + 1);
-    }
-
-    def slice(start : i32, end_exclusive : i32) -> StringBytesView yields OutOfBounds {
-        length = self.size();
-        if start < 0 or start > length { yield(OutOfBounds.new(length, start)); }
-        if end_exclusive < start or end_exclusive > length {
-            yield(OutOfBounds.new(length, end_exclusive));
-        }
-        return StringBytesView{@str, @start + start, @start + end_exclusive};
-    }
-
-    def to_string() -> String yields InvalidUTF8Error {
-        source_len = @str.byte_length();
-
-        if @start < source_len {
-            start_byte = @str.unchecked_index(@start);
-            if UTF8.is_continuation(start_byte as i32) { yield(InvalidUTF8Error{}); }
-        }
-        if @end_exclusive < source_len {
-            end_byte = @str.unchecked_index(@end_exclusive);
-            if UTF8.is_continuation(end_byte as i32) { yield(InvalidUTF8Error{}); }
-        }
-
-        n_bytes = self.size();
-        bytes = Buffer[i8].new(n_bytes);
-        n_chars = 0;
-        for i in 0..n_bytes {
-            byte = @str.unchecked_index(@start + i);
-            bytes.[i] = byte;
-            if not UTF8.is_continuation(byte as i32) { n_chars = n_chars + 1; }
-        }
-        return String{bytes, n_bytes, n_chars, n_bytes};
-    }
-
 }
 
 // Iterator can trust that the source string is valid.
@@ -564,34 +558,20 @@ class StringIterator extends ConstantTimeIterator[Character] {
 }
 
 class StringBytesIterator extends ConstantTimeIterator[i8] {
-    @str : String
+    @bytes : StringBytes
     @cursor : i32
 
-    def init(@str : String) {
+    regions { @elems_reg == @bytes.elems_reg }
+
+    getter @bytes
+
+    def init(@bytes : StringBytes) {
         @cursor = 0;
     }
 
     def next() -> i8? {
-        if @cursor >= @str.byte_length() { return nil; }
-        next = @str.unchecked_index(@cursor);
-        @cursor = @cursor + 1;
-        return next;
-    }
-}
-
-class StringBytesViewIterator extends ConstantTimeIterator[i8] {
-    @view : StringBytesView
-    @cursor : i32
-
-    regions { @elems_reg == @view.elems_reg }
-
-    def init(@view : StringBytesView) {
-        @cursor = 0;
-    }
-
-    def next() -> i8? {
-        if @cursor >= @view.size() { return nil; }
-        next = @view.str().unchecked_index(@view.start() + @cursor);
+        if @cursor >= @bytes.size() { return nil; }
+        next = @bytes.unchecked_index(@cursor);
         @cursor = @cursor + 1;
         return next;
     }
@@ -832,9 +812,7 @@ class UTF8BytesValidator {
         while n_written < max_elems {
             b1 = peeker.next();
             if b1 is Nil { return n_written; }
-            tuple = UTF8.classify_lead(b1 as i32);
-            codepoint = tuple.[0];
-            bytes_needed = tuple.[1];
+            (codepoint, bytes_needed) = UTF8.classify_lead(b1);
 
             // Check for invalid start byte
             if bytes_needed == 0 {
@@ -856,14 +834,13 @@ class UTF8BytesValidator {
             for i in 1..bytes_needed {
                 b_next = peeker.peek();
                 if b_next is Nil { return n_written; }
-                b_next_i32 = b_next as i32;
-                if not UTF8.is_continuation(b_next_i32) {
+                if not UTF8.is_continuation(b_next) {
                     valid_bytes = false;
                     break;
                 }
                 peeker.next();
                 temp_buf.[i] = b_next;
-                codepoint = UTF8.accumulate(codepoint, b_next_i32);
+                codepoint = UTF8.accumulate(codepoint, b_next);
             }
 
             if (not valid_bytes) or (not UTF8.is_valid_codepoint(codepoint, bytes_needed)) {
@@ -920,26 +897,22 @@ class UTF8Decoder extends ConstantTimeIterator[i32] {
     def next() -> i32? {
         b1 = @peeker.next();
         if b1 is Nil { return nil; }
-        b1 = b1 as i32;
-        tuple = UTF8.classify_lead(b1);
-        codepoint = tuple.[0];
-        bytes_needed = tuple.[1];
+        (codepoint, bytes_needed) = UTF8.classify_lead(b1);
 
         // Check for invalid start byte
-        if bytes_needed == 0 { return @replacement_fn.call(b1 as i8); }
+        if bytes_needed == 0 { return @replacement_fn.call(b1); }
 
         for i in 1..bytes_needed {
             b_next = @peeker.peek();
             if b_next is Nil { return nil; }
-            b_next = b_next as i32;
             if not UTF8.is_continuation(b_next) { // Invalid continuation byte
-                return @replacement_fn.call(b1 as i8);
+                return @replacement_fn.call(b1);
             }
             codepoint = UTF8.accumulate(codepoint, b_next);
             b_next = @peeker.next();            // Advance, now that known valid
         }
         
-        if not UTF8.is_valid_codepoint(codepoint, bytes_needed) { return @replacement_fn.call(b1 as i8); }
+        if not UTF8.is_valid_codepoint(codepoint, bytes_needed) { return @replacement_fn.call(b1); }
 
         return codepoint;
     }
@@ -1042,10 +1015,10 @@ def report_exception(current_coroutine : Coroutine[() -> Exception]) {
 // It is the lowest-level abstraction over a raw Buffer
 class Slice[T] extends IndexableCollection[i32, T, T] {
     
-    // Having a @start_index makes Slice useful for views into pre-existing buffers
+    // Having a @start makes Slice useful for views into pre-existing buffers
     @buffer : Buffer[T]
     @length : i32
-    @start_index : i32
+    @start : i32
 
     regions { @elems_reg == @buffer }
 
@@ -1060,10 +1033,10 @@ class Slice[T] extends IndexableCollection[i32, T, T] {
         return Slice{buf, collection_size, 0};
     } ~> { ret.elems_reg holds collection.elems_reg }
 
-    def init(@buffer : Buffer[T], @length : i32, @start_index : i32) {
+    def init(@buffer : Buffer[T], @length : i32, @start : i32) {
     }
     def init(@buffer : Buffer[T], @length : i32) {
-        @start_index = 0;
+        @start = 0;
     }
     def size() -> i32 {
         return @length;
@@ -1075,10 +1048,10 @@ class Slice[T] extends IndexableCollection[i32, T, T] {
         return self;
     }
     def unchecked_index(index : i32) -> T {
-        return @buffer.[@start_index + index];
+        return @buffer.[@start + index];
     } ~> { ret holds @elems_reg }
     def unchecked_insert(index : i32, value : T) {
-        @buffer.[@start_index + index] = value;
+        @buffer.[@start + index] = value;
     } ~> { @elems_reg holds value }
     def [](index : i32) -> T yields OutOfBounds {
         self.bounds_check(index);

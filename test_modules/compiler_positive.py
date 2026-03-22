@@ -550,10 +550,8 @@ class CompilerPositiveTestsMixin:
         mini_code = """
             import std;
 
-            raw = Path{"./foo//bar/../baz.txt"};
-            IO.print(raw.to_string());
+            normalized = Path{"./foo//bar/../baz.txt"};
 
-            normalized = raw.normalize();
             IO.print(normalized.to_string());
             IO.print(normalized.is_absolute());
             IO.print(normalized.basename());
@@ -566,15 +564,14 @@ class CompilerPositiveTestsMixin:
             joined = normalized.dirname().join("qux.log");
             IO.print(joined.to_string());
         """
-        expected_output = "./foo//bar/../baz.txt\nfoo/baz.txt\nfalse\nbaz.txt\nfoo\nbaz\n.txt\nfoo/qux.log"
+        expected_output = "foo/baz.txt\nfalse\nbaz.txt\nfoo\nbaz\n.txt\nfoo/qux.log"
         self.run_mini_code(mini_code, expected_output, "path_object_basics")
 
     def test_path_object_components_and_join(self):
         mini_code = """
             import std;
 
-            mixed = Path{"alpha\\\\beta\\\\..\\\\gamma.tar.gz"};
-            clean = mixed.normalize();
+            clean = Path{"alpha\\\\beta\\\\..\\\\gamma.tar.gz"};
             IO.print(clean.to_string());
             for part in clean.components() { IO.print(part); }
 
@@ -585,14 +582,36 @@ class CompilerPositiveTestsMixin:
             base = Path{"foo/bar"};
             IO.print(base.join("/abs//x").to_string());
 
-            rooted = Path{"/tmp//logs/"}.normalize();
+            rooted = Path{"/tmp//logs/"};
             IO.print(rooted.to_string());
             IO.print(rooted.parent().to_string());
 
-            IO.print(Path{"../../a/../b"}.normalize().to_string());
+            IO.print(Path{"../../a/../b"}.to_string());
         """
         expected_output = "alpha/gamma.tar.gz\nalpha\ngamma.tar.gz\nalpha/gamma.tar.bin\nalpha/gamma.tar.zip\n/abs/x\n/tmp/logs\n/tmp\n../../b"
         self.run_mini_code(mini_code, expected_output, "path_object_components_and_join")
+
+    def test_path_special_extension(self):
+        mini_code = """
+            import std;
+
+            IO.print(Path{"."}.with_extension("txt").to_string());
+            IO.print(Path{".."}.with_extension("txt").to_string());
+            IO.print(Path{"/"}.with_extension("txt").to_string());
+            IO.print(Path{".."}.basename());
+            IO.print(Path{".."}.dirname().to_string());
+            IO.print(Path{"/tmp"}.basename());
+            IO.print(Path{"/tmp"}.dirname().to_string());
+            IO.print(Path{"foo/bar"}.join("../baz").to_string());
+            IO.print(Path{".gitignore"}.stem());
+
+            hidden_ext = Path{".gitignore"}.extension();
+            if hidden_ext is String { IO.print(hidden_ext); } else { IO.print("nil"); }
+
+            IO.print(Path{"foo.tar.gz"}.with_extension("").to_string());
+        """
+        expected_output = ".\n..\n/\n..\n.\ntmp\n/\nfoo/baz\n.gitignore\nnil\nfoo.tar"
+        self.run_mini_code(mini_code, expected_output, "path_special_extension")
 
     def test_mutated_branch(self):
         mini_code = """
@@ -639,27 +658,27 @@ class CompilerPositiveTestsMixin:
         expected_output = "true\ntrue\ntrue\nfalse\ntrue"
         self.run_mini_code(mini_code, expected_output, "string_search_helpers")
 
-    def test_string_byte_index_of(self):
+    def test_string_bytes_index_of(self):
         mini_code = """
             import core;
             import io;
 
             text = "电脑abc电脑";
 
-            idx1 = text.byte_index_of("电");
+            idx1 = text.bytes().index_of("电");
             if idx1 is i32 { IO.print(idx1); } else { IO.print("nil"); }
 
-            idx2 = text.byte_index_of("abc");
+            idx2 = text.bytes().index_of("abc");
             if idx2 is i32 { IO.print(idx2); } else { IO.print("nil"); }
 
-            idx3 = text.byte_index_of("脑a");
+            idx3 = text.bytes().index_of("脑a");
             if idx3 is i32 { IO.print(idx3); } else { IO.print("nil"); }
 
-            idx4 = text.byte_index_of("xyz");
+            idx4 = text.bytes().index_of("xyz");
             if idx4 is i32 { IO.print(idx4); } else { IO.print("nil"); }
         """
         expected_output = "0\n6\n3\nnil"
-        self.run_mini_code(mini_code, expected_output, "string_byte_index_of")
+        self.run_mini_code(mini_code, expected_output, "string_bytes_index_of")
 
     def test_string_bytes_view_slice(self):
         mini_code = """

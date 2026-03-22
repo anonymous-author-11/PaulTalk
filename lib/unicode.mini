@@ -3,10 +3,12 @@ import builtins;
 class UTF8 {
 
     // returns (codepoint_seed, bytes_needed)
-    def Self.classify_lead(b1 : i32) -> Tuple[i32, i32] {
+    def Self.classify_lead(b1 : i8) -> Tuple[i32, i32] {
 
         // these bit patterns are mutually exclusive
         // LLVM will see that the conditions are disjoint
+
+        b1 = b1 as i32;
 
         if (b1 bit_and 0x80) == 0 { return (b1, 1); } // 0xxxxxxx
         if (b1 bit_and 0xE0) == 0xC0 { return (b1 bit_and 0x1F, 2); } // 110xxxxx
@@ -15,12 +17,12 @@ class UTF8 {
         return (0, 0);
     }
 
-    def Self.is_continuation(b : i32) -> Bool {
-        return (b bit_and 0xC0) == 0x80;
+    def Self.is_continuation(b : i8) -> Bool {
+        return ((b as i32) bit_and 0xC0) == 0x80;
     }
 
-    def Self.accumulate(codepoint : i32, b_next : i32) -> i32 {
-        return (codepoint << 6) bit_or (b_next bit_and 0x3F);
+    def Self.accumulate(codepoint : i32, b_next : i8) -> i32 {
+        return (codepoint << 6) bit_or ((b_next as i32) bit_and 0x3F);
     }
 
     // Check for overlong encodings and other invalid sequences

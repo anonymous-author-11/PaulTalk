@@ -151,7 +151,7 @@ def line_text_at(source : String, line_number : i32) -> String {
 
 def trim_trailing_cr(text : String) -> String {
     if not text.ends_with("\r") { return text; }
-    return text.bytes().slice(0, text.byte_length() - 1) into String;
+    return text.slice_bytes(0, text.byte_length() - 1);
 }
 
 def format_parse_error(source : String, error : ParseError) -> String {
@@ -263,7 +263,7 @@ class PaulTalkLexer {
     }
 
     def slice_from(start : i32) -> String {
-    	return @source.bytes().slice(start, @cursor).to_string();
+    	return @source.slice_bytes(start, @cursor);
     }
 
     def skip_ignored() {
@@ -1035,11 +1035,11 @@ class PaulTalkParser {
         if lexeme.byte_length() < 2 { return literal; }
         start = 1;
         finish = lexeme.byte_length() - 1;
-        text = lexeme.bytes().slice(start, finish).to_string();
+        text = lexeme.bytes().slice(start, finish);
         if not text.contains("\${") { return literal; }
 
         node = ParseNode{"string_literal", "", token.line(), token.column()};
-        size = text.byte_length();
+        size = text.size();
         cursor = 0;
         chunk_start = 0;
         found_interp = false;
@@ -1047,7 +1047,7 @@ class PaulTalkParser {
             is_escape = text.unchecked_index(cursor) == ('\\' as i8);
             if is_escape { cursor = cursor + 2; }
             if is_escape { continue; }
-            is_open = self.is_interp_open(text, cursor, size);
+            is_open = self.is_interp_open(text, cursor);
             if not is_open { cursor = cursor + 1; }
             if not is_open { continue; }
 
@@ -1060,7 +1060,7 @@ class PaulTalkParser {
             if bad_interp { return node; }
 
             found_interp = true;
-            expr = text.bytes().slice(expr_start, expr_end).to_string();
+            expr = text.slice(expr_start, expr_end).to_string();
             node.add(self.parse_string_interp(expr, token));
             cursor = expr_end + 1;
             chunk_start = cursor;
@@ -1071,8 +1071,8 @@ class PaulTalkParser {
         return node;
     }
 
-    def find_interp_end(text : String, start : i32) -> i32 {
-        size = text.byte_length();
+    def find_interp_end(text : StringBytes, start : i32) -> i32 {
+        size = text.size();
         depth = 1;
         cursor = start;
         while cursor < size {
@@ -1084,7 +1084,7 @@ class PaulTalkParser {
             has_quote = quote_skip >= 0;
             if has_quote { cursor = quote_skip; }
             if has_quote { continue; }
-            comment_skip = self.comment_skip_target(text, cursor, size);
+            comment_skip = self.comment_skip_target(text, cursor);
             has_comment = comment_skip >= 0;
             if has_comment { cursor = comment_skip; }
             if has_comment { continue; }
@@ -1102,19 +1102,20 @@ class PaulTalkParser {
         return -1;
     }
 
-    def is_interp_open(text : String, cursor : i32, size : i32) -> Bool {
+    def is_interp_open(text : StringBytes, cursor : i32) -> Bool {
         if text.unchecked_index(cursor) != ('$' as i8) { return false; }
+        size = text.size();
         if cursor + 1 >= size { return false; }
         return text.unchecked_index(cursor + 1) == ('{' as i8);
     }
 
-    def add_chunk(n : ParseNode, s : String, a : i32, b : i32, t : Token) {
+    def add_chunk(n : ParseNode, s : StringBytes, a : i32, b : i32, t : Token) {
         if a >= b { return; }
-        chunk = s.bytes().slice(a, b).to_string();
+        chunk = s.slice(a, b).to_string();
         n.add(ParseNode{"string_text", chunk, t.line(), t.column()});
     }
 
-    def quote_skip_target(text : String, cursor : i32, byte : i8) -> i32 {
+    def quote_skip_target(text : StringBytes, cursor : i32, byte : i8) -> i32 {
         if byte == ('"' as i8) {
             return self.skip_quoted(text, cursor, '"' as i8);
         }
@@ -1124,7 +1125,8 @@ class PaulTalkParser {
         return -1;
     }
 
-    def comment_skip_target(text : String, cursor : i32, size : i32) -> i32 {
+    def comment_skip_target(text : StringBytes, cursor : i32) -> i32 {
+        size = text.size();
         if cursor + 1 >= size { return -1; }
         if text.unchecked_index(cursor) != ('/' as i8) { return -1; }
         next = text.unchecked_index(cursor + 1);
@@ -1137,8 +1139,8 @@ class PaulTalkParser {
         return -1;
     }
 
-    def skip_quoted(text : String, start : i32, quote : i8) -> i32 {
-        size = text.byte_length();
+    def skip_quoted(text : StringBytes, start : i32, quote : i8) -> i32 {
+        size = text.size();
         cursor = start + 1;
         while cursor < size {
             byte = text.unchecked_index(cursor);
@@ -1151,8 +1153,8 @@ class PaulTalkParser {
         return size;
     }
 
-    def skip_line_comment(text : String, start : i32) -> i32 {
-        size = text.byte_length();
+    def skip_line_comment(text : StringBytes, start : i32) -> i32 {
+        size = text.size();
         cursor = start;
         while cursor < size {
             if text.unchecked_index(cursor) == ('\n' as i8) { return cursor; }
@@ -1161,8 +1163,8 @@ class PaulTalkParser {
         return size;
     }
 
-    def skip_block_comment(text : String, start : i32) -> i32 {
-        size = text.byte_length();
+    def skip_block_comment(text : StringBytes, start : i32) -> i32 {
+        size = text.size();
         cursor = start;
         while cursor + 1 < size {
             left = text.unchecked_index(cursor);

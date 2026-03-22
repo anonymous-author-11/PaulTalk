@@ -722,7 +722,7 @@ TODO:
 
 - Have codex investigate some longstanding quandaries
 	- Why does it crash at O0?
-	- Why the aarch64 layout?
+	- Why the aarch64 layout? (160:64 default instead of i160:128)
 
 - Delete run_opt
 - Delete llvm_link
@@ -1067,8 +1067,7 @@ TODO:
 		- Justification
 			- The "privateness" of a class / function is not intrinsic
 			- You might want to export a class from one file and not from another
-		- Export local definitions by default
-		- Don't export imports by default
+		- Export everything by default
 		- There's a difference between symbol visibility and data accessibility
 			- Files / export lists used for symbol visibility control; classes for data accessibility
 			- What is encapsulated is static (symbol visibility) vs dynamic (data accessibility)
@@ -1252,13 +1251,8 @@ TODO:
 
 # --- Known Bugs ---
 
-- paultalk_parser line 213, type inference bug
-	- Should be able to return @tokens.append(...) directly
 - Why does it crash at O0?
 - You could probably see what's going wrong with O0 by seeing the asm for passing a fatptr vs type-param
-- Pair.swapped leads to infinite recursion in type substitution
-- Bug in primesieve.mini where I was able to insert a NaiveSieve into the map without making it extend PrimeSieve
-	- Must be something wrong in behavior.applicable
 - Union involving Tuple is clearly broken
 - Obviously there is an issue with nil-initialized buffer in swiss_table.mini.
 - Check if a method's definition has different param base types than its behavior
@@ -1285,6 +1279,8 @@ TODO:
 	- In particular, casting Tuple[i32, i32] | Nil to Tuple[Any, Any] | Nil will be incorrect
 	- Generally subtyping between value types of different size is fraught
 - Interface codegenning a method may create a signature mismatch with the original due to different behavior signatures
+- Bug in primesieve.mini where I was able to insert a NaiveSieve into the map without making it extend PrimeSieve [fixed!]
+- Pair.swapped leads to infinite recursion in type substitution [fixed!]
 - There's a bug in lowering early returns in else clauses [fixed!]
 - Casting to/from Object in unions is not correct [fixed!]
 - .all() is clearly not correct [fixed!]
