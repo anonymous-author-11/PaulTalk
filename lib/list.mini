@@ -20,7 +20,8 @@ class List[T] extends Collection[T] {
     // iterator.next() should be O(1)
     abstract def iterator() -> ConstantTimeIterator[T] {}
 
-    // we do not provide List.set(index, value), as String for example cannot fulfill it
+    // we do not provide List.set(index, value)
+    // mutating the middle of the list maybe be impossible for some subtypes
 
     def length() -> i32 {
         return self.size();
@@ -34,8 +35,11 @@ class List[T] extends Collection[T] {
 
     // O(size) time complexity
     def last() -> T? {
-    	return self.get(self.size() - 1);
+    	return self.at(self.size() - 1);
     }
+
+    // .at(index) has O(index) time complexity
+    // .index_of has O(index) time complexity
 
     // No time complexity guarantees
     def extend(other : Iterator[T]) -> Self {
@@ -53,22 +57,6 @@ class List[T] extends Collection[T] {
         return self;
     }
 
-    // O(index) time complexity
-    def get(index : i32) -> T? {
-    	if index >= self.size() { return nil; }
-    	for (first, second) in self.enumerate() {
-    		if first == index { return second; }
-    	}
-    }
-
-    // O(index) time complexity
-    def index_of(target : T, eq : (T, T) -> Bool) -> i32? {
-    	if self.is_empty() { return nil; }
-    	for (first, second) in self.enumerate() {
-    		if eq.call(second, target) { return first; }
-    	}
-    	return nil;
-    }
     def writer() -> Writer[T] {
         return ListWriter{self};
     } ~> { ret holds self, ret.dest_reg == @elems_reg }
