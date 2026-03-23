@@ -3605,7 +3605,21 @@ class Method:
         if self._overridden_methods: return self._overridden_methods
         candidates = (definition for definition in self.cls.parents_methods() if definition.name == self.definition.name)
         candidates = (definition for definition in candidates if definition.arity == self.definition.arity)
-        candidates = (candidate for candidate in candidates if self.definition.arity == 0 or all(a == self.cls.type_env.simplify(candidate.defining_class.type_env.simplify(b)) for (a,b) in zip(self.param_types(), candidate.param_types())))
+        if self.definition.arity == 0:
+            if isinstance(self.definition, AbstractMethodDef): candidates = (candidate for candidate in candidates if isinstance(candidate, AbstractMethodDef))
+            self._overridden_methods = [*candidates]
+            return self._overridden_methods
+        param_types = self.param_types()
+        matched = []
+        for candidate in candidates:
+            if candidate.defining_class == self.definition.defining_class: continue
+            if not self.cls.type_env.subtype(self.definition.defining_class.type(), candidate.defining_class.type()): continue
+            type_env = TypeEnvironment(self.cls.type_env)
+            for t in candidate.type_params: type_env.add_alias(FatPtr.basic(t.label.data), t)
+            candidate_param_types = [type_env.simplify(candidate.defining_class.type_env.simplify(param._type)) for param in candidate.params]
+            if not all(self.type_env.matches(a, b) and self.type_env.matches(b, a) for (a, b) in zip(param_types, candidate_param_types)): continue
+            matched.append(candidate)
+        candidates = matched
         if isinstance(self.definition, AbstractMethodDef):
             candidates = (candidate for candidate in candidates if isinstance(candidate, AbstractMethodDef))
         self._overridden_methods = [*candidates]
