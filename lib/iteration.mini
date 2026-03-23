@@ -67,6 +67,21 @@ class Iterable[T] {
         for x in self { if f.call(x) { return x; } }
         return nil;
     }
+
+    def at(index : i32) -> T? {
+        if index < 0 { return nil; }
+        for (i, x) in self.enumerate() {
+            if i == index { return x; }
+        }
+        return nil;
+    }
+
+    def index_of(target : T, eq : (T, T) -> Bool) -> i32? {
+        for (i, x) in self.enumerate() {
+            if eq.call(x, target) { return i; }
+        }
+        return nil;
+    }
     
     def enumerate() -> Iterable[Pair[i32, T]] {
         return Enumerated{self};
