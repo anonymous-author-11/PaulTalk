@@ -1,0 +1,161 @@
+import core;
+import store;
+
+class KeyNotFound extends Exception {}
+
+class Entry[K, V] {
+    @key : K
+    @value : V
+
+    getters @key, @value
+    setter @value
+
+    def init(@key : K, @value : V) {}
+
+    def to_pair() -> Pair[K, V] {
+        return Pair{@key, @value};
+    } ~> { ret.first == @key, ret.second == @value }
+}
+
+class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
+    abstract def get(key : K) -> V? {}
+    abstract def insert(key : K, value : V) {}
+    abstract def remove(key : K) -> V? {}
+
+    def indices() -> Collection[K] {
+        return self.keys();
+    }
+
+    def keys() -> Collection[K] {
+        return self.map((pair : Pair[K, V]) => { pair.first(); });
+    }
+
+    def values() -> Collection[V] {
+        return self.map((pair : Pair[K, V]) => { pair.second(); });
+    }
+
+    def clear() {
+        for key in self.keys() { self.remove(key); }
+    }
+
+    def contains_key(key : K) -> Bool {
+        return self.get(key) is V;
+    }
+
+    def contains(pair : Pair[K, V], eq : (Pair[K, V], Pair[K, V]) -> Bool) -> Bool {
+        key = pair.first();
+        value = self.get(key);
+        if value is not V { return false; }
+        return eq.call(pair, Pair{key, value});
+    }
+
+    def get_or(key : K, fallback : V) -> V {
+        value = self.get(key);
+        if value is V { return value; }
+        return fallback;
+    }
+
+    def get_or_insert(key : K, fallback : V) -> V {
+        value = self.get(key);
+        if value is V { return value; }
+        self.insert(key, fallback);
+        return fallback;
+    }
+
+    def get_or_insert_with(key : K, fallback_fn : (K) -> V) -> V {
+        value = self.get(key);
+        if value is V { return value; }
+        fallback = fallback_fn.call(key);
+        self.insert(key, fallback);
+        return fallback;
+    }
+
+    def remove_or(key : K, fallback : V) -> V {
+        value = self.remove(key);
+        if value is V { return value; }
+        return fallback;
+    }
+
+    def update(key : K, f : (V) -> V) -> Bool {
+        value = self.get(key);
+        if value is not V { return false; }
+        self.insert(key, f.call(value));
+        return true;
+    }
+
+    def update_or_insert(key : K, update_fn : (V) -> V, fallback_fn : (K) -> V) -> V {
+        value = self.get(key);
+        if value is V {
+            updated = update_fn.call(value);
+            self.insert(key, updated);
+            return updated;
+        }
+        fallback = fallback_fn.call(key);
+        self.insert(key, fallback);
+        return fallback;
+    }
+
+    def [](key : K) -> V {
+        value = self.get(key);
+        if value is V { return value; }
+        yield(KeyNotFound{});
+    }
+
+    def []=(key : K, value : V) {
+        self.insert(key, value);
+    }
+}
+
+class HashMap[K, V] extends Map[K, V] {
+    @store : HashStore[K, Entry[K, V]]
+
+    regions { @elems_reg == @store.elems_reg }
+
+    abstract def init(hasher : (K) -> i32, eq : (K, K) -> Bool) {}
+
+    def size() -> i32 {
+        return @store.size();
+    }
+
+    def get(key : K) -> V? {
+        record = @store.get_record(key);
+        if record is not Entry[K, V] { return nil; }
+        return record.value();
+    }
+
+    def insert(key : K, value : V) {
+        @store.put_record(Entry{key, value});
+    }
+
+    def remove(key : K) -> V? {
+        record = @store.remove_record(key);
+        if record is not Entry[K, V] { return nil; }
+        return record.value();
+    }
+
+    def clear() {
+        @store.clear();
+    }
+
+    def iterator() -> Iterator[Pair[K, V]] {
+        return MapIterator{@store.iterator()};
+    }
+}
+
+class MapIterator[K, V] extends Iterator[Pair[K, V]] {
+    @records : Iterator[Entry[K, V]]
+
+    regions {
+        @elems_reg == @records.elems_reg,
+        @nxt.first == @records.nxt.key,
+        @nxt.second == @records.nxt.value
+    }
+
+    def init(@records : Iterator[Entry[K, V]]) {}
+
+    def next() -> Pair[K, V]? {
+        record = @records.next();
+        if record is not Entry[K, V] { return nil; }
+        return record.to_pair();
+    }
+}

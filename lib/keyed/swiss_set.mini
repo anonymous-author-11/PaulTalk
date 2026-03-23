@@ -1,0 +1,9 @@
+import set;
+import swiss_store;
+
+class SwissSet[T] extends HashSet[T] {
+    def init(hasher : (T) -> i32, eq : (T, T) -> Bool) {
+        key_of_fn = (value : T) => { value; };
+        @store = SwissStore{hasher, eq, key_of_fn};
+    }
+}

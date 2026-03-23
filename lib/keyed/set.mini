@@ -1,0 +1,44 @@
+import iteration;
+import collection;
+import store;
+
+class Set[T] extends Collection[T] {
+    abstract def contains(value : T) -> Bool {}
+    abstract def insert(value : T) -> Bool {}
+    abstract def remove(value : T) -> Bool {}
+    abstract def clear() {}
+}
+
+class HashSet[T] extends Set[T] {
+    @store : HashStore[T, T]
+
+    regions { @elems_reg == @store.elems_reg }
+
+    abstract def init(hasher : (T) -> i32, eq : (T, T) -> Bool) {}
+
+    def size() -> i32 {
+        return @store.size();
+    }
+
+    def contains(value : T) -> Bool {
+        return @store.contains_key(value);
+    }
+
+    def insert(value : T) -> Bool {
+        old_value = @store.put_record(value);
+        return old_value is not T;
+    }
+
+    def remove(value : T) -> Bool {
+        removed = @store.remove_record(value);
+        return removed is T;
+    }
+
+    def clear() {
+        @store.clear();
+    }
+
+    def iterator() -> Iterator[T] {
+        return @store.iterator();
+    }
+}

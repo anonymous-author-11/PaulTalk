@@ -1,0 +1,9 @@
+import keyed.map;
+import keyed.swiss_store;
+
+class SwissMap[K, V] extends HashMap[K, V] {
+    def init(hasher : (K) -> i32, eq : (K, K) -> Bool) {
+        key_of_fn = (record : Entry[K, V]) => { record.key(); };
+        @store = SwissStore{hasher, eq, key_of_fn};
+    }
+}
