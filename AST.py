@@ -3426,6 +3426,7 @@ class Method:
     def ensure_proper_init(self, body_scope):
         if self.definition.name != "init": return
         if isinstance(self.definition, ClassMethodDef): return
+        if isinstance(self.definition, AbstractMethodDef): return
         for field in self.cls.fields():
             if "@" not in field.declaration.name: continue
             declared_type = field.type()
