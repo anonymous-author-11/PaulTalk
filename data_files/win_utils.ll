@@ -23,7 +23,7 @@ define void @virtual_commit(ptr %allocation, i64 %size) optnone noinline {
 ; Define an OS-agnostic wrapper around VirtualProtect
 define void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite) {
   %oldProtect = alloca i32
-  %result = call i32 @VirtualProtect(ptr %tramp, i64 16, i32 64, ptr %oldProtect)
+  %result = call i32 @VirtualProtect(ptr %tramp, i64 24, i32 64, ptr %oldProtect)
   ret void
 }
 

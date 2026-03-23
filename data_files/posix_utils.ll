@@ -41,7 +41,7 @@ define void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind w
   %tramp_int = ptrtoint ptr %tramp to i64
   %page_start_int = and i64 %tramp_int, 0xFFFFFFFFFFFFF000 ; Mask to align down
   %offset_in_page = sub i64 %tramp_int, %page_start_int
-  %mprotect_len = add i64 %offset_in_page, 16
+  %mprotect_len = add i64 %offset_in_page, 24
   %page_start_ptr = inttoptr i64 %page_start_int to ptr
 
   ; Apply protection PROT_READ | PROT_WRITE | PROT_EXEC
