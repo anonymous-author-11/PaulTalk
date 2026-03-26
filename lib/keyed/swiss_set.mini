@@ -7,38 +7,38 @@ class SwissSet[T] extends HashSet[T] {
     }
 }
 
-class SwissSetStore[K] extends SwissStore[K, K] {
-    @keys : Buffer[K]
+class SwissSetStore[T] extends SwissStore[T, T, T] {
+    @keys : Buffer[T]
 
     regions { @elems_reg == @keys }
 
-    def init(@hasher : (K) -> i32, @eq : (K, K) -> Bool) {
+    def init(@hasher : (T) -> i32, @eq : (T, T) -> Bool) {
         initial_capacity = 8;
-        @keys = Buffer[K].new(initial_capacity);
+        @keys = Buffer[T].new(initial_capacity);
         @hashes = Buffer[i32].new(initial_capacity);
         @metadata = Buffer[i8].new(initial_capacity);
         @entries_len = initial_capacity;
         @size = 0;
     }
 
-    def record_at(index : i32) -> K {
+    def value_at(index : i32) -> T {
         return @keys.[index];
     }
 
-    def key_at(index : i32) -> K {
+    def key_at(index : i32) -> T {
         return @keys.[index];
     }
 
-    def set_record_at(index : i32, record : K) {
+    def set_value_at(index : i32, record : T) {
         @keys.[index] = record;
     }
 
-    def key_of(record : K) -> K {
-        return record;
+    def set_key_at(index : i32, record : T) {
+        @keys.[index] = record;
     }
 
     def reset_records(capacity : i32) {
-        @keys = Buffer[K].new(capacity);
+        @keys = Buffer[T].new(capacity);
     }
 
     def resize(new_capacity : i32) {
@@ -63,4 +63,36 @@ class SwissSetStore[K] extends SwissStore[K, K] {
         }
     }
 
+    def scan_next(start_cursor : i32) -> Pair[i32, T]? {
+        if start_cursor >= @entries_len { return nil; }
+
+        for cursor in start_cursor..@entries_len {
+            if (@metadata.[cursor] bit_and occupied_mask()) == 0 { continue; }
+            return Pair{cursor + 1, @keys.[cursor]};
+        }
+        return nil;
+    } ~> { ret.second holds @elems_reg }
+
+    def iterator() -> SwissSetStoreIterator[T] {
+        return SwissSetStoreIterator{self};
+    } ~> { ret.store == self }
+
+}
+
+class SwissSetStoreIterator[T] extends Iterator[T] {
+    @store : SwissSetStore[T]
+    @cursor : i32
+
+    regions { @elems_reg == @store.elems_reg }
+
+    def init(@store : SwissSetStore[T]) {
+        @cursor = 0;
+    }
+
+    def next() -> T? {
+        pair = @store.scan_next(@cursor);
+        if pair is Nil { return nil; }
+        (@cursor, entry) = pair;
+        return entry;
+    }
 }

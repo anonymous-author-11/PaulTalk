@@ -7,12 +7,11 @@ class SwissMap[K, V] extends HashMap[K, V] {
     }
 }
 
-class SwissMapStore[K, V] extends SwissStore[K, Entry[K, V]] {
+class SwissMapStore[K, V] extends SwissStore[K, V, Pair[K, V]] {
     @keys : Buffer[K]
     @values : Buffer[V]
-    @entry : Entry[K, V]?
 
-    regions { @elems_reg == @keys == @values == @entry }
+    regions { @elems_reg == @keys == @values }
 
     def init(@hasher : (K) -> i32, @eq : (K, K) -> Bool) {
         initial_capacity = 8;
@@ -21,33 +20,23 @@ class SwissMapStore[K, V] extends SwissStore[K, Entry[K, V]] {
         @hashes = Buffer[i32].new(initial_capacity);
         @metadata = Buffer[i8].new(initial_capacity);
         @entries_len = initial_capacity;
-        @entry = nil;
         @size = 0;
     }
 
-    def record_at(index : i32) -> Entry[K, V] {
-        entry = @entry;
-        if entry is Nil {
-            entry = Entry{@keys.[index], @values.[index]};
-            @entry = entry;
-            return entry;
-        }
-        entry.key() = @keys.[index];
-        entry.value() = @values.[index];
-        return entry;
+    def value_at(index : i32) -> V {
+        return @values.[index];
     }
 
     def key_at(index : i32) -> K {
         return @keys.[index];
     }
 
-    def set_record_at(index : i32, record : Entry[K, V]) {
-        @keys.[index] = record.key();
-        @values.[index] = record.value();
+    def set_value_at(index : i32, value : V) {
+        @values.[index] = value;
     }
 
-    def key_of(record : Entry[K, V]) -> K {
-        return record.key();
+    def set_key_at(index : i32, key : K) {
+        @keys.[index] = key;
     }
 
     def reset_records(capacity : i32) {
@@ -79,4 +68,37 @@ class SwissMapStore[K, V] extends SwissStore[K, Entry[K, V]] {
         }
     }
 
+    def scan_next(start_cursor : i32) -> Pair[i32, Pair[K, V]]? {
+        if start_cursor >= @entries_len { return nil; }
+
+        for cursor in start_cursor..@entries_len {
+            if (@metadata.[cursor] bit_and occupied_mask()) == 0 { continue; }
+            entry = Pair{@keys.[cursor], @values.[cursor]};
+            return Pair{cursor + 1, entry};
+        }
+        return nil;
+    } ~> { ret.second holds @elems_reg }
+
+    def iterator() -> SwissMapStoreIterator[K, V] {
+        return SwissMapStoreIterator{self};
+    } ~> { ret.store == self }
+
+}
+
+class SwissMapStoreIterator[K, V] extends Iterator[Pair[K, V]] {
+    @store : SwissMapStore[K, V]
+    @cursor : i32
+
+    regions { @elems_reg == @store.elems_reg }
+
+    def init(@store : SwissMapStore[K, V]) {
+        @cursor = 0;
+    }
+
+    def next() -> Pair[K, V]? {
+        pair = @store.scan_next(@cursor);
+        if pair is Nil { return nil; }
+        (@cursor, entry) = pair;
+        return entry;
+    }
 }

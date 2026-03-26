@@ -18,7 +18,7 @@ def h2_to_control(hash : i32) -> i8 {
     return (h2_6bit << 1) bit_or occupied_mask();
 }
 
-class SwissStore[K, R] extends HashStore[K, R] {
+class SwissStore[K, V, T] extends HashStore[K, V, T] {
     @hashes : Buffer[i32]
     @metadata : Buffer[i8]
     @entries_len : i32
@@ -29,17 +29,21 @@ class SwissStore[K, R] extends HashStore[K, R] {
     getter @size
 
     // We abstract from the actual storage of the records
-    abstract def record_at(index : i32) -> R {
+    abstract def value_at(index : i32) -> V {
     } ~> { ret holds @elems_reg }
 
-    abstract def set_record_at(index : i32, record : R) {
-    } ~> { @elems_reg holds record }
+    abstract def key_at(index : i32) -> K {
+    } ~> { ret holds @elems_reg }
+
+    abstract def set_value_at(index : i32, value : V) {
+    } ~> { @elems_reg holds value }
+
+    abstract def set_key_at(index : i32, key : K) {
+    } ~> { @elems_reg holds key }
 
     abstract def reset_records(capacity : i32) {}
 
     abstract def resize(new_capacity : i32) {}
-
-    abstract def key_of(record : R) -> K {}
 
     def hash(key : K) -> i32 {
         return @hasher.call(key);
@@ -47,10 +51,6 @@ class SwissStore[K, R] extends HashStore[K, R] {
 
     def same_key(left : K, right : K) -> Bool {
         return @eq.call(left, right);
-    }
-
-    def key_at(index : i32) -> K {
-        return self.key_of(self.record_at(index));
     }
 
     def matches_slot(index : i32, control : i8, key : K, hash : i32, h2_control : i8) -> Bool {
@@ -101,47 +101,47 @@ class SwissStore[K, R] extends HashStore[K, R] {
         self.resize(new_capacity);
     }
 
-    def get_record(key : K) -> R? {
+    def get_value(key : K) -> V? {
         if @size == 0 { return nil; }
         hash = self.hash(key);
         index = self.find_slot(key, hash);
         if (@metadata.[index] bit_and occupied_mask()) == 0 { return nil; }
-        record = self.record_at(index);
-        return record;
+        return self.value_at(index);
     }
 
-    def put_record(record : R) -> R? {
-        key = self.key_of(record);
+    def put_value(key : K, value : V) -> V? {
         hash = self.hash(key);
         self.ensure_capacity(@size + 1);
         index = self.find_slot(key, hash);
         was_empty = (@metadata.[index] bit_and occupied_mask()) == 0;
 
         if not was_empty {
-            old_record = self.record_at(index);
+            old_value = self.value_at(index);
             @metadata.[index] = h2_to_control(hash);
-            self.set_record_at(index, record);
+            self.set_key_at(index, key);
+            self.set_value_at(index, value);
             @hashes.[index] = hash;
-            return old_record;
+            return old_value;
         }
         
         @metadata.[index] = h2_to_control(hash);
-        self.set_record_at(index, record);
+        self.set_key_at(index, key);
+        self.set_value_at(index, value);
         @hashes.[index] = hash;
         @size = @size + 1;
         return nil;
     }
 
-    def remove_record(key : K) -> R? {
+    def remove_value(key : K) -> V? {
         if @size == 0 { return nil; }
         hash = self.hash(key);
         index = self.find_slot(key, hash);
         if (@metadata.[index] bit_and occupied_mask()) == 0 { return nil; }
-        record = self.record_at(index);
+        value = self.value_at(index);
         @metadata.[index] = deleted();
         @hashes.[index] = 0;
         @size = @size - 1;
-        return record;
+        return value;
     }
 
     def clear() {
@@ -153,36 +153,5 @@ class SwissStore[K, R] extends HashStore[K, R] {
         @size = 0;
     }
 
-    def scan_next(start_cursor : i32) -> Pair[i32, R]? {
-        if start_cursor >= @entries_len { return nil; }
-
-        for cursor in start_cursor..@entries_len {
-            if (@metadata.[cursor] bit_and occupied_mask()) == 0 { continue; }
-            record = self.record_at(cursor);
-            return Pair{cursor + 1, record};
-        }
-        return nil;
-    } ~> { ret.second holds @elems_reg }
-
-    def iterator() -> SwissStoreIterator[K, R] {
-        return SwissStoreIterator{self};
-    } ~> { ret.store == self }
 }
 
-class SwissStoreIterator[K, R] extends Iterator[R] {
-    @store : SwissStore[K, R]
-    @cursor : i32
-
-    regions { @elems_reg == @store.elems_reg }
-
-    def init(@store : SwissStore[K, R]) {
-        @cursor = 0;
-    }
-
-    def next() -> R? {
-        pair = @store.scan_next(@cursor);
-        if pair is Nil { return nil; }
-        (@cursor, record) = pair;
-        return record;
-    }
-}

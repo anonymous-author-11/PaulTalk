@@ -1,19 +1,17 @@
 import collection;
 
-class KeyedStore[K, R] extends Collection[R] {
-    abstract def key_of(record : R) -> K {}
-
-    abstract def get_record(key : K) -> R? {}
-    abstract def put_record(record : R) -> R? {}
-    abstract def remove_record(key : K) -> R? {}
+class KeyedStore[K, V, T] extends Collection[T] {
+    abstract def get_value(key : K) -> V? {}
+    abstract def put_value(key : K, value : V) -> V? {}
+    abstract def remove_value(key : K) -> V? {}
     abstract def clear() {}
 
     def contains_key(key : K) -> Bool {
-        return self.get_record(key) is R;
+        return self.get_value(key) is V;
     }
 }
 
-class HashStore[K, R] extends KeyedStore[K, R] {
+class HashStore[K, V, T] extends KeyedStore[K, V, T] {
     abstract def hash(key : K) -> i32 {}
     abstract def same_key(left : K, right : K) -> Bool {}
 }

@@ -3,22 +3,6 @@ import store;
 
 class KeyNotFound extends Exception {}
 
-class Entry[K, V] {
-    @key : K
-    @value : V
-
-    regions { self == @key == @value }
-
-    getters @key, @value
-    setters @key, @value
-
-    def init(@key : K, @value : V) {}
-
-    def to_pair() -> Pair[K, V] {
-        return Pair{@key, @value};
-    } ~> { ret.first == @key, ret.second == @value }
-}
-
 class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
     abstract def get(key : K) -> V? {}
     abstract def insert(key : K, value : V) {}
@@ -109,7 +93,7 @@ class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
 }
 
 class HashMap[K, V] extends Map[K, V] {
-    @store : HashStore[K, Entry[K, V]]
+    @store : HashStore[K, V, Pair[K, V]]
 
     regions { @elems_reg == @store.elems_reg }
 
@@ -120,19 +104,19 @@ class HashMap[K, V] extends Map[K, V] {
     }
 
     def get(key : K) -> V? {
-        record = @store.get_record(key);
-        if record is Nil { return nil; }
-        return record.value();
+        value = @store.get_value(key);
+        if value is Nil { return nil; }
+        return value;
     }
 
     def insert(key : K, value : V) {
-        @store.put_record(Entry{key, value});
+        @store.put_value(key, value);
     }
 
     def remove(key : K) -> V? {
-        record = @store.remove_record(key);
-        if record is Nil { return nil; }
-        return record.value();
+        value = @store.remove_value(key);
+        if value is Nil { return nil; }
+        return value;
     }
 
     def clear() {
@@ -140,24 +124,7 @@ class HashMap[K, V] extends Map[K, V] {
     }
 
     def iterator() -> Iterator[Pair[K, V]] {
-        return MapIterator{@store.iterator()};
+        return @store.iterator();
     }
 }
 
-class MapIterator[K, V] extends Iterator[Pair[K, V]] {
-    @records : Iterator[Entry[K, V]]
-
-    regions {
-        @elems_reg == @records.elems_reg,
-        @nxt.first == @records.nxt.key,
-        @nxt.second == @records.nxt.value
-    }
-
-    def init(@records : Iterator[Entry[K, V]]) {}
-
-    def next() -> Pair[K, V]? {
-        record = @records.next();
-        if record is Nil { return nil; }
-        return record.to_pair();
-    }
-}
