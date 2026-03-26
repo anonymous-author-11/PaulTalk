@@ -31,7 +31,7 @@ python tools/lint_ptalk_code.py core.mini path.mini
 python tools/lint_ai_changes.py parser.py test_modules/contracts.py
 
 # Compile single file
-python ptalk_compile.py input.mini -o output.exe --build-dir build
+python ptalk_compile.py input.mini -o out_dir/output.exe --build-dir temp_build
 
 # Build entire project
 python ptalk_build.py
@@ -50,6 +50,7 @@ python ptalk_build.py
 	- Don't contort your code to work around the bug
 - Reuse a build directory (temp_build) so that compilation can use cached artifacts
 	- Don't recompile the entire stdlib every time you want to compile a single file
+	- Don't compile executables into the build dir. Compile them into an output dir.
 - When asked to analyze or evaluate, "genuine" and "real" are banned as adjectives
 - If I ask you to analyze code, I am not just asking for a bug report
 	- If you don't report boilerplate, bad abstractions, dead code, that is a failure
