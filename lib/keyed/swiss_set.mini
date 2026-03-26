@@ -13,12 +13,15 @@ class SwissSetStore[T] extends SwissStore[T, T, T] {
     regions { @elems_reg == @keys }
 
     def init(@hasher : (T) -> i32, @eq : (T, T) -> Bool) {
-        initial_capacity = 8;
-        @keys = Buffer[T].new(initial_capacity);
-        @hashes = Buffer[i32].new(initial_capacity);
-        @metadata = Buffer[i8].new(initial_capacity);
-        @entries_len = initial_capacity;
+        entries_len = min_capacity();
+        capacity = padded_capacity(entries_len);
+        @keys = Buffer[T].new(entries_len);
+        @hashes = Buffer[i32].new(entries_len);
+        @metadata = Buffer[i8].new(capacity);
+        @entries_len = entries_len;
         @size = 0;
+
+        for i in entries_len..capacity { @metadata.[i] = padding(); }
     }
 
     def value_at(index : i32) -> T {
@@ -46,11 +49,7 @@ class SwissSetStore[T] extends SwissStore[T, T, T] {
         old_metadata = @metadata;
         old_hashes = @hashes;
         old_len = @entries_len;
-        self.reset_records(new_capacity);
-        @hashes = Buffer[i32].new(new_capacity);
-        @metadata = Buffer[i8].new(new_capacity);
-        @entries_len = new_capacity;
-        @size = 0;
+        self.reset_table(new_capacity);
 
         for i in 0..old_len {
             if (old_metadata.[i] bit_and occupied_mask()) == 0 { continue; }
@@ -71,28 +70,6 @@ class SwissSetStore[T] extends SwissStore[T, T, T] {
             return Pair{cursor + 1, @keys.[cursor]};
         }
         return nil;
-    } ~> { ret.second holds @elems_reg }
-
-    def iterator() -> SwissSetStoreIterator[T] {
-        return SwissSetStoreIterator{self};
-    } ~> { ret.store == self }
-
-}
-
-class SwissSetStoreIterator[T] extends Iterator[T] {
-    @store : SwissSetStore[T]
-    @cursor : i32
-
-    regions { @elems_reg == @store.elems_reg }
-
-    def init(@store : SwissSetStore[T]) {
-        @cursor = 0;
     }
 
-    def next() -> T? {
-        pair = @store.scan_next(@cursor);
-        if pair is Nil { return nil; }
-        (@cursor, entry) = pair;
-        return entry;
-    }
 }

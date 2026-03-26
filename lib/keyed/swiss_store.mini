@@ -13,6 +13,22 @@ def occupied_mask() -> i8 {
     return 1 as i8;
 }
 
+def group_width() -> i32 {
+    return 32;
+}
+
+def padding() -> i8 {
+    return -1 as i8;
+}
+
+def min_capacity() -> i32 {
+    return group_width() * 4;
+}
+
+def padded_capacity(entries_len : i32) -> i32 {
+    return entries_len + group_width();
+}
+
 def h2_to_control(hash : i32) -> i8 {
     h2_6bit = (hash >> 26) as i8;
     return (h2_6bit << 1) bit_or occupied_mask();
@@ -45,6 +61,9 @@ class SwissStore[K, V, T] extends HashStore[K, V, T] {
 
     abstract def resize(new_capacity : i32) {}
 
+    abstract def scan_next(start_cursor : i32) -> Pair[i32, T]? {
+    } ~> { ret.second holds @elems_reg }
+
     def hash(key : K) -> i32 {
         return @hasher.call(key);
     }
@@ -53,42 +72,78 @@ class SwissStore[K, V, T] extends HashStore[K, V, T] {
         return @eq.call(left, right);
     }
 
-    def matches_slot(index : i32, control : i8, key : K, hash : i32, h2_control : i8) -> Bool {
-        if control != h2_control { return false; }
+    def matches_slot(index : i32, key : K, hash : i32) -> Bool {
         if @hashes.[index] != hash { return false; }
         entry_key = self.key_at(index);
         return self.same_key(entry_key, key);
     }
 
     def find_slot(key : K, hash : i32) -> i32 {
-        capacity = @entries_len;
-        mask = capacity - 1;
-        start_index = hash bit_and mask;
-        h2_control = h2_to_control(hash);
-        first_tombstone = -1;
+        mask = @entries_len - 1;
+        h2 = h2_to_control(hash);
+        probe = hash bit_and mask;
+        tombstone = -1;
+        metadata = @metadata;
 
-        for probe_offset in 0..capacity {
-            index = (start_index + probe_offset) bit_and mask;
-            control = @metadata.[index];
-            if self.matches_slot(index, control, key, hash, h2_control) { return index; }
-            if (control bit_and occupied_mask()) != 0 { continue; }
-            is_empty = control == empty();
-            if is_empty and first_tombstone != -1 { return first_tombstone; }
-            if is_empty { return index; }
-            if first_tombstone == -1 { first_tombstone = index; }
+        first_control = metadata.[probe];
+        if first_control == empty() { return probe; }
+        if first_control == h2 {
+            if self.matches_slot(probe, key, hash) { return probe; }
         }
-        if first_tombstone != -1 { return first_tombstone; }
+
+        probe = probe + 1;
+        h2_splat = 32 of h2;
+        zero_splat = 32 of empty();
+        one_splat = 32 of occupied_mask();
+
+        while true {
+            group = metadata.[32 from probe];
+
+            h2_matches = group == h2_splat;
+            i = cttz(h2_matches);
+            while i < group_width() {
+                slot = probe + i;
+                if self.matches_slot(slot, key, hash) { return slot; }
+                h2_matches = blsr(h2_matches);
+                i = cttz(h2_matches);
+            }
+
+            empty_matches = group == zero_splat;
+            i = cttz(empty_matches);
+            if i < group_width() {
+                if tombstone >= 0 { return tombstone; }
+                return probe + i;
+            }
+
+            if tombstone < 0 {
+                lsb = group bit_and one_splat;
+                deleted_matches = lsb == zero_splat;
+                i = cttz(deleted_matches);
+                if i < group_width() { tombstone = probe + i; }
+            }
+
+            probe = (probe + group_width()) bit_and mask;
+        }
     }
 
     def find_slot_for_new_hash(hash : i32) -> i32 {
-        capacity = @entries_len;
-        mask = capacity - 1;
-        start_index = hash bit_and mask;
+        mask = @entries_len - 1;
+        probe = hash bit_and mask;
+        metadata = @metadata;
 
-        for probe_offset in 0..capacity {
-            index = (start_index + probe_offset) bit_and mask;
-            control = @metadata.[index];
-            if (control bit_and occupied_mask()) == 0 { return index; }
+        if metadata.[probe] == empty() { return probe; }
+        probe = probe + 1;
+
+        zero_splat = 32 of empty();
+        one_splat = 32 of occupied_mask();
+
+        while true {
+            group = metadata.[32 from probe];
+            lsb = group bit_and one_splat;
+            sentinel_matches = lsb == zero_splat;
+            i = cttz(sentinel_matches);
+            if i < group_width() { return probe + i; }
+            probe = (probe + group_width()) bit_and mask;
         }
     }
 
@@ -97,7 +152,7 @@ class SwissStore[K, V, T] extends HashStore[K, V, T] {
         needs_resize = current_length == 0 or required_size > (current_length * 7) / 8;
         if not needs_resize { return; }
         new_capacity = current_length * 2;
-        if new_capacity < 8 { new_capacity = 8; }
+        if new_capacity < min_capacity() { new_capacity = min_capacity(); }
         self.resize(new_capacity);
     }
 
@@ -145,13 +200,40 @@ class SwissStore[K, V, T] extends HashStore[K, V, T] {
     }
 
     def clear() {
-        initial_capacity = 8;
-        self.reset_records(initial_capacity);
-        @hashes = Buffer[i32].new(initial_capacity);
-        @metadata = Buffer[i8].new(initial_capacity);
-        @entries_len = initial_capacity;
-        @size = 0;
+        self.reset_table(min_capacity());
     }
+
+    def reset_table(entries_len : i32) {
+        capacity = padded_capacity(entries_len);
+        self.reset_records(entries_len);
+        @hashes = Buffer[i32].new(entries_len);
+        @metadata = Buffer[i8].new(capacity);
+        @entries_len = entries_len;
+        @size = 0;
+
+        for i in entries_len..capacity { @metadata.[i] = padding(); }
+    }
+
+    def iterator() -> SwissStoreIterator[K, V, T] {
+        return SwissStoreIterator{self};
+    } ~> { ret.store == self }
 
 }
 
+class SwissStoreIterator[K, V, T] extends Iterator[T] {
+    @store : SwissStore[K, V, T]
+    @cursor : i32
+
+    regions { @elems_reg == @store.elems_reg }
+
+    def init(@store : SwissStore[K, V, T]) {
+        @cursor = 0;
+    }
+
+    def next() -> T? {
+        pair = @store.scan_next(@cursor);
+        if pair is Nil { return nil; }
+        (@cursor, entry) = pair;
+        return entry;
+    }
+}

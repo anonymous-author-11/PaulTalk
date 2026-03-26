@@ -1,4 +1,4 @@
-import map;
+import hashmaps.map;
 import io;
 import array;
 

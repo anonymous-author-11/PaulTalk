@@ -14,13 +14,16 @@ class SwissMapStore[K, V] extends SwissStore[K, V, Pair[K, V]] {
     regions { @elems_reg == @keys == @values }
 
     def init(@hasher : (K) -> i32, @eq : (K, K) -> Bool) {
-        initial_capacity = 8;
-        @keys = Buffer[K].new(initial_capacity);
-        @values = Buffer[V].new(initial_capacity);
-        @hashes = Buffer[i32].new(initial_capacity);
-        @metadata = Buffer[i8].new(initial_capacity);
-        @entries_len = initial_capacity;
+        entries_len = min_capacity();
+        capacity = padded_capacity(entries_len);
+        @keys = Buffer[K].new(capacity);
+        @values = Buffer[V].new(capacity);
+        @hashes = Buffer[i32].new(capacity);
+        @metadata = Buffer[i8].new(capacity);
+        @entries_len = entries_len;
         @size = 0;
+
+        for i in entries_len..capacity { @metadata.[i] = padding(); }
     }
 
     def value_at(index : i32) -> V {
@@ -50,11 +53,7 @@ class SwissMapStore[K, V] extends SwissStore[K, V, Pair[K, V]] {
         old_metadata = @metadata;
         old_hashes = @hashes;
         old_len = @entries_len;
-        self.reset_records(new_capacity);
-        @hashes = Buffer[i32].new(new_capacity);
-        @metadata = Buffer[i8].new(new_capacity);
-        @entries_len = new_capacity;
-        @size = 0;
+        self.reset_table(new_capacity);
 
         for i in 0..old_len {
             if (old_metadata.[i] bit_and occupied_mask()) == 0 { continue; }
@@ -77,28 +76,5 @@ class SwissMapStore[K, V] extends SwissStore[K, V, Pair[K, V]] {
             return Pair{cursor + 1, entry};
         }
         return nil;
-    } ~> { ret.second holds @elems_reg }
-
-    def iterator() -> SwissMapStoreIterator[K, V] {
-        return SwissMapStoreIterator{self};
-    } ~> { ret.store == self }
-
-}
-
-class SwissMapStoreIterator[K, V] extends Iterator[Pair[K, V]] {
-    @store : SwissMapStore[K, V]
-    @cursor : i32
-
-    regions { @elems_reg == @store.elems_reg }
-
-    def init(@store : SwissMapStore[K, V]) {
-        @cursor = 0;
-    }
-
-    def next() -> Pair[K, V]? {
-        pair = @store.scan_next(@cursor);
-        if pair is Nil { return nil; }
-        (@cursor, entry) = pair;
-        return entry;
     }
 }
