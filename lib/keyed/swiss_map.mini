@@ -3,7 +3,80 @@ import keyed.swiss_store;
 
 class SwissMap[K, V] extends HashMap[K, V] {
     def init(hasher : (K) -> i32, eq : (K, K) -> Bool) {
-        key_of_fn = (record : Entry[K, V]) => { record.key(); };
-        @store = SwissStore{hasher, eq, key_of_fn};
+        @store = SwissMapStore[K, V]{hasher, eq};
     }
+}
+
+class SwissMapStore[K, V] extends SwissStore[K, Entry[K, V]] {
+    @keys : Buffer[K]
+    @values : Buffer[V]
+    @entry : Entry[K, V]?
+
+    regions { @elems_reg == @keys == @values == @entry }
+
+    def init(@hasher : (K) -> i32, @eq : (K, K) -> Bool) {
+        initial_capacity = 8;
+        @keys = Buffer[K].new(initial_capacity);
+        @values = Buffer[V].new(initial_capacity);
+        @hashes = Buffer[i32].new(initial_capacity);
+        @metadata = Buffer[i8].new(initial_capacity);
+        @entries_len = initial_capacity;
+        @entry = nil;
+        @size = 0;
+    }
+
+    def record_at(index : i32) -> Entry[K, V] {
+        entry = @entry;
+        if entry is Nil {
+            entry = Entry{@keys.[index], @values.[index]};
+            @entry = entry;
+            return entry;
+        }
+        entry.key() = @keys.[index];
+        entry.value() = @values.[index];
+        return entry;
+    }
+
+    def key_at(index : i32) -> K {
+        return @keys.[index];
+    }
+
+    def set_record_at(index : i32, record : Entry[K, V]) {
+        @keys.[index] = record.key();
+        @values.[index] = record.value();
+    }
+
+    def key_of(record : Entry[K, V]) -> K {
+        return record.key();
+    }
+
+    def reset_records(capacity : i32) {
+        @keys = Buffer[K].new(capacity);
+        @values = Buffer[V].new(capacity);
+    }
+
+    def resize(new_capacity : i32) {
+        old_keys = @keys;
+        old_values = @values;
+        old_metadata = @metadata;
+        old_hashes = @hashes;
+        old_len = @entries_len;
+        self.reset_records(new_capacity);
+        @hashes = Buffer[i32].new(new_capacity);
+        @metadata = Buffer[i8].new(new_capacity);
+        @entries_len = new_capacity;
+        @size = 0;
+
+        for i in 0..old_len {
+            if (old_metadata.[i] bit_and occupied_mask()) == 0 { continue; }
+            hash = old_hashes.[i];
+            slot = self.find_slot_for_new_hash(hash);
+            @keys.[slot] = old_keys.[i];
+            @values.[slot] = old_values.[i];
+            @hashes.[slot] = hash;
+            @metadata.[slot] = h2_to_control(hash);
+            @size = @size + 1;
+        }
+    }
+
 }

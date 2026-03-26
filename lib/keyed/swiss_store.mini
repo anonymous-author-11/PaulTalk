@@ -13,28 +13,33 @@ def occupied_mask() -> i8 {
     return 1 as i8;
 }
 
+def h2_to_control(hash : i32) -> i8 {
+    h2_6bit = (hash >> 26) as i8;
+    return (h2_6bit << 1) bit_or occupied_mask();
+}
+
 class SwissStore[K, R] extends HashStore[K, R] {
-    @records : Buffer[R?]
     @hashes : Buffer[i32]
     @metadata : Buffer[i8]
     @entries_len : i32
     @size : i32
     @hasher : (K) -> i32
     @eq : (K, K) -> Bool
-    @key_of_fn : (R) -> K
-
-    regions { @elems_reg == @records }
 
     getter @size
 
-    def init(@hasher : (K) -> i32, @eq : (K, K) -> Bool, @key_of_fn : (R) -> K) {
-        initial_capacity = 8;
-        @records = Buffer[R?].new(initial_capacity);
-        @hashes = Buffer[i32].new(initial_capacity);
-        @metadata = Buffer[i8].new(initial_capacity);
-        @entries_len = initial_capacity;
-        @size = 0;
-    }
+    // We abstract from the actual storage of the records
+    abstract def record_at(index : i32) -> R {
+    } ~> { ret holds @elems_reg }
+
+    abstract def set_record_at(index : i32, record : R) {
+    } ~> { @elems_reg holds record }
+
+    abstract def reset_records(capacity : i32) {}
+
+    abstract def resize(new_capacity : i32) {}
+
+    abstract def key_of(record : R) -> K {}
 
     def hash(key : K) -> i32 {
         return @hasher.call(key);
@@ -44,21 +49,14 @@ class SwissStore[K, R] extends HashStore[K, R] {
         return @eq.call(left, right);
     }
 
-    def key_of(record : R) -> K {
-        return @key_of_fn.call(record);
-    }
-
-    def Self.h2_to_control(hash : i32) -> i8 {
-        h2_6bit = (hash >> 26) as i8;
-        return (h2_6bit << 1) bit_or occupied_mask();
+    def key_at(index : i32) -> K {
+        return self.key_of(self.record_at(index));
     }
 
     def matches_slot(index : i32, control : i8, key : K, hash : i32, h2_control : i8) -> Bool {
         if control != h2_control { return false; }
         if @hashes.[index] != hash { return false; }
-        record = @records.[index];
-        if record is Nil { return false; }
-        entry_key = self.key_of(record);
+        entry_key = self.key_at(index);
         return self.same_key(entry_key, key);
     }
 
@@ -66,7 +64,7 @@ class SwissStore[K, R] extends HashStore[K, R] {
         capacity = @entries_len;
         mask = capacity - 1;
         start_index = hash bit_and mask;
-        h2_control = Self.h2_to_control(hash);
+        h2_control = h2_to_control(hash);
         first_tombstone = -1;
 
         for probe_offset in 0..capacity {
@@ -94,28 +92,6 @@ class SwissStore[K, R] extends HashStore[K, R] {
         }
     }
 
-    def resize(new_capacity : i32) {
-        old_records = @records;
-        old_hashes = @hashes;
-        old_len = @entries_len;
-        @records = Buffer[R?].new(new_capacity);
-        @hashes = Buffer[i32].new(new_capacity);
-        @metadata = Buffer[i8].new(new_capacity);
-        @entries_len = new_capacity;
-        @size = 0;
-
-        for i in 0..old_len {
-            record = old_records.[i];
-            if record is Nil { continue; }
-            hash = old_hashes.[i];
-            slot = self.find_slot_for_new_hash(hash);
-            @records.[slot] = record;
-            @hashes.[slot] = hash;
-            @metadata.[slot] = Self.h2_to_control(hash);
-            @size = @size + 1;
-        }
-    }
-
     def ensure_capacity(required_size : i32) {
         current_length = @entries_len;
         needs_resize = current_length == 0 or required_size > (current_length * 7) / 8;
@@ -130,8 +106,7 @@ class SwissStore[K, R] extends HashStore[K, R] {
         hash = self.hash(key);
         index = self.find_slot(key, hash);
         if (@metadata.[index] bit_and occupied_mask()) == 0 { return nil; }
-        record = @records.[index];
-        if record is Nil { return nil; }
+        record = self.record_at(index);
         return record;
     }
 
@@ -141,15 +116,19 @@ class SwissStore[K, R] extends HashStore[K, R] {
         self.ensure_capacity(@size + 1);
         index = self.find_slot(key, hash);
         was_empty = (@metadata.[index] bit_and occupied_mask()) == 0;
-        old_record = @records.[index];
-        @metadata.[index] = Self.h2_to_control(hash);
-        @records.[index] = record;
-        @hashes.[index] = hash;
-        if was_empty {
-            @size = @size + 1;
-            return nil;
+
+        if not was_empty {
+            old_record = self.record_at(index);
+            @metadata.[index] = h2_to_control(hash);
+            self.set_record_at(index, record);
+            @hashes.[index] = hash;
+            return old_record;
         }
-        if old_record is R { return old_record; }
+        
+        @metadata.[index] = h2_to_control(hash);
+        self.set_record_at(index, record);
+        @hashes.[index] = hash;
+        @size = @size + 1;
         return nil;
     }
 
@@ -158,10 +137,8 @@ class SwissStore[K, R] extends HashStore[K, R] {
         hash = self.hash(key);
         index = self.find_slot(key, hash);
         if (@metadata.[index] bit_and occupied_mask()) == 0 { return nil; }
-        record = @records.[index];
-        if record is Nil { return nil; }
+        record = self.record_at(index);
         @metadata.[index] = deleted();
-        @records.[index] = nil;
         @hashes.[index] = 0;
         @size = @size - 1;
         return record;
@@ -169,7 +146,7 @@ class SwissStore[K, R] extends HashStore[K, R] {
 
     def clear() {
         initial_capacity = 8;
-        @records = Buffer[R?].new(initial_capacity);
+        self.reset_records(initial_capacity);
         @hashes = Buffer[i32].new(initial_capacity);
         @metadata = Buffer[i8].new(initial_capacity);
         @entries_len = initial_capacity;
@@ -181,8 +158,7 @@ class SwissStore[K, R] extends HashStore[K, R] {
 
         for cursor in start_cursor..@entries_len {
             if (@metadata.[cursor] bit_and occupied_mask()) == 0 { continue; }
-            record = @records.[cursor];
-            if record is Nil { continue; }
+            record = self.record_at(cursor);
             return Pair{cursor + 1, record};
         }
         return nil;

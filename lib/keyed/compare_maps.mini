@@ -1,16 +1,16 @@
 import std;
 import hashmaps.hash_perf_utils;
 import hashmaps.swiss_table_v4;
+import keyed.swiss_map;
 import keyed.swiss_map_split;
-import keyed.swiss_map_split_simd;
 
-alias TableOne = keyed.swiss_map_split.SwissMap;
-alias TableTwo = keyed.swiss_map_split_simd.SwissMap;
+alias TableOne = keyed.swiss_map.SwissMap;
+alias TableTwo = keyed.swiss_map_split.SwissMap;
 //alias TableTwo = hashmaps.swiss_table_v4.SwissTable;
 
-def table_one() -> String { return "SwissMapSplit"; }
+def table_one() -> String { return "SwissMap"; }
 
-def table_two() -> String { return "SwissMapSplitSIMD"; }
+def table_two() -> String { return "SwissMapSplit"; }
 
 extern def clock() -> i64
 

@@ -7,8 +7,10 @@ class Entry[K, V] {
     @key : K
     @value : V
 
+    regions { self == @key == @value }
+
     getters @key, @value
-    setter @value
+    setters @key, @value
 
     def init(@key : K, @value : V) {}
 
@@ -45,7 +47,7 @@ class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
     def contains(pair : Pair[K, V], eq : (Pair[K, V], Pair[K, V]) -> Bool) -> Bool {
         key = pair.first();
         value = self.get(key);
-        if value is not V { return false; }
+        if value is Nil { return false; }
         return eq.call(pair, Pair{key, value});
     }
 
@@ -78,7 +80,7 @@ class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
 
     def update(key : K, f : (V) -> V) -> Bool {
         value = self.get(key);
-        if value is not V { return false; }
+        if value is Nil { return false; }
         self.insert(key, f.call(value));
         return true;
     }
@@ -119,7 +121,7 @@ class HashMap[K, V] extends Map[K, V] {
 
     def get(key : K) -> V? {
         record = @store.get_record(key);
-        if record is not Entry[K, V] { return nil; }
+        if record is Nil { return nil; }
         return record.value();
     }
 
@@ -129,7 +131,7 @@ class HashMap[K, V] extends Map[K, V] {
 
     def remove(key : K) -> V? {
         record = @store.remove_record(key);
-        if record is not Entry[K, V] { return nil; }
+        if record is Nil { return nil; }
         return record.value();
     }
 
@@ -155,7 +157,7 @@ class MapIterator[K, V] extends Iterator[Pair[K, V]] {
 
     def next() -> Pair[K, V]? {
         record = @records.next();
-        if record is not Entry[K, V] { return nil; }
+        if record is Nil { return nil; }
         return record.to_pair();
     }
 }

@@ -3,7 +3,64 @@ import swiss_store;
 
 class SwissSet[T] extends HashSet[T] {
     def init(hasher : (T) -> i32, eq : (T, T) -> Bool) {
-        key_of_fn = (value : T) => { value; };
-        @store = SwissStore{hasher, eq, key_of_fn};
+        @store = SwissSetStore{hasher, eq};
     }
+}
+
+class SwissSetStore[K] extends SwissStore[K, K] {
+    @keys : Buffer[K]
+
+    regions { @elems_reg == @keys }
+
+    def init(@hasher : (K) -> i32, @eq : (K, K) -> Bool) {
+        initial_capacity = 8;
+        @keys = Buffer[K].new(initial_capacity);
+        @hashes = Buffer[i32].new(initial_capacity);
+        @metadata = Buffer[i8].new(initial_capacity);
+        @entries_len = initial_capacity;
+        @size = 0;
+    }
+
+    def record_at(index : i32) -> K {
+        return @keys.[index];
+    }
+
+    def key_at(index : i32) -> K {
+        return @keys.[index];
+    }
+
+    def set_record_at(index : i32, record : K) {
+        @keys.[index] = record;
+    }
+
+    def key_of(record : K) -> K {
+        return record;
+    }
+
+    def reset_records(capacity : i32) {
+        @keys = Buffer[K].new(capacity);
+    }
+
+    def resize(new_capacity : i32) {
+        old_keys = @keys;
+        old_metadata = @metadata;
+        old_hashes = @hashes;
+        old_len = @entries_len;
+        self.reset_records(new_capacity);
+        @hashes = Buffer[i32].new(new_capacity);
+        @metadata = Buffer[i8].new(new_capacity);
+        @entries_len = new_capacity;
+        @size = 0;
+
+        for i in 0..old_len {
+            if (old_metadata.[i] bit_and occupied_mask()) == 0 { continue; }
+            hash = old_hashes.[i];
+            slot = self.find_slot_for_new_hash(hash);
+            @keys.[slot] = old_keys.[i];
+            @hashes.[slot] = hash;
+            @metadata.[slot] = h2_to_control(hash);
+            @size = @size + 1;
+        }
+    }
+
 }
