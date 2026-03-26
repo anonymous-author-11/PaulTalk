@@ -27,6 +27,7 @@ STRESS_TEST_NAMES = {
     "test_paultalk_parser_class_method_setter",
     "test_paultalk_parser_resilient_recovery",
     "test_paultalk_parser_error_context",
+    "test_paultalk_parser_namespaced_types_and_exports",
 }
 
 def iter_tests(test_suite):
