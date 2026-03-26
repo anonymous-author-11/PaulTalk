@@ -1,9 +1,5 @@
 import iteration;
-
-def min(a : i32, b : i32) -> i32 {
-    if a < b { return a; }
-    return b;
-}
+import math;
 
 class Collection[T] extends Iterable[T] {
 
@@ -66,7 +62,7 @@ class Collection[T] extends Iterable[T] {
     def zip[U](other : Collection[U]) -> Collection[Pair[T, U]] {
         pair = Pair{self, other};
         zipped = Zipped{self, other};
-        size_fn = (pair : Pair[Collection[T], Collection[U]]) => { min(pair.first().size(), pair.second().size()); };
+        size_fn = (pair : Pair[Collection[T], Collection[U]]) => { Math.min(pair.first().size(), pair.second().size()); };
         return CollectionAdapter{pair, zipped, size_fn};
     }
 

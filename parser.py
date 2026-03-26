@@ -111,7 +111,7 @@ def parse(file_path) -> AST:
         # auto-include core.mini
         special_files = (
             "builtins.mini", "iteration.mini", "collection.mini", "writer.mini",
-            "list.mini", "stack.mini", "range.mini", "indexable.mini",
+            "list.mini", "stack.mini", "range.mini", "indexable.mini", "math.mini",
             "ascii.mini", "unicode.mini", "peek.mini", "stacktrace.mini", "core.mini"
         )
         if file_path.name not in special_files:
