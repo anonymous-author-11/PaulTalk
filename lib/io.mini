@@ -28,6 +28,9 @@ class IO {
     def Self.print(x : String) {
         print(x);
     }
+    def Self.print(x : StringView) {
+        print(x into String);
+    }
     def Self.print(x : Character){
         str = String{4};
         str.codepoints().writer().write(x.codepoint());
