@@ -1138,7 +1138,7 @@ class CompilerPositiveTestsMixin:
 
             limit = 10_000_000;
 
-            sieves = SwissTable[String, PrimeSieve].new(string_hasher, string_eq);
+            sieves = SwissMap[String, PrimeSieve].new(string_hasher, string_eq);
             sieves.insert("Naive Sieve", NaiveSieveWithCollection{limit});
             sieves.insert("Regular Sieve", SimplePrimeSieve{limit});
             sieves.insert("Optimized Sieve", CacheOptimizedSieve{limit});

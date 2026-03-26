@@ -1,8 +1,8 @@
 import std;
-import hashmaps.hash_perf_utils;
+import old_hashmaps.hash_perf_utils;
 
 n = 600_000;
-table = SwissTable[i32, i32].new(i32_hasher, i32_eq);
+table = SwissMap[i32, i32].new(i32_hasher, i32_eq);
 keys = Array[i32].new(n);
 
 for i in 0..n {
