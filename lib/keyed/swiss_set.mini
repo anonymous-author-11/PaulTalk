@@ -32,12 +32,12 @@ class SwissSetStore[T] extends SwissStore[T, T, T] {
         return @keys.[index];
     }
 
-    def set_value_at(index : i32, record : T) {
-        @keys.[index] = record;
+    def set_value_at(index : i32, value : T) {
+        @keys.[index] = value;
     }
 
-    def set_key_at(index : i32, record : T) {
-        @keys.[index] = record;
+    def set_key_at(index : i32, key : T) {
+        @keys.[index] = key;
     }
 
     def reset_records(capacity : i32) {

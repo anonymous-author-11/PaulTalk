@@ -16,9 +16,9 @@ class SwissMapStore[K, V] extends SwissStore[K, V, Pair[K, V]] {
     def init(@hasher : (K) -> i32, @eq : (K, K) -> Bool) {
         entries_len = min_capacity();
         capacity = padded_capacity(entries_len);
-        @keys = Buffer[K].new(capacity);
-        @values = Buffer[V].new(capacity);
-        @hashes = Buffer[i32].new(capacity);
+        @keys = Buffer[K].new(entries_len);
+        @values = Buffer[V].new(entries_len);
+        @hashes = Buffer[i32].new(entries_len);
         @metadata = Buffer[i8].new(capacity);
         @entries_len = entries_len;
         @size = 0;

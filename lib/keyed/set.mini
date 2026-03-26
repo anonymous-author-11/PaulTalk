@@ -10,7 +10,7 @@ class Set[T] extends Collection[T] {
 }
 
 class HashSet[T] extends Set[T] {
-    @store : HashStore[T, T]
+    @store : HashStore[T, T, T]
 
     regions { @elems_reg == @store.elems_reg }
 
@@ -36,6 +36,10 @@ class HashSet[T] extends Set[T] {
 
     def clear() {
         @store.clear();
+    }
+
+    def iterator() -> Iterator[T] {
+        return @store.iterator();
     }
 
 }

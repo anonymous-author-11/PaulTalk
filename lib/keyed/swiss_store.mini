@@ -22,7 +22,7 @@ def padding() -> i8 {
 }
 
 def min_capacity() -> i32 {
-    return group_width() * 4;
+    return group_width() * 2;
 }
 
 def padded_capacity(entries_len : i32) -> i32 {

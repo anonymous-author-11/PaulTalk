@@ -8,4 +8,8 @@ import swiss_map;
 no_export store.KeyedStore;
 no_export store.HashStore;
 no_export swiss_store.SwissStore;
-no_export map.Entry;
+no_export swiss_map.SwissMapStore;
+no_export swiss_set.SwissSetStore;
+
+alias DefaultMap = swiss_map.SwissMap;
+alias DefaultSet = swiss_set.SwissSet;
