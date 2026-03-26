@@ -128,17 +128,6 @@ class Iterable[T] {
 // ( O(1) with respect to what? )
 class ConstantTimeIterator[T] extends Iterator[T] {}
 
-// Adapts a Coroutine into an Iterator
-// An alternative to writing boilerplate Iterator classes for your types
-// Generally less efficient than writing the classes
-class CoroIterator[T] extends Iterator[T] {
-    @coro : Coroutine[() yields T?]
-
-    def init(@coro : Coroutine[() yields T?]) {}
-
-    def next() -> T? { return @coro.call(); }
-}
-
 class Enumerated[T] extends Iterable[Pair[i32, T]] {
     @iterable : Iterable[T]
 
@@ -417,8 +406,23 @@ class Productizer[T, U] extends Iterator[Pair[T, U]] {
     }
 }
 
+/*
+
+// Adapts a Coroutine into an Iterator
+// An alternative to writing boilerplate Iterator classes for your types
+// Generally less efficient than writing the classes
+class CoroIterator[T] extends Iterator[T] {
+    @coro : Coroutine[() yields T?]
+
+    def init(@coro : Coroutine[() yields T?]) {}
+
+    def next() -> T? { return @coro.call(); }
+}
+
 class SizedIterator[T] extends Iterator[T] {
 
     // how many items are remaining to be returned by .next?
     abstract def remaining() -> i32 {}
 }
+
+*/
