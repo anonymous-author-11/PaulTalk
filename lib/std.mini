@@ -9,4 +9,4 @@ import path;
 import hashmaps.map;
 import hashmaps.swiss_table_v4;
 
-alias DefaultMap = SwissTable;
+alias DefaultMap = SwissTable;import circle_queue;
