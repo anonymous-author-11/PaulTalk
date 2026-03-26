@@ -1,0 +1,332 @@
+import map;
+
+class Entry[K,V] {
+    @primary_hash: i32 // Store primary hash (h1)
+    @key: K
+    @value: V
+
+    def init(@key: K, @value: V, @primary_hash: i32) {}
+
+    def key() -> K { return @key; }
+    def value() -> V { return @value; }
+    def primary_hash() -> i32 { return @primary_hash; }
+
+    def to_pair() -> Pair[K, V] {
+        return Pair{@key, @value};
+    } ~> { ret.first == @key, ret.second == @value }
+}
+
+class CuckooMap[K,V] extends HashMap[K, V] {
+    @table1 : Buffer[Entry[K,V]?]
+    @table2 : Buffer[Entry[K,V]?]
+    @table_len : i32
+    @size : i32
+    @hasher : (K) -> i32 // Primary user-provided hash function
+    @eq : (K, K) -> Bool
+
+    regions { @elems_reg == @table1 == @table2 }
+
+    def Self.max_displacements() -> i32 {
+        return 100;
+    }
+
+    def init(@hasher : (K) -> i32, @eq : (K, K) -> Bool) {
+        tbl_capacity = 8;
+        @table_len = tbl_capacity; // Start small, total capacity 16
+        @table1 = Buffer[Entry[K,V]?].new(tbl_capacity);
+        @table2 = Buffer[Entry[K,V]?].new(tbl_capacity);
+        @size = 0;
+    }
+
+    // --- Hashing and Indexing Helpers ---
+
+    def hash1(key: K) -> i32 {
+        return @hasher.call(key);
+    }
+
+    def hash2_from_primary(primary_hash: i32) -> i32 {
+        // Use a secondary, independent mixing hash function
+        return i32_hasher(primary_hash);
+    }
+
+    def index1(primary_hash: i32) -> i32 {
+        mask = @table_len - 1; // Assumes power-of-two length
+        return primary_hash bit_and mask;
+    }
+
+    def index2(primary_hash: i32) -> i32 {
+        secondary_hash = self.hash2_from_primary(primary_hash);
+        mask = @table_len - 1; // Assumes power-of-two length
+        return secondary_hash bit_and mask;
+    }
+
+    // --- Core Cuckoo Operations ---
+
+    // Attempts to place an entry, performing displacements.
+    // Returns Nil on success.
+    // Returns the Entry that failed placement if max displacements reached.
+    def place_entry_or_get_failed(entry_to_insert: Entry[K,V]) -> Entry[K,V]? {
+        current_entry = entry_to_insert;
+        on_first = true; // Start with table 1
+
+        loop_count = 0;
+        while loop_count < CuckooMap[K,V].max_displacements() {
+            loop_count = loop_count + 1;
+            primary_hash = current_entry.primary_hash();
+
+            if on_first {
+                // Target table 1
+                idx = self.index1(primary_hash);
+                existing_entry_or_nil = @table1.[idx];
+                @table1.[idx] = current_entry; // Place current
+
+                if existing_entry_or_nil is Nil {
+                    @size = @size + 1;
+                    return nil; // Success: placed in empty slot
+                }
+                // Displacement occurred
+                if existing_entry_or_nil is Entry[K, V] {
+                    current_entry = existing_entry_or_nil; // Displaced item becomes current
+                    on_first = false; // Try placing it in table 2 next
+                }
+                continue;
+            }
+            // Target table 2
+            idx = self.index2(primary_hash);
+            existing_entry_or_nil = @table2.[idx];
+            @table2.[idx] = current_entry; // Place current
+
+            if existing_entry_or_nil is Nil {
+                @size = @size + 1;
+                return nil; // Success: placed in empty slot
+            }
+            // Displacement occurred
+             if existing_entry_or_nil is Entry[K, V] {
+                current_entry = existing_entry_or_nil; // Displaced item becomes current
+                on_first = true; // Try placing it in table 1 next
+             }
+        } // End while loop_count
+
+        // Max displacements reached. Return the entry that couldn't find a home.
+        return current_entry;
+    }
+
+    def move_entries(old_table : Buffer[Entry[K,V]?], old_capacity_per_table : i32) {
+        i = 0;
+        while i < old_capacity_per_table {
+            entry = old_table.[i];
+            if entry is Entry[K,V] {
+                failed_entry_during_rehash = self.place_entry_or_get_failed(entry);
+            }
+            i = i + 1;
+        }
+    }
+
+    // Resizes both tables (doubling capacity) and rehashes all existing entries.
+    def resize() {
+        old_table1 = @table1;
+        old_table2 = @table2;
+        old_capacity_per_table = @table_len;
+        new_capacity_per_table = old_capacity_per_table * 2;
+        if new_capacity_per_table < 16 { new_capacity_per_table = 16; }
+
+        // Create new tables and reset state
+        @table_len = new_capacity_per_table;
+        @table1 = Buffer[Entry[K,V]?].new(new_capacity_per_table);
+        @table2 = Buffer[Entry[K,V]?].new(new_capacity_per_table);
+        @size = 0; // Reset size, place_entry_or_get_failed will increment it
+
+        self.move_entries(old_table1, old_capacity_per_table);
+        self.move_entries(old_table2, old_capacity_per_table);
+    }
+
+    def replace_in_table(key : K, value : V, h1 : i32, idx : i32, table : Buffer[Entry[K,V]?]) -> Bool {
+        entry = table.[idx];
+        if entry is Entry[K,V] {
+            // Check primary hash first (quick), then key equality (potentially slow)
+            if entry.primary_hash() == h1 and @eq.call(entry.key(), key) {
+                // Found in table 1, update in place
+                updated_entry = Entry[K,V].new(key, value, h1);
+                table.[idx] = updated_entry;
+                return true; // Update done, size doesn't change
+            }
+        }
+        return false;
+    }
+
+    def get_from_table(key : K, h1 : i32, idx : i32, table : Buffer[Entry[K,V]?]) -> V? {
+        entry = table.[idx];
+        if entry is Entry[K,V] {
+            // Check hash first, then equality
+            if entry.primary_hash() == h1 and @eq.call(entry.key(), key) {
+                return entry.value();
+            }
+        }
+        return nil;
+    }
+
+    def remove_from_table(key : K, h1 : i32, idx : i32, table : Buffer[Entry[K,V]?]) -> V? {
+        entry = table.[idx];
+        if entry is Entry[K,V] {
+            if entry.primary_hash() == h1 and @eq.call(entry.key(), key) {
+                value_to_return = entry.value();
+                table.[idx] = nil; // Mark slot as empty
+                @size = @size - 1;
+                return value_to_return;
+            }
+        }
+        return nil;
+    }
+
+    def []=(key: K, value: V) {
+        self.insert(key, value);
+    }
+
+    // Public insert method
+    def insert(key: K, value: V) {
+        h1 = self.hash1(key);
+
+        // --- Check if key already exists (update value) ---
+        // Must check both potential locations before deciding it's a new insert.
+        idx1 = self.index1(h1);
+        existing = self.replace_in_table(key, value, h1, idx1, @table1);
+        if existing { return; }
+
+        // Check table 2 as well if not found/updated in table 1
+        idx2 = self.index2(h1);
+        existing = self.replace_in_table(key, value, h1, idx2, @table2);
+        if existing { return; }
+
+        // --- Key not found, proceed with insertion ---
+
+        // Check load factor: Resize if total size reaches half the total capacity
+        // (i.e., size >= capacity of one table). Check BEFORE attempting placement.
+        if @size >= @table_len {
+            self.resize();
+            // Recalculate indices based on potentially new capacity after resize
+            // Note: place_entry_or_get_failed called below will use the new table sizes.
+        }
+
+        // Create the new entry to insert
+        entry_to_insert = Entry[K,V].new(key, value, h1);
+        failed_entry: Entry[K,V]? = nil; // Tracks failure across resize attempts
+
+        // --- Loop to handle insertion attempts and potential resize ---
+        // Allow one resize cycle if the initial placement fails.
+        max_placement_attempts = 2; // Attempt -> Resize -> Attempt
+        placement_attempt = 0;
+        while placement_attempt < max_placement_attempts {
+            // Attempt to place the current entry_to_insert
+            failed_entry = self.place_entry_or_get_failed(entry_to_insert);
+
+            if failed_entry is Nil {
+                // Success! Entry placed (potentially after displacements).
+                return;
+            }
+
+            // Placement failed (max displacements reached for 'failed_entry')
+            // Trigger resize before the next attempt
+            self.resize();
+
+            // The entry that failed placement becomes the one to try inserting next cycle
+            if failed_entry is Entry[K, V] { entry_to_insert = failed_entry; }
+
+            placement_attempt = placement_attempt + 1;
+        } // end while placement_attempt
+
+        // If we exit the loop, it means placement failed even after resize and retry.
+    }
+
+    // Get value associated with key
+    def get(key: K) -> V? {
+        h1 = self.hash1(key);
+        idx1 = self.index1(h1);
+
+        // Check table 1
+        val1 = self.get_from_table(key, h1, idx1, @table1);
+        if val1 is V { return val1; }
+
+        // Check table 2 only if not found in table 1
+        idx2 = self.index2(h1);
+        val2 = self.get_from_table(key, h1, idx2, @table2);
+        if val2 is V { return val2; }
+
+        // Key not found in either potential location
+        return nil;
+    }
+
+    // Remove key and return its value, or Nil if not found.
+    def remove(key: K) -> V? {
+        h1 = self.hash1(key);
+        idx1 = self.index1(h1);
+
+        // Check table 1
+        val1 = self.remove_from_table(key, h1, idx1, @table1);
+        if val1 is V { return val1; }
+
+        // Check table 2 only if not found in table 1
+        idx2 = self.index2(h1);
+        val2 = self.remove_from_table(key, h1, idx2, @table2);
+        if val2 is V { return val2; }
+
+        // Key not found to remove
+        return nil;
+    }
+
+    // Clear the map
+    def clear() {
+        tbl_capacity = 8;
+        @table_len = tbl_capacity;
+        @table1 = Buffer[Entry[K,V]?].new(tbl_capacity);
+        @table2 = Buffer[Entry[K,V]?].new(tbl_capacity);
+        @size = 0;
+    }
+
+    // Return number of active key-value pairs
+    def size() -> i32 {
+        return @size;
+    }
+
+    // --- Iterator Implementation ---
+    def iterator() -> CuckooMapIterator[K,V] {
+        // Pass both tables to the iterator
+        return CuckooMapIterator[K,V].new(@table1, @table2, @table_len);
+    } ~> { ret.map_table1 == @table1, ret.map_table2 == @table2 }
+}
+
+class CuckooMapIterator[K,V] extends Iterator[Pair[K,V]] {
+    @map_table1: Buffer[Entry[K,V]?]
+    @map_table2: Buffer[Entry[K,V]?]
+    @table_len : i32
+    @index: i32       // Index within the current table
+    @on_second : Bool // whether on second table
+
+    regions {
+        @elems_reg holds (@map_table1, @map_table2),
+        @map_table1 == @map_table2
+    }
+
+    def init(@map_table1: Buffer[Entry[K,V]?], @map_table2: Buffer[Entry[K,V]?], @table_len : i32) {
+        @index = 0;
+        @on_second = false; // Start with table 1
+    }
+
+    def next_from_table(table : Buffer[Entry[K,V]?]) -> Pair[K, V]? {
+        while @index < @table_len {
+            entry = table.[@index];
+            @index = @index + 1;
+            if entry is Entry[K, V] { return entry.to_pair(); }
+        }
+        return nil;
+    } ~> { ret holds @elems_reg }
+
+    def next() -> Pair[K, V]? {
+        if not @on_second {
+            nxt = self.next_from_table(@map_table1);
+            if nxt is Pair[K, V] { return nxt; }
+            @index = 0;
+            @on_second = true;
+        }
+        return self.next_from_table(@map_table2);
+    }
+}

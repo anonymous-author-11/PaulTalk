@@ -1,4 +1,4 @@
-import map;
+import old_hashmaps.map;
 import io;
 
 // --- Swiss Table Control Bytes (LSB Scheme) ---
