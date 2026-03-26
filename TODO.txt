@@ -720,6 +720,8 @@ TODO:
 - Minimize binary size by extracting main() and linking in only needed symbols [check!]
 	- Hello world now 36kb instead of 923kb [check!]
 
+- Better error message for use of self within init
+
 - Have codex investigate some longstanding quandaries
 	- Why does it crash at O0?
 	- Why the aarch64 layout? (160:64 default instead of i160:128)
@@ -1251,6 +1253,9 @@ TODO:
 
 # --- Known Bugs ---
 
+- Class methods of non-instantiable classes are broken
+	- vtable is not generated but is then indexed into as if it were
+- If I make StringView extend Representable instead of adding an overload to IO.print it crashes
 - Why does it crash at O0?
 - You could probably see what's going wrong with O0 by seeing the asm for passing a fatptr vs type-param
 - Union involving Tuple is clearly broken
