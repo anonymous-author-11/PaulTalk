@@ -101,12 +101,38 @@ class CompilerPositiveTestsMixin:
 
             src = "class Box { @x : i32 def Self.make(v : i32) -> Box { return Box{v}; } def value=(v : i32) { @x = v; } }";
             tree = parse_paultalk(src);
-            IO.print(tree.kind());
+            IO.print(tree is Program);
             IO.print(tree.children().size());
-            IO.print(tree.children().[0].kind());
+            IO.print(tree.children().[0] is ClassDef);
         """
-        expected_output = "program\n1\nclass_def"
+        expected_output = "true\n1\ntrue"
         self.compile_and_run(mini_code, expected_output, "paultalk_parser_class_method_and_setter_smoke")
+
+    def test_paultalk_parser_namespaced_types_and_exports(self):
+        mini_code = """
+            import std;
+            import paultalk_parser;
+
+            src = "export pkg.types.Box; no_export pkg.secret.Box; value : pkg.types.Box[i32] = pkg.types.Box[i32]{1};";
+            tree = parse_paultalk_strict(src);
+            stmts = tree.children();
+            var_decl = stmts.[2];
+            init = var_decl.children().[2];
+
+            IO.print(stmts.[0] is ExportStmt);
+            IO.print(stmts.[0].children().[0] is QualifiedName);
+            IO.print(stmts.[1] is NoExportStmt);
+            IO.print(var_decl is VarDecl);
+            IO.print(var_decl.children().[1] is ParameterizedType);
+            IO.print(init is ObjectCreation);
+            IO.print(init.children().[0] is ParameterizedName);
+        """
+        expected_output = "true\ntrue\ntrue\ntrue\ntrue\ntrue\ntrue"
+        self.compile_and_run(
+            mini_code,
+            expected_output,
+            "paultalk_parser_namespaced_types_and_exports"
+        )
 
     def test_namespace_typechecks(self):
         cases = [
@@ -376,7 +402,7 @@ class CompilerPositiveTestsMixin:
 
             has_tail = false;
             for child in tree.children() {
-                is_tail = child.kind() == "function_def" and child.value() == "tail";
+                is_tail = child is FunctionDef and child.value() == "tail";
                 if is_tail { has_tail = true; }
             }
 
