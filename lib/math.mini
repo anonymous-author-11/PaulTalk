@@ -1,3 +1,4 @@
+import builtins;
 
 class Math {
     def Self.sqrt(x : f64) -> f64 {
