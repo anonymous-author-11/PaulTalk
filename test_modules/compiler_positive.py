@@ -912,13 +912,16 @@ class CompilerPositiveTestsMixin:
             import std;
 
             stringmap = {"foo":"bar", "baz":"qux", "hello":"world"};
+            seen = [] of String;
 
-            for (key, value) in stringmap {
-                IO.print(key);
-                IO.print(value);
-            }
+            for (key, value) in stringmap { seen.append("${key}:${value}"); }
+
+            IO.print(seen.size());
+            IO.print(seen.contains("foo:bar", string_eq));
+            IO.print(seen.contains("baz:qux", string_eq));
+            IO.print(seen.contains("hello:world", string_eq));
         """
-        expected_output = "hello\nworld\nbaz\nqux\nfoo\nbar"
+        expected_output = "3\ntrue\ntrue\ntrue"
         self.run_mini_code(mini_code, expected_output, "str_map_iterate")
 
     def test_fn_map(self):
