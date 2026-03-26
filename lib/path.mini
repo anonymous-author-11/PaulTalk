@@ -113,7 +113,7 @@ class Path extends Representable {
         if absolute { text = Self.separator(); }
 
         for part in unified.split(Self.separator()) {
-            text = Self.add_part(text, part, absolute);
+            text = Self.add_part(text, part.to_string(), absolute);
         }
         if text.byte_length() == 0 { return "."; }
         return text;
@@ -123,9 +123,9 @@ class Path extends Representable {
         return @text.copy();
     }
 
-    def components() -> Iterable[String] {
+    def components() -> Iterable[StringView] {
         return @text.split(Self.separator())
-            .filter((part : String) => { part.byte_length() > 0 and part != "."; });
+            .filter((part : StringView) => { part.byte_length() > 0; });
     }
 
     def basename() -> String {
@@ -164,7 +164,7 @@ class Path extends Representable {
         if text == "." { text = ""; }
 
         for part in child_text.split(Self.separator()) {
-            text = Self.add_part(text, part, absolute);
+            text = Self.add_part(text, part.to_string(), absolute);
         }
         if text.byte_length() == 0 { return Path{"."}; }
         return Path{text};
