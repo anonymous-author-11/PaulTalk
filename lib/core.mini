@@ -29,7 +29,7 @@ class String extends List[Character], Representable {
         return Self.empty().extend(iterable);
     }
 
-    // STRICT, Failable constructor. Validates input and can yield an error.
+    // Strict, failable constructor. Validates input and can yield an error.
     def Self.from_bytes(source_bytes: Collection[i8]) -> String yields InvalidUTF8Error {
         result = String{source_bytes.size()};    // Pre-allocate
         validator = UTF8BytesValidator{result.bytes().writer()};
@@ -38,7 +38,7 @@ class String extends List[Character], Representable {
         return result;
     } ~> { ret.elems_reg holds source_bytes.elems_reg }
 
-    // LOSSY constructor. Never fails, replaces invalid sequences with '�'.
+    // Lossy constructor. Never fails, replaces invalid sequences with '�'.
     // Consequently, byte length of resultant string may be different than source length
     def Self.from_bytes_lossy(source_bytes: Collection[i8]) -> String {
         result = String{source_bytes.size()};    // Pre-allocate
@@ -226,8 +226,11 @@ class String extends List[Character], Representable {
         }
         return first;
     }
-    def split(delimiter : String) -> Iterable[String] {
+    def split(delimiter : String) -> Iterable[StringView] {
         return SplitString{self, delimiter};
+    }
+    def lines() -> Iterable[StringView] {
+        return self.split("\n");
     }
     def unchecked_index(x : i32) -> i8 {
         return @bytes.[x];
@@ -271,7 +274,7 @@ class String extends List[Character], Representable {
 
 }
 
-class SplitString extends Iterable[String] {
+class SplitString extends Iterable[StringView] {
     @source : String
     @delimiter : String
 
@@ -282,31 +285,30 @@ class SplitString extends Iterable[String] {
     } ~> { ret.source == @source, ret.delimiter == @delimiter }
 }
 
-class SplitStringIterator extends Iterator[String] {
+class SplitStringIterator extends Iterator[StringView] {
     @source : String
     @delimiter : String
     @cursor : i32
     @done : Bool
+
+    regions { @nxt.str == @source }
 
     def init(@source : String, @delimiter : String) {
         @cursor = 0;
         @done = false;
     }
 
-    def build_segment(start : i32, end_exclusive : i32) -> String {
-        n_bytes = end_exclusive - start;
-        bytes = Buffer[i8].new(n_bytes);
+    def build_segment(start : i32, end_exclusive : i32) -> StringView {
         n_chars = 0;
 
-        for i in 0..n_bytes {
-            byte = @source.unchecked_index(start + i);
-            bytes.[i] = byte;
+        for i in start..end_exclusive {
+            byte = @source.unchecked_index(i);
             if UTF8.is_continuation(byte) { continue; }
             n_chars = n_chars + 1;
         }
 
-        return String{bytes, n_bytes, n_chars, n_bytes};
-    } ~> no_alias
+        return StringView{@source, start, end_exclusive, n_chars};
+    } ~> { ret == @nxt }
 
     def find_delimiter(last_start : i32) -> i32? {
         source = @source.bytes();
@@ -316,7 +318,7 @@ class SplitStringIterator extends Iterator[String] {
         return nil;
     } ~> no_alias
 
-    def next() -> String? {
+    def next() -> StringView? {
         if @done { return nil; }
 
         source_len = @source.byte_length();
@@ -360,9 +362,9 @@ class StringCodePoints extends List[i32] {
     def size() -> i32 {
         return @str.char_length();
     }
-    def iterator() -> ConstantTimeIterator[i32] {
-        return UTF8Decoder{@str.bytes().iterator()};
-    }
+    def iterator() -> StringCodepointIterator {
+        return StringCodepointIterator{@str};
+    } ~> { ret.str == @str }
     def append(x : i32) -> Self {
         self.writer().write(x);
         return self;
@@ -385,7 +387,7 @@ class StringBytes extends Collection[i8] {
         return self.end() - self.start();
     }
 
-    def iterator() -> ConstantTimeIterator[i8] {
+    def iterator() -> StringBytesIterator {
         return StringBytesIterator{self};
     } ~> { ret.bytes == self }
 
@@ -542,6 +544,29 @@ class StringBytesView extends StringBytes {
     }
 }
 
+class StringView {
+    @str : String
+    @start : i32
+    @end_exclusive : i32
+    @char_length : i32
+
+    getter @char_length
+
+    def init(@str : String, @start : i32, @end_exclusive : i32, @char_length : i32) {}
+
+    def byte_length() -> i32 {
+        return @end_exclusive - @start;
+    }
+
+    def to_string() -> String {
+        n_bytes = self.byte_length();
+        bytes = Buffer[i8].new(n_bytes);
+        for i in 0..n_bytes { bytes.[i] = @str.unchecked_index(@start + i); }
+        return String{bytes, n_bytes, @char_length, n_bytes};
+    } ~> no_alias
+
+}
+
 // Iterator can trust that the source string is valid.
 // Constant-time *with respect to the length of the String*
 class StringIterator extends ConstantTimeIterator[Character] {
@@ -569,11 +594,62 @@ class StringBytesIterator extends ConstantTimeIterator[i8] {
         @cursor = 0;
     }
 
+    def byte_position() -> i32 {
+        return @bytes.start() + @cursor;
+    }
+
+    def slice(n_bytes : i32) -> StringBytes {
+        old_cursor = @cursor;
+        for i in 0..n_bytes { self.next(); }
+        return @bytes.slice(old_cursor, @cursor);
+    }
+
     def next() -> i8? {
         if @cursor >= @bytes.size() { return nil; }
         next = @bytes.unchecked_index(@cursor);
         @cursor = @cursor + 1;
         return next;
+    }
+}
+
+class StringCodepointIterator extends ConstantTimeIterator[i32] {
+    @str : String
+    @byte_iterator : StringBytesIterator
+    @decoder : ValidUTF8Decoder
+    @codepoint_cursor : i32
+
+    regions { @elems_reg == @str.elems_reg }
+
+    def init(@str : String) {
+        @byte_iterator = @str.bytes().iterator();
+        @decoder = ValidUTF8Decoder{@byte_iterator};
+        @codepoint_cursor = 0;
+    }
+
+    def byte_position() -> i32 {
+        return @byte_iterator.byte_position();
+    }
+
+    def codepoint_position() -> i32 {
+        return @codepoint_cursor;
+    }
+
+    def slice(n_codepoints : i32) -> StringView {
+        start = self.byte_position();
+        taken = 0;
+        while taken < n_codepoints {
+            nxt = self.next();
+            if nxt is Nil { break; }
+            taken = taken + 1;
+        }
+        return StringView{@str, start, self.byte_position(), taken};
+    }
+
+    def next() -> i32? {
+        next_cp = @decoder.next();
+        if next_cp is Nil { return nil; }
+        @codepoint_cursor = @codepoint_cursor + 1;
+        return next_cp;
     }
 }
 
@@ -868,13 +944,60 @@ class UTF8BytesValidator {
     } ~> { @writer.dest_reg holds source.elems_reg }
 }
 
-class UTF8Decoder extends ConstantTimeIterator[i32] {
+// Decodes bytes that are valid UTF8 into codepoints
+class ValidUTF8Decoder extends ConstantTimeIterator[i32] {
     @peeker : Peeker[i8]
-    @replacement_fn : (i8) -> i32
 
     regions { @elems_reg == @peeker.elems_reg }
 
-    getters @peeker, @replacement_fn
+    getters @peeker
+
+    def init(iterator : Iterator[i8]) {
+        @peeker = iterator into Peeker[i8];
+    }
+
+    def bad_result(b1 : i8) -> i32? {
+        return nil; 
+    }
+
+    def invalid_continuation(b_next : i8) -> Bool {
+        return false;
+    }
+
+    def invalid_codepoint(codepoint : i32, bytes_needed : i32) -> Bool {
+        return false;
+    }
+
+    def next() -> i32? {
+        b1 = @peeker.next();
+        if b1 is Nil { return nil; }
+        (codepoint, bytes_needed) = UTF8.classify_lead(b1);
+
+        // Check for invalid start byte
+        if bytes_needed == 0 { return self.bad_result(b1); }
+
+        for i in 1..bytes_needed {
+            b_next = @peeker.peek();
+            if b_next is Nil { return nil; }
+            if self.invalid_continuation(b_next) { // Invalid continuation byte
+                return self.bad_result(b1);
+            }
+            codepoint = UTF8.accumulate(codepoint, b_next);
+            b_next = @peeker.next();            // Advance, now that known valid
+        }
+        
+        if self.invalid_codepoint(codepoint, bytes_needed) {
+            return self.bad_result(b1); 
+        }
+        return codepoint;
+    }
+}
+
+// Decodes UTF8 bytes that may or may not be valid
+class UTF8Decoder extends ValidUTF8Decoder {
+    @replacement_fn : (i8) -> i32
+
+    getter @replacement_fn
     setter @replacement_fn
 
     def Self.lossy(iterator : Iterator[i8]) -> UTF8Decoder {
@@ -894,28 +1017,18 @@ class UTF8Decoder extends ConstantTimeIterator[i32] {
         @peeker = iterator into Peeker[i8];
     }
 
-    def next() -> i32? {
-        b1 = @peeker.next();
-        if b1 is Nil { return nil; }
-        (codepoint, bytes_needed) = UTF8.classify_lead(b1);
-
-        // Check for invalid start byte
-        if bytes_needed == 0 { return @replacement_fn.call(b1); }
-
-        for i in 1..bytes_needed {
-            b_next = @peeker.peek();
-            if b_next is Nil { return nil; }
-            if not UTF8.is_continuation(b_next) { // Invalid continuation byte
-                return @replacement_fn.call(b1);
-            }
-            codepoint = UTF8.accumulate(codepoint, b_next);
-            b_next = @peeker.next();            // Advance, now that known valid
-        }
-        
-        if not UTF8.is_valid_codepoint(codepoint, bytes_needed) { return @replacement_fn.call(b1); }
-
-        return codepoint;
+    def bad_result(b1 : i8) -> i32? {
+        return @replacement_fn.call(b1); 
     }
+
+    def invalid_continuation(b_next : i8) -> Bool {
+        return not UTF8.is_continuation(b_next);
+    }
+
+    def invalid_codepoint(codepoint : i32, bytes_needed : i32) -> Bool {
+        return not UTF8.is_valid_codepoint(codepoint, bytes_needed);
+    }
+
 }
 
 class Exception {

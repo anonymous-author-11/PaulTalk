@@ -438,7 +438,7 @@ class CompilerPositiveTestsMixin:
         mini_code = """
             import core;
             import io;
-            import files;
+            import file_system;
 
             class FileProcessor[T] {
                 abstract def process(file : File) -> T {
@@ -478,7 +478,7 @@ class CompilerPositiveTestsMixin:
         mini_code = """
             import core;
             import io;
-            import files;
+            import file_system;
 
             file_name = "files_test_rw.txt";
             FileSystem.write(file_name, "line1");
@@ -493,7 +493,7 @@ class CompilerPositiveTestsMixin:
         mini_code = """
             import core;
             import io;
-            import files;
+            import file_system;
 
             file_name = "files_test_exists.txt";
             if FileSystem.exists(file_name) { FileSystem.remove(file_name); }
@@ -512,7 +512,7 @@ class CompilerPositiveTestsMixin:
         mini_code = """
             import core;
             import io;
-            import files;
+            import file_system;
 
             file_name = "files_test_index.txt";
             FileSystem.write(file_name, "abcde");
@@ -537,7 +537,7 @@ class CompilerPositiveTestsMixin:
         mini_code = """
             import core;
             import io;
-            import files;
+            import file_system;
 
             file_name = "files_test_writer.txt";
             file = BufferedFile{file_name, "wb+"};
@@ -720,6 +720,41 @@ class CompilerPositiveTestsMixin:
         """
         expected_output = "abc\nabc\n-25"
         self.compile_and_run(mini_code, expected_output, "string_bytes_view_slice_and_into_string")
+
+    def test_string_bytes_iterator_slice(self):
+        mini_code = """
+            import std;
+
+            text = "电脑abc电脑";
+            it = text.bytes().iterator();
+
+            for i in 0..6 { it.next(); }
+            IO.print(it.byte_position());
+            sub = it.slice(3) into String;
+            IO.print(sub);
+        """
+        expected_output = "6\nabc"
+        self.compile_and_run(mini_code, expected_output, "string_bytes_iterator_slice")
+
+    def test_string_codepoint_iterator_slice(self):
+        mini_code = """
+            import std;
+
+            text = "a电脑bc";
+            it = text.codepoints().iterator();
+
+            it.next();
+            IO.print(it.byte_position());
+            IO.print(it.codepoint_position());
+            sub = it.slice(2);
+            IO.print(it.byte_position());
+            IO.print(it.codepoint_position());
+            IO.print(sub.char_length());
+            IO.print(sub.byte_length());
+            IO.print(sub.to_string());
+        """
+        expected_output = "1\n1\n7\n3\n2\n6\n电脑"
+        self.compile_and_run(mini_code, expected_output, "string_codepoint_iterator_slice")
 
     def test_string_trim_helpers(self):
         mini_code = """
