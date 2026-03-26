@@ -1,0 +1,50 @@
+import buffered_file;
+import file;
+import path;
+
+class FileSystem {
+
+	def Self.exists(name : Path) -> Bool {
+		return Self.exists(name into String);
+	}
+	def Self.read(name : Path) -> String {
+		return Self.read(name into String);
+	}
+	def Self.write(name : Path, text : String) {
+		Self.write(name into String, text);
+	}
+	def Self.append(name : Path, text : String) {
+		Self.append(name into String, text);
+	}
+	def Self.remove(name : Path) {
+		Self.remove(name into String);
+	}
+
+	def Self.exists(name : String) -> Bool {
+		handle = fopen(name.c_string(), "rb".c_string());
+		if handle is Nil { return false; }
+		fclose(handle);
+		return true;
+	}
+	def Self.read(name : String) -> String {
+		file = BufferedFile{name, "rb"};
+		str = file.read();
+		file.close();
+		return str;
+	}
+	def Self.write(name : String, text : String) {
+		file = BufferedFile{name, "wb"};
+		file.write(text);
+		file.close();
+	}
+	def Self.append(name : String, text : String) {
+		file = BufferedFile{name, "ab"};
+		file.write(text);
+		file.close();
+	}
+	def Self.remove(name : String) {
+		status = remove(name.c_string());
+		if status != 0 { yield(FileSystemError{}); }
+	}
+
+}

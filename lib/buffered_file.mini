@@ -1,0 +1,166 @@
+import file;
+
+extern def fopen(name : Buffer[i8], mode : Buffer[i8]) -> Buffer[i32]
+extern def fprintf(file : Buffer[i32], text : Buffer[i8]) -> i32
+extern def fclose(file : Buffer[i32]) -> i32
+extern def fgetc(file : Buffer[i32]) -> i32
+extern def fgets(out : Buffer[i8], size : i32, file : Buffer[i32]) -> i64
+extern def ferror(file : Buffer[i32]) -> i32
+extern def fseek(file : Buffer[i32], offset : i64, whence : i32) -> i32
+extern def ftell(file : Buffer[i32]) -> i64
+extern def fread(out : Buffer[i8], size : i64, nmemb : i64, file : Buffer[i32]) -> i64
+extern def fwrite(ptr : Buffer[i8], size : i64, nmemb : i64, file : Buffer[i32]) -> i64
+extern def perror(null : i64)
+extern def remove(name : Buffer[i8]) -> i32
+
+class BufferedFile extends File {
+	@name : String
+	@mode : String
+	@handle : Buffer[i32]
+	@cache : Buffer[i8]
+	@cache_start : i64
+	@cache_len : i32
+	@cache_capacity : i32
+	@open : Bool
+
+	def Self.seek_set() -> i32 {
+		return 0;
+	}
+
+	def Self.default_cache_capacity() -> i32 {
+		return 8192;
+	}
+
+	def Self.seek_end() -> i32 {
+		return 2;
+	}
+
+	def init(@name : String, @mode : String) {
+		@cache_capacity = Self.default_cache_capacity();
+		@cache = Buffer[i8].new(@cache_capacity);
+		@cache_start = 0 as i64;
+		@cache_len = 0;
+		@open = false;
+		@handle = fopen(@name.c_string(), @mode.c_string());
+		if @handle is Nil { yield(FileSystemError{}); }
+		@open = true;
+	} ~> all_alias
+
+	def ensure_open() {
+		if not @open { yield(FileSystemError{}); }
+	} ~> no_alias
+
+	def current_position() -> i64 {
+		self.ensure_open();
+		pos = ftell(@handle);
+		if pos < 0 as i64 { yield(FileSystemError{}); }
+		return pos;
+	} ~> no_alias
+
+	def seek_to(offset : i64) {
+		self.ensure_open();
+		status = fseek(@handle, offset, Self.seek_set());
+		if status != 0 { yield(FileSystemError{}); }
+	} ~> no_alias
+
+	def invalidate_cache() {
+		@cache_len = 0;
+		@cache_start = 0 as i64;
+	} ~> no_alias
+
+	def cache_contains(offset : i64) -> Bool {
+		if @cache_len == 0 { return false; }
+		if offset < @cache_start { return false; }
+		cache_end = @cache_start + @cache_len as i64;
+		return offset < cache_end;
+	} ~> no_alias
+
+	def refill_cache(start_offset : i64) {
+		self.ensure_open();
+		if start_offset < 0 as i64 { start_offset = 0 as i64; }
+		self.seek_to(start_offset);
+		@cache_len = 0;
+		read_count = fread(@cache, 1 as i64, @cache_capacity as i64, @handle);
+		if ferror(@handle) != 0 { yield(FileSystemError{}); }
+		@cache_start = start_offset;
+		@cache_len = read_count as i32;
+	} ~> no_alias
+
+	def read_at(offset : i64) -> i8? {
+		self.ensure_open();
+		if offset < 0 as i64 { return nil; }
+		if not self.cache_contains(offset) { self.refill_cache(offset); }
+		if not self.cache_contains(offset) { return nil; }
+		local_index = (offset - @cache_start) as i32;
+		return @cache.[local_index];
+	}
+
+	def write_at_offset(offset : i64, value : i8) {
+		self.ensure_open();
+		self.seek_to(offset);
+		single_byte = Buffer[i8].new(1);
+		single_byte.[0] = value;
+		written = fwrite(single_byte, 1 as i64, 1 as i64, @handle);
+		if written < 1 as i64 { yield(FileSystemError{}); }
+		if ferror(@handle) != 0 { yield(FileSystemError{}); }
+	}
+
+	def write(offset : i64, source : Buffer[i8], n_bytes : i32) -> i32 {
+		self.ensure_open();
+		if n_bytes <= 0 { return 0; }
+		self.seek_to(offset);
+		written = fwrite(source, 1 as i64, n_bytes as i64, @handle);
+		if ferror(@handle) != 0 { yield(FileSystemError{}); }
+		self.invalidate_cache();
+		return written as i32;
+	}
+
+	def byte_length() -> i64 {
+		self.ensure_open();
+		status = fseek(@handle, 0 as i64, Self.seek_end());
+		if status != 0 { yield(FileSystemError{}); }
+		length = ftell(@handle);
+		if length < 0 as i64 { yield(FileSystemError{}); }
+		return length;
+	}
+
+	def unchecked_insert(index : i32, value : i8) {
+		self.write_at_offset(index as i64, value);
+		if self.cache_contains(index as i64) {
+			local_index = ((index as i64) - @cache_start) as i32;
+			@cache.[local_index] = value;
+		}
+	}
+
+	def mode=(@mode : String) {
+		if not @open { return; }
+		self.reopen();
+	}
+
+	def reopen() {
+		self.close();
+		@handle = fopen(@name.c_string(), @mode.c_string());
+		if @handle is Nil { yield(FileSystemError{}); }
+		@open = true;
+		self.invalidate_cache();
+	} ~> no_alias
+
+	def close() {
+		if not @open { return; }
+		int = fclose(@handle);
+		@open = false;
+		self.invalidate_cache();
+		if int == -1 { yield(FileSystemError{}); }
+	}
+
+	def read() -> String {
+		self.ensure_open();
+		length_i32 = self.size();
+		length_i64 = length_i32 as i64;
+		self.seek_to(0 as i64);
+		buf = Buffer[i8].new(length_i32 + 1);
+		read_count = fread(buf, 1 as i64, length_i64, @handle);
+		if read_count < length_i64 { yield(FileSystemError{}); }
+		return String.from_bytes_lossy(Array{buf, length_i32, length_i32});
+	}
+}

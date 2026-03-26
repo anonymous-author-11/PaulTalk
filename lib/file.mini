@@ -1,0 +1,194 @@
+import array;
+import writer;
+
+class FileSystemError extends Exception {}
+
+class File extends IndexableCollection[i32, i8, i8] {
+
+	abstract def read_at(offset : i64) -> i8? {
+	} ~> no_alias
+	abstract def write(offset : i64, source : Buffer[i8], n_bytes : i32) -> i32 {
+	} ~> no_alias
+	abstract def byte_length() -> i64 {
+	} ~> no_alias
+	abstract def mode=(mode : String) {
+	}
+	abstract def reopen() {
+	} ~> no_alias
+	abstract def close() {
+	} ~> no_alias
+
+	def size() -> i32 {
+		length = self.byte_length();
+		max_i32 = i32.max() as i64;
+		if length > max_i32 { yield(FileSystemError{}); }
+		return length as i32;
+	}
+
+	def bounds_check(index : i32) {
+		length = self.size();
+		if index < 0 or index >= length { yield(OutOfBounds{length, index}); }
+	}
+
+	def indices() -> Range {
+		return 0..self.size();
+	}
+
+	def values() -> Self {
+		return self;
+	}
+
+	def unchecked_index(index : i32) -> i8 {
+		value = self.read_at(index as i64);
+		if value is i8 { return value; }
+		yield(FileSystemError{});
+	}
+
+	def [](index : i32) -> i8 {
+		self.bounds_check(index);
+		return self.unchecked_index(index);
+	}
+
+	def unchecked_insert(index : i32, value : i8) {
+		single_byte = Buffer[i8].new(1);
+		single_byte.[0] = value;
+		written = self.write(index as i64, single_byte, 1);
+		if written < 1 { yield(FileSystemError{}); }
+	}
+
+	def []=(index : i32, value : i8) {
+		self.bounds_check(index);
+		self.unchecked_insert(index, value);
+	}
+
+	def append_byte(value : i8) {
+		offset = self.byte_length();
+		single_byte = Buffer[i8].new(1);
+		single_byte.[0] = value;
+		self.write(offset, single_byte, 1);
+	}
+
+	def read() -> String {
+		return String.from_bytes_lossy(self);
+	}
+
+	def lines() -> Iterable[StringView] {
+		return self.read().lines();
+	}
+
+	def write(text : String) -> i64 {
+		text_len = text.byte_length();
+		written = self.write(0 as i64, text.c_string(), text_len);
+		if written < text_len { yield(FileSystemError{}); }
+		return written as i64;
+	}
+
+	def iterator() -> FileIterator {
+		return FileIterator{self};
+	} ~> { ret.file == self }
+
+	def writer() -> FileWriter {
+		return FileWriter{self};
+	}
+
+	def writer(cursor : i64) -> FileWriter {
+		return FileWriter{self, cursor};
+	}
+}
+
+class FileIterator extends Iterator[i8] {
+	@file : File
+	@size : i32
+	@cursor : i32
+
+	regions { @elems_reg == @file.elems_reg }
+
+	def init(@file : File) {
+		@cursor = 0;
+		@size = @file.size();
+	}
+
+	def next() -> i8? {
+		if @cursor >= @size { return nil; }
+		index = @cursor;
+		@cursor = @cursor + 1;
+		return @file.unchecked_index(index);
+	}
+}
+
+class FileWriter extends Writer[i8] {
+	@file : File
+	@cursor : i64
+	@scratch : Buffer[i8]
+	@scratch_capacity : i32
+
+	regions { @dest_reg == @file.elems_reg }
+
+	def Self.default_scratch_capacity() -> i32 {
+		return 8192;
+	}
+
+	getter @cursor
+
+	def init(@file : File) {
+		@cursor = 0 as i64;
+		@scratch_capacity = Self.default_scratch_capacity();
+		@scratch = Buffer[i8].new(@scratch_capacity);
+	}
+
+	def init(@file : File, @cursor : i64) {
+		@scratch_capacity = Self.default_scratch_capacity();
+		@scratch = Buffer[i8].new(@scratch_capacity);
+		if @cursor < 0 as i64 { yield(FileSystemError{}); }
+	}
+
+	def cursor=(new_cursor : i64) {
+		if new_cursor < 0 as i64 { yield(FileSystemError{}); }
+		@cursor = new_cursor;
+	}
+
+	def write(value : i8) {
+		@scratch.[0] = value;
+		written = @file.write(@cursor, @scratch, 1);
+		@cursor = @cursor + written as i64;
+	}
+
+	def fill_scratch(source : Iterator[i8], max_elems : i32) -> i32 {
+		target = max_elems;
+		if target > @scratch_capacity { target = @scratch_capacity; }
+		filled = 0;
+		while filled < target {
+			next = source.next();
+			if next is not i8 { return filled; }
+			@scratch.[filled] = next;
+			filled = filled + 1;
+		}
+		return filled;
+	} ~> no_alias
+
+	def flush_scratch(n_bytes : i32) -> i32 {
+		written = @file.write(@cursor, @scratch, n_bytes);
+		@cursor = @cursor + written as i64;
+		return written;
+	}
+
+	def write_from(source : Iterator[i8], max_elems : i32) -> i32 {
+		if max_elems <= 0 { return 0; }
+		total_written = 0;
+		while total_written < max_elems {
+			remaining = max_elems - total_written;
+			filled = self.fill_scratch(source, remaining);
+			if filled == 0 { break; }
+			written = self.flush_scratch(filled);
+			total_written = total_written + written;
+			if written < filled { break; }
+		}
+		return total_written;
+	}
+
+	def write_from(source : Collection[i8], max_elems : i32) -> i32 {
+		n_write = source.size();
+		if max_elems < n_write { n_write = max_elems; }
+		return self.write_from(source.iterator(), n_write);
+	}
+}
