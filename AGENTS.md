@@ -55,6 +55,7 @@ python ptalk_build.py
 - If I ask you to analyze code, I am not just asking for a bug report
 	- If you don't report boilerplate, bad abstractions, dead code, that is a failure
 - The fast test suite will take more than 120s to run, so don't set a 120s timeout
+- Do not ever give time estimates (minutes, hours, days). You have no understanding of time.
 
 ## Code Style Guidelines
 
