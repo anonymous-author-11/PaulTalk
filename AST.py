@@ -3899,6 +3899,150 @@ class ClassBehavior(Behavior):
         return f"ClassBehavior({self.name}, {self.broad_param_types()}, {self.offset})"
 
 @dataclass
+class Vtable:
+    entries: List["Field | Behavior | Method"]
+    starts: dict[TypeAttribute, int]
+
+    def start_of(self, typ):
+        return self.starts[typ]
+
+    def assign_offsets(self):
+        for i, elem in reversed(list(enumerate(self.entries))):
+            if isinstance(elem, (Behavior, Method)): elem.offset = i
+
+    @classmethod
+    def for_class(cls, owner):
+        flat_cache = {}
+        flat = cls.flat(owner, flat_cache)
+        exact_cache = {}
+        vtable = cls.for_target(owner, owner.type(), flat, exact_cache)
+        vtable.assign_offsets()
+        return vtable
+
+    @classmethod
+    def field_declarations(cls, owner):
+        field_declarations = owner.all_field_declarations()
+        data_fields = [field for field in field_declarations if not isinstance(field, TypeFieldDecl)]
+        fixed_type_fields = [
+            field for field in field_declarations
+            if isinstance(field, TypeFieldDecl) and "subtype" not in field.scoped_name(owner._type_env)
+        ]
+        unfixed_type_fields = [
+            field for field in field_declarations
+            if isinstance(field, TypeFieldDecl) and "subtype" in field.scoped_name(owner._type_env)
+        ]
+        return [*unfixed_type_fields, *data_fields, *fixed_type_fields]
+
+    @classmethod
+    def field_replacement(cls, owner, fields, elem):
+        for field in fields:
+            same_name = elem.declaration.scoped_name(owner._type_env) == field.declaration.scoped_name(owner._type_env)
+            if same_name: return field
+        return elem
+
+    @classmethod
+    def behavior_replacement(cls, behaviors, elem):
+        for behavior in behaviors:
+            if elem.name == behavior.name and elem.arity == behavior.arity: return behavior
+        return elem
+
+    @classmethod
+    def method_replacement(cls, methods, superfluous_methods, elem):
+        for method in methods:
+            if method.is_override_of(elem): return method
+        if elem.definition in superfluous_methods: return methods[0]
+        return elem
+
+    @classmethod
+    def replacement(cls, owner, fields, methods, superfluous_methods, elem):
+        if isinstance(elem, Field): return cls.field_replacement(owner, fields, elem)
+        if isinstance(elem, Behavior): return cls.behavior_replacement(owner._behaviors, elem)
+        if isinstance(elem, Method): return cls.method_replacement(methods, superfluous_methods, elem)
+        return elem
+
+    @classmethod
+    def starts_for_flat(cls, owner, cache):
+        classes = [owner, *owner.my_ordering()]
+        sizes = [owner.marginal_vtable_size(), *[len(cache[sup].entries) for sup in owner.my_ordering()]]
+        starts = {}
+        fat_ancestors = [owner.type_env.simplify(anc) for anc in owner.ancestors() if isinstance(anc, FatPtr)]
+        for anc in fat_ancestors:
+            anc = owner.type_env.simplify(anc)
+            anc_class = owner.type_env.get_class(None, anc)
+            idx = classes.index(anc_class)
+            starts[anc] = sum(sizes[:idx])
+        return starts
+
+    @classmethod
+    def merge_starts(cls, starts, cursor, sub):
+        additions = {anc: cursor + rel for anc, rel in sub.starts.items() if anc not in starts}
+        starts.update(additions)
+
+    @classmethod
+    def flat(cls, owner, cache):
+        if owner in cache:
+            return cache[owner]
+
+        owner.compute_aliases()
+        for sup in owner.my_ordering():
+            cls.flat(sup, cache)
+
+        field_declarations = cls.field_declarations(owner)
+        fields = [Field(i, owner, declaration) for (i, declaration) in enumerate(field_declarations)]
+
+        if not isinstance(owner._behaviors, list):
+            owner.initialize_behaviors()
+        methods = [*chain.from_iterable(behavior.methods for behavior in owner._behaviors)]
+        superfluous_methods = [*chain.from_iterable(behavior.superfluous_methods for behavior in owner._behaviors)]
+        vtables = [*chain.from_iterable(cache[sup].entries for sup in owner.my_ordering())]
+        entries = [*fields, *owner._behaviors, *methods, *vtables]
+
+        for i, elem in reversed(list(enumerate(entries))):
+            entries[i] = cls.replacement(owner, fields, methods, superfluous_methods, elem)
+            if isinstance(entries[i], (Behavior, Method)): entries[i].offset = i
+
+        result = cls(entries, cls.starts_for_flat(owner, cache))
+        cache[owner] = result
+        return result
+
+    @classmethod
+    def for_target(cls, owner, target_type, flat, cache):
+        target_type = owner.type_env.simplify(target_type)
+        if target_type in cache:
+            return cache[target_type]
+
+        target_class = owner.type_env.get_class(None, target_type)
+        start = flat.start_of(target_type)
+        head_len = target_class.marginal_vtable_size()
+        entries = [*flat.entries[start:start + head_len]]
+        starts = {target_type: 0}
+        cursor = head_len
+
+        for sup_type in cls.direct_views(owner, target_type):
+            sub = cls.for_target(owner, sup_type, flat, cache)
+            entries.extend(sub.entries)
+            cls.merge_starts(starts, cursor, sub)
+            cursor += len(sub.entries)
+
+        result = cls(entries, starts)
+        cache[target_type] = result
+        return result
+
+    @classmethod
+    def direct_views(cls, owner, target_type):
+        target_class = owner.type_env.get_class(None, target_type)
+        direct_supertypes = [sup for sup in target_class.direct_supertypes() if isinstance(sup, FatPtr)]
+
+        def cmp_key(a, b):
+            return 0 if owner.type_env.subtype(a, b) else 1
+
+        direct_supertypes = sorted(direct_supertypes, key=cmp_to_key(cmp_key))
+        return [
+            owner.type_env.specialize([target_class.type()], [target_type], sup)
+            for sup in direct_supertypes
+        ]
+
+@dataclass
 class ClassDef(Statement):
     name: str
     type_parameters: List[TypeAttribute]
@@ -3910,7 +4054,7 @@ class ClassDef(Statement):
     method_definitions: List[MethodDef]
     _behaviors: List[Behavior]
     _type_env: TypeEnvironment
-    _vtable: List[Method | Behavior]
+    _vtable: Optional[Vtable]
     _my_ordering: List["ClassDef"]
 
     def __init__(self, info, name, type_params, supertypes, fields, regions, constraints, methods):
@@ -3931,7 +4075,7 @@ class ClassDef(Statement):
     @property
     def type_env(self):
         if self._type_env and FatPtr.basic("Self") in self._type_env.aliases: return self._type_env
-        vtbl = self.vtable() # will compute all aliases implicitly
+        self.compute_aliases()
         return self._type_env
 
     def codegen(self, scope):
@@ -4165,7 +4309,8 @@ class ClassDef(Statement):
 
     @property
     def behaviors(self):
-        if not isinstance(self._behaviors, list): self.compute_vtable()
+        if not isinstance(self._behaviors, list):
+            self.initialize_behaviors()
         return self._behaviors
 
     def initialize_behaviors(self):
@@ -4184,54 +4329,22 @@ class ClassDef(Statement):
             self._behaviors.append(behavior)
 
     def compute_vtable(self):
-        self.compute_aliases()
-        vtables = [*chain.from_iterable(cls.vtable() for cls in self.my_ordering())]
-        # divide type fields into fixed and unfixed depending on whether a type parameter appears anywhere in them
-        # need a utility method to determine if a type is fully concrete
-        # we could cheat and search for "subtype" in its cleaned name
-        field_declarations = self.all_field_declarations()
-        data_fields = [field for field in field_declarations if not isinstance(field, TypeFieldDecl)]
-        fixed_type_fields = [field for field in field_declarations if isinstance(field, TypeFieldDecl) and "subtype" not in field.scoped_name(self._type_env)]
-        unfixed_type_fields = [field for field in field_declarations if isinstance(field, TypeFieldDecl) and "subtype" in field.scoped_name(self._type_env)]
-        field_declarations = [*unfixed_type_fields, *data_fields, *fixed_type_fields]
-        fields = [Field(i, self, declaration) for (i, declaration) in enumerate(field_declarations)]
-        self.initialize_behaviors()
-        methods = [*chain.from_iterable(behavior.methods for behavior in self.behaviors)]
-        superfluous_methods = [*chain.from_iterable(behavior.superfluous_methods for behavior in self.behaviors)]
-        combined = [*fields, *self.behaviors, *methods, *vtables]
-        for i, elem in reversed(list(enumerate(combined))):
-            if isinstance(elem, Field):
-                for field in fields:
-                    if elem.declaration.scoped_name(self._type_env) == field.declaration.scoped_name(self._type_env):
-                        combined[i] = field
-            if isinstance(elem, Behavior):
-                for behavior in self.behaviors:
-                    if elem.name == behavior.name and elem.arity == behavior.arity:
-                        combined[i] = behavior
-                combined[i].offset = i
-            if isinstance(elem, Method):
-                for method in methods:
-                    if method.is_override_of(elem): combined[i] = method
-                if elem.definition in superfluous_methods:
-                    #debug_print(f"replacing superfluous method {elem} with a random method {methods[0]}")
-                    combined[i] = methods[0]
-                combined[i].offset = i
-        self._vtable = combined
+        self._vtable = Vtable.for_class(self)
 
     def marginal_vtable_size(self):
         return len([*self.all_field_declarations(), *self.behaviors, *[*chain.from_iterable(behavior.methods for behavior in self.behaviors)]])
 
     def offset_to(self, target_type):
-        my_ordering = self.my_ordering()
-        target_class = self.type_env.get_class(None, target_type)
-        idx = [self, *my_ordering].index(target_class)
-        vtbl_sizes = [self.marginal_vtable_size(), *[cls.vtable_size() for cls in my_ordering]]
-        return sum(vtbl_sizes[:idx])
+        if not self._vtable:
+            self.compute_vtable()
+        target_type = self.type_env.simplify(target_type)
+        return self._vtable.start_of(target_type)
 
     def vtable(self):
-        if self._vtable: return self._vtable
+        if self._vtable:
+            return self._vtable.entries
         self.compute_vtable()
-        return self._vtable
+        return self._vtable.entries
 
     def __repr__(self):
         return self.name
