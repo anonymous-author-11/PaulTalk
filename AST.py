@@ -1579,7 +1579,6 @@ class Into(Expression):
         return [self.operand]
 
     def codegen(self, scope):
-        operand_type = self.operand.exprtype(scope)
         to_type = scope.simplify(self.typ)
         method_return_type = self.method.exprtype(scope)
         if method_return_type == to_type: return self.method.codegen(scope)
@@ -1592,52 +1591,99 @@ class Into(Expression):
     def exprtype(self, scope):
         if self.method: return scope.simplify(self.typ)
         operand_type = self.operand.exprtype(scope)
-        to_type = scope.simplify(self.typ)
-        to_type = scope.type_env.validated_type(self.info, to_type)
+        to_type = scope.type_env.qualify(self.typ, self.info)
 
         # Precedence order: 1) .to_ method 2) .from_ method 3) constructor
 
         to_method = self.find_to_method(scope, operand_type, to_type)
         if to_method:
             self.method = to_method
-            return to_type
+            return scope.simplify(self.typ)
 
         from_method = self.find_from_method(scope, operand_type, to_type)
         if from_method:
             self.method = from_method
-            return to_type
+            return scope.simplify(self.typ)
 
         constructor = self.find_constructor(scope, operand_type, to_type)
         if constructor:
             self.method = constructor
-            return to_type
+            return scope.simplify(self.typ)
 
         raise Exception(f"{self.info}: There are no {operand_type}.to_ methods or {to_type}.from_ methods that are applicable")
+
+    def deduce_from_type(self, scope, target_class, candidate_behaviors, operand_type):
+        target_type = target_class.type()
+        candidate_types = (self.deduced_types_for_behavior(scope, target_type, behavior, operand_type) for behavior in candidate_behaviors)
+        deduced_types = set().union(*candidate_types)
+        return self.validate_deduced_type(scope, operand_type, target_type, deduced_types)
+
+    def deduce_to_type(self, scope, target_class, candidate_behaviors, operand_type):
+        target_type = target_class.type()
+        candidate_types = [behavior.specialized_return_type(operand_type, [], scope) for behavior in candidate_behaviors]
+        deduced_types = {t for t in candidate_types if scope.matches(t, target_type)}
+        return self.validate_deduced_type(scope, operand_type, target_type, deduced_types)
+
+    def validate_deduced_type(self, scope, operand_type, target_type, deduced_types):
+        if len(deduced_types) == 0: return None
+        if len(deduced_types) != 1:
+            raise Exception(f"{self.info}: Could not deduce a unique target type for {target_type.cls.data} from argument type {operand_type}")
+        return scope.type_env.validated_type(self.info, next(iter(deduced_types)))
+
+    def deduced_types_for_behavior(self, scope, target_type, behavior, operand_type):
+        deduced_types = set()
+        for method in behavior.methods:
+            param_types = method.param_types()
+            if len(param_types) != 1: continue
+            ancestor = next((anc for anc in scope.ancestors(operand_type) if scope.matches(anc, param_types[0])), None)
+            if not ancestor: continue
+            deduced_types.add(scope.specialize(param_types, [ancestor], target_type))
+        return deduced_types
+
+    def generic_target_class(self, scope, to_type):
+        if not isinstance(to_type, FatPtr): return None
+        to_class = scope.get_class(self.info, to_type)
+        if to_type.type_params != NoneAttr(): return None
+        if len(to_class.type_parameters) == 0: return None
+        return to_class
 
     # see if there is a .to_ method on the operand that returns the rhs type
     def find_to_method(self, scope, operand_type, to_type):
         if not isinstance(operand_type, FatPtr): return None
         operand_class = scope.get_class(self.info, operand_type)
         candidate_behaviors = [behavior for behavior in operand_class.behaviors if behavior.name.startswith("to_") and behavior.arity == 0]
+        to_class = self.generic_target_class(scope, to_type)
+        if to_class:
+            to_type = self.deduce_to_type(scope, to_class, candidate_behaviors, operand_type)
+            if not to_type: return None
+            self.typ = to_type
+        to_type = scope.type_env.validated_type(self.info, to_type)
         candidate_behaviors = [behavior for behavior in candidate_behaviors if scope.subtype(behavior.specialized_return_type(operand_type, [], scope), to_type)]
+        if len(candidate_behaviors) == 0: return None
         if len(candidate_behaviors) > 1:
             candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.specialized_return_type(operand_type, [], scope) == to_type]
-            if len(candidate_behaviors) != 1:
-                raise Exception(f"{self.info}: There are multiple equally applicable {operand_type}.to_ methods that return a subtype of {to_type}")
-        if len(candidate_behaviors) == 1:
-            to_behavior = candidate_behaviors[0]
-            call = MethodCall(self.info, self.operand, to_behavior.name, [])
-            call.exprtype(scope)
-            return call
-        return None
+        if len(candidate_behaviors) != 1:
+            raise Exception(f"{self.info}: There are multiple equally applicable {operand_type}.to_ methods that return a subtype of {to_type}")
+        to_behavior = candidate_behaviors[0]
+        call = MethodCall(self.info, self.operand, to_behavior.name, [])
+        call.exprtype(scope)
+        return call
 
     # see if there is a .from_ ClassMethod on the target type that accepts the operand type
     def find_from_method(self, scope, operand_type, to_type):
         if not isinstance(to_type, FatPtr): return None
         to_class = scope.get_class(self.info, to_type)
         candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name.startswith("_Self_from_") and behavior.arity == 1]
+        if self.generic_target_class(scope, to_type):
+            to_type = self.deduce_from_type(scope, to_class, candidate_behaviors, operand_type)
+            if not to_type: return None
+            self.typ = to_type
+        else:
+            to_type = scope.type_env.validated_type(self.info, to_type)
         candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, behavior.name, [operand_type])]
         if len(candidate_behaviors) == 0: return None
+        if len({behavior.name for behavior in candidate_behaviors}) > 1:
+            raise Exception(f"{self.info}: There are multiple equally applicable {to_type}.from_ methods that accept {operand_type}")
         from_behavior = candidate_behaviors[0]
         call = ClassMethodCall(self.info, to_type, from_behavior.name.replace("_Self_",""), [self.operand])
         call.exprtype(scope)
@@ -1648,6 +1694,12 @@ class Into(Expression):
         if not isinstance(to_type, FatPtr): return None
         to_class = scope.get_class(self.info, to_type)
         candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name == "init" and behavior.arity == 1]
+        if self.generic_target_class(scope, to_type):
+            if len(candidate_behaviors) == 0: return None
+            call = ObjectCreation(self.info, self.info.id + "_into_constructor", to_type, [self.operand])
+            self.typ = call.exprtype(scope)
+            return call
+        to_type = scope.type_env.validated_type(self.info, to_type)
         candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, "init", [operand_type])]
         if len(candidate_behaviors) == 0: return None
         call = ObjectCreation(self.info, self.info.id + "_into_constructor", to_type, [self.operand])
