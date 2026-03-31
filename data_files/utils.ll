@@ -8,6 +8,8 @@ source_filename = "UtilsModule"
 declare i32 @printf(ptr, ...)
 declare void @exit()
 declare ptr @malloc(i64)
+declare ptr @GC_malloc(i64)
+declare ptr @calloc(i64, i64)
 declare void @free(ptr allocptr nocapture noundef)
 declare void @llvm.eh.sjlj.longjmp(ptr) noreturn nounwind
 declare ptr @llvm.stacksave() mustprogress nocallback nofree nosync nounwind willreturn
@@ -102,6 +104,8 @@ define noalias ptr @bump_malloc(i64 noundef %size) alwaysinline mustprogress nof
 }
 
 define noalias ptr @bump_malloc_wrapper(i64 noundef %size) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
+  ;%result = call noalias ptr @calloc(i64 noundef %size, i64 1)
+  ;%result = call noalias ptr @GC_malloc(i64 noundef %size)
   %result = call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   ret ptr %result
 }
