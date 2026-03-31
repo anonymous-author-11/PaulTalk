@@ -884,9 +884,6 @@ def shell_join(command) -> str:
 def add_source_directories(input_path):
     source_directories.clear()
 
-    # Immediate parent directory of the file being compiled
-    source_directories[input_path.parent] = input_path.parent
-
     # Dependencies put into PTALK_PATH by the build system
     ptalk_path = os.environ.get("PTALK_PATH")
     if ptalk_path:
