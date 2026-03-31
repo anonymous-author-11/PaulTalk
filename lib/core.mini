@@ -883,7 +883,7 @@ class UTF8BytesValidator {
 
     // Re-encode bytes for one codepoint from the byte source into @writer
     def write_codepoints_from(source : Iterator[i8], max_elems : i32) -> i32 {
-        peeker = source into Peeker[i8];
+        peeker = source into Peeker;
         n_written = 0;
         while n_written < max_elems {
             b1 = peeker.next();
@@ -953,7 +953,7 @@ class ValidUTF8Decoder extends ConstantTimeIterator[i32] {
     getters @peeker
 
     def init(iterator : Iterator[i8]) {
-        @peeker = iterator into Peeker[i8];
+        @peeker = iterator into Peeker;
     }
 
     def bad_result(b1 : i8) -> i32? {
@@ -1006,7 +1006,7 @@ class UTF8Decoder extends ValidUTF8Decoder {
     } ~> { ret.iterator == iterator }
 
     def init(iterator : Iterator[i8]) {
-        @peeker = iterator into Peeker[i8];
+        @peeker = iterator into Peeker;
         @replacement_fn = (byte : i8) => {
             yield(InvalidUTF8Error{});
             return -1;
@@ -1014,7 +1014,7 @@ class UTF8Decoder extends ValidUTF8Decoder {
     }
 
     def init(iterator : Iterator[i8], @replacement_fn : (i8) -> i32) {
-        @peeker = iterator into Peeker[i8];
+        @peeker = iterator into Peeker;
     }
 
     def bad_result(b1 : i8) -> i32? {
@@ -1206,3 +1206,4 @@ class SliceIterator[T] extends ConstantTimeIterator[T] {
         return @slice.unchecked_index(old_index);
     }
 }
+
