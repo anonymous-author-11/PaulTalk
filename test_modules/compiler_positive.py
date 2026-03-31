@@ -835,6 +835,45 @@ class CompilerPositiveTestsMixin:
         expected_output = "d"
         self.run_mini_code(mini_code, expected_output, "chained_into_operators")
 
+    def test_into_infers_generic_target(self):
+        mini_code = """
+            import std;
+
+            class Box[T] {
+                @value : T
+
+                def init(@value : T) {}
+
+                def value() -> T {
+                    return @value;
+                }
+            }
+
+            class Source[T] {
+                @value : T
+
+                def init(@value : T) {}
+
+                def to_box() -> Box[T] {
+                    return Box[T]{@value};
+                }
+            }
+
+            it = [1, 2, 3].iterator();
+            peeker = it into Peeker;
+            first = peeker.peek();
+            if first is i32 { IO.print(first); }
+            second = peeker.next();
+            if second is i32 { IO.print(second); }
+            src = Source[i32]{7};
+            from_to = src into Box;
+            from_init = 9 into Box;
+            IO.print(from_to.value());
+            IO.print(from_init.value());
+        """
+        expected_output = "1\n1\n7\n9"
+        self.compile_and_run(mini_code, expected_output, "into_generic")
+
     def test_nil_syntax_sugar(self):
         mini_code = """
             import core;
