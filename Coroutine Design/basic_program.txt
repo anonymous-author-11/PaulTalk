@@ -1,0 +1,33 @@
+
+def yielding_fn(n : i32) -> i32 {
+	print(n);
+	yield();
+	n = n + 1;
+	print(n);
+	yield();
+	n = n + 1;
+	print(n);
+	yield();
+	n = n + 1;
+	print(n);
+	return n;
+}
+
+def passthru_fn(n : i32) -> i32 {
+	return yielding_fn(n : i32);
+}
+
+def calling_fn(n : i32) {
+	coro = Coro{passthru_fn, n};
+	coro.call();
+	n = n + 10;
+	print(n);
+	coro.call();
+	n = n + 20;
+	print(n);
+	return;
+}
+
+def main() {
+	calling_fn(5);
+}
