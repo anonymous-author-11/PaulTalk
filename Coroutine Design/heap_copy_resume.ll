@@ -1,29 +1,16 @@
 source_filename = "Coroutine Design\\heap_copy_resume.ll"
 target triple = "x86_64-pc-windows-msvc"
 
-%stack_copy = type { ptr, i64 }
+%stack_copy = type { ptr, i64, i64 }
+%resume_target = type { ptr, ptr }
+%callee_state = type { ptr, %stack_copy }
+%resume_frame = type { ptr, i32 }
 
 @print_i32_fmt = private unnamed_addr constant [4 x i8] c"%d\0A\00"
 
-@calling_fn_caller_tramp = internal thread_local global [24 x i8] zeroinitializer
-@calling_fn_1_caller_tramp = internal thread_local global [24 x i8] zeroinitializer
-
-@calling_fn_caller_trampoline = internal thread_local global ptr null
-@calling_fn_1_caller_trampoline = internal thread_local global ptr null
-@yielding_fn_continuation = internal thread_local global ptr null
-@yielding_fn_1_continuation = internal thread_local global ptr null
-@yielding_fn_2_continuation = internal thread_local global ptr null
-
-@calling_fn_caller_sp = internal thread_local global ptr null
-@calling_fn_1_caller_sp = internal thread_local global ptr null
-
-@calling_fn_1_resume_result = internal thread_local global i32 0
-
-@yielding_fn_copy = internal thread_local global %stack_copy zeroinitializer
-@yielding_fn_1_copy = internal thread_local global %stack_copy zeroinitializer
-@yielding_fn_2_copy = internal thread_local global %stack_copy zeroinitializer
-
-@restore_pad = internal constant i64 4096
+@caller_handoff = internal thread_local global %resume_target zeroinitializer
+@callee_handoff = internal thread_local global %callee_state zeroinitializer
+@active_resume_frame = internal thread_local global ptr null
 
 declare i32 @printf(ptr, ...)
 declare i32 @fflush(ptr)
@@ -69,15 +56,21 @@ define i64 @section_size(ptr %top_sp, ptr %bottom_sp) alwaysinline {
   ret i64 %size
 }
 
-define ptr @require_buf(ptr %slot, i64 %size) alwaysinline {
-  %buf = load ptr, ptr %slot
+define ptr @require_buf(ptr %copy, i64 %size) alwaysinline {
+  %buf_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 0
+  %buf = load ptr, ptr %buf_slot
+  %capacity_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 2
+  %capacity = load i64, ptr %capacity_slot
   %missing = icmp eq ptr %buf, null
-  br i1 %missing, label %alloc, label %done
+  %enough = icmp uge i64 %capacity, %size
+  %need_alloc = xor i1 %enough, true
+  %grow = or i1 %missing, %need_alloc
+  br i1 %grow, label %alloc, label %done
 
 alloc:
   %new_buf = call ptr @malloc(i64 %size)
-  store ptr %new_buf, ptr %slot
-  %buf_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr %slot)
+  store ptr %new_buf, ptr %buf_slot
+  store i64 %size, ptr %capacity_slot
   br label %done
 
 done:
@@ -92,8 +85,7 @@ define void @save_copy(ptr %copy, ptr %top_sp, ptr %bottom_sp) alwaysinline {
   store i64 %size, ptr %size_slot
   %size_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr %size_slot)
 
-  %buf_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 0
-  %buf = call ptr @require_buf(ptr %buf_slot, i64 %size)
+  %buf = call ptr @require_buf(ptr %copy, i64 %size)
   call void @llvm.memcpy.p0.p0.i64(ptr %buf, ptr %bottom_sp, i64 %size, i1 false)
   ret void
 }
@@ -107,8 +99,7 @@ define void @restore_copy(ptr %copy) alwaysinline {
 
   %top_sp = call ptr @llvm.stacksave()
   %top_i = ptrtoint ptr %top_sp to i64
-  %pad = load i64, ptr @restore_pad
-  %top_after_pad = sub i64 %top_i, %pad
+  %top_after_pad = sub i64 %top_i, 4096
   %bottom_i = sub i64 %top_after_pad, %size
   %bottom = inttoptr i64 %bottom_i to ptr
 
@@ -117,18 +108,24 @@ define void @restore_copy(ptr %copy) alwaysinline {
   ret void
 }
 
-define ptr @load_calling_fn_1_sp() noinline {
-  %value = load ptr, ptr @calling_fn_1_caller_sp
+define ptr @load_active_resume_sp() noinline {
+  %frame = load ptr, ptr @active_resume_frame
+  %slot = getelementptr %resume_frame, ptr %frame, i32 0, i32 0
+  %value = load ptr, ptr %slot
   ret ptr %value
 }
 
-define void @store_calling_fn_1_resume_result(i32 %value) noinline {
-  store i32 %value, ptr @calling_fn_1_resume_result
+define void @store_active_resume_result(i32 %value) noinline {
+  %frame = load ptr, ptr @active_resume_frame
+  %slot = getelementptr %resume_frame, ptr %frame, i32 0, i32 1
+  store i32 %value, ptr %slot
   ret void
 }
 
-define i32 @load_calling_fn_1_resume_result() noinline {
-  %value = load i32, ptr @calling_fn_1_resume_result
+define i32 @load_active_resume_result() noinline {
+  %frame = load ptr, ptr @active_resume_frame
+  %slot = getelementptr %resume_frame, ptr %frame, i32 0, i32 1
+  %value = load i32, ptr %slot
   ret i32 %value
 }
 
@@ -140,13 +137,17 @@ define i32 @yielding_fn(i32 %n) {
   call void @print_i32(i32 %n)
 
   call void @llvm.init.trampoline(ptr %tramp, ptr @yielding_fn_1, ptr %n_ptr)
-  call void @save_continuation(ptr @yielding_fn_continuation, ptr %tramp)
+  %callee_cont_slot = getelementptr %callee_state, ptr @callee_handoff, i32 0, i32 0
+  call void @save_continuation(ptr %callee_cont_slot, ptr %tramp)
 
-  %top_sp = load ptr, ptr @calling_fn_caller_sp
+  %caller_sp_slot = getelementptr %resume_target, ptr @caller_handoff, i32 0, i32 1
+  %top_sp = load ptr, ptr %caller_sp_slot
   %bottom_sp = call ptr @llvm.stacksave()
-  call void @save_copy(ptr @yielding_fn_copy, ptr %top_sp, ptr %bottom_sp)
+  %callee_copy = getelementptr %callee_state, ptr @callee_handoff, i32 0, i32 1
+  call void @save_copy(ptr %callee_copy, ptr %top_sp, ptr %bottom_sp)
 
-  %yield_trampoline = load ptr, ptr @calling_fn_caller_trampoline
+  %caller_cont_slot = getelementptr %resume_target, ptr @caller_handoff, i32 0, i32 0
+  %yield_trampoline = load ptr, ptr %caller_cont_slot
   %result = call i32 %yield_trampoline()
   ret i32 %result
 }
@@ -161,13 +162,17 @@ define i32 @yielding_fn_1(ptr nest %n_ptr) {
   call void @print_i32(i32 %n1)
 
   call void @llvm.init.trampoline(ptr %tramp, ptr @yielding_fn_2, ptr %n1_ptr)
-  call void @save_continuation(ptr @yielding_fn_1_continuation, ptr %tramp)
+  %callee_cont_slot = getelementptr %callee_state, ptr @callee_handoff, i32 0, i32 0
+  call void @save_continuation(ptr %callee_cont_slot, ptr %tramp)
 
-  %top_sp = load ptr, ptr @calling_fn_1_caller_sp
+  %caller_sp_slot = getelementptr %resume_target, ptr @caller_handoff, i32 0, i32 1
+  %top_sp = load ptr, ptr %caller_sp_slot
   %bottom_sp = call ptr @llvm.stacksave()
-  call void @save_copy(ptr @yielding_fn_1_copy, ptr %top_sp, ptr %bottom_sp)
+  %callee_copy = getelementptr %callee_state, ptr @callee_handoff, i32 0, i32 1
+  call void @save_copy(ptr %callee_copy, ptr %top_sp, ptr %bottom_sp)
 
-  %yield_trampoline = load ptr, ptr @calling_fn_1_caller_trampoline
+  %caller_cont_slot = getelementptr %resume_target, ptr @caller_handoff, i32 0, i32 0
+  %yield_trampoline = load ptr, ptr %caller_cont_slot
   %result = call i32 %yield_trampoline()
   ret i32 %result
 }
@@ -182,13 +187,17 @@ define i32 @yielding_fn_2(ptr nest %n1_ptr) {
   call void @print_i32(i32 %n2)
 
   call void @llvm.init.trampoline(ptr %tramp, ptr @yielding_fn_3, ptr %n2_ptr)
-  call void @save_continuation(ptr @yielding_fn_2_continuation, ptr %tramp)
+  %callee_cont_slot = getelementptr %callee_state, ptr @callee_handoff, i32 0, i32 0
+  call void @save_continuation(ptr %callee_cont_slot, ptr %tramp)
 
-  %top_sp = load ptr, ptr @calling_fn_1_caller_sp
+  %caller_sp_slot = getelementptr %resume_target, ptr @caller_handoff, i32 0, i32 1
+  %top_sp = load ptr, ptr %caller_sp_slot
   %bottom_sp = call ptr @llvm.stacksave()
-  call void @save_copy(ptr @yielding_fn_2_copy, ptr %top_sp, ptr %bottom_sp)
+  %callee_copy = getelementptr %callee_state, ptr @callee_handoff, i32 0, i32 1
+  call void @save_copy(ptr %callee_copy, ptr %top_sp, ptr %bottom_sp)
 
-  %yield_trampoline = load ptr, ptr @calling_fn_1_caller_trampoline
+  %caller_cont_slot = getelementptr %resume_target, ptr @caller_handoff, i32 0, i32 0
+  %yield_trampoline = load ptr, ptr %caller_cont_slot
   %result = call i32 %yield_trampoline()
   ret i32 %result
 }
@@ -207,15 +216,18 @@ define i32 @passthru_fn(i32 %n) {
 
 define void @calling_fn(i32 %n) {
   %n_ptr = alloca i32
+  %caller_tramp = alloca [24 x i8]
   store i32 %n, ptr %n_ptr
   %n_invariant = call ptr @llvm.invariant.start.p0(i64 4, ptr %n_ptr)
 
-  call void @llvm.init.trampoline(ptr @calling_fn_caller_tramp, ptr @calling_fn_1, ptr %n_ptr)
-  call void @save_continuation(ptr @calling_fn_caller_trampoline, ptr @calling_fn_caller_tramp)
+  call void @llvm.init.trampoline(ptr %caller_tramp, ptr @calling_fn_1, ptr %n_ptr)
+  %caller_cont_slot = getelementptr %resume_target, ptr @caller_handoff, i32 0, i32 0
+  call void @save_continuation(ptr %caller_cont_slot, ptr %caller_tramp)
 
   %caller_sp = call ptr @llvm.stacksave()
-  store ptr %caller_sp, ptr @calling_fn_caller_sp
-  %caller_sp_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr @calling_fn_caller_sp)
+  %caller_sp_slot = getelementptr %resume_target, ptr @caller_handoff, i32 0, i32 1
+  store ptr %caller_sp, ptr %caller_sp_slot
+  %caller_sp_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr %caller_sp_slot)
 
   %result = call i32 @passthru_fn(i32 %n)
   ret void
@@ -223,26 +235,37 @@ define void @calling_fn(i32 %n) {
 
 define i32 @calling_fn_1(ptr nest %n_ptr) {
   %n1_ptr = alloca i32
+  %caller_tramp = alloca [24 x i8]
+  %resume_frame = alloca %resume_frame
   %n = load i32, ptr %n_ptr
   %n1 = add i32 %n, 10
   store i32 %n1, ptr %n1_ptr
   %n1_invariant = call ptr @llvm.invariant.start.p0(i64 4, ptr %n1_ptr)
   call void @print_i32(i32 %n1)
 
-  call void @llvm.init.trampoline(ptr @calling_fn_1_caller_tramp, ptr @calling_fn_2, ptr %n1_ptr)
-  call void @save_continuation(ptr @calling_fn_1_caller_trampoline, ptr @calling_fn_1_caller_tramp)
+  call void @llvm.init.trampoline(ptr %caller_tramp, ptr @calling_fn_2, ptr %n1_ptr)
+  %caller_cont_slot = getelementptr %resume_target, ptr @caller_handoff, i32 0, i32 0
+  call void @save_continuation(ptr %caller_cont_slot, ptr %caller_tramp)
 
   %caller_sp = call ptr @llvm.stacksave()
-  store ptr %caller_sp, ptr @calling_fn_1_caller_sp
-  %caller_sp_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr @calling_fn_1_caller_sp)
+  %caller_sp_slot = getelementptr %resume_target, ptr @caller_handoff, i32 0, i32 1
+  store ptr %caller_sp, ptr %caller_sp_slot
+  %caller_sp_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr %caller_sp_slot)
+  %resume_sp_slot = getelementptr %resume_frame, ptr %resume_frame, i32 0, i32 0
+  store ptr %caller_sp, ptr %resume_sp_slot
+  %resume_sp_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr %resume_sp_slot)
+  store ptr %resume_frame, ptr @active_resume_frame
+  %active_resume_frame_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr @active_resume_frame)
 
-  call void @restore_copy(ptr @yielding_fn_copy)
-  %resume = load ptr, ptr @yielding_fn_continuation
+  %callee_copy = getelementptr %callee_state, ptr @callee_handoff, i32 0, i32 1
+  call void @restore_copy(ptr %callee_copy)
+  %callee_cont_slot = getelementptr %callee_state, ptr @callee_handoff, i32 0, i32 0
+  %resume = load ptr, ptr %callee_cont_slot
   %result = call i32 %resume()
-  call void @store_calling_fn_1_resume_result(i32 %result)
-  %return_sp = call ptr @load_calling_fn_1_sp()
+  call void @store_active_resume_result(i32 %result)
+  %return_sp = call ptr @load_active_resume_sp()
   call void @llvm.stackrestore(ptr %return_sp)
-  %return_result = call i32 @load_calling_fn_1_resume_result()
+  %return_result = call i32 @load_active_resume_result()
   ret i32 %return_result
 }
 

@@ -1,23 +1,17 @@
-; ModuleID = 'Coroutine Design\heap_copy_resume.ll'
+; ModuleID = 'C:\Users\PaulK\OneDrive\Documents\PL\PyPL\Coroutine Design\heap_copy_resume.ll'
 source_filename = "Coroutine Design\\heap_copy_resume.ll"
 target datalayout = "e-m:w-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-pc-windows-msvc"
 
-%stack_copy = type { ptr, ptr, i64 }
+%resume_target = type { ptr, ptr }
+%callee_state = type { ptr, %stack_copy }
+%stack_copy = type { ptr, i64, i64 }
+%resume_frame = type { ptr, i32 }
 
 @print_i32_fmt = private unnamed_addr constant [4 x i8] c"%d\0A\00"
-@calling_fn_caller_tramp = internal thread_local global [24 x i8] zeroinitializer
-@calling_fn_1_caller_tramp = internal thread_local global [24 x i8] zeroinitializer
-@calling_fn_caller_trampoline = internal thread_local global ptr null
-@calling_fn_1_caller_trampoline = internal thread_local global ptr null
-@yielding_fn_continuation = internal thread_local global ptr null
-@yielding_fn_1_continuation = internal thread_local global ptr null
-@yielding_fn_2_continuation = internal thread_local global ptr null
-@calling_fn_caller_sp = internal thread_local global ptr null
-@calling_fn_1_caller_sp = internal thread_local global ptr null
-@yielding_fn_copy = internal thread_local global %stack_copy zeroinitializer
-@yielding_fn_1_copy = internal thread_local global %stack_copy zeroinitializer
-@yielding_fn_2_copy = internal thread_local global %stack_copy zeroinitializer
+@caller_handoff = internal thread_local global %resume_target zeroinitializer
+@callee_handoff = internal thread_local global %callee_state zeroinitializer
+@active_resume_frame = internal thread_local global ptr null
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr nocapture noundef readonly, ...) local_unnamed_addr #0
@@ -83,15 +77,19 @@ define i64 @section_size(ptr %top_sp, ptr %bottom_sp) local_unnamed_addr #8 {
 }
 
 ; Function Attrs: alwaysinline mustprogress nofree nounwind willreturn memory(argmem: readwrite, inaccessiblemem: readwrite)
-define ptr @require_buf(ptr nocapture %slot, i64 %size) local_unnamed_addr #9 {
-  %buf = load ptr, ptr %slot, align 8
+define ptr @require_buf(ptr nocapture %copy, i64 %size) local_unnamed_addr #9 {
+  %buf = load ptr, ptr %copy, align 8
+  %capacity_slot = getelementptr i8, ptr %copy, i64 16
+  %capacity = load i64, ptr %capacity_slot, align 8
   %missing = icmp eq ptr %buf, null
-  br i1 %missing, label %alloc, label %done
+  %enough.not = icmp ult i64 %capacity, %size
+  %grow = or i1 %missing, %enough.not
+  br i1 %grow, label %alloc, label %done
 
 alloc:                                            ; preds = %0
   %new_buf = tail call ptr @malloc(i64 %size)
-  store ptr %new_buf, ptr %slot, align 8
-  %buf_invariant = tail call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %slot)
+  store ptr %new_buf, ptr %copy, align 8
+  store i64 %size, ptr %capacity_slot, align 8
   br label %done
 
 done:                                             ; preds = %alloc, %0
@@ -104,20 +102,21 @@ define void @save_copy(ptr nocapture %copy, ptr %top_sp, ptr %bottom_sp) local_u
   %top_i.i = ptrtoint ptr %top_sp to i64
   %bottom_i.i = ptrtoint ptr %bottom_sp to i64
   %size.i = sub i64 %top_i.i, %bottom_i.i
-  store ptr %bottom_sp, ptr %copy, align 8
-  %bottom_invariant = tail call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %copy)
-  %size_slot = getelementptr i8, ptr %copy, i64 16
+  %size_slot = getelementptr i8, ptr %copy, i64 8
   store i64 %size.i, ptr %size_slot, align 8
   %size_invariant = tail call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %size_slot)
-  %buf_slot = getelementptr i8, ptr %copy, i64 8
-  %buf.i = load ptr, ptr %buf_slot, align 8
+  %buf.i = load ptr, ptr %copy, align 8
+  %capacity_slot.i = getelementptr i8, ptr %copy, i64 16
+  %capacity.i = load i64, ptr %capacity_slot.i, align 8
   %missing.i = icmp eq ptr %buf.i, null
-  br i1 %missing.i, label %alloc.i, label %require_buf.exit
+  %enough.not.i = icmp ult i64 %capacity.i, %size.i
+  %grow.i = or i1 %missing.i, %enough.not.i
+  br i1 %grow.i, label %alloc.i, label %require_buf.exit
 
 alloc.i:                                          ; preds = %0
   %new_buf.i = tail call ptr @malloc(i64 %size.i)
-  store ptr %new_buf.i, ptr %buf_slot, align 8
-  %buf_invariant.i = tail call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %buf_slot)
+  store ptr %new_buf.i, ptr %copy, align 8
+  store i64 %size.i, ptr %capacity_slot.i, align 8
   br label %require_buf.exit
 
 require_buf.exit:                                 ; preds = %0, %alloc.i
@@ -126,15 +125,41 @@ require_buf.exit:                                 ; preds = %0, %alloc.i
   ret void
 }
 
-; Function Attrs: alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, inaccessiblemem: none)
+; Function Attrs: alwaysinline mustprogress nofree norecurse nosync nounwind willreturn
 define void @restore_copy(ptr nocapture readonly %copy) local_unnamed_addr #11 {
-  %bottom = load ptr, ptr %copy, align 8
-  %buf_slot = getelementptr i8, ptr %copy, i64 8
-  %buf = load ptr, ptr %buf_slot, align 8
-  %size_slot = getelementptr i8, ptr %copy, i64 16
+  %buf = load ptr, ptr %copy, align 8
+  %size_slot = getelementptr i8, ptr %copy, i64 8
   %size = load i64, ptr %size_slot, align 8
+  %top_sp = tail call ptr @llvm.stacksave.p0()
+  %top_i = ptrtoint ptr %top_sp to i64
+  %reass.sub = sub i64 %top_i, %size
+  %bottom_i = add i64 %reass.sub, -4096
+  %bottom = inttoptr i64 %bottom_i to ptr
   tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %bottom, ptr align 1 %buf, i64 %size, i1 false)
   ret void
+}
+
+; Function Attrs: mustprogress nofree noinline norecurse nosync nounwind willreturn memory(read, inaccessiblemem: none)
+define ptr @load_active_resume_sp() local_unnamed_addr #12 {
+  %frame = load ptr, ptr @active_resume_frame, align 8
+  %value = load ptr, ptr %frame, align 8
+  ret ptr %value
+}
+
+; Function Attrs: mustprogress nofree noinline norecurse nosync nounwind willreturn memory(readwrite, argmem: write, inaccessiblemem: none)
+define void @store_active_resume_result(i32 %value) local_unnamed_addr #13 {
+  %frame = load ptr, ptr @active_resume_frame, align 8
+  %slot = getelementptr i8, ptr %frame, i64 8
+  store i32 %value, ptr %slot, align 4
+  ret void
+}
+
+; Function Attrs: mustprogress nofree noinline norecurse nosync nounwind willreturn memory(read, inaccessiblemem: none)
+define i32 @load_active_resume_result() local_unnamed_addr #12 {
+  %frame = load ptr, ptr @active_resume_frame, align 8
+  %slot = getelementptr i8, ptr %frame, i64 8
+  %value = load i32, ptr %slot, align 4
+  ret i32 %value
 }
 
 define i32 @yielding_fn(i32 %n) local_unnamed_addr {
@@ -148,31 +173,32 @@ define i32 @yielding_fn(i32 %n) local_unnamed_addr {
   %f.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull %tramp)
   call void @anoint_trampoline(ptr nonnull %tramp)
   %unused.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %tramp)
-  store ptr %f.i.i, ptr @yielding_fn_continuation, align 8
-  %slot_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @yielding_fn_continuation)
-  %top_sp = load ptr, ptr @calling_fn_caller_sp, align 8
+  store ptr %f.i.i, ptr @callee_handoff, align 16
+  %slot_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @callee_handoff)
+  %top_sp = load ptr, ptr getelementptr inbounds (i8, ptr @caller_handoff, i64 8), align 8
   %bottom_sp = call ptr @llvm.stacksave.p0()
   %top_i.i.i = ptrtoint ptr %top_sp to i64
   %bottom_i.i.i = ptrtoint ptr %bottom_sp to i64
   %size.i.i = sub i64 %top_i.i.i, %bottom_i.i.i
-  store ptr %bottom_sp, ptr @yielding_fn_copy, align 16
-  %bottom_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @yielding_fn_copy)
-  store i64 %size.i.i, ptr getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 16), align 16
-  %size_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 16))
-  %buf.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 8), align 8
+  store i64 %size.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 16), align 16
+  %size_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @callee_handoff, i64 16))
+  %buf.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  %capacity.i.i = load i64, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 24), align 8
   %missing.i.i = icmp eq ptr %buf.i.i, null
-  br i1 %missing.i.i, label %alloc.i.i, label %save_copy.exit
+  %enough.not.i.i = icmp ult i64 %capacity.i.i, %size.i.i
+  %grow.i.i = or i1 %missing.i.i, %enough.not.i.i
+  br i1 %grow.i.i, label %alloc.i.i, label %save_copy.exit
 
 alloc.i.i:                                        ; preds = %0
   %new_buf.i.i = call ptr @malloc(i64 %size.i.i)
-  store ptr %new_buf.i.i, ptr getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 8), align 8
-  %buf_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 8))
+  store ptr %new_buf.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  store i64 %size.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 24), align 8
   br label %save_copy.exit
 
 save_copy.exit:                                   ; preds = %0, %alloc.i.i
   %result.i.i = phi ptr [ %new_buf.i.i, %alloc.i.i ], [ %buf.i.i, %0 ]
   call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i, ptr align 1 %bottom_sp, i64 %size.i.i, i1 false)
-  %yield_trampoline = load ptr, ptr @calling_fn_caller_trampoline, align 8
+  %yield_trampoline = load ptr, ptr @caller_handoff, align 8
   %result = call i32 %yield_trampoline()
   ret i32 %result
 }
@@ -190,31 +216,32 @@ define i32 @yielding_fn_1(ptr nest nocapture readonly %n_ptr) {
   %f.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull %tramp)
   call void @anoint_trampoline(ptr nonnull %tramp)
   %unused.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %tramp)
-  store ptr %f.i.i, ptr @yielding_fn_1_continuation, align 8
-  %slot_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @yielding_fn_1_continuation)
-  %top_sp = load ptr, ptr @calling_fn_1_caller_sp, align 8
+  store ptr %f.i.i, ptr @callee_handoff, align 16
+  %slot_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @callee_handoff)
+  %top_sp = load ptr, ptr getelementptr inbounds (i8, ptr @caller_handoff, i64 8), align 8
   %bottom_sp = call ptr @llvm.stacksave.p0()
   %top_i.i.i = ptrtoint ptr %top_sp to i64
   %bottom_i.i.i = ptrtoint ptr %bottom_sp to i64
   %size.i.i = sub i64 %top_i.i.i, %bottom_i.i.i
-  store ptr %bottom_sp, ptr @yielding_fn_1_copy, align 16
-  %bottom_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @yielding_fn_1_copy)
-  store i64 %size.i.i, ptr getelementptr inbounds (i8, ptr @yielding_fn_1_copy, i64 16), align 16
-  %size_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @yielding_fn_1_copy, i64 16))
-  %buf.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @yielding_fn_1_copy, i64 8), align 8
+  store i64 %size.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 16), align 16
+  %size_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @callee_handoff, i64 16))
+  %buf.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  %capacity.i.i = load i64, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 24), align 8
   %missing.i.i = icmp eq ptr %buf.i.i, null
-  br i1 %missing.i.i, label %alloc.i.i, label %save_copy.exit
+  %enough.not.i.i = icmp ult i64 %capacity.i.i, %size.i.i
+  %grow.i.i = or i1 %missing.i.i, %enough.not.i.i
+  br i1 %grow.i.i, label %alloc.i.i, label %save_copy.exit
 
 alloc.i.i:                                        ; preds = %0
   %new_buf.i.i = call ptr @malloc(i64 %size.i.i)
-  store ptr %new_buf.i.i, ptr getelementptr inbounds (i8, ptr @yielding_fn_1_copy, i64 8), align 8
-  %buf_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @yielding_fn_1_copy, i64 8))
+  store ptr %new_buf.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  store i64 %size.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 24), align 8
   br label %save_copy.exit
 
 save_copy.exit:                                   ; preds = %0, %alloc.i.i
   %result.i.i = phi ptr [ %new_buf.i.i, %alloc.i.i ], [ %buf.i.i, %0 ]
   call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i, ptr align 1 %bottom_sp, i64 %size.i.i, i1 false)
-  %yield_trampoline = load ptr, ptr @calling_fn_1_caller_trampoline, align 8
+  %yield_trampoline = load ptr, ptr @caller_handoff, align 8
   %result = call i32 %yield_trampoline()
   ret i32 %result
 }
@@ -232,31 +259,32 @@ define i32 @yielding_fn_2(ptr nest nocapture readonly %n1_ptr) {
   %f.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull %tramp)
   call void @anoint_trampoline(ptr nonnull %tramp)
   %unused.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %tramp)
-  store ptr %f.i.i, ptr @yielding_fn_2_continuation, align 8
-  %slot_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @yielding_fn_2_continuation)
-  %top_sp = load ptr, ptr @calling_fn_1_caller_sp, align 8
+  store ptr %f.i.i, ptr @callee_handoff, align 16
+  %slot_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @callee_handoff)
+  %top_sp = load ptr, ptr getelementptr inbounds (i8, ptr @caller_handoff, i64 8), align 8
   %bottom_sp = call ptr @llvm.stacksave.p0()
   %top_i.i.i = ptrtoint ptr %top_sp to i64
   %bottom_i.i.i = ptrtoint ptr %bottom_sp to i64
   %size.i.i = sub i64 %top_i.i.i, %bottom_i.i.i
-  store ptr %bottom_sp, ptr @yielding_fn_2_copy, align 16
-  %bottom_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @yielding_fn_2_copy)
-  store i64 %size.i.i, ptr getelementptr inbounds (i8, ptr @yielding_fn_2_copy, i64 16), align 16
-  %size_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @yielding_fn_2_copy, i64 16))
-  %buf.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @yielding_fn_2_copy, i64 8), align 8
+  store i64 %size.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 16), align 16
+  %size_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @callee_handoff, i64 16))
+  %buf.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  %capacity.i.i = load i64, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 24), align 8
   %missing.i.i = icmp eq ptr %buf.i.i, null
-  br i1 %missing.i.i, label %alloc.i.i, label %save_copy.exit
+  %enough.not.i.i = icmp ult i64 %capacity.i.i, %size.i.i
+  %grow.i.i = or i1 %missing.i.i, %enough.not.i.i
+  br i1 %grow.i.i, label %alloc.i.i, label %save_copy.exit
 
 alloc.i.i:                                        ; preds = %0
   %new_buf.i.i = call ptr @malloc(i64 %size.i.i)
-  store ptr %new_buf.i.i, ptr getelementptr inbounds (i8, ptr @yielding_fn_2_copy, i64 8), align 8
-  %buf_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @yielding_fn_2_copy, i64 8))
+  store ptr %new_buf.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  store i64 %size.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 24), align 8
   br label %save_copy.exit
 
 save_copy.exit:                                   ; preds = %0, %alloc.i.i
   %result.i.i = phi ptr [ %new_buf.i.i, %alloc.i.i ], [ %buf.i.i, %0 ]
   call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i, ptr align 1 %bottom_sp, i64 %size.i.i, i1 false)
-  %yield_trampoline = load ptr, ptr @calling_fn_1_caller_trampoline, align 8
+  %yield_trampoline = load ptr, ptr @caller_handoff, align 8
   %result = call i32 %yield_trampoline()
   ret i32 %result
 }
@@ -283,31 +311,32 @@ define i32 @passthru_fn(i32 %n) local_unnamed_addr {
   %f.i.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull %tramp.i)
   call void @anoint_trampoline(ptr nonnull %tramp.i)
   %unused.i.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %tramp.i)
-  store ptr %f.i.i.i, ptr @yielding_fn_continuation, align 8
-  %slot_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @yielding_fn_continuation)
-  %top_sp.i = load ptr, ptr @calling_fn_caller_sp, align 8
+  store ptr %f.i.i.i, ptr @callee_handoff, align 16
+  %slot_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @callee_handoff)
+  %top_sp.i = load ptr, ptr getelementptr inbounds (i8, ptr @caller_handoff, i64 8), align 8
   %bottom_sp.i = call ptr @llvm.stacksave.p0()
   %top_i.i.i.i = ptrtoint ptr %top_sp.i to i64
   %bottom_i.i.i.i = ptrtoint ptr %bottom_sp.i to i64
   %size.i.i.i = sub i64 %top_i.i.i.i, %bottom_i.i.i.i
-  store ptr %bottom_sp.i, ptr @yielding_fn_copy, align 16
-  %bottom_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @yielding_fn_copy)
-  store i64 %size.i.i.i, ptr getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 16), align 16
-  %size_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 16))
-  %buf.i.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 8), align 8
+  store i64 %size.i.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 16), align 16
+  %size_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @callee_handoff, i64 16))
+  %buf.i.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  %capacity.i.i.i = load i64, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 24), align 8
   %missing.i.i.i = icmp eq ptr %buf.i.i.i, null
-  br i1 %missing.i.i.i, label %alloc.i.i.i, label %yielding_fn.exit
+  %enough.not.i.i.i = icmp ult i64 %capacity.i.i.i, %size.i.i.i
+  %grow.i.i.i = or i1 %missing.i.i.i, %enough.not.i.i.i
+  br i1 %grow.i.i.i, label %alloc.i.i.i, label %yielding_fn.exit
 
 alloc.i.i.i:                                      ; preds = %0
   %new_buf.i.i.i = call ptr @malloc(i64 %size.i.i.i)
-  store ptr %new_buf.i.i.i, ptr getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 8), align 8
-  %buf_invariant.i.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 8))
+  store ptr %new_buf.i.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  store i64 %size.i.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 24), align 8
   br label %yielding_fn.exit
 
 yielding_fn.exit:                                 ; preds = %0, %alloc.i.i.i
   %result.i.i.i = phi ptr [ %new_buf.i.i.i, %alloc.i.i.i ], [ %buf.i.i.i, %0 ]
   call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i, ptr align 1 %bottom_sp.i, i64 %size.i.i.i, i1 false)
-  %yield_trampoline.i = load ptr, ptr @calling_fn_caller_trampoline, align 8
+  %yield_trampoline.i = load ptr, ptr @caller_handoff, align 8
   %result.i = call i32 %yield_trampoline.i()
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %n_ptr.i)
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %tramp.i)
@@ -318,20 +347,23 @@ define void @calling_fn(i32 %n) local_unnamed_addr {
   %n1_ptr.i1 = alloca i32, align 4
   %tramp.i = alloca [24 x i8], align 1
   %n1_ptr.i = alloca i32, align 4
+  %caller_tramp.i = alloca [24 x i8], align 1
+  %resume_frame.i = alloca %resume_frame, align 8
   %n_ptr.i.i = alloca i32, align 4
   %tramp.i.i = alloca [24 x i8], align 1
   %n_ptr = alloca i32, align 4
+  %caller_tramp = alloca [24 x i8], align 1
   store i32 %n, ptr %n_ptr, align 4
   %n_invariant = call ptr @llvm.invariant.start.p0(i64 4, ptr nonnull %n_ptr)
-  call void @llvm.init.trampoline(ptr nonnull @calling_fn_caller_tramp, ptr nonnull @calling_fn_1, ptr nonnull %n_ptr)
-  %f.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull @calling_fn_caller_tramp)
-  call void @anoint_trampoline(ptr nonnull @calling_fn_caller_tramp)
-  %unused.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull @calling_fn_caller_tramp)
-  store ptr %f.i.i, ptr @calling_fn_caller_trampoline, align 8
-  %slot_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @calling_fn_caller_trampoline)
+  call void @llvm.init.trampoline(ptr nonnull %caller_tramp, ptr nonnull @calling_fn_1, ptr nonnull %n_ptr)
+  %f.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull %caller_tramp)
+  call void @anoint_trampoline(ptr nonnull %caller_tramp)
+  %unused.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %caller_tramp)
+  store ptr %f.i.i, ptr @caller_handoff, align 8
+  %slot_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @caller_handoff)
   %caller_sp = call ptr @llvm.stacksave.p0()
-  store ptr %caller_sp, ptr @calling_fn_caller_sp, align 8
-  %caller_sp_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @calling_fn_caller_sp)
+  store ptr %caller_sp, ptr getelementptr inbounds (i8, ptr @caller_handoff, i64 8), align 8
+  %caller_sp_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @caller_handoff, i64 8))
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %n_ptr.i.i)
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %tramp.i.i)
   store i32 %n, ptr %n_ptr.i.i, align 4
@@ -342,46 +374,58 @@ define void @calling_fn(i32 %n) local_unnamed_addr {
   %f.i.i.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull %tramp.i.i)
   call void @anoint_trampoline(ptr nonnull %tramp.i.i)
   %unused.i.i.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %tramp.i.i)
-  store ptr %f.i.i.i.i, ptr @yielding_fn_continuation, align 8
-  %slot_invariant.i.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @yielding_fn_continuation)
+  store ptr %f.i.i.i.i, ptr @callee_handoff, align 16
+  %slot_invariant.i.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @callee_handoff)
   %bottom_sp.i.i = call ptr @llvm.stacksave.p0()
   %top_i.i.i.i.i = ptrtoint ptr %caller_sp to i64
   %bottom_i.i.i.i.i = ptrtoint ptr %bottom_sp.i.i to i64
   %size.i.i.i.i = sub i64 %top_i.i.i.i.i, %bottom_i.i.i.i.i
-  store ptr %bottom_sp.i.i, ptr @yielding_fn_copy, align 16
-  %bottom_invariant.i.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @yielding_fn_copy)
-  store i64 %size.i.i.i.i, ptr getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 16), align 16
-  %size_invariant.i.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 16))
-  %buf.i.i.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 8), align 8
+  store i64 %size.i.i.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 16), align 16
+  %size_invariant.i.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @callee_handoff, i64 16))
+  %buf.i.i.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  %capacity.i.i.i.i = load i64, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 24), align 8
   %missing.i.i.i.i = icmp eq ptr %buf.i.i.i.i, null
-  br i1 %missing.i.i.i.i, label %alloc.i.i.i.i, label %passthru_fn.exit
+  %enough.not.i.i.i.i = icmp ult i64 %capacity.i.i.i.i, %size.i.i.i.i
+  %grow.i.i.i.i = or i1 %missing.i.i.i.i, %enough.not.i.i.i.i
+  br i1 %grow.i.i.i.i, label %alloc.i.i.i.i, label %passthru_fn.exit
 
 alloc.i.i.i.i:                                    ; preds = %0
   %new_buf.i.i.i.i = call ptr @malloc(i64 %size.i.i.i.i)
-  store ptr %new_buf.i.i.i.i, ptr getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 8), align 8
-  %buf_invariant.i.i.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 8))
+  store ptr %new_buf.i.i.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  store i64 %size.i.i.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 24), align 8
   br label %passthru_fn.exit
 
 passthru_fn.exit:                                 ; preds = %0, %alloc.i.i.i.i
   %result.i.i.i.i = phi ptr [ %new_buf.i.i.i.i, %alloc.i.i.i.i ], [ %buf.i.i.i.i, %0 ]
   call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i.i, ptr align 1 %bottom_sp.i.i, i64 %size.i.i.i.i, i1 false)
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %n1_ptr.i)
+  call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %caller_tramp.i)
+  call void @llvm.lifetime.start.p0(i64 16, ptr nonnull %resume_frame.i)
   %n1.i = add i32 %n, 10
   store i32 %n1.i, ptr %n1_ptr.i, align 4
   %n1_invariant.i = call ptr @llvm.invariant.start.p0(i64 4, ptr nonnull %n1_ptr.i)
   %print.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i)
   %flush.i.i = call i32 @fflush(ptr null)
-  call void @llvm.init.trampoline(ptr nonnull @calling_fn_1_caller_tramp, ptr nonnull @calling_fn_2, ptr nonnull %n1_ptr.i)
-  %f.i.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull @calling_fn_1_caller_tramp)
-  call void @anoint_trampoline(ptr nonnull @calling_fn_1_caller_tramp)
-  %unused.i.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull @calling_fn_1_caller_tramp)
-  store ptr %f.i.i.i, ptr @calling_fn_1_caller_trampoline, align 8
-  %slot_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @calling_fn_1_caller_trampoline)
+  call void @llvm.init.trampoline(ptr nonnull %caller_tramp.i, ptr nonnull @calling_fn_2, ptr nonnull %n1_ptr.i)
+  %f.i.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull %caller_tramp.i)
+  call void @anoint_trampoline(ptr nonnull %caller_tramp.i)
+  %unused.i.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %caller_tramp.i)
+  store ptr %f.i.i.i, ptr @caller_handoff, align 8
+  %slot_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @caller_handoff)
   %caller_sp.i = call ptr @llvm.stacksave.p0()
-  store ptr %caller_sp.i, ptr @calling_fn_1_caller_sp, align 8
-  %caller_sp_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @calling_fn_1_caller_sp)
-  %buf.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 8), align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %bottom_sp.i.i, ptr align 1 %buf.i.i, i64 %size.i.i.i.i, i1 false)
+  store ptr %caller_sp.i, ptr getelementptr inbounds (i8, ptr @caller_handoff, i64 8), align 8
+  %caller_sp_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @caller_handoff, i64 8))
+  store ptr %caller_sp.i, ptr %resume_frame.i, align 8
+  %resume_sp_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %resume_frame.i)
+  store ptr %resume_frame.i, ptr @active_resume_frame, align 8
+  %active_resume_frame_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @active_resume_frame)
+  %buf.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  %top_sp.i.i = call ptr @llvm.stacksave.p0()
+  %top_i.i.i = ptrtoint ptr %top_sp.i.i to i64
+  %reass.sub = sub i64 %top_i.i.i, %size.i.i.i.i
+  %bottom_i.i.i = add i64 %reass.sub, -4096
+  %bottom.i.i = inttoptr i64 %bottom_i.i.i to ptr
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %bottom.i.i, ptr align 1 %buf.i.i, i64 %size.i.i.i.i, i1 false)
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %n1_ptr.i1)
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %tramp.i)
   %n1.i2 = add i32 %n, 1
@@ -393,35 +437,41 @@ passthru_fn.exit:                                 ; preds = %0, %alloc.i.i.i.i
   %f.i.i.i6 = call ptr @llvm.adjust.trampoline(ptr nonnull %tramp.i)
   call void @anoint_trampoline(ptr nonnull %tramp.i)
   %unused.i.i.i7 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %tramp.i)
-  store ptr %f.i.i.i6, ptr @yielding_fn_1_continuation, align 8
-  %slot_invariant.i.i8 = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @yielding_fn_1_continuation)
+  store ptr %f.i.i.i6, ptr @callee_handoff, align 16
+  %slot_invariant.i.i8 = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @callee_handoff)
   %bottom_sp.i = call ptr @llvm.stacksave.p0()
   %top_i.i.i.i = ptrtoint ptr %caller_sp.i to i64
   %bottom_i.i.i.i = ptrtoint ptr %bottom_sp.i to i64
   %size.i.i.i = sub i64 %top_i.i.i.i, %bottom_i.i.i.i
-  store ptr %bottom_sp.i, ptr @yielding_fn_1_copy, align 16
-  %bottom_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @yielding_fn_1_copy)
-  store i64 %size.i.i.i, ptr getelementptr inbounds (i8, ptr @yielding_fn_1_copy, i64 16), align 16
-  %size_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @yielding_fn_1_copy, i64 16))
-  %buf.i.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @yielding_fn_1_copy, i64 8), align 8
+  store i64 %size.i.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 16), align 16
+  %size_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @callee_handoff, i64 16))
+  %buf.i.i.i = load ptr, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  %capacity.i.i.i = load i64, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 24), align 8
   %missing.i.i.i = icmp eq ptr %buf.i.i.i, null
-  br i1 %missing.i.i.i, label %alloc.i.i.i, label %yielding_fn_1.exit
+  %enough.not.i.i.i = icmp ult i64 %capacity.i.i.i, %size.i.i.i
+  %grow.i.i.i = or i1 %missing.i.i.i, %enough.not.i.i.i
+  br i1 %grow.i.i.i, label %alloc.i.i.i, label %yielding_fn_1.exit
 
 alloc.i.i.i:                                      ; preds = %passthru_fn.exit
   %new_buf.i.i.i = call ptr @malloc(i64 %size.i.i.i)
-  store ptr %new_buf.i.i.i, ptr getelementptr inbounds (i8, ptr @yielding_fn_1_copy, i64 8), align 8
-  %buf_invariant.i.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @yielding_fn_1_copy, i64 8))
+  store ptr %new_buf.i.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  store i64 %size.i.i.i, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 24), align 8
   br label %yielding_fn_1.exit
 
 yielding_fn_1.exit:                               ; preds = %passthru_fn.exit, %alloc.i.i.i
   %result.i.i.i = phi ptr [ %new_buf.i.i.i, %alloc.i.i.i ], [ %buf.i.i.i, %passthru_fn.exit ]
   call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i, ptr align 1 %bottom_sp.i, i64 %size.i.i.i, i1 false)
   %n2.i = add i32 %n, 30
-  %print.i.i11 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2.i)
-  %flush.i.i12 = call i32 @fflush(ptr null)
+  %print.i.i12 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2.i)
+  %flush.i.i13 = call i32 @fflush(ptr null)
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %n1_ptr.i1)
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %tramp.i)
+  call void @store_active_resume_result(i32 0)
+  %return_sp.i = call ptr @load_active_resume_sp()
+  call void @llvm.stackrestore.p0(ptr %return_sp.i)
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %n1_ptr.i)
+  call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %caller_tramp.i)
+  call void @llvm.lifetime.end.p0(i64 16, ptr nonnull %resume_frame.i)
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %n_ptr.i.i)
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %tramp.i.i)
   ret void
@@ -429,28 +479,42 @@ yielding_fn_1.exit:                               ; preds = %passthru_fn.exit, %
 
 define i32 @calling_fn_1(ptr nest nocapture readonly %n_ptr) {
   %n1_ptr = alloca i32, align 4
+  %caller_tramp = alloca [24 x i8], align 1
+  %resume_frame = alloca %resume_frame, align 8
   %n = load i32, ptr %n_ptr, align 4
   %n1 = add i32 %n, 10
   store i32 %n1, ptr %n1_ptr, align 4
   %n1_invariant = call ptr @llvm.invariant.start.p0(i64 4, ptr nonnull %n1_ptr)
   %print.i = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1)
   %flush.i = tail call i32 @fflush(ptr null)
-  call void @llvm.init.trampoline(ptr nonnull @calling_fn_1_caller_tramp, ptr nonnull @calling_fn_2, ptr nonnull %n1_ptr)
-  %f.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull @calling_fn_1_caller_tramp)
-  call void @anoint_trampoline(ptr nonnull @calling_fn_1_caller_tramp)
-  %unused.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull @calling_fn_1_caller_tramp)
-  store ptr %f.i.i, ptr @calling_fn_1_caller_trampoline, align 8
-  %slot_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @calling_fn_1_caller_trampoline)
+  call void @llvm.init.trampoline(ptr nonnull %caller_tramp, ptr nonnull @calling_fn_2, ptr nonnull %n1_ptr)
+  %f.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull %caller_tramp)
+  call void @anoint_trampoline(ptr nonnull %caller_tramp)
+  %unused.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %caller_tramp)
+  store ptr %f.i.i, ptr @caller_handoff, align 8
+  %slot_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @caller_handoff)
   %caller_sp = call ptr @llvm.stacksave.p0()
-  store ptr %caller_sp, ptr @calling_fn_1_caller_sp, align 8
-  %caller_sp_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @calling_fn_1_caller_sp)
-  %bottom.i = load ptr, ptr @yielding_fn_copy, align 16
-  %buf.i = load ptr, ptr getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 8), align 8
-  %size.i = load i64, ptr getelementptr inbounds (i8, ptr @yielding_fn_copy, i64 16), align 16
+  store ptr %caller_sp, ptr getelementptr inbounds (i8, ptr @caller_handoff, i64 8), align 8
+  %caller_sp_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull getelementptr inbounds (i8, ptr @caller_handoff, i64 8))
+  store ptr %caller_sp, ptr %resume_frame, align 8
+  %resume_sp_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %resume_frame)
+  store ptr %resume_frame, ptr @active_resume_frame, align 8
+  %active_resume_frame_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull @active_resume_frame)
+  %buf.i = load ptr, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 8), align 8
+  %size.i = load i64, ptr getelementptr inbounds (i8, ptr @callee_handoff, i64 16), align 16
+  %top_sp.i = call ptr @llvm.stacksave.p0()
+  %top_i.i = ptrtoint ptr %top_sp.i to i64
+  %reass.sub = sub i64 %top_i.i, %size.i
+  %bottom_i.i = add i64 %reass.sub, -4096
+  %bottom.i = inttoptr i64 %bottom_i.i to ptr
   call void @llvm.memcpy.p0.p0.i64(ptr align 1 %bottom.i, ptr align 1 %buf.i, i64 %size.i, i1 false)
-  %resume = load ptr, ptr @yielding_fn_continuation, align 8
+  %resume = load ptr, ptr @callee_handoff, align 16
   %result = call i32 %resume()
-  ret i32 %result
+  call void @store_active_resume_result(i32 %result)
+  %return_sp = call ptr @load_active_resume_sp()
+  call void @llvm.stackrestore.p0(ptr %return_sp)
+  %return_result = call i32 @load_active_resume_result()
+  ret i32 %return_result
 }
 
 ; Function Attrs: nofree nounwind
@@ -468,13 +532,16 @@ define noundef i32 @main() local_unnamed_addr {
 }
 
 ; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn
-declare ptr @llvm.stacksave.p0() #12
+declare ptr @llvm.stacksave.p0() #14
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn
+declare void @llvm.stackrestore.p0(ptr) #14
 
 ; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr nocapture) #13
+declare void @llvm.lifetime.start.p0(i64 immarg, ptr nocapture) #15
 
 ; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.end.p0(i64 immarg, ptr nocapture) #13
+declare void @llvm.lifetime.end.p0(i64 immarg, ptr nocapture) #15
 
 attributes #0 = { nofree nounwind }
 attributes #1 = { mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) memory(inaccessiblemem: readwrite) "alloc-family"="malloc" }
@@ -487,6 +554,8 @@ attributes #7 = { alwaysinline nofree nounwind }
 attributes #8 = { alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(none) }
 attributes #9 = { alwaysinline mustprogress nofree nounwind willreturn memory(argmem: readwrite, inaccessiblemem: readwrite) }
 attributes #10 = { alwaysinline mustprogress nofree nounwind willreturn }
-attributes #11 = { alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, inaccessiblemem: none) }
-attributes #12 = { mustprogress nocallback nofree nosync nounwind willreturn }
-attributes #13 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #11 = { alwaysinline mustprogress nofree norecurse nosync nounwind willreturn }
+attributes #12 = { mustprogress nofree noinline norecurse nosync nounwind willreturn memory(read, inaccessiblemem: none) }
+attributes #13 = { mustprogress nofree noinline norecurse nosync nounwind willreturn memory(readwrite, argmem: write, inaccessiblemem: none) }
+attributes #14 = { mustprogress nocallback nofree nosync nounwind willreturn }
+attributes #15 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
