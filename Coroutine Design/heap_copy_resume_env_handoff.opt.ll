@@ -324,12 +324,12 @@ define internal i32 @yielding_fn_3(ptr nest nocapture readonly %n2_ptr) #11 {
 
 define void @calling_fn(i32 %n) local_unnamed_addr {
   %next_yield_env.i = alloca %yield_env, align 8
-  %tramp.i13 = alloca [24 x i8], align 1
+  %tramp.i = alloca [24 x i8], align 1
   %next_env.i = alloca %caller_env, align 8
   %caller_tramp.i = alloca [24 x i8], align 1
   %resume_frame.i = alloca %resume_frame, align 8
-  %yield_env.i = alloca %yield_env, align 8
-  %tramp.i = alloca [24 x i8], align 1
+  %yield_env.i.i = alloca %yield_env, align 8
+  %tramp.i.i = alloca [24 x i8], align 1
   %env = alloca %caller_env, align 8
   %caller_tramp = alloca [24 x i8], align 1
   %n_slot = getelementptr inbounds i8, ptr %env, i64 56
@@ -351,45 +351,45 @@ define void @calling_fn(i32 %n) local_unnamed_addr {
   store ptr %caller_sp.i, ptr %caller_sp_slot.i, align 8
   %caller_sp_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %caller_sp_slot.i)
   store ptr %env, ptr @entry_context, align 8
-  call void @llvm.lifetime.start.p0(i64 16, ptr nonnull %yield_env.i)
-  call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %tramp.i)
-  %next_header_slot.i = getelementptr inbounds i8, ptr %yield_env.i, i64 8
-  store ptr %yield_env.i, ptr %callee_link_slot.i, align 8
-  %callee_link_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %callee_link_slot.i)
-  store i32 %n, ptr %yield_env.i, align 8
-  %n_invariant.i = call ptr @llvm.invariant.start.p0(i64 4, ptr nonnull %yield_env.i)
-  store ptr null, ptr %next_header_slot.i, align 8
-  %print.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n)
-  %flush.i.i = call i32 @fflush(ptr null)
-  call void @llvm.init.trampoline(ptr nonnull %tramp.i, ptr nonnull @yielding_fn_1, ptr nonnull %yield_env.i)
-  %callee_cont_slot.i = getelementptr inbounds i8, ptr %env, i64 16
-  %f.i.i.i2 = call ptr @llvm.adjust.trampoline(ptr nonnull %tramp.i)
-  call void @anoint_trampoline(ptr nonnull %tramp.i)
-  %unused.i.i.i3 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %tramp.i)
-  store ptr %f.i.i.i2, ptr %callee_cont_slot.i, align 8
-  %slot_invariant.i.i4 = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %callee_cont_slot.i)
-  %bottom_sp.i = call ptr @llvm.stacksave.p0()
-  %top_i.i.i.i = ptrtoint ptr %caller_sp.i to i64
-  %bottom_i.i.i.i = ptrtoint ptr %bottom_sp.i to i64
-  %size.i.i.i = sub i64 %top_i.i.i.i, %bottom_i.i.i.i
-  %size_slot.i.i = getelementptr inbounds i8, ptr %env, i64 32
-  store i64 %size.i.i.i, ptr %size_slot.i.i, align 8
-  %buf.i.i.i = load ptr, ptr %copy_buf_slot.i.i, align 8
-  %capacity.i.i.i = load i64, ptr %copy_capacity_slot.i.i, align 8
-  %missing.i.i.i = icmp eq ptr %buf.i.i.i, null
-  %enough.not.i.i.i = icmp ult i64 %capacity.i.i.i, %size.i.i.i
-  %grow.i.i.i = or i1 %missing.i.i.i, %enough.not.i.i.i
-  br i1 %grow.i.i.i, label %alloc.i.i.i, label %yielding_fn.exit
+  call void @llvm.lifetime.start.p0(i64 16, ptr nonnull %yield_env.i.i)
+  call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %tramp.i.i)
+  %next_header_slot.i.i = getelementptr inbounds i8, ptr %yield_env.i.i, i64 8
+  store ptr %yield_env.i.i, ptr %callee_link_slot.i, align 8
+  %callee_link_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %callee_link_slot.i)
+  store i32 %n, ptr %yield_env.i.i, align 8
+  %n_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 4, ptr nonnull %yield_env.i.i)
+  store ptr null, ptr %next_header_slot.i.i, align 8
+  %print.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n)
+  %flush.i.i.i = call i32 @fflush(ptr null)
+  call void @llvm.init.trampoline(ptr nonnull %tramp.i.i, ptr nonnull @yielding_fn_1, ptr nonnull %yield_env.i.i)
+  %callee_cont_slot.i.i = getelementptr inbounds i8, ptr %env, i64 16
+  %f.i.i.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull %tramp.i.i)
+  call void @anoint_trampoline(ptr nonnull %tramp.i.i)
+  %unused.i.i.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %tramp.i.i)
+  store ptr %f.i.i.i.i, ptr %callee_cont_slot.i.i, align 8
+  %slot_invariant.i.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %callee_cont_slot.i.i)
+  %bottom_sp.i.i = call ptr @llvm.stacksave.p0()
+  %top_i.i.i.i.i = ptrtoint ptr %caller_sp.i to i64
+  %bottom_i.i.i.i.i = ptrtoint ptr %bottom_sp.i.i to i64
+  %size.i.i.i.i = sub i64 %top_i.i.i.i.i, %bottom_i.i.i.i.i
+  %size_slot.i.i.i = getelementptr inbounds i8, ptr %env, i64 32
+  store i64 %size.i.i.i.i, ptr %size_slot.i.i.i, align 8
+  %buf.i.i.i.i = load ptr, ptr %copy_buf_slot.i.i, align 8
+  %capacity.i.i.i.i = load i64, ptr %copy_capacity_slot.i.i, align 8
+  %missing.i.i.i.i = icmp eq ptr %buf.i.i.i.i, null
+  %enough.not.i.i.i.i = icmp ult i64 %capacity.i.i.i.i, %size.i.i.i.i
+  %grow.i.i.i.i = or i1 %missing.i.i.i.i, %enough.not.i.i.i.i
+  br i1 %grow.i.i.i.i, label %alloc.i.i.i.i, label %passthru_fn.exit
 
-alloc.i.i.i:                                      ; preds = %0
-  %new_buf.i.i.i = call ptr @malloc(i64 %size.i.i.i)
-  store ptr %new_buf.i.i.i, ptr %copy_buf_slot.i.i, align 8
-  store i64 %size.i.i.i, ptr %copy_capacity_slot.i.i, align 8
-  br label %yielding_fn.exit
+alloc.i.i.i.i:                                    ; preds = %0
+  %new_buf.i.i.i.i = call ptr @malloc(i64 %size.i.i.i.i)
+  store ptr %new_buf.i.i.i.i, ptr %copy_buf_slot.i.i, align 8
+  store i64 %size.i.i.i.i, ptr %copy_capacity_slot.i.i, align 8
+  br label %passthru_fn.exit
 
-yielding_fn.exit:                                 ; preds = %0, %alloc.i.i.i
-  %result.i.i.i = phi ptr [ %new_buf.i.i.i, %alloc.i.i.i ], [ %buf.i.i.i, %0 ]
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i, ptr align 1 %bottom_sp.i, i64 %size.i.i.i, i1 false)
+passthru_fn.exit:                                 ; preds = %0, %alloc.i.i.i.i
+  %result.i.i.i.i = phi ptr [ %new_buf.i.i.i.i, %alloc.i.i.i.i ], [ %buf.i.i.i.i, %0 ]
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i.i, ptr align 1 %bottom_sp.i.i, i64 %size.i.i.i.i, i1 false)
   call void @llvm.lifetime.start.p0(i64 64, ptr nonnull %next_env.i)
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %caller_tramp.i)
   call void @llvm.lifetime.start.p0(i64 16, ptr nonnull %resume_frame.i)
@@ -401,25 +401,25 @@ yielding_fn.exit:                                 ; preds = %0, %alloc.i.i.i
   call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(16) %copy_capacity_slot.i.i.i, i8 0, i64 16, i1 false)
   store i32 %n1.i, ptr %next_n_slot.i, align 8
   %n1_invariant.i = call ptr @llvm.invariant.start.p0(i64 4, ptr nonnull %next_n_slot.i)
-  %print.i.i7 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i)
-  %flush.i.i8 = call i32 @fflush(ptr null)
+  %print.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i)
+  %flush.i.i = call i32 @fflush(ptr null)
   call void @llvm.init.trampoline(ptr nonnull %caller_tramp.i, ptr nonnull @calling_fn_2, ptr nonnull %next_env.i)
-  %f.i.i.i.i = call ptr @llvm.adjust.trampoline(ptr nonnull %caller_tramp.i)
+  %f.i.i.i.i2 = call ptr @llvm.adjust.trampoline(ptr nonnull %caller_tramp.i)
   call void @anoint_trampoline(ptr nonnull %caller_tramp.i)
-  %unused.i.i.i.i = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %caller_tramp.i)
-  store ptr %f.i.i.i.i, ptr %next_env.i, align 8
-  %slot_invariant.i.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %next_env.i)
+  %unused.i.i.i.i3 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %caller_tramp.i)
+  store ptr %f.i.i.i.i2, ptr %next_env.i, align 8
+  %slot_invariant.i.i.i4 = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %next_env.i)
   %caller_sp.i.i = call ptr @llvm.stacksave.p0()
   %caller_sp_slot.i.i = getelementptr inbounds i8, ptr %next_env.i, i64 8
   store ptr %caller_sp.i.i, ptr %caller_sp_slot.i.i, align 8
   %caller_sp_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %caller_sp_slot.i.i)
-  store ptr %next_env.i, ptr %next_header_slot.i, align 8
-  %yield_header_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %next_header_slot.i)
+  store ptr %next_env.i, ptr %next_header_slot.i.i, align 8
+  %yield_header_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %next_header_slot.i.i)
   store ptr %caller_sp.i.i, ptr %resume_frame.i, align 8
   %resume_sp_invariant.i.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %resume_frame.i)
   store ptr %resume_frame.i, ptr @active_resume_frame, align 8
   %buf.i.i = load ptr, ptr %copy_buf_slot.i.i, align 8
-  %size.i.i = load i64, ptr %size_slot.i.i, align 8
+  %size.i.i = load i64, ptr %size_slot.i.i.i, align 8
   %top_sp.i.i = call ptr @llvm.stacksave.p0()
   %top_i.i.i = ptrtoint ptr %top_sp.i.i to i64
   %reass.sub = sub i64 %top_i.i.i, %size.i.i
@@ -427,59 +427,59 @@ yielding_fn.exit:                                 ; preds = %0, %alloc.i.i.i
   %bottom.i.i = inttoptr i64 %bottom_i.i.i to ptr
   call void @llvm.memcpy.p0.p0.i64(ptr align 1 %bottom.i.i, ptr align 1 %buf.i.i, i64 %size.i.i, i1 false)
   call void @llvm.lifetime.start.p0(i64 16, ptr nonnull %next_yield_env.i)
-  call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %tramp.i13)
-  %next_header_slot.i14 = getelementptr inbounds i8, ptr %next_yield_env.i, i64 8
-  %n1.i15 = add i32 %n, 1
-  %callee_link_slot.i16 = getelementptr inbounds i8, ptr %next_env.i, i64 48
-  store ptr %next_yield_env.i, ptr %callee_link_slot.i16, align 8
-  %callee_link_invariant.i17 = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %callee_link_slot.i16)
-  store i32 %n1.i15, ptr %next_yield_env.i, align 8
-  %n1_invariant.i18 = call ptr @llvm.invariant.start.p0(i64 4, ptr nonnull %next_yield_env.i)
-  store ptr null, ptr %next_header_slot.i14, align 8
-  %print.i.i19 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i15)
-  %flush.i.i20 = call i32 @fflush(ptr null)
-  call void @llvm.init.trampoline(ptr nonnull %tramp.i13, ptr nonnull @yielding_fn_2, ptr nonnull %next_yield_env.i)
-  %callee_cont_slot.i21 = getelementptr inbounds i8, ptr %next_env.i, i64 16
-  %f.i.i.i22 = call ptr @llvm.adjust.trampoline(ptr nonnull %tramp.i13)
-  call void @anoint_trampoline(ptr nonnull %tramp.i13)
-  %unused.i.i.i23 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %tramp.i13)
-  store ptr %f.i.i.i22, ptr %callee_cont_slot.i21, align 8
-  %slot_invariant.i.i24 = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %callee_cont_slot.i21)
-  %bottom_sp.i26 = call ptr @llvm.stacksave.p0()
-  %top_i.i.i.i27 = ptrtoint ptr %caller_sp.i.i to i64
-  %bottom_i.i.i.i28 = ptrtoint ptr %bottom_sp.i26 to i64
-  %size.i.i.i29 = sub i64 %top_i.i.i.i27, %bottom_i.i.i.i28
-  %size_slot.i.i30 = getelementptr inbounds i8, ptr %next_env.i, i64 32
-  store i64 %size.i.i.i29, ptr %size_slot.i.i30, align 8
-  %buf.i.i.i31 = load ptr, ptr %copy_buf_slot.i.i.i, align 8
-  %capacity.i.i.i32 = load i64, ptr %copy_capacity_slot.i.i.i, align 8
-  %missing.i.i.i33 = icmp eq ptr %buf.i.i.i31, null
-  %enough.not.i.i.i34 = icmp ult i64 %capacity.i.i.i32, %size.i.i.i29
-  %grow.i.i.i35 = or i1 %missing.i.i.i33, %enough.not.i.i.i34
-  br i1 %grow.i.i.i35, label %alloc.i.i.i37, label %yielding_fn_1.exit
+  call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %tramp.i)
+  %next_header_slot.i = getelementptr inbounds i8, ptr %next_yield_env.i, i64 8
+  %n1.i6 = add i32 %n, 1
+  %callee_link_slot.i7 = getelementptr inbounds i8, ptr %next_env.i, i64 48
+  store ptr %next_yield_env.i, ptr %callee_link_slot.i7, align 8
+  %callee_link_invariant.i = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %callee_link_slot.i7)
+  store i32 %n1.i6, ptr %next_yield_env.i, align 8
+  %n1_invariant.i8 = call ptr @llvm.invariant.start.p0(i64 4, ptr nonnull %next_yield_env.i)
+  store ptr null, ptr %next_header_slot.i, align 8
+  %print.i.i9 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i6)
+  %flush.i.i10 = call i32 @fflush(ptr null)
+  call void @llvm.init.trampoline(ptr nonnull %tramp.i, ptr nonnull @yielding_fn_2, ptr nonnull %next_yield_env.i)
+  %callee_cont_slot.i = getelementptr inbounds i8, ptr %next_env.i, i64 16
+  %f.i.i.i11 = call ptr @llvm.adjust.trampoline(ptr nonnull %tramp.i)
+  call void @anoint_trampoline(ptr nonnull %tramp.i)
+  %unused.i.i.i12 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %tramp.i)
+  store ptr %f.i.i.i11, ptr %callee_cont_slot.i, align 8
+  %slot_invariant.i.i13 = call ptr @llvm.invariant.start.p0(i64 8, ptr nonnull %callee_cont_slot.i)
+  %bottom_sp.i = call ptr @llvm.stacksave.p0()
+  %top_i.i.i.i = ptrtoint ptr %caller_sp.i.i to i64
+  %bottom_i.i.i.i = ptrtoint ptr %bottom_sp.i to i64
+  %size.i.i.i = sub i64 %top_i.i.i.i, %bottom_i.i.i.i
+  %size_slot.i.i = getelementptr inbounds i8, ptr %next_env.i, i64 32
+  store i64 %size.i.i.i, ptr %size_slot.i.i, align 8
+  %buf.i.i.i = load ptr, ptr %copy_buf_slot.i.i.i, align 8
+  %capacity.i.i.i = load i64, ptr %copy_capacity_slot.i.i.i, align 8
+  %missing.i.i.i = icmp eq ptr %buf.i.i.i, null
+  %enough.not.i.i.i = icmp ult i64 %capacity.i.i.i, %size.i.i.i
+  %grow.i.i.i = or i1 %missing.i.i.i, %enough.not.i.i.i
+  br i1 %grow.i.i.i, label %alloc.i.i.i, label %yielding_fn_1.exit
 
-alloc.i.i.i37:                                    ; preds = %yielding_fn.exit
-  %new_buf.i.i.i38 = call ptr @malloc(i64 %size.i.i.i29)
-  store ptr %new_buf.i.i.i38, ptr %copy_buf_slot.i.i.i, align 8
-  store i64 %size.i.i.i29, ptr %copy_capacity_slot.i.i.i, align 8
+alloc.i.i.i:                                      ; preds = %passthru_fn.exit
+  %new_buf.i.i.i = call ptr @malloc(i64 %size.i.i.i)
+  store ptr %new_buf.i.i.i, ptr %copy_buf_slot.i.i.i, align 8
+  store i64 %size.i.i.i, ptr %copy_capacity_slot.i.i.i, align 8
   br label %yielding_fn_1.exit
 
-yielding_fn_1.exit:                               ; preds = %yielding_fn.exit, %alloc.i.i.i37
-  %result.i.i.i36 = phi ptr [ %new_buf.i.i.i38, %alloc.i.i.i37 ], [ %buf.i.i.i31, %yielding_fn.exit ]
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i36, ptr align 1 %bottom_sp.i26, i64 %size.i.i.i29, i1 false)
+yielding_fn_1.exit:                               ; preds = %passthru_fn.exit, %alloc.i.i.i
+  %result.i.i.i = phi ptr [ %new_buf.i.i.i, %alloc.i.i.i ], [ %buf.i.i.i, %passthru_fn.exit ]
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i, ptr align 1 %bottom_sp.i, i64 %size.i.i.i, i1 false)
   %n2.i = add i32 %n, 30
-  %print.i.i41 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2.i)
-  %flush.i.i42 = call i32 @fflush(ptr null)
+  %print.i.i18 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2.i)
+  %flush.i.i19 = call i32 @fflush(ptr null)
   call void @llvm.lifetime.end.p0(i64 16, ptr nonnull %next_yield_env.i)
-  call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %tramp.i13)
+  call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %tramp.i)
   call void @store_active_resume_result(i32 0)
   %return_sp.i = call ptr @load_active_resume_sp()
   call void @llvm.stackrestore.p0(ptr %return_sp.i)
   call void @llvm.lifetime.end.p0(i64 64, ptr nonnull %next_env.i)
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %caller_tramp.i)
   call void @llvm.lifetime.end.p0(i64 16, ptr nonnull %resume_frame.i)
-  call void @llvm.lifetime.end.p0(i64 16, ptr nonnull %yield_env.i)
-  call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %tramp.i)
+  call void @llvm.lifetime.end.p0(i64 16, ptr nonnull %yield_env.i.i)
+  call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %tramp.i.i)
   ret void
 }
 
