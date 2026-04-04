@@ -1,37 +1,42 @@
 source_filename = "Coroutine Design\\heap_copy_resume.ll"
 target triple = "x86_64-pc-windows-msvc"
 
-%stack_copy = type { ptr, ptr, i64 }
+%stack_copy = type { ptr, i64 }
 
 @print_i32_fmt = private unnamed_addr constant [4 x i8] c"%d\0A\00"
 
-@calling_fn_caller_tramp = thread_local global [24 x i8] zeroinitializer
-@calling_fn_1_caller_tramp = thread_local global [24 x i8] zeroinitializer
+@calling_fn_caller_tramp = internal thread_local global [24 x i8] zeroinitializer
+@calling_fn_1_caller_tramp = internal thread_local global [24 x i8] zeroinitializer
 
-@calling_fn_caller_trampoline = thread_local global ptr null
-@calling_fn_1_caller_trampoline = thread_local global ptr null
-@yielding_fn_continuation = thread_local global ptr null
-@yielding_fn_1_continuation = thread_local global ptr null
-@yielding_fn_2_continuation = thread_local global ptr null
+@calling_fn_caller_trampoline = internal thread_local global ptr null
+@calling_fn_1_caller_trampoline = internal thread_local global ptr null
+@yielding_fn_continuation = internal thread_local global ptr null
+@yielding_fn_1_continuation = internal thread_local global ptr null
+@yielding_fn_2_continuation = internal thread_local global ptr null
 
-@calling_fn_caller_sp = thread_local global ptr null
-@calling_fn_1_caller_sp = thread_local global ptr null
+@calling_fn_caller_sp = internal thread_local global ptr null
+@calling_fn_1_caller_sp = internal thread_local global ptr null
 
-@yielding_fn_copy = thread_local global %stack_copy zeroinitializer
-@yielding_fn_1_copy = thread_local global %stack_copy zeroinitializer
-@yielding_fn_2_copy = thread_local global %stack_copy zeroinitializer
+@calling_fn_1_resume_result = internal thread_local global i32 0
+
+@yielding_fn_copy = internal thread_local global %stack_copy zeroinitializer
+@yielding_fn_1_copy = internal thread_local global %stack_copy zeroinitializer
+@yielding_fn_2_copy = internal thread_local global %stack_copy zeroinitializer
+
+@restore_pad = internal constant i64 4096
 
 declare i32 @printf(ptr, ...)
 declare i32 @fflush(ptr)
 declare noalias ptr @malloc(i64)
 declare i32 @VirtualProtect(ptr, i64, i32, ptr)
 declare ptr @llvm.stacksave()
+declare void @llvm.stackrestore(ptr)
 declare void @llvm.init.trampoline(ptr, ptr, ptr)
 declare ptr @llvm.adjust.trampoline(ptr)
 declare ptr @llvm.invariant.start.p0(i64, ptr)
 declare void @llvm.memcpy.p0.p0.i64(ptr, ptr, i64, i1)
 
-define void @anoint_trampoline(ptr %tramp) alwaysinline {
+define void @anoint_trampoline(ptr %tramp) noinline memory(argmem: readwrite) {
   %old_protect = alloca i32
   %result = call i32 @VirtualProtect(ptr %tramp, i64 24, i32 64, ptr %old_protect)
   ret void
@@ -83,32 +88,48 @@ done:
 define void @save_copy(ptr %copy, ptr %top_sp, ptr %bottom_sp) alwaysinline {
   %size = call i64 @section_size(ptr %top_sp, ptr %bottom_sp)
 
-  %bottom_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 0
-  store ptr %bottom_sp, ptr %bottom_slot
-  %bottom_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr %bottom_slot)
-
-  %size_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 2
+  %size_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 1
   store i64 %size, ptr %size_slot
   %size_invariant = call ptr @llvm.invariant.start.p0(i64 8, ptr %size_slot)
 
-  %buf_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 1
+  %buf_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 0
   %buf = call ptr @require_buf(ptr %buf_slot, i64 %size)
   call void @llvm.memcpy.p0.p0.i64(ptr %buf, ptr %bottom_sp, i64 %size, i1 false)
   ret void
 }
 
 define void @restore_copy(ptr %copy) alwaysinline {
-  %bottom_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 0
-  %bottom = load ptr, ptr %bottom_slot
-
-  %buf_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 1
+  %buf_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 0
   %buf = load ptr, ptr %buf_slot
 
-  %size_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 2
+  %size_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 1
   %size = load i64, ptr %size_slot
 
+  %top_sp = call ptr @llvm.stacksave()
+  %top_i = ptrtoint ptr %top_sp to i64
+  %pad = load i64, ptr @restore_pad
+  %top_after_pad = sub i64 %top_i, %pad
+  %bottom_i = sub i64 %top_after_pad, %size
+  %bottom = inttoptr i64 %bottom_i to ptr
+
   call void @llvm.memcpy.p0.p0.i64(ptr %bottom, ptr %buf, i64 %size, i1 false)
+  call void @llvm.stackrestore(ptr %bottom)
   ret void
+}
+
+define ptr @load_calling_fn_1_sp() noinline {
+  %value = load ptr, ptr @calling_fn_1_caller_sp
+  ret ptr %value
+}
+
+define void @store_calling_fn_1_resume_result(i32 %value) noinline {
+  store i32 %value, ptr @calling_fn_1_resume_result
+  ret void
+}
+
+define i32 @load_calling_fn_1_resume_result() noinline {
+  %value = load i32, ptr @calling_fn_1_resume_result
+  ret i32 %value
 }
 
 define i32 @yielding_fn(i32 %n) {
@@ -218,7 +239,11 @@ define i32 @calling_fn_1(ptr nest %n_ptr) {
   call void @restore_copy(ptr @yielding_fn_copy)
   %resume = load ptr, ptr @yielding_fn_continuation
   %result = call i32 %resume()
-  ret i32 %result
+  call void @store_calling_fn_1_resume_result(i32 %result)
+  %return_sp = call ptr @load_calling_fn_1_sp()
+  call void @llvm.stackrestore(ptr %return_sp)
+  %return_result = call i32 @load_calling_fn_1_resume_result()
+  ret i32 %return_result
 }
 
 define i32 @calling_fn_2(ptr nest %n1_ptr) {
