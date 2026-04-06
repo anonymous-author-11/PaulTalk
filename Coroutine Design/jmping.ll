@@ -8,12 +8,14 @@ target triple = "x86_64-pc-windows-msvc"
 @caller_buf = internal thread_local global [3 x ptr] zeroinitializer
 @callee_buf = internal thread_local global [3 x ptr] zeroinitializer
 @callee_copy = internal thread_local global %stack_copy zeroinitializer
+@prepare_top = internal thread_local global ptr null
 @flag = internal thread_local global i1 false
 
 declare i32 @printf(ptr, ...)
 declare i32 @fflush(ptr)
 declare noalias ptr @malloc(i64)
 declare ptr @llvm.stacksave()
+declare void @llvm.stackrestore(ptr)
 declare ptr @llvm.addressofreturnaddress()
 declare void @llvm.memcpy.p0.p0.i64(ptr, ptr, i64, i1)
 declare void @llvm.eh.sjlj.longjmp(ptr) noreturn nounwind
@@ -55,15 +57,22 @@ define void @save_context(ptr %sp, ptr %ip, ptr %buf) noinline memory(argmem: re
   ret void
 }
 
+define ptr @load_prepare_top() noinline {
+  %top = load ptr, ptr @prepare_top
+  ret ptr %top
+}
+
 define ptr @require_buf(ptr %copy, i64 %size) alwaysinline {
+entry:
+  %nonzero_size = icmp ne i64 %size, 0
   %buf_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 0
   %buf = load ptr, ptr %buf_slot
   %capacity_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 2
   %capacity = load i64, ptr %capacity_slot
   %missing = icmp eq ptr %buf, null
-  %enough = icmp uge i64 %capacity, %size
-  %grow = xor i1 %enough, true
-  %need_alloc = or i1 %missing, %grow
+  %not_enough = icmp ult i64 %capacity, %size
+  %would_need_alloc = or i1 %missing, %not_enough
+  %need_alloc = and i1 %would_need_alloc, %nonzero_size
   br i1 %need_alloc, label %alloc, label %done
 
 alloc:
@@ -73,7 +82,7 @@ alloc:
   br label %done
 
 done:
-  %result = phi ptr [ %new_buf, %alloc ], [ %buf, %0 ]
+  %result = phi ptr [ %new_buf, %alloc ], [ %buf, %entry ]
   ret ptr %result
 }
 
@@ -95,29 +104,21 @@ define void @prepare_resume(ptr %copy, ptr %buf) alwaysinline {
 
   %top_sp = call ptr @llvm.stacksave()
   %top_i = ptrtoint ptr %top_sp to i64
-  %top_after_pad = sub i64 %top_i, 4096
-  %bottom_i = sub i64 %top_after_pad, %size
+  %bottom_i = sub i64 %top_i, %size
   %bottom = inttoptr i64 %bottom_i to ptr
+  %copy_sp_i = sub i64 %bottom_i, 32
+  %copy_sp = inttoptr i64 %copy_sp_i to ptr
 
-  call void @llvm.memcpy.p0.p0.i64(ptr %bottom, ptr %saved, i64 %size, i1 false)
+  store ptr %top_sp, ptr @prepare_top
   call void @store_context_sp(ptr %buf, ptr %bottom)
+  call void @llvm.stackrestore(ptr %copy_sp)
+  call void @llvm.memcpy.p0.p0.i64(ptr %bottom, ptr %saved, i64 %size, i1 false)
+  %restore_top = call ptr @load_prepare_top()
+  call void @llvm.stackrestore(ptr %restore_top)
   ret void
 }
 
-define ghccc i32 @instruction_ptr_n(
-  ptr inreg %slot,
-  i64 inreg %a,
-  i64 inreg %b,
-  i64 inreg %c,
-  i64 inreg %d,
-  i64 inreg %e,
-  i64 inreg %f,
-  i64 inreg %g,
-  i64 inreg %h,
-  i64 inreg %i,
-  i64 inreg %j,
-  i32 returned %n
-) noinline {
+define ghccc i32 @instruction_ptr_n(ptr %slot, i32 %n) noinline {
   %return_addr_ptr = call ptr @llvm.addressofreturnaddress()
   %ip = load ptr, ptr %return_addr_ptr
   store ptr %ip, ptr %slot
@@ -126,20 +127,7 @@ define ghccc i32 @instruction_ptr_n(
 }
 
 define ptr @instruction_ptr(ptr %slot, i32 %n) alwaysinline {
-  %ignored = call ghccc i32 @instruction_ptr_n(
-    ptr inreg %slot,
-    i64 inreg 1,
-    i64 inreg 2,
-    i64 inreg 3,
-    i64 inreg 4,
-    i64 inreg 5,
-    i64 inreg 6,
-    i64 inreg 7,
-    i64 inreg 8,
-    i64 inreg 9,
-    i64 inreg 10,
-    i32 %n
-  )
+  %ignored = call ghccc i32 @instruction_ptr_n(ptr %slot, i32 %n)
   %ip = load ptr, ptr %slot
   ret ptr %ip
 }
