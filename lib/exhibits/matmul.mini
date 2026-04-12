@@ -36,9 +36,6 @@ class Matrix {
     @rows : i32
     @cols : i32
 
-    // A subtype could override this to do something adaptive
-    def Self.block_size() -> i32 { return 32; }
-
     def init(@rows : i32, @cols : i32) {
         @data = Buffer[f64].new(@rows * @cols);
     }
@@ -78,95 +75,269 @@ class Matrix {
     }
 
     def *(other : Matrix) -> Matrix {
-        if @cols != other.rows() { yield(Exception.new()); }
-        
-        result = Matrix.new(@rows, other.cols());
-        
-        m = @rows;
-        p = @cols;
-        n = other.cols();
-
-        block_size = Self.block_size();
-        row_blocks_idx = self.row_idx().step(block_size);
-        col_blocks_idx = self.col_idx().step(block_size);
-        other_col_blocks_idx = other.col_idx().step(block_size);
-
-        for jj in other_col_blocks_idx {
-            j_limit_block = min(jj + block_size, n);
-            for kk in col_blocks_idx {
-                k_limit_block = min(kk + block_size, p);
-                for ii in row_blocks_idx {
-                    i_limit_block = min(ii + block_size, m);
-                    for j_block in jj..j_limit_block {
-
-                        i_block = ii;
-                        while i_block <= i_limit_block - 8 {
-                            c_vec = result.get_simd(i_block, j_block);
-                            for k_block in kk..k_limit_block {
-                                b_kj = other.[k_block, j_block];
-                                if b_kj == 0.0 { continue; }
-                                a_vec = self.get_simd(i_block, k_block);
-                                c_vec = c_vec + a_vec * (8 of b_kj);
-                            }
-                            result.set_simd(i_block, j_block, c_vec);
-                            i_block = i_block + 8;
-                        }
-                        
-                        while i_block < i_limit_block {
-                            c_val = result.[i_block, j_block];
-                            for k_block in kk..k_limit_block {
-                                b_kj = other.[k_block, j_block];
-                                a_val = self.[i_block, k_block];
-                                c_val = c_val + a_val * b_kj;
-                            }
-                            result.[i_block, j_block] = c_val;
-                            i_block = i_block + 1;
-                        }
-                    }
-                }
-            }
-        }
-        return result;
+        return MatMul{self, other}.run();
     }
 }
-
-/*
 
 class MatMul {
-    @mat_a : Matrix
-    @mat_b : Matrix
-    @mat_c : Matrix
-    @buf_a : Buffer[f64]
-    @buf_b : Buffer[f64]
-    @buf_c : Buffer[f64]
+    @a : Matrix
+    @b : Matrix
+    @result : Matrix
 
-    def init(@mat_a : Matrix, @mat_b : Matrix) {
-        @mat_c =Matrix.new(@mat_a.rows(), @mat_b.cols());
-        @buf_a = @mat_b.data();
-        @buf_b = @mat_b.data();
-        @buf_c = @mat_c.data();
+    getters @a, @b, @result
+
+    // A subtype could override this
+    def Self.block_size() -> i32 { return 64; }
+
+    def init(@a : Matrix, @b : Matrix) {
+        if @a.cols() != @b.rows() { yield(Exception{}); }
+        @result = Matrix.new(@a.rows(), @b.cols());
     }
 
-    def foo(c_vec : Tuple[8 x f64], i_block : i32, j_block : i32, k_block : i32) -> Tuple[8 x f64] {
-        c_vec = result.get_simd(i_block, j_block);
-        for k_block in kk..k_limit_block {
-            b_kj = other.[k_block, j_block];
-            if b_kj == 0.0 { continue; }
-            a_vec = self.get_simd(i_block, k_block);
-            c_vec = c_vec + a_vec * (8 of b_kj);
+    def run() -> Matrix {
+        bs = Self.block_size();
+        m = @a.rows();
+        p = @a.cols();
+        n = @b.cols();
+
+        jj_vals = (0..n).step(bs);
+        kk_vals = (0..p).step(bs);
+        ii_vals = (0..m).step(bs);
+
+        triples = jj_vals.product(kk_vals).product(ii_vals);
+        for ((jj, kk), ii) in triples {
+            j_end = min(jj + bs, n);
+            k_end = min(kk + bs, p);
+            i_end = min(ii + bs, m);
+            block = MatBlock{self, ii, i_end, jj, j_end, kk, k_end};
+            block.process();
+        }
+        return @result;
+    }
+
+}
+
+class MatBlock {
+    @matmul : MatMul
+    @ii : i32
+    @i_end : i32
+    @jj : i32
+    @j_end : i32
+    @k_start : i32
+    @k_end : i32
+
+    getters @matmul, @ii, @i_end, @jj, @j_end, @k_start, @k_end
+
+    def init(@matmul : MatMul, @ii : i32, @i_end : i32, @jj : i32, @j_end : i32, @k_start : i32, @k_end : i32) {}
+
+    def process() {
+        i = @ii;
+        while i < @i_end {
+            rs = self.row_size(i);
+            self.process_strip(i, rs);
+            i = i + rs;
         }
     }
 
-    def bar()
+    def process_strip(i : i32, rs : i32) {
+        j = @jj;
+        while j < @j_end {
+            cs = self.col_size(rs, j);
+            self.make_tile(rs, cs, i, j).process();
+            j = j + cs;
+        }
+    }
+
+    def row_size(i : i32) -> i32 {
+        if i + 16 <= @i_end { return 16; }
+        if i + 8 <= @i_end { return 8; }
+        return 1;
+    }
+
+    def col_size(rs : i32, j : i32) -> i32 {
+        if rs >= 8 and j + 4 <= @j_end { return 4; }
+        return 1;
+    }
+
+    def make_tile(rs : i32, cs : i32, i : i32, j : i32) -> Tile {
+        if rs == 16 and cs == 4 { return Tile16x4{self, i, j}; }
+        if rs == 16 and cs == 1 { return Tile16x1{self, i, j}; }
+        if rs == 8  and cs == 4 { return Tile8x4{self, i, j}; }
+        if rs == 8  and cs == 1 { return Tile8x1{self, i, j}; }
+        return Tile1x1{self, i, j};
+    }
 }
 
-class MatrixBlock {
+class Tile {
+    @block : MatBlock
     @i : i32
     @j : i32
-    @k : i32
+
+    def init(@block : MatBlock, @i : i32, @j : i32) {}
+
+    abstract def process() {}
 }
 
-*/
+class Tile1x1 extends Tile {
+
+    def process() {
+        i = @i;
+        j = @j;
+        matmul = @block.matmul();
+        k_start = @block.k_start();
+        k_end = @block.k_end();
+        a = matmul.a();
+        b = matmul.b();
+        result = matmul.result();
+
+        c_val = result.[i, j];
+        for k in k_start..k_end {
+            c_val = c_val + a.[i, k] * b.[k, j];
+        }
+        result.[i, j] = c_val;
+    }
+
+}
+
+class Tile8x1 extends Tile {
+
+    def process() {
+        i = @i;
+        j = @j;
+        matmul = @block.matmul();
+        k_start = @block.k_start();
+        k_end = @block.k_end();
+        a = matmul.a();
+        b = matmul.b();
+        result = matmul.result();
+
+        c_vec = result.get_simd(i, j);
+        for k in k_start..k_end {
+            a_vec = a.get_simd(i, k);
+            bk = (8 of b.[k, j]);
+            c_vec = c_vec + a_vec * bk;
+        }
+        result.set_simd(i, j, c_vec);
+    }
+
+}
+
+class Tile8x4 extends Tile {
+
+    def process() {
+        i = @i;
+        j = @j;
+        matmul = @block.matmul();
+        k_start = @block.k_start();
+        k_end = @block.k_end();
+        a = matmul.a();
+        b = matmul.b();
+        result = matmul.result();
+
+        c0 = result.get_simd(i, j);
+        c1 = result.get_simd(i, j + 1);
+        c2 = result.get_simd(i, j + 2);
+        c3 = result.get_simd(i, j + 3);
+
+        for k in k_start..k_end {
+            a_vec = a.get_simd(i, k);
+            b0 = (8 of b.[k, j]);
+            b1 = (8 of b.[k, j + 1]);
+            b2 = (8 of b.[k, j + 2]);
+            b3 = (8 of b.[k, j + 3]);
+            c0 = c0 + a_vec * b0;
+            c1 = c1 + a_vec * b1;
+            c2 = c2 + a_vec * b2;
+            c3 = c3 + a_vec * b3;
+        }
+
+        result.set_simd(i, j, c0);
+        result.set_simd(i, j + 1, c1);
+        result.set_simd(i, j + 2, c2);
+        result.set_simd(i, j + 3, c3);
+    }
+
+}
+
+class Tile16x1 extends Tile {
+
+    def process() {
+        i = @i;
+        j = @j;
+        matmul = @block.matmul();
+        k_start = @block.k_start();
+        k_end = @block.k_end();
+        a = matmul.a();
+        b = matmul.b();
+        result = matmul.result();
+
+        c_lo = result.get_simd(i, j);
+        c_hi = result.get_simd(i + 8, j);
+
+        for k in k_start..k_end {
+            a_lo = a.get_simd(i, k);
+            a_hi = a.get_simd(i + 8, k);
+            bk = (8 of b.[k, j]);
+            c_lo = c_lo + a_lo * bk;
+            c_hi = c_hi + a_hi * bk;
+        }
+
+        result.set_simd(i, j, c_lo);
+        result.set_simd(i + 8, j, c_hi);
+    }
+
+}
+
+class Tile16x4 extends Tile {
+
+    def process() {
+        i = @i;
+        j = @j;
+        matmul = @block.matmul();
+        k_start = @block.k_start();
+        k_end = @block.k_end();
+        a = matmul.a();
+        b = matmul.b();
+        result = matmul.result();
+
+        c0_lo = result.get_simd(i, j);
+        c0_hi = result.get_simd(i + 8, j);
+        c1_lo = result.get_simd(i, j + 1);
+        c1_hi = result.get_simd(i + 8, j + 1);
+        c2_lo = result.get_simd(i, j + 2);
+        c2_hi = result.get_simd(i + 8, j + 2);
+        c3_lo = result.get_simd(i, j + 3);
+        c3_hi = result.get_simd(i + 8, j + 3);
+
+        for k in k_start..k_end {
+            a_lo = a.get_simd(i, k);
+            a_hi = a.get_simd(i + 8, k);
+            b0 = (8 of b.[k, j]);
+            b1 = (8 of b.[k, j + 1]);
+            b2 = (8 of b.[k, j + 2]);
+            b3 = (8 of b.[k, j + 3]);
+
+            c0_lo = c0_lo + a_lo * b0;
+            c0_hi = c0_hi + a_hi * b0;
+            c1_lo = c1_lo + a_lo * b1;
+            c1_hi = c1_hi + a_hi * b1;
+            c2_lo = c2_lo + a_lo * b2;
+            c2_hi = c2_hi + a_hi * b2;
+            c3_lo = c3_lo + a_lo * b3;
+            c3_hi = c3_hi + a_hi * b3;
+        }
+
+        result.set_simd(i, j, c0_lo);
+        result.set_simd(i + 8, j, c0_hi);
+        result.set_simd(i, j + 1, c1_lo);
+        result.set_simd(i + 8, j + 1, c1_hi);
+        result.set_simd(i, j + 2, c2_lo);
+        result.set_simd(i + 8, j + 2, c2_hi);
+        result.set_simd(i, j + 3, c3_lo);
+        result.set_simd(i + 8, j + 3, c3_hi);
+    }
+
+}
 
 def benchmark_matrix_multiplication() {
     size = 2048;
