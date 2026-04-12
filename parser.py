@@ -91,11 +91,6 @@ def resolve_import_target(parts: tuple[str, ...], from_path: Path, node_info) ->
 def make_qualified_type(name: QualifiedName, file_path: Path, types=None):
     return QualifiedType.make(file_path, name.parts, types)
 
-@dataclass(frozen=True)
-class PostfixChain:
-    base: object
-    attrs: tuple[str, ...] = ()
-
 def resolve_basic_type(type_name, type_map):
     return type_map.get(type_name.value, FatPtr.basic(type_name.value))
 
@@ -141,6 +136,11 @@ def format_parser_error(exc: UnexpectedToken, file_path: Path) -> str:
 def line_number(token):
     # Account for the implicit 'import core;\n\n' appended to the file
     return token.line - 2
+
+@dataclass(frozen=True)
+class PostfixChain:
+    base: object
+    attrs: tuple[str, ...] = ()
 
 @v_args(inline=True)
 class CSTTransformer(Transformer):
