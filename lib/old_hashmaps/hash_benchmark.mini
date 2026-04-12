@@ -1,6 +1,6 @@
-import swiss_table_v4;
+import std;
 
-alias Map = swiss_table_v4.SwissTable;
+alias Map = SwissMap;
 
 extern def clock() -> i64
 
