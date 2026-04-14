@@ -128,15 +128,10 @@ class String extends List[Character], Representable {
         return not (self == other);
     }
     def starts_with(prefix : String) -> Bool {
-        prefix_len = prefix.byte_length();
-        if prefix_len > @byte_length { return false; }
-        return self.bytes().match_at(prefix, 0);
+        return self.bytes().starts_with(prefix);
     }
     def ends_with(suffix : String) -> Bool {
-        suffix_len = suffix.byte_length();
-        if suffix_len > @byte_length { return false; }
-        offset = @byte_length - suffix_len;
-        return self.bytes().match_at(suffix, offset);
+        return self.bytes().ends_with(suffix);
     }
     def contains(needle : String) -> Bool {
         return self.bytes().contains(needle);
@@ -430,6 +425,19 @@ class StringBytes extends Collection[i8] {
         base = self.start();
         source = self.source();
         return StringBytesView{source, base + start, base + end_exclusive};
+    }
+
+    def starts_with(prefix : String) -> Bool {
+        prefix_len = prefix.byte_length();
+        if prefix_len > self.size() { return false; }
+        return self.match_at(prefix, 0);
+    }
+
+    def ends_with(suffix : String) -> Bool {
+        suffix_len = suffix.byte_length();
+        if suffix_len > self.size() { return false; }
+        offset = self.size() - suffix_len;
+        return self.match_at(suffix, offset);
     }
 
     def match_at(needle : String, start : i32) -> Bool {
