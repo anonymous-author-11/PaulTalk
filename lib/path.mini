@@ -61,7 +61,7 @@ class Path extends Representable {
         slash = Self.last_index_of_byte(text, Self.separator_byte());
         if slash is not i32 { return ""; }
         if slash == 0 { return Self.separator(); }
-        return text.slice_bytes(0, slash);
+        return text.bytes().slice(0, slash).to_string();
     }
 
     def Self.basename_of(text : String) -> String {
@@ -69,7 +69,7 @@ class Path extends Representable {
         if text == "." { return "."; }
         slash = Self.last_index_of_byte(text, Self.separator_byte());
         if slash is not i32 { return text.copy(); }
-        return text.slice_bytes(slash + 1, text.byte_length());
+        return text.bytes().slice(slash + 1, text.byte_length()).to_string();
     }
 
     def Self.is_special_name(name : String) -> Bool {
@@ -89,7 +89,7 @@ class Path extends Representable {
     def Self.stem_of(base : String) -> String {
         dot = Self.extension_index(base);
         if dot is not i32 { return base.copy(); }
-        return base.slice_bytes(0, dot);
+        return base.bytes().slice(0, dot).to_string();
     }
 
     def Self.add_part(text : String, part : String, absolute : Bool) -> String {
@@ -182,7 +182,7 @@ class Path extends Representable {
         base = self.basename();
         dot = Self.extension_index(base);
         if dot is not i32 { return nil; }
-        return base.slice_bytes(dot, base.byte_length());
+        return base..bytes().slice(dot, base.byte_length()).to_string();
     }
 
     def with_extension(ext : String) -> Path {

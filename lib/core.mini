@@ -141,9 +141,6 @@ class String extends List[Character], Representable {
     def contains(needle : String) -> Bool {
         return self.bytes().contains(needle);
     }
-    def slice_bytes(start : i32, end : i32) -> String {
-        return self.bytes().slice(start, end).to_string();
-    }
     def lead_whitespace() -> i32 {
         for i in 0..@byte_length {
             if not ASCII.is_whitespace(@bytes.[i]) { return i; }

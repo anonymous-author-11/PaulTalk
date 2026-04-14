@@ -455,12 +455,12 @@ def line_text_at(source : String, line_number : i32) -> String {
     if line_number < 1 { return ""; }
     line_text = source.lines().at(line_number - 1);
     if line_text is Nil { return ""; }
-    return trim_trailing_cr(line_text.to_string());
+    return trim_trailing_cr(line_text).to_string();
 }
 
-def trim_trailing_cr(text : String) -> String {
+def trim_trailing_cr(text : StringBytes) -> StringBytes {
     if not text.ends_with("\r") { return text; }
-    return text.slice_bytes(0, text.byte_length() - 1);
+    return text.bytes().slice(0, text.byte_length() - 1);
 }
 
 def format_parse_error(source : String, error : ParseError) -> String {
@@ -572,7 +572,7 @@ class PaulTalkLexer {
     }
 
     def slice_from(start : i32) -> String {
-        return @source.slice_bytes(start, @cursor);
+        return @source.bytes().slice(start, @cursor).to_string();
     }
 
     def skip_ignored() {
