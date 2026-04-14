@@ -36,7 +36,7 @@ class String extends List[Character], Representable {
         n_chars = validator.write_codepoints_from(source_bytes.iterator());
         result.increment_chars(n_chars);
         return result;
-    } ~> { ret.elems_reg holds source_bytes.elems_reg }
+    } ~> no_alias
 
     // Lossy constructor. Never fails, replaces invalid sequences with '�'.
     // Consequently, byte length of resultant string may be different than source length
@@ -46,14 +46,14 @@ class String extends List[Character], Representable {
         n_chars = validator.write_codepoints_from(source_bytes.iterator());
         result.increment_chars(n_chars);
         return result;
-    } ~> { ret.elems_reg holds source_bytes.elems_reg }
+    } ~> no_alias
 
     // Construct from a null-terminated buffer of bytes
     def Self.from_c_string(c_string : Buffer[i8]) -> String {
         size = 0;
         while c_string.[size] != (0 as i8) { size = size + 1; } // count bytes
         return String.from_bytes_lossy(Slice{c_string, size}); // default to lossy conversion
-    } ~> { ret.elems_reg holds c_string }
+    } ~> no_alias
 
     def Self.from_char(char : Character) -> String {
         str = String{char.n_bytes()};
@@ -808,7 +808,7 @@ class UTF8Encoder extends Writer[i32] {
     def write_from(source : UTF8Decoder, max_elems : i32) -> i32 {
         validator = UTF8BytesValidator{@writer, @replacement_fn};
         return validator.write_codepoints_from(source.peeker(), max_elems);
-    } ~> { @dest_reg holds source.peeker.elems_reg }
+    } ~> no_alias
 
     // optimization: validator + encoder = encoder
     def write_from(source : UTF8CodepointsValidator, max_elems : i32) -> i32 {
@@ -822,7 +822,7 @@ class UTF8Encoder extends Writer[i32] {
             codepoint = iterator.next();
         }
         return n_written;
-    } ~> { @dest_reg holds source.iterator.elems_reg }
+    } ~> no_alias
 }
 
 class UTF8CodepointsValidator extends Iterator[i32] {
@@ -929,19 +929,19 @@ class UTF8BytesValidator {
             n_written = n_written + 1;
         }
         return n_written;
-    } ~> { @writer.dest_reg holds source.elems_reg }
+    } ~> no_alias
 
     def write_codepoints_from(source : Iterator[i8]) -> i32 {
         return self.write_codepoints_from(source, i32.max());
-    } ~> { @writer.dest_reg holds source.elems_reg }
+    } ~> no_alias
 
     def write_codepoints_from(source : Iterable[i8], max_elems : i32) -> i32 {
         return self.write_codepoints_from(source.iterator(), max_elems);
-    } ~> { @writer.dest_reg holds source.elems_reg }
+    } ~> no_alias
 
     def write_codepoints_from(source : Iterable[i8]) -> i32 {
         return self.write_codepoints_from(source.iterator(), i32.max());
-    } ~> { @writer.dest_reg holds source.elems_reg }
+    } ~> no_alias
 }
 
 // Decodes bytes that are valid UTF8 into codepoints
