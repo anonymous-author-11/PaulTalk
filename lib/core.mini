@@ -375,6 +375,9 @@ class StringBytes extends Collection[i8] {
     abstract def start() -> i32 {}
     abstract def end() -> i32 {}
 
+    // StringBytes may have an invalid start or end due to slicing
+    abstract def validate() -> ValidStringBytes {}
+
     def size() -> i32 {
         return self.end() - self.start();
     }
@@ -467,34 +470,36 @@ class StringBytes extends Collection[i8] {
         return nil;
     }
 
+    def to_string_view() -> StringView yields InvalidUTF8Error {
+        return self.validate().to_string_view();
+    }
+
     def to_string() -> String yields InvalidUTF8Error {
-        source = self.source();
-        start = self.start();
-        end_exclusive = self.end();
-        source_len = source.byte_length();
-
-        if start < source_len {
-            start_byte = source.unchecked_index(start);
-            if UTF8.is_continuation(start_byte) { yield(InvalidUTF8Error{}); }
-        }
-        if end_exclusive < source_len {
-            end_byte = source.unchecked_index(end_exclusive);
-            if UTF8.is_continuation(end_byte) { yield(InvalidUTF8Error{}); }
-        }
-
-        n_bytes = self.size();
-        bytes = Buffer[i8].new(n_bytes);
-        n_chars = 0;
-        for i in 0..n_bytes {
-            byte = self.unchecked_index(i);
-            bytes.[i] = byte;
-            if not UTF8.is_continuation(byte) { n_chars = n_chars + 1; }
-        }
-        return String{bytes, n_bytes, n_chars, n_bytes};
+        return self.to_string_view().to_string();
     }
 }
 
-class StringBytesList extends StringBytes, List[i8] {
+class ValidStringBytes extends StringBytes {
+
+    def count_chars() -> i32 {
+        n_chars = 0;
+        for byte in self {
+            if not UTF8.is_continuation(byte) { n_chars = n_chars + 1; }
+        }
+        return n_chars;
+    }
+
+    def to_string_view() -> StringView {
+        return StringView{self.source(), self.start(), self.end(), self.count_chars()};
+    }
+
+    def validate() -> Self {
+        return self;
+    }
+
+}
+
+class StringBytesList extends ValidStringBytes, List[i8] {
     @str : String
 
     regions { @elems_reg == @str.elems_reg }
@@ -524,6 +529,9 @@ class StringBytesList extends StringBytes, List[i8] {
         self.writer().write_from(other);
         return self;
     }
+    def count_chars() -> i32 {
+        return @str.char_length();
+    }
     def writer() -> Writer[i8] {
         return StringByteWriter{@str};
     } ~> { ret.string == @str, ret.dest_reg == @elems_reg }
@@ -547,7 +555,27 @@ class StringBytesView extends StringBytes {
     def end() -> i32 {
         return @end_exclusive;
     }
+
+    def validate() -> ValidStringBytesView yields InvalidUTF8Error {
+        source = self.source();
+        start = self.start();
+        end_exclusive = self.end();
+        source_len = source.byte_length();
+
+        if start < source_len {
+            start_byte = source.unchecked_index(start);
+            if UTF8.is_continuation(start_byte) { yield(InvalidUTF8Error{}); }
+        }
+        if end_exclusive < source_len {
+            end_byte = source.unchecked_index(end_exclusive);
+            if UTF8.is_continuation(end_byte) { yield(InvalidUTF8Error{}); }
+        }
+
+        return ValidStringBytesView{source, start, end_exclusive};
+    }
 }
+
+class ValidStringBytesView extends ValidStringBytes, StringBytesView {}
 
 class StringView {
     @str : String
