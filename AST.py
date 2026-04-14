@@ -3844,9 +3844,15 @@ class Behavior(Statement):
         exit.add_ops([vptr, adjustment, gep, offset, offsetted, ret])
         return exit
 
+    def current_method_offset(self, method):
+        for i, entry in enumerate(self.cls.vtable()):
+            if entry is method: return i
+        raise Exception(f"{self.info}: Could not find method {method.definition.name} in vtable for class {self.cls.name}.")
+
     def process_final_state(self, block, bblock, offset_ptr, exit, fat_ptr):
         if not isinstance(block, FinalBlock): return False
-        offset = llvm.ConstantOp(IntegerAttr.from_int_and_width(block.associated_method.offset, 32), IntegerType(32))
+        method_offset = self.current_method_offset(block.associated_method)
+        offset = llvm.ConstantOp(IntegerAttr.from_int_and_width(method_offset, 32), IntegerType(32))
         store = llvm.StoreOp(offset.results[0], offset_ptr.results[0])
         br = cf.Branch.create(successors=[exit])
         bblock.add_ops([offset, store, br])
@@ -4344,7 +4350,8 @@ class ClassDef(Statement):
         return pruned
 
     def all_method_definitions(self):
-        unpruned = [*self.method_definitions, *chain.from_iterable(cls.method_definitions for cls in self.my_ordering())]
+        ancestors = [self._type_env.get_class(self.info, anc) for anc in self.ancestors()[1:] if isinstance(anc, FatPtr)]
+        unpruned = [*self.method_definitions, *chain.from_iterable(cls.method_definitions for cls in ancestors)]
         return list(reversed({(definition.name, *definition.param_types()):definition for definition in reversed(unpruned)}.values()))
 
     def parents_methods(self):
