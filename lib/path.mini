@@ -182,7 +182,7 @@ class Path extends Representable {
         base = self.basename();
         dot = Self.extension_index(base);
         if dot is not i32 { return nil; }
-        return base..bytes().slice(dot, base.byte_length()).to_string();
+        return base.bytes().slice(dot, base.byte_length()).to_string();
     }
 
     def with_extension(ext : String) -> Path {
