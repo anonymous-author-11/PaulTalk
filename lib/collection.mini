@@ -10,6 +10,7 @@ class Collection[T] extends Iterable[T] {
     }
 
     def contains(target : T, eq : (T, T) -> Bool) -> Bool {
+        if self.is_empty() { return false; }
         for item in self {
             if eq.call(item, target) { return true; }
         }
