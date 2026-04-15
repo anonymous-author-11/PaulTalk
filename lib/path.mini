@@ -12,110 +12,57 @@ class Path extends Representable {
         return Self{text};
     }
 
-    def Self.separator() -> String {
-        return "/";
-    }
-
-    def Self.separator_byte() -> i8 {
-        return '/' as i8;
-    }
-
-    def Self.alt_separator_byte() -> i8 {
-        return '\\' as i8;
-    }
-
-    def Self.unify_separators(input : String) -> String {
-        out = String{input.byte_length()};
-        writer = out.bytes().writer();
-        for byte in input.bytes() {
-            out_byte = byte;
-            if byte == Self.alt_separator_byte() { out_byte = Self.separator_byte(); }
-            writer.write(out_byte);
-        }
-        out.increment_chars(input.char_length());
-        return out;
-    } ~> no_alias
-
-    def Self.is_absolute_text(text : String) -> Bool {
-        if text.byte_length() == 0 { return false; }
-        return text.unchecked_index(0) == Self.separator_byte();
-    }
-
-    def Self.last_index_of_byte(source : String, target : i8) -> i32? {
-        index = 0;
-        found = nil;
-        for byte in source.bytes() {
-            if byte == target { found = index; }
-            index = index + 1;
-        }
-        return found;
-    } ~> no_alias
-
     def Self.append_part(text : String, part : String) -> String {
-        if text.byte_length() == 0 { return part.copy(); }
-        if text == Self.separator() { return "/${part}"; }
+        if text.is_empty() { return part.copy(); }
+        if text == "/" { return "/${part}"; }
         return "${text}/${part}";
     }
 
     def Self.trim_last_part(text : String) -> String {
-        slash = Self.last_index_of_byte(text, Self.separator_byte());
-        if slash is not i32 { return ""; }
-        if slash == 0 { return Self.separator(); }
-        return text.bytes().slice(0, slash).to_string();
+        pair = text.rsplit_once("/");
+        if pair is Nil { return ""; }
+        return pair.[0].to_string();
     }
 
     def Self.basename_of(text : String) -> String {
-        if text == Self.separator() { return Self.separator(); }
+        sep = "/";
+        if text == sep { return sep; }
         if text == "." { return "."; }
-        slash = Self.last_index_of_byte(text, Self.separator_byte());
-        if slash is not i32 { return text.copy(); }
-        return text.bytes().slice(slash + 1, text.byte_length()).to_string();
-    }
-
-    def Self.is_special_name(name : String) -> Bool {
-        return name == "." or name == ".." or name == Self.separator();
-    }
-
-    def Self.extension_index(base : String) -> i32? {
-        if Self.is_special_name(base) { return nil; }
-
-        dot = Self.last_index_of_byte(base, '.' as i8);
-        if dot is not i32 { return nil; }
-        if dot == 0 { return nil; }
-        if dot == base.byte_length() - 1 { return nil; }
-        return dot;
+        pair = text.rsplit_once(sep);
+        if pair is Nil { return text.copy(); }
+        return pair.[1].to_string();
     }
 
     def Self.stem_of(base : String) -> String {
-        dot = Self.extension_index(base);
-        if dot is not i32 { return base.copy(); }
-        return base.bytes().slice(0, dot).to_string();
+        if base == ".." { return base.copy(); }
+        pair = base.rsplit_once(".");
+        if pair is Nil { return base.copy(); }
+        (stem, after) = pair;
+        if stem.is_empty() { return base.copy(); }
+        return stem.to_string();
     }
 
     def Self.add_part(text : String, part : String, absolute : Bool) -> String {
-        if part.byte_length() == 0 or part == "." { return text; }
-        if part == ".." {
-            if text.byte_length() == 0 and absolute { return text; }
-            if text.byte_length() == 0 { return ".."; }
-            if text == Self.separator() { return text; }
+        if part.is_empty() or part == "." { return text; }
+        if part != ".." { return Self.append_part(text, part); }
+        if text.is_empty() and absolute { return text; }
+        if text.is_empty() { return ".."; }
+        if text == "/" { return text; }
 
-            tail = Self.basename_of(text);
-            if tail == ".." { return Self.append_part(text, ".."); }
-            return Self.trim_last_part(text);
-        }
-        return Self.append_part(text, part);
+        if Self.basename_of(text) != ".." { return Self.trim_last_part(text); }
+        return Self.append_part(text, "..");
     }
 
     def Self.normalize_text(input : String) -> String {
-        unified = Self.unify_separators(input);
-        absolute = Self.is_absolute_text(unified);
+        unified = input.replace("\\", "/");
+        absolute = unified.starts_with("/");
         text = "";
-        if absolute { text = Self.separator(); }
+        if absolute { text = "/"; }
 
-        for part in unified.split(Self.separator()) {
+        for part in unified.split("/") {
             text = Self.add_part(text, part.to_string(), absolute);
         }
-        if text.byte_length() == 0 { return "."; }
+        if text.is_empty() { return "."; }
         return text;
     } ~> no_alias
 
@@ -124,7 +71,7 @@ class Path extends Representable {
     }
 
     def components() -> Iterable[StringView] {
-        return @text.split(Self.separator())
+        return @text.split("/")
             .filter((part : StringView) => { part.byte_length() > 0; });
     }
 
@@ -133,11 +80,10 @@ class Path extends Representable {
     }
 
     def dirname() -> Path {
-        if @text == Self.separator() { return self; }
-        if @text == "." { return self; }
+        if @text == "/" or @text == "." { return self; }
 
         parent = Self.trim_last_part(@text);
-        if parent.byte_length() == 0 { return Path{"."}; }
+        if parent.is_empty() { return Path{"."}; }
         return Path{parent};
     }
 
@@ -146,7 +92,7 @@ class Path extends Representable {
     }
 
     def is_absolute() -> Bool {
-        return Self.is_absolute_text(@text);
+        return @text.starts_with("/");
     }
 
     def parent() -> Path {
@@ -160,13 +106,13 @@ class Path extends Representable {
         if child_text == "." { return self; }
 
         text = @text;
-        absolute = Self.is_absolute_text(text);
+        absolute = text.starts_with("/");
         if text == "." { text = ""; }
 
-        for part in child_text.split(Self.separator()) {
+        for part in child_text.split("/") {
             text = Self.add_part(text, part.to_string(), absolute);
         }
-        if text.byte_length() == 0 { return Path{"."}; }
+        if text.is_empty() { return Path{"."}; }
         return Path{text};
     }
 
@@ -180,14 +126,16 @@ class Path extends Representable {
 
     def extension() -> String? {
         base = self.basename();
-        dot = Self.extension_index(base);
-        if dot is not i32 { return nil; }
-        return base.bytes().slice(dot, base.byte_length()).to_string();
+        pair = base.rsplit_once(".");
+        if pair is Nil { return nil; }
+        (before, extension) = pair;
+        if before.is_empty() or extension.is_empty() { return nil; }
+        return extension.to_string();
     }
 
     def with_extension(ext : String) -> Path {
         base = Self.basename_of(@text);
-        if Self.is_special_name(base) { return self; }
+        if base == "." or base == ".." or base == "/" { return self; }
 
         suffix = ext;
         if suffix.byte_length() > 0 and not suffix.starts_with(".") {
@@ -196,7 +144,7 @@ class Path extends Representable {
 
         name = Self.stem_of(base).extend(suffix);
         parent = Self.trim_last_part(@text);
-        if parent.byte_length() == 0 { return Path{name}; }
+        if parent.is_empty() { return Path{name}; }
         return Path{Self.append_part(parent, name)};
     }
 }
