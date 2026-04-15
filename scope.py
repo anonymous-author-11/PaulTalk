@@ -397,6 +397,11 @@ class TypeEnvironment:
     def ancestors_inner(self, typ: TypeAttribute) -> list:
         if typ == Any(): return [typ]
         if typ == Nil(): return [typ, Any()]
+        if isinstance(typ, Function):
+            obj_type = self.visible_fatptr(None, "Object")
+            ret_ancestors = self.ancestors(typ.return_type)
+            funcs = [Function([typ.param_types, typ.yield_type, ret]) for ret in ret_ancestors]
+            return [*funcs, obj_type, Any()]
         if is_builtin(typ):
             obj_type = self.visible_fatptr(None, "Object")
             return [typ, obj_type, Any()]
