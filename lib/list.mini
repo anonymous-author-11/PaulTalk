@@ -18,7 +18,7 @@ class List[T] extends Collection[T] {
     } ~> { @elems_reg holds x, ret == self }
 
     // iterator.next() should be O(1)
-    abstract def iterator() -> ConstantTimeIterator[T] {}
+    abstract def iterator() -> Iterator[T] {}
 
     // we do not provide List.set(index, value)
     // mutating the middle of the list maybe be impossible for some subtypes
