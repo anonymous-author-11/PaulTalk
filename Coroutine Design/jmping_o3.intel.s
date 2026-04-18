@@ -15,9 +15,8 @@
 	.p2align	4, 0x90
 returns_one:                            # @returns_one
 # %bb.0:
-	mov	eax, dword ptr [rip + _tls_index]
-	mov	rcx, qword ptr gs:[88]
-	mov	rax, qword ptr [rcx + 8*rax]
+	mov	rax, qword ptr gs:[88]
+	mov	rax, qword ptr [rax]
 	movzx	eax, byte ptr [rax + always_one@SECREL32]
 	ret
                                         # -- End function
@@ -540,7 +539,7 @@ coro_call:                              # @coro_call
 	test	al, 1
 	jne	.LBB29_5
 .LBB29_7:                               # %exit
-	mov	al, 1
+	mov	byte ptr [rsi + 112], 1
 	movaps	xmm6, xmmword ptr [rsp + 64]    # 16-byte Reload
 	movaps	xmm7, xmmword ptr [rsp + 80]    # 16-byte Reload
 	movaps	xmm8, xmmword ptr [rsp + 96]    # 16-byte Reload
@@ -697,7 +696,7 @@ coro_yield:                             # @coro_yield
 	.globl	yielding_fn                     # -- Begin function yielding_fn
 	.p2align	4, 0x90
 yielding_fn:                            # @yielding_fn
-# %bb.0:                                # %entry
+# %bb.0:
 	push	r15
 	push	r14
 	push	r13
@@ -732,13 +731,12 @@ yielding_fn:                            # @yielding_fn
 	mov	qword ptr [rsp + 40], rcx       # 8-byte Spill
 	mov	qword ptr [rcx + 40], rax
 	#EH_SjLj_Setup	.LBB32_13
-# %bb.1:                                # %entry
+# %bb.1:
 	xor	eax, eax
 	jmp	.LBB32_2
 .LBB32_13:                              # Block address taken
-                                        # %entry
 	mov	eax, 1
-.LBB32_2:                               # %entry
+.LBB32_2:
 	test	eax, eax
 	je	.LBB32_17
 # %bb.3:                                # %coro_yield.exit32
@@ -1024,7 +1022,7 @@ i32_i32_tramp:                          # @i32_i32_tramp
 	.globl	calling_fn                      # -- Begin function calling_fn
 	.p2align	4, 0x90
 calling_fn:                             # @calling_fn
-# %bb.0:                                # %entry
+# %bb.0:
 	push	r15
 	push	r14
 	push	r13
@@ -1033,61 +1031,56 @@ calling_fn:                             # @calling_fn
 	push	rdi
 	push	rbp
 	push	rbx
-	sub	rsp, 264
-	movaps	xmmword ptr [rsp + 240], xmm15  # 16-byte Spill
-	movaps	xmmword ptr [rsp + 224], xmm14  # 16-byte Spill
-	movaps	xmmword ptr [rsp + 208], xmm13  # 16-byte Spill
-	movaps	xmmword ptr [rsp + 192], xmm12  # 16-byte Spill
-	movaps	xmmword ptr [rsp + 176], xmm11  # 16-byte Spill
-	movaps	xmmword ptr [rsp + 160], xmm10  # 16-byte Spill
-	movaps	xmmword ptr [rsp + 144], xmm9   # 16-byte Spill
-	movaps	xmmword ptr [rsp + 128], xmm8   # 16-byte Spill
-	movaps	xmmword ptr [rsp + 112], xmm7   # 16-byte Spill
-	movaps	xmmword ptr [rsp + 96], xmm6    # 16-byte Spill
-	mov	esi, ecx
-	mov	ecx, 120
-	call	malloc
-	mov	qword ptr [rsp + 72], rsp       # 8-byte Spill
-	mov	qword ptr [rsp + 56], rsp       # 8-byte Spill
-	mov	qword ptr [rax + 56], 0
-	lea	rcx, [rip + passthru_fn]
-	mov	qword ptr [rax + 88], rcx
-	lea	rcx, [rip + i32_i32_tramp]
-	mov	qword ptr [rax + 96], rcx
-	mov	word ptr [rax + 112], 0
-	lea	rcx, [rsp + 92]
-	mov	qword ptr [rax + 104], rcx
-	mov	qword ptr [rsp + 64], rsi       # 8-byte Spill
-	mov	dword ptr [rsp + 92], esi
-	lea	rcx, [rip + .LBB35_21]
-	mov	qword ptr [rsp + 80], rax       # 8-byte Spill
-	mov	qword ptr [rax + 16], rcx
+	sub	rsp, 360
+	movaps	xmmword ptr [rsp + 336], xmm15  # 16-byte Spill
+	movaps	xmmword ptr [rsp + 320], xmm14  # 16-byte Spill
+	movaps	xmmword ptr [rsp + 304], xmm13  # 16-byte Spill
+	movaps	xmmword ptr [rsp + 288], xmm12  # 16-byte Spill
+	movaps	xmmword ptr [rsp + 272], xmm11  # 16-byte Spill
+	movaps	xmmword ptr [rsp + 256], xmm10  # 16-byte Spill
+	movaps	xmmword ptr [rsp + 240], xmm9   # 16-byte Spill
+	movaps	xmmword ptr [rsp + 224], xmm8   # 16-byte Spill
+	movaps	xmmword ptr [rsp + 208], xmm7   # 16-byte Spill
+	movaps	xmmword ptr [rsp + 192], xmm6   # 16-byte Spill
+                                        # kill: def $ecx killed $ecx def $rcx
+	mov	qword ptr [rsp + 32], rsp       # 8-byte Spill
+	mov	qword ptr [rsp + 48], rsp       # 8-byte Spill
+	mov	qword ptr [rsp + 128], 0
+	lea	rax, [rip + passthru_fn]
+	mov	qword ptr [rsp + 160], rax
+	lea	rax, [rip + i32_i32_tramp]
+	mov	qword ptr [rsp + 168], rax
+	mov	word ptr [rsp + 184], 0
+	lea	rax, [rsp + 68]
+	mov	qword ptr [rsp + 176], rax
+	mov	qword ptr [rsp + 56], rcx       # 8-byte Spill
+	mov	dword ptr [rsp + 68], ecx
+	lea	rax, [rip + .LBB35_21]
+	mov	qword ptr [rsp + 88], rax
 	#EH_SjLj_Setup	.LBB35_21
-# %bb.1:                                # %entry
+# %bb.1:
 	xor	eax, eax
 	jmp	.LBB35_2
 .LBB35_21:                              # Block address taken
-                                        # %entry
 	mov	eax, 1
-.LBB35_2:                               # %entry
-	mov	rdx, qword ptr [rsp + 80]       # 8-byte Reload
-	lea	rsi, [rdx + 8]
-	mov	rcx, qword ptr [rsp + 72]       # 8-byte Reload
-	mov	qword ptr [rdx + 8], rcx
-	mov	rcx, qword ptr [rsp + 56]       # 8-byte Reload
-	mov	qword ptr [rdx + 24], rcx
+.LBB35_2:
+	lea	rsi, [rsp + 80]
+	mov	rcx, qword ptr [rsp + 32]       # 8-byte Reload
+	mov	qword ptr [rsp + 80], rcx
+	mov	rcx, qword ptr [rsp + 48]       # 8-byte Reload
+	mov	qword ptr [rsp + 96], rcx
 	test	eax, eax
 	jne	.LBB35_16
-# %bb.3:                                # %dispatch.i13
-	mov	qword ptr [rsp + 72], rsi       # 8-byte Spill
+# %bb.3:                                # %start.i14
 	mov	rax, qword ptr gs:[88]
 	mov	rsi, qword ptr [rax]
 	mov	rax, qword ptr [rsi + active_coroutine@SECREL32]
-	mov	qword ptr [rdx], rax
-	mov	qword ptr [rsi + active_coroutine@SECREL32], rdx
-	mov	byte ptr [rdx + 112], 1
+	mov	qword ptr [rsp + 72], rax
+	lea	rax, [rsp + 72]
+	mov	qword ptr [rsi + active_coroutine@SECREL32], rax
+	mov	byte ptr [rsp + 184], 1
 	lea	rcx, [rip + .Lprint_i32_fmt]
-	mov	rdx, qword ptr [rsp + 64]       # 8-byte Reload
+	mov	rdx, qword ptr [rsp + 56]       # 8-byte Reload
                                         # kill: def $edx killed $edx killed $rdx
 	call	printf
 	xor	ecx, ecx
@@ -1095,26 +1088,26 @@ calling_fn:                             # @calling_fn
 	mov	qword ptr [rsp + 40], rsp       # 8-byte Spill
 	mov	rcx, qword ptr [rsi + active_coroutine@SECREL32]
 	lea	rax, [rip + .LBB35_22]
-	mov	qword ptr [rsp + 48], rcx       # 8-byte Spill
+	mov	qword ptr [rsp + 32], rcx       # 8-byte Spill
 	mov	qword ptr [rcx + 40], rax
 	#EH_SjLj_Setup	.LBB35_22
-# %bb.4:                                # %dispatch.i13
+# %bb.4:                                # %start.i14
 	xor	eax, eax
 	jmp	.LBB35_5
 .LBB35_22:                              # Block address taken
-                                        # %dispatch.i13
+                                        # %start.i14
 	mov	eax, 1
-.LBB35_5:                               # %dispatch.i13
+.LBB35_5:                               # %start.i14
 	test	eax, eax
 	je	.LBB35_27
 # %bb.6:                                # %coro_yield.exit32.i.i
-	mov	rax, qword ptr [rsp + 64]       # 8-byte Reload
+	mov	rax, qword ptr [rsp + 56]       # 8-byte Reload
 	lea	edx, [rax + 1]
 	lea	rcx, [rip + .Lprint_i32_fmt]
 	call	printf
 	xor	ecx, ecx
 	call	fflush
-	mov	qword ptr [rsp + 48], rsp       # 8-byte Spill
+	mov	qword ptr [rsp + 32], rsp       # 8-byte Spill
 	mov	rax, qword ptr gs:[88]
 	mov	rax, qword ptr [rax]
 	mov	rcx, qword ptr [rax + active_coroutine@SECREL32]
@@ -1132,13 +1125,13 @@ calling_fn:                             # @calling_fn
 	test	eax, eax
 	je	.LBB35_28
 # %bb.9:                                # %coro_yield.exit24.i.i
-	mov	rax, qword ptr [rsp + 64]       # 8-byte Reload
+	mov	rax, qword ptr [rsp + 56]       # 8-byte Reload
 	lea	edx, [rax + 2]
 	lea	rcx, [rip + .Lprint_i32_fmt]
 	call	printf
 	xor	ecx, ecx
 	call	fflush
-	mov	qword ptr [rsp + 48], rsp       # 8-byte Spill
+	mov	qword ptr [rsp + 32], rsp       # 8-byte Spill
 	mov	rax, qword ptr gs:[88]
 	mov	rax, qword ptr [rax]
 	mov	rcx, qword ptr [rax + active_coroutine@SECREL32]
@@ -1156,13 +1149,13 @@ calling_fn:                             # @calling_fn
 	test	eax, eax
 	je	.LBB35_28
 # %bb.12:                               # %coro_yield.exit16.i.i
-	mov	rax, qword ptr [rsp + 64]       # 8-byte Reload
+	mov	rax, qword ptr [rsp + 56]       # 8-byte Reload
 	lea	edx, [rax + 3]
 	lea	rcx, [rip + .Lprint_i32_fmt]
 	call	printf
 	xor	ecx, ecx
 	call	fflush
-	mov	qword ptr [rsp + 48], rsp       # 8-byte Spill
+	mov	qword ptr [rsp + 32], rsp       # 8-byte Spill
 	mov	rax, qword ptr gs:[88]
 	mov	rax, qword ptr [rax]
 	mov	rcx, qword ptr [rax + active_coroutine@SECREL32]
@@ -1178,67 +1171,67 @@ calling_fn:                             # @calling_fn
 	mov	eax, 1
 .LBB35_14:                              # %coro_yield.exit16.i.i
 	test	eax, eax
-	mov	rsi, qword ptr [rsp + 80]       # 8-byte Reload
+	lea	rsi, [rsp + 80]
 	je	.LBB35_28
 # %bb.15:                               # %passthru_fn.exit
-	mov	rax, qword ptr [rsp + 64]       # 8-byte Reload
+	mov	rax, qword ptr [rsp + 56]       # 8-byte Reload
 	lea	edx, [rax + 4]
 	lea	rcx, [rip + .Lprint_i32_fmt]
 	call	printf
 	xor	ecx, ecx
 	call	fflush
-	mov	byte ptr [rsi + 113], 1
+	mov	byte ptr [rsp + 185], 1
 	call	returns_one
 	test	al, 1
-	mov	rsi, qword ptr [rsp + 72]       # 8-byte Reload
 	jne	.LBB35_29
-.LBB35_16:                              # %coro_call.exit14
-	mov	rax, qword ptr [rsp + 64]       # 8-byte Reload
+.LBB35_16:                              # %coro_call.exit45
+	mov	byte ptr [rsp + 184], 1
+	mov	rax, qword ptr [rsp + 56]       # 8-byte Reload
 	lea	edx, [rax + 10]
 	lea	rcx, [rip + .Lprint_i32_fmt]
 	call	printf
 	xor	ecx, ecx
 	call	fflush
-	mov	qword ptr [rsp + 72], rsp       # 8-byte Spill
+	mov	qword ptr [rsp + 32], rsp       # 8-byte Spill
 	lea	rax, [rip + .LBB35_26]
 	mov	qword ptr [rsi + 8], rax
 	#EH_SjLj_Setup	.LBB35_26
-# %bb.17:                               # %coro_call.exit14
+# %bb.17:                               # %coro_call.exit45
 	xor	eax, eax
 	jmp	.LBB35_18
 .LBB35_26:                              # Block address taken
-                                        # %coro_call.exit14
+                                        # %coro_call.exit45
 	mov	eax, 1
-.LBB35_18:                              # %coro_call.exit14
-	mov	r10, qword ptr [rsp + 80]       # 8-byte Reload
-	mov	rcx, qword ptr [rsp + 72]       # 8-byte Reload
-	mov	qword ptr [r10 + 8], rcx
-	mov	rcx, qword ptr [rsp + 56]       # 8-byte Reload
-	mov	qword ptr [r10 + 24], rcx
+.LBB35_18:                              # %coro_call.exit45
+	mov	rcx, qword ptr [rsp + 32]       # 8-byte Reload
+	mov	qword ptr [rsp + 80], rcx
+	mov	rcx, qword ptr [rsp + 48]       # 8-byte Reload
+	mov	qword ptr [rsp + 96], rcx
 	test	eax, eax
 	jne	.LBB35_20
-# %bb.19:                               # %dispatch.i
-	cmp	byte ptr [r10 + 113], 0
+# %bb.19:                               # %resume.i
+	cmp	byte ptr [rsp + 185], 0
 	je	.LBB35_30
 .LBB35_20:                              # %coro_call.exit
-	mov	rdx, qword ptr [rsp + 64]       # 8-byte Reload
+	mov	byte ptr [rsp + 184], 1
+	mov	rdx, qword ptr [rsp + 56]       # 8-byte Reload
 	add	edx, 30
 	lea	rcx, [rip + .Lprint_i32_fmt]
                                         # kill: def $edx killed $edx killed $rdx
 	call	printf
 	xor	ecx, ecx
 	call	fflush
-	movaps	xmm6, xmmword ptr [rsp + 96]    # 16-byte Reload
-	movaps	xmm7, xmmword ptr [rsp + 112]   # 16-byte Reload
-	movaps	xmm8, xmmword ptr [rsp + 128]   # 16-byte Reload
-	movaps	xmm9, xmmword ptr [rsp + 144]   # 16-byte Reload
-	movaps	xmm10, xmmword ptr [rsp + 160]  # 16-byte Reload
-	movaps	xmm11, xmmword ptr [rsp + 176]  # 16-byte Reload
-	movaps	xmm12, xmmword ptr [rsp + 192]  # 16-byte Reload
-	movaps	xmm13, xmmword ptr [rsp + 208]  # 16-byte Reload
-	movaps	xmm14, xmmword ptr [rsp + 224]  # 16-byte Reload
-	movaps	xmm15, xmmword ptr [rsp + 240]  # 16-byte Reload
-	add	rsp, 264
+	movaps	xmm6, xmmword ptr [rsp + 192]   # 16-byte Reload
+	movaps	xmm7, xmmword ptr [rsp + 208]   # 16-byte Reload
+	movaps	xmm8, xmmword ptr [rsp + 224]   # 16-byte Reload
+	movaps	xmm9, xmmword ptr [rsp + 240]   # 16-byte Reload
+	movaps	xmm10, xmmword ptr [rsp + 256]  # 16-byte Reload
+	movaps	xmm11, xmmword ptr [rsp + 272]  # 16-byte Reload
+	movaps	xmm12, xmmword ptr [rsp + 288]  # 16-byte Reload
+	movaps	xmm13, xmmword ptr [rsp + 304]  # 16-byte Reload
+	movaps	xmm14, xmmword ptr [rsp + 320]  # 16-byte Reload
+	movaps	xmm15, xmmword ptr [rsp + 336]  # 16-byte Reload
+	add	rsp, 360
 	pop	rbx
 	pop	rbp
 	pop	rdi
@@ -1249,34 +1242,35 @@ calling_fn:                             # @calling_fn
 	pop	r15
 	ret
 .LBB35_28:                              # %yield.i22.i.i
-	mov	rcx, qword ptr [rsp + 48]       # 8-byte Reload
-	mov	rdx, qword ptr [rsp + 56]       # 8-byte Reload
+	mov	rcx, qword ptr [rsp + 32]       # 8-byte Reload
+	mov	rdx, qword ptr [rsp + 48]       # 8-byte Reload
 	mov	r8, qword ptr [rsp + 40]        # 8-byte Reload
 	call	coro_yield_inner
 .LBB35_27:                              # %yield.i30.i.i
 	mov	rcx, qword ptr [rsp + 40]       # 8-byte Reload
-	mov	rdx, qword ptr [rsp + 56]       # 8-byte Reload
-	mov	r8, qword ptr [rsp + 48]        # 8-byte Reload
+	mov	rdx, qword ptr [rsp + 48]       # 8-byte Reload
+	mov	r8, qword ptr [rsp + 32]        # 8-byte Reload
 	call	coro_yield_inner
 .LBB35_30:                              # %resume_go.i
 	mov	rcx, rsp
 	mov	rax, qword ptr gs:[88]
 	mov	rax, qword ptr [rax]
 	mov	rdx, qword ptr [rax + active_coroutine@SECREL32]
-	mov	qword ptr [r10], rdx
-	mov	qword ptr [rax + active_coroutine@SECREL32], r10
-	mov	rdx, qword ptr [r10 + 56]
-	mov	r8, qword ptr [r10 + 64]
+	mov	qword ptr [rsp + 72], rdx
+	lea	rdx, [rsp + 72]
+	mov	qword ptr [rax + active_coroutine@SECREL32], rdx
+	mov	rdx, qword ptr [rsp + 128]
+	mov	r8, qword ptr [rsp + 136]
 	sub	rcx, r8
 	lea	rax, [rcx - 32]
-	mov	qword ptr [r10 + 80], rsp
-	mov	r9, qword ptr [rsp + 56]        # 8-byte Reload
-	mov	qword ptr [r10 + 32], r9
-	mov	qword ptr [r10 + 48], rcx
+	mov	qword ptr [rsp + 152], rsp
+	mov	r9, qword ptr [rsp + 48]        # 8-byte Reload
+	mov	qword ptr [rsp + 104], r9
+	mov	qword ptr [rsp + 120], rcx
 	mov	rsp, rax
 	call	memcpy
 	call	longjmp_active_callee
-.LBB35_29:                              # %do_jmp.i.i
+.LBB35_29:                              # %do_jmp.i.i24
 	mov	rbp, qword ptr [rsi]
 	mov	rax, qword ptr [rsi + 8]
 	mov	rsp, qword ptr [rsi + 16]
@@ -1298,33 +1292,30 @@ main:                                   # @main
 	push	rdi
 	push	rbp
 	push	rbx
-	sub	rsp, 248
-	movaps	xmmword ptr [rsp + 224], xmm15  # 16-byte Spill
-	movaps	xmmword ptr [rsp + 208], xmm14  # 16-byte Spill
-	movaps	xmmword ptr [rsp + 192], xmm13  # 16-byte Spill
-	movaps	xmmword ptr [rsp + 176], xmm12  # 16-byte Spill
-	movaps	xmmword ptr [rsp + 160], xmm11  # 16-byte Spill
-	movaps	xmmword ptr [rsp + 144], xmm10  # 16-byte Spill
-	movaps	xmmword ptr [rsp + 128], xmm9   # 16-byte Spill
-	movaps	xmmword ptr [rsp + 112], xmm8   # 16-byte Spill
-	movaps	xmmword ptr [rsp + 96], xmm7    # 16-byte Spill
-	movaps	xmmword ptr [rsp + 80], xmm6    # 16-byte Spill
-	mov	ecx, 120
-	call	malloc
+	sub	rsp, 360
+	movaps	xmmword ptr [rsp + 336], xmm15  # 16-byte Spill
+	movaps	xmmword ptr [rsp + 320], xmm14  # 16-byte Spill
+	movaps	xmmword ptr [rsp + 304], xmm13  # 16-byte Spill
+	movaps	xmmword ptr [rsp + 288], xmm12  # 16-byte Spill
+	movaps	xmmword ptr [rsp + 272], xmm11  # 16-byte Spill
+	movaps	xmmword ptr [rsp + 256], xmm10  # 16-byte Spill
+	movaps	xmmword ptr [rsp + 240], xmm9   # 16-byte Spill
+	movaps	xmmword ptr [rsp + 224], xmm8   # 16-byte Spill
+	movaps	xmmword ptr [rsp + 208], xmm7   # 16-byte Spill
+	movaps	xmmword ptr [rsp + 192], xmm6   # 16-byte Spill
+	mov	qword ptr [rsp + 40], rsp       # 8-byte Spill
 	mov	qword ptr [rsp + 56], rsp       # 8-byte Spill
-	mov	qword ptr [rsp + 48], rsp       # 8-byte Spill
-	mov	qword ptr [rax + 56], 0
-	lea	rcx, [rip + passthru_fn]
-	mov	qword ptr [rax + 88], rcx
-	lea	rcx, [rip + i32_i32_tramp]
-	mov	qword ptr [rax + 96], rcx
-	mov	word ptr [rax + 112], 0
-	lea	rcx, [rsp + 76]
-	mov	qword ptr [rax + 104], rcx
-	mov	dword ptr [rsp + 76], 5
-	lea	rcx, [rip + .LBB36_21]
-	mov	qword ptr [rsp + 64], rax       # 8-byte Spill
-	mov	qword ptr [rax + 16], rcx
+	mov	qword ptr [rsp + 128], 0
+	lea	rax, [rip + passthru_fn]
+	mov	qword ptr [rsp + 160], rax
+	lea	rax, [rip + i32_i32_tramp]
+	mov	qword ptr [rsp + 168], rax
+	mov	word ptr [rsp + 184], 0
+	lea	rax, [rsp + 68]
+	mov	qword ptr [rsp + 176], rax
+	mov	dword ptr [rsp + 68], 5
+	lea	rax, [rip + .LBB36_21]
+	mov	qword ptr [rsp + 88], rax
 	#EH_SjLj_Setup	.LBB36_21
 # %bb.1:
 	xor	eax, eax
@@ -1332,40 +1323,39 @@ main:                                   # @main
 .LBB36_21:                              # Block address taken
 	mov	eax, 1
 .LBB36_2:
-	mov	rdx, qword ptr [rsp + 64]       # 8-byte Reload
-	lea	rsi, [rdx + 8]
+	lea	rsi, [rsp + 80]
+	mov	rcx, qword ptr [rsp + 40]       # 8-byte Reload
+	mov	qword ptr [rsp + 80], rcx
 	mov	rcx, qword ptr [rsp + 56]       # 8-byte Reload
-	mov	qword ptr [rdx + 8], rcx
-	mov	rcx, qword ptr [rsp + 48]       # 8-byte Reload
-	mov	qword ptr [rdx + 24], rcx
+	mov	qword ptr [rsp + 96], rcx
 	test	eax, eax
 	jne	.LBB36_16
-# %bb.3:                                # %dispatch.i13.i
-	mov	qword ptr [rsp + 56], rsi       # 8-byte Spill
+# %bb.3:                                # %start.i14.i
 	mov	rax, qword ptr gs:[88]
 	mov	rsi, qword ptr [rax]
 	mov	rax, qword ptr [rsi + active_coroutine@SECREL32]
-	mov	qword ptr [rdx], rax
-	mov	qword ptr [rsi + active_coroutine@SECREL32], rdx
-	mov	byte ptr [rdx + 112], 1
+	mov	qword ptr [rsp + 72], rax
+	lea	rax, [rsp + 72]
+	mov	qword ptr [rsi + active_coroutine@SECREL32], rax
+	mov	byte ptr [rsp + 184], 1
 	lea	rcx, [rip + .Lprint_i32_fmt]
 	mov	edx, 5
 	call	printf
 	xor	ecx, ecx
 	call	fflush
-	mov	qword ptr [rsp + 32], rsp       # 8-byte Spill
+	mov	qword ptr [rsp + 48], rsp       # 8-byte Spill
 	mov	rcx, qword ptr [rsi + active_coroutine@SECREL32]
 	lea	rax, [rip + .LBB36_22]
 	mov	qword ptr [rsp + 40], rcx       # 8-byte Spill
 	mov	qword ptr [rcx + 40], rax
 	#EH_SjLj_Setup	.LBB36_22
-# %bb.4:                                # %dispatch.i13.i
+# %bb.4:                                # %start.i14.i
 	xor	eax, eax
 	jmp	.LBB36_5
 .LBB36_22:                              # Block address taken
-                                        # %dispatch.i13.i
+                                        # %start.i14.i
 	mov	eax, 1
-.LBB36_5:                               # %dispatch.i13.i
+.LBB36_5:                               # %start.i14.i
 	test	eax, eax
 	je	.LBB36_27
 # %bb.6:                                # %coro_yield.exit32.i.i.i
@@ -1379,7 +1369,7 @@ main:                                   # @main
 	mov	rax, qword ptr [rax]
 	mov	rcx, qword ptr [rax + active_coroutine@SECREL32]
 	lea	rax, [rip + .LBB36_23]
-	mov	qword ptr [rsp + 32], rcx       # 8-byte Spill
+	mov	qword ptr [rsp + 48], rcx       # 8-byte Spill
 	mov	qword ptr [rcx + 40], rax
 	#EH_SjLj_Setup	.LBB36_23
 # %bb.7:                                # %coro_yield.exit32.i.i.i
@@ -1402,7 +1392,7 @@ main:                                   # @main
 	mov	rax, qword ptr [rax]
 	mov	rcx, qword ptr [rax + active_coroutine@SECREL32]
 	lea	rax, [rip + .LBB36_24]
-	mov	qword ptr [rsp + 32], rcx       # 8-byte Spill
+	mov	qword ptr [rsp + 48], rcx       # 8-byte Spill
 	mov	qword ptr [rcx + 40], rax
 	#EH_SjLj_Setup	.LBB36_24
 # %bb.10:                               # %coro_yield.exit24.i.i.i
@@ -1425,7 +1415,7 @@ main:                                   # @main
 	mov	rax, qword ptr [rax]
 	mov	rcx, qword ptr [rax + active_coroutine@SECREL32]
 	lea	rax, [rip + .LBB36_25]
-	mov	qword ptr [rsp + 32], rcx       # 8-byte Spill
+	mov	qword ptr [rsp + 48], rcx       # 8-byte Spill
 	mov	qword ptr [rcx + 40], rax
 	#EH_SjLj_Setup	.LBB36_25
 # %bb.13:                               # %coro_yield.exit16.i.i.i
@@ -1436,7 +1426,7 @@ main:                                   # @main
 	mov	eax, 1
 .LBB36_14:                              # %coro_yield.exit16.i.i.i
 	test	eax, eax
-	mov	rsi, qword ptr [rsp + 64]       # 8-byte Reload
+	lea	rsi, [rsp + 80]
 	je	.LBB36_28
 # %bb.15:                               # %passthru_fn.exit.i
 	lea	rcx, [rip + .Lprint_i32_fmt]
@@ -1444,56 +1434,56 @@ main:                                   # @main
 	call	printf
 	xor	ecx, ecx
 	call	fflush
-	mov	byte ptr [rsi + 113], 1
+	mov	byte ptr [rsp + 185], 1
 	call	returns_one
 	test	al, 1
-	mov	rsi, qword ptr [rsp + 56]       # 8-byte Reload
 	jne	.LBB36_29
-.LBB36_16:                              # %coro_call.exit14.i
+.LBB36_16:                              # %coro_call.exit45.i
+	mov	byte ptr [rsp + 184], 1
 	lea	rcx, [rip + .Lprint_i32_fmt]
 	mov	edx, 15
 	call	printf
 	xor	ecx, ecx
 	call	fflush
-	mov	qword ptr [rsp + 56], rsp       # 8-byte Spill
+	mov	qword ptr [rsp + 40], rsp       # 8-byte Spill
 	lea	rax, [rip + .LBB36_26]
 	mov	qword ptr [rsi + 8], rax
 	#EH_SjLj_Setup	.LBB36_26
-# %bb.17:                               # %coro_call.exit14.i
+# %bb.17:                               # %coro_call.exit45.i
 	xor	eax, eax
 	jmp	.LBB36_18
 .LBB36_26:                              # Block address taken
-                                        # %coro_call.exit14.i
+                                        # %coro_call.exit45.i
 	mov	eax, 1
-.LBB36_18:                              # %coro_call.exit14.i
-	mov	r10, qword ptr [rsp + 64]       # 8-byte Reload
+.LBB36_18:                              # %coro_call.exit45.i
+	mov	rcx, qword ptr [rsp + 40]       # 8-byte Reload
+	mov	qword ptr [rsp + 80], rcx
 	mov	rcx, qword ptr [rsp + 56]       # 8-byte Reload
-	mov	qword ptr [r10 + 8], rcx
-	mov	rcx, qword ptr [rsp + 48]       # 8-byte Reload
-	mov	qword ptr [r10 + 24], rcx
+	mov	qword ptr [rsp + 96], rcx
 	test	eax, eax
 	jne	.LBB36_20
-# %bb.19:                               # %dispatch.i.i
-	cmp	byte ptr [r10 + 113], 0
+# %bb.19:                               # %resume.i.i
+	cmp	byte ptr [rsp + 185], 0
 	je	.LBB36_30
 .LBB36_20:                              # %calling_fn.exit
+	mov	byte ptr [rsp + 184], 1
 	lea	rcx, [rip + .Lprint_i32_fmt]
 	mov	edx, 35
 	call	printf
 	xor	ecx, ecx
 	call	fflush
 	xor	eax, eax
-	movaps	xmm6, xmmword ptr [rsp + 80]    # 16-byte Reload
-	movaps	xmm7, xmmword ptr [rsp + 96]    # 16-byte Reload
-	movaps	xmm8, xmmword ptr [rsp + 112]   # 16-byte Reload
-	movaps	xmm9, xmmword ptr [rsp + 128]   # 16-byte Reload
-	movaps	xmm10, xmmword ptr [rsp + 144]  # 16-byte Reload
-	movaps	xmm11, xmmword ptr [rsp + 160]  # 16-byte Reload
-	movaps	xmm12, xmmword ptr [rsp + 176]  # 16-byte Reload
-	movaps	xmm13, xmmword ptr [rsp + 192]  # 16-byte Reload
-	movaps	xmm14, xmmword ptr [rsp + 208]  # 16-byte Reload
-	movaps	xmm15, xmmword ptr [rsp + 224]  # 16-byte Reload
-	add	rsp, 248
+	movaps	xmm6, xmmword ptr [rsp + 192]   # 16-byte Reload
+	movaps	xmm7, xmmword ptr [rsp + 208]   # 16-byte Reload
+	movaps	xmm8, xmmword ptr [rsp + 224]   # 16-byte Reload
+	movaps	xmm9, xmmword ptr [rsp + 240]   # 16-byte Reload
+	movaps	xmm10, xmmword ptr [rsp + 256]  # 16-byte Reload
+	movaps	xmm11, xmmword ptr [rsp + 272]  # 16-byte Reload
+	movaps	xmm12, xmmword ptr [rsp + 288]  # 16-byte Reload
+	movaps	xmm13, xmmword ptr [rsp + 304]  # 16-byte Reload
+	movaps	xmm14, xmmword ptr [rsp + 320]  # 16-byte Reload
+	movaps	xmm15, xmmword ptr [rsp + 336]  # 16-byte Reload
+	add	rsp, 360
 	pop	rbx
 	pop	rbp
 	pop	rdi
@@ -1505,12 +1495,12 @@ main:                                   # @main
 	ret
 .LBB36_28:                              # %yield.i22.i.i.i
 	mov	rcx, qword ptr [rsp + 40]       # 8-byte Reload
-	mov	rdx, qword ptr [rsp + 48]       # 8-byte Reload
-	mov	r8, qword ptr [rsp + 32]        # 8-byte Reload
+	mov	rdx, qword ptr [rsp + 56]       # 8-byte Reload
+	mov	r8, qword ptr [rsp + 48]        # 8-byte Reload
 	call	coro_yield_inner
 .LBB36_27:                              # %yield.i30.i.i.i
-	mov	rcx, qword ptr [rsp + 32]       # 8-byte Reload
-	mov	rdx, qword ptr [rsp + 48]       # 8-byte Reload
+	mov	rcx, qword ptr [rsp + 48]       # 8-byte Reload
+	mov	rdx, qword ptr [rsp + 56]       # 8-byte Reload
 	mov	r8, qword ptr [rsp + 40]        # 8-byte Reload
 	call	coro_yield_inner
 .LBB36_30:                              # %resume_go.i.i
@@ -1518,20 +1508,21 @@ main:                                   # @main
 	mov	rax, qword ptr gs:[88]
 	mov	rax, qword ptr [rax]
 	mov	rdx, qword ptr [rax + active_coroutine@SECREL32]
-	mov	qword ptr [r10], rdx
-	mov	qword ptr [rax + active_coroutine@SECREL32], r10
-	mov	rdx, qword ptr [r10 + 56]
-	mov	r8, qword ptr [r10 + 64]
+	mov	qword ptr [rsp + 72], rdx
+	lea	rdx, [rsp + 72]
+	mov	qword ptr [rax + active_coroutine@SECREL32], rdx
+	mov	rdx, qword ptr [rsp + 128]
+	mov	r8, qword ptr [rsp + 136]
 	sub	rcx, r8
 	lea	rax, [rcx - 32]
-	mov	qword ptr [r10 + 80], rsp
-	mov	r9, qword ptr [rsp + 48]        # 8-byte Reload
-	mov	qword ptr [r10 + 32], r9
-	mov	qword ptr [r10 + 48], rcx
+	mov	qword ptr [rsp + 152], rsp
+	mov	r9, qword ptr [rsp + 56]        # 8-byte Reload
+	mov	qword ptr [rsp + 104], r9
+	mov	qword ptr [rsp + 120], rcx
 	mov	rsp, rax
 	call	memcpy
 	call	longjmp_active_callee
-.LBB36_29:                              # %do_jmp.i.i.i
+.LBB36_29:                              # %do_jmp.i.i24.i
 	mov	rbp, qword ptr [rsi]
 	mov	rax, qword ptr [rsi + 8]
 	mov	rsp, qword ptr [rsi + 16]

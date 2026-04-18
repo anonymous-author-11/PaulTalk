@@ -5,7 +5,7 @@ target triple = "x86_64-pc-windows-msvc"
 %stack_copy = type { ptr, i64, i64 }
 
 @print_i32_fmt = private unnamed_addr constant [4 x i8] c"%d\0A\00"
-@always_one = linkonce thread_local global i1 true
+@always_one = linkonce dso_local thread_local(localexec) global i1 true
 
 @active_coroutine = internal dso_local thread_local(localexec) global ptr null
 
@@ -103,6 +103,11 @@ define void @mark_started(ptr %state) alwaysinline {
   %slot = call ptr @started_slot(ptr %state)
   store i1 true, ptr %slot
   ret void
+}
+
+define i1 @started_flag(%coroutine %state) alwaysinline {
+  %flag = extractvalue %coroutine %state, 8
+  ret i1 %flag
 }
 
 define ptr @done_slot(ptr %state) alwaysinline {
@@ -258,7 +263,7 @@ define void @prepare_resume(ptr %state) alwaysinline {
   ret void
 }
 
-define i1 @coro_call(ptr %state, i1 %started, ptr %args) alwaysinline {
+define %coroutine @coro_call(ptr %state, i1 %started, ptr %args) alwaysinline {
 entry:
   %caller_buf = call ptr @caller_buf(ptr %state)
   %sp = call ptr @llvm.stacksave()
@@ -294,9 +299,9 @@ resume_go:
 
 exit:
   %started_slot_out = call ptr @started_slot(ptr %state)
-  %started_out = load i1, ptr %started_slot_out
-  call void @llvm.assume(i1 %started_out)
-  ret i1 true
+  store i1 true, ptr %started_slot_out
+  %coro = load %coroutine, ptr %state
+  ret %coroutine %coro
 }
 
 define void @coro_yield_inner(ptr %sp, ptr %fp, ptr %state) noinline {
@@ -329,7 +334,6 @@ exit:
 }
 
 define i32 @yielding_fn(i32 %n) {
-entry:
   call void @print_i32(i32 %n)
   call void @coro_yield()
 
@@ -365,20 +369,22 @@ define i32 @i32_i32_tramp(ptr %fn, ptr %args) {
 }
 
 define void @calling_fn(i32 %n) {
-entry:
-  %state_end = getelementptr %coroutine, ptr null, i32 1
-  %state_size = ptrtoint ptr %state_end to i64
-  %state = call ptr @malloc(i64 %state_size)
+  %state = alloca %coroutine
   %args = alloca i32
   call void @init_coroutine(ptr %state, ptr @passthru_fn, ptr @i32_i32_tramp)
+  %coro_0 = load %coroutine, ptr %state
   %args_slot = call ptr @args_slot(ptr %state)
   store ptr %args, ptr %args_slot
   store i32 %n, ptr %args
-  %started_0 = call i1 @coro_call(ptr %state, i1 false, ptr %args)
+  %started_slot = call ptr @started_slot(ptr %state)
+  %started_0 = call i1 @started_flag(%coroutine %coro_0)
+  %coro_1 = call %coroutine @coro_call(ptr %state, i1 %started_0, ptr %args)
 
   %n1 = add i32 %n, 10
   call void @print_i32(i32 %n1)
-  %started_1 = call i1 @coro_call(ptr %state, i1 %started_0, ptr %args)
+  
+  %started_1 = call i1 @started_flag(%coroutine %coro_1)
+  %coro_2 = call %coroutine @coro_call(ptr %state, i1 %started_1, ptr %args)
 
   %n2 = add i32 %n1, 20
   call void @print_i32(i32 %n2)
