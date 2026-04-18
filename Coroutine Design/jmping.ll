@@ -1,18 +1,19 @@
 source_filename = "Coroutine Design\\jmping.ll"
 target triple = "x86_64-pc-windows-msvc"
 
-%coroutine = type { ptr, [3 x ptr], [3 x ptr], %stack_copy, ptr, ptr, ptr, ptr, i1 }
+%coroutine = type { ptr, [3 x ptr], [3 x ptr], %stack_copy, ptr, ptr, ptr, ptr, i1, i1 }
 %stack_copy = type { ptr, i64, i64 }
 
 @print_i32_fmt = private unnamed_addr constant [4 x i8] c"%d\0A\00"
 @always_one = linkonce thread_local global i1 true
 
-@active_coroutine = internal thread_local global ptr null
+@active_coroutine = internal dso_local thread_local(localexec) global ptr null
 
 declare i32 @printf(ptr, ...)
 declare i32 @fflush(ptr)
 declare noalias ptr @malloc(i64)
 declare ptr @llvm.addressofreturnaddress()
+declare void @llvm.assume(i1)
 declare ptr @llvm.stacksave()
 declare void @llvm.stackrestore(ptr)
 declare void @llvm.memcpy.p0.p0.i64(ptr, ptr, i64, i1)
@@ -76,6 +77,11 @@ define ptr @tramp_slot(ptr %state) alwaysinline {
   ret ptr %slot
 }
 
+define ptr @args_slot(ptr %state) alwaysinline {
+  %slot = getelementptr %coroutine, ptr %state, i32 0, i32 7
+  ret ptr %slot
+}
+
 define ptr @fn_of(ptr %state) alwaysinline {
   %slot = call ptr @fn_slot(ptr %state)
   %fn = load ptr, ptr %slot, !invariant.load !0
@@ -88,8 +94,19 @@ define ptr @tramp_of(ptr %state) alwaysinline {
   ret ptr %tramp
 }
 
-define ptr @done_slot(ptr %state) alwaysinline {
+define ptr @started_slot(ptr %state) alwaysinline {
   %slot = getelementptr %coroutine, ptr %state, i32 0, i32 8
+  ret ptr %slot
+}
+
+define void @mark_started(ptr %state) alwaysinline {
+  %slot = call ptr @started_slot(ptr %state)
+  store i1 true, ptr %slot
+  ret void
+}
+
+define ptr @done_slot(ptr %state) alwaysinline {
+  %slot = getelementptr %coroutine, ptr %state, i32 0, i32 9
   ret ptr %slot
 }
 
@@ -112,14 +129,6 @@ define ptr @load_context_sp(ptr %buf) alwaysinline {
   ret ptr %sp
 }
 
-define void @store_context_sp(ptr %buf, ptr %sp) alwaysinline {
-  %slot_0 = getelementptr [3 x ptr], ptr %buf, i32 0, i32 0
-  %slot_2 = getelementptr [3 x ptr], ptr %buf, i32 0, i32 2
-  store ptr %sp, ptr %slot_0
-  store ptr %sp, ptr %slot_2
-  ret void
-}
-
 define void @save_context(ptr %buf, ptr %fp, ptr %sp) alwaysinline {
   %slot_0 = getelementptr [3 x ptr], ptr %buf, i32 0, i32 0
   %slot_1 = getelementptr [3 x ptr], ptr %buf, i32 0, i32 1
@@ -132,11 +141,15 @@ define void @save_context(ptr %buf, ptr %fp, ptr %sp) alwaysinline {
 define void @init_coroutine(ptr %state, ptr %fn, ptr %tramp) alwaysinline {
   %copy_slot = call ptr @copy_slot(ptr %state)
   store ptr null, ptr %copy_slot
+  %args_slot = call ptr @args_slot(ptr %state)
+  %started_slot = call ptr @started_slot(ptr %state)
   %done_slot = call ptr @done_slot(ptr %state)
   %fn_ptr = call ptr @fn_slot(ptr %state)
   %tramp_ptr = call ptr @tramp_slot(ptr %state)
   store ptr %fn, ptr %fn_ptr
   store ptr %tramp, ptr %tramp_ptr
+  store ptr null, ptr %args_slot
+  store i1 false, ptr %started_slot
   store i1 false, ptr %done_slot
   ret void
 }
@@ -226,6 +239,7 @@ define void @prepare_resume(ptr %state) alwaysinline {
   %size = load i64, ptr %size_slot
 
   %top_sp = call ptr @llvm.stacksave()
+  %fp = call ptr @llvm.localaddress()
   %top_i = ptrtoint ptr %top_sp to i64
   %bottom_i = sub i64 %top_i, %size
   %bottom = inttoptr i64 %bottom_i to ptr
@@ -236,7 +250,7 @@ define void @prepare_resume(ptr %state) alwaysinline {
 
   %slot = call ptr @top_slot(ptr %state)
   store ptr %top_sp, ptr %slot
-  call void @store_context_sp(ptr %buf, ptr %bottom)
+  call void @save_context(ptr %buf, ptr %fp, ptr %bottom)
   call void @llvm.stackrestore(ptr %copy_sp)
   call void @llvm.memcpy.p0.p0.i64(ptr %bottom, ptr %saved, i64 %size, i1 false)
   %restore_top = call ptr @load_prepare_top()
@@ -244,73 +258,98 @@ define void @prepare_resume(ptr %state) alwaysinline {
   ret void
 }
 
-define i32 @yielding_fn(i32 %n) {
+define i1 @coro_call(ptr %state, i1 %started, ptr %args) alwaysinline {
 entry:
-  call void @print_i32(i32 %n)
-
-  %state_0 = load ptr, ptr @active_coroutine
-  %callee_buf_0 = call ptr @callee_buf(ptr %state_0)
+  %caller_buf = call ptr @caller_buf(ptr %state)
   %sp = call ptr @llvm.stacksave()
   %fp = call ptr @llvm.localaddress()
-  %set_0 = call i32 @llvm.eh.sjlj.setjmp(ptr %callee_buf_0)
-  call void @save_context(ptr %callee_buf_0, ptr %sp, ptr %fp)
-  %do_yield = icmp eq i32 %set_0, 0
-  br i1 %do_yield, label %yield, label %continuation_1
+  %set = call i32 @llvm.eh.sjlj.setjmp(ptr %caller_buf)
+  call void @save_context(ptr %caller_buf, ptr %sp, ptr %fp)
+  %do_call = icmp eq i32 %set, 0
+  br i1 %do_call, label %dispatch, label %exit
 
-yield:
-  %sp_yield = phi ptr [ %sp, %entry ], [ %sp_1, %continuation_1 ], [ %sp_2, %continuation_2 ], [ %sp_3, %continuation_3 ]
-  %state_yield = load ptr, ptr @active_coroutine
-  %caller_buf = call ptr @caller_buf(ptr %state_yield)
-  %callee_copy = call ptr @copy_slot(ptr %state_yield)
+dispatch:
+  br i1 %started, label %resume, label %start
+
+start:
+  call void @enter_coroutine(ptr %state)
+  call void @mark_started(ptr %state)
+  %fn = call ptr @fn_of(ptr %state)
+  %tramp = call ptr @tramp_of(ptr %state)
+  call i32 %tramp(ptr %fn, ptr %args)
+  call void @mark_done(ptr %state)
+  call void @longjmp(ptr %caller_buf)
+  br label %exit
+
+resume:
+  %done_slot = call ptr @done_slot(ptr %state)
+  %done = load i1, ptr %done_slot
+  br i1 %done, label %exit, label %resume_go
+
+resume_go:
+  call void @enter_coroutine(ptr %state)
+  call void @prepare_resume(ptr %state)
+  call void @longjmp_active_callee()
+  unreachable
+
+exit:
+  %started_slot_out = call ptr @started_slot(ptr %state)
+  %started_out = load i1, ptr %started_slot_out
+  call void @llvm.assume(i1 %started_out)
+  ret i1 true
+}
+
+define void @coro_yield_inner(ptr %sp, ptr %fp, ptr %state) noinline {
+  %callee_buf = call ptr @callee_buf(ptr %state)
+  call void @save_context(ptr %callee_buf, ptr %sp, ptr %fp)
+  %caller_buf = call ptr @caller_buf(ptr %state)
+  %callee_copy = call ptr @copy_slot(ptr %state)
   %caller_sp = call ptr @load_context_sp(ptr %caller_buf)
-  call void @save_copy(ptr %callee_copy, ptr %caller_sp, ptr %sp_yield)
+  call void @save_copy(ptr %callee_copy, ptr %caller_sp, ptr %sp)
   call void @leave_coroutine()
   call void @llvm.eh.sjlj.longjmp(ptr %caller_buf) noreturn nounwind
   unreachable
+}
 
-continuation_1:
+define void @coro_yield() alwaysinline {
+  %sp = call ptr @llvm.stacksave()
+  %fp = call ptr @llvm.localaddress()
+  %state = load ptr, ptr @active_coroutine
+  %callee_buf = call ptr @callee_buf(ptr %state)
+  %set = call i32 @llvm.eh.sjlj.setjmp(ptr %callee_buf)
+  %do_yield = icmp eq i32 %set, 0
+  br i1 %do_yield, label %yield, label %exit
+
+yield:
+  call void @coro_yield_inner(ptr %sp, ptr %fp, ptr %state)
+  unreachable
+
+exit:
+  ret void
+}
+
+define i32 @yielding_fn(i32 %n) {
+entry:
+  call void @print_i32(i32 %n)
+  call void @coro_yield()
+
   %n1 = add i32 %n, 1
   call void @print_i32(i32 %n1)
 
-  %state_1 = load ptr, ptr @active_coroutine
-  %callee_buf_1 = call ptr @callee_buf(ptr %state_1)
-  %sp_1 = call ptr @llvm.stacksave()
-  %fp_1 = call ptr @llvm.localaddress()
-  %set_1 = call i32 @llvm.eh.sjlj.setjmp(ptr %callee_buf_1)
-  call void @save_context(ptr %callee_buf_0, ptr %sp, ptr %fp)
-  %do_yield_1 = icmp eq i32 %set_1, 0
-  br i1 %do_yield_1, label %yield, label %continuation_2
+  call void @coro_yield()
 
-continuation_2:
   %n2 = add i32 %n1, 1
   call void @print_i32(i32 %n2)
 
-  %state_2 = load ptr, ptr @active_coroutine
-  %callee_buf_2 = call ptr @callee_buf(ptr %state_2)
-  %sp_2 = call ptr @llvm.stacksave()
-  %fp_2 = call ptr @llvm.localaddress()
-  %set_2 = call i32 @llvm.eh.sjlj.setjmp(ptr %callee_buf_2)
-  call void @save_context(ptr %callee_buf_0, ptr %sp, ptr %fp)
-  %do_yield_2 = icmp eq i32 %set_2, 0
-  br i1 %do_yield_2, label %yield, label %continuation_3
+  call void @coro_yield()
 
-continuation_3:
   %n3 = add i32 %n2, 1
   call void @print_i32(i32 %n3)
 
-  %state_3 = load ptr, ptr @active_coroutine
-  %callee_buf_3 = call ptr @callee_buf(ptr %state_3)
-  %sp_3 = call ptr @llvm.stacksave()
-  %fp_3 = call ptr @llvm.localaddress()
-  %set_3 = call i32 @llvm.eh.sjlj.setjmp(ptr %callee_buf_3)
-  call void @save_context(ptr %callee_buf_0, ptr %sp, ptr %fp)
-  %do_yield_3 = icmp eq i32 %set_3, 0
-  br i1 %do_yield_3, label %yield, label %continuation_4
+  call void @coro_yield()
 
-continuation_4:
   %n4 = add i32 %n3, 1
   call void @print_i32(i32 %n4)
-  call void @leave_coroutine()
   ret i32 %n4
 }
 
@@ -320,58 +359,27 @@ define i32 @passthru_fn(i32 %n) {
 }
 
 define i32 @i32_i32_tramp(ptr %fn, ptr %args) {
-  %arg1 = load i32, ptr %args
+  %arg1 = load i32, ptr %args, !invariant.load !0
   %result = call i32 %fn(i32 %arg1)
   ret i32 %result
 }
 
 define void @calling_fn(i32 %n) {
 entry:
-  %state = alloca %coroutine
+  %state_end = getelementptr %coroutine, ptr null, i32 1
+  %state_size = ptrtoint ptr %state_end to i64
+  %state = call ptr @malloc(i64 %state_size)
   %args = alloca i32
   call void @init_coroutine(ptr %state, ptr @passthru_fn, ptr @i32_i32_tramp)
-  %caller_buf_0 = call ptr @caller_buf(ptr %state)
-  %sp = call ptr @llvm.stacksave()
-  %fp = call ptr @llvm.localaddress()
-  %set_0 = call i32 @llvm.eh.sjlj.setjmp(ptr %caller_buf_0)
-  call void @save_context(ptr %caller_buf_0, ptr %sp, ptr %fp)
-  %do_call = icmp eq i32 %set_0, 0
-  br i1 %do_call, label %call, label %continuation_1
-
-call:
-  call void @enter_coroutine(ptr %state)
+  %args_slot = call ptr @args_slot(ptr %state)
+  store ptr %args, ptr %args_slot
   store i32 %n, ptr %args
-  %fn = call ptr @fn_of(ptr %state)
-  %tramp = call ptr @tramp_of(ptr %state)
-  %result = call i32 %tramp(ptr %fn, ptr %args)
-  call void @mark_done(ptr %state)
-  call void @longjmp(ptr %caller_buf_0)
-  br label %continuation_1
+  %started_0 = call i1 @coro_call(ptr %state, i1 false, ptr %args)
 
-continuation_1:
   %n1 = add i32 %n, 10
   call void @print_i32(i32 %n1)
+  %started_1 = call i1 @coro_call(ptr %state, i1 %started_0, ptr %args)
 
-  %caller_buf_1 = call ptr @caller_buf(ptr %state)
-  %sp_1 = call ptr @llvm.stacksave()
-  %fp_1 = call ptr @llvm.localaddress()
-  %set_1 = call i32 @llvm.eh.sjlj.setjmp(ptr %caller_buf_1)
-  call void @save_context(ptr %caller_buf_1, ptr %sp_1, ptr %fp_1)
-  %do_resume = icmp eq i32 %set_1, 0
-  br i1 %do_resume, label %resume, label %continuation_2
-
-resume:
-  %done_slot_resume = call ptr @done_slot(ptr %state)
-  %done = load i1, ptr %done_slot_resume
-  br i1 %done, label %continuation_2, label %resume_go
-
-resume_go:
-  call void @enter_coroutine(ptr %state)
-  call void @prepare_resume(ptr %state)
-  call void @longjmp_active_callee()
-  unreachable
-
-continuation_2:
   %n2 = add i32 %n1, 20
   call void @print_i32(i32 %n2)
   ret void
