@@ -5,7 +5,7 @@ target triple = "x86_64-pc-windows-msvc"
 %stack_copy = type { ptr, i64, i64 }
 
 @print_i32_fmt = private unnamed_addr constant [4 x i8] c"%d\0A\00"
-@always_one = linkonce dso_local thread_local(localexec) global i1 true
+@always_one = linkonce dso_local global i1 true
 
 @active_coroutine = internal dso_local thread_local(localexec) global ptr null
 
@@ -14,10 +14,12 @@ declare i32 @fflush(ptr)
 declare noalias ptr @malloc(i64)
 declare ptr @llvm.addressofreturnaddress()
 declare void @llvm.assume(i1)
-declare ptr @llvm.stacksave()
+declare ptr @llvm.stacksave() speculatable mustprogress nocallback nofree nosync nounwind willreturn memory(none)
 declare void @llvm.stackrestore(ptr)
-declare void @llvm.memcpy.p0.p0.i64(ptr, ptr, i64, i1)
-declare void @llvm.eh.sjlj.longjmp(ptr) noreturn nounwind
+declare ptr @llvm.localaddress() speculatable mustprogress nocallback nofree nosync nounwind willreturn memory(none)
+declare void @llvm.memcpy.p0.p0.i64(ptr, ptr, i64, i1) memory(none, argmem: readwrite)
+declare i32 @llvm.eh.sjlj.setjmp(ptr) memory(none, argmem: readwrite)
+declare void @llvm.eh.sjlj.longjmp(ptr) noreturn nounwind memory(read, inaccessiblemem: readwrite)
 
 define i1 @returns_one() noinline {
   %retval = load i1, ptr @always_one, align 1
@@ -30,15 +32,25 @@ define void @longjmp(ptr %buf) alwaysinline {
   %true = call i1 @returns_one()
   br i1 %true, label %do_jmp, label %exit
 do_jmp:
-  call void @llvm.eh.sjlj.longjmp(ptr %buf) noreturn nounwind
+  call void @llvm.eh.sjlj.longjmp(ptr %buf) noreturn nounwind memory(read, inaccessiblemem: readwrite)
   unreachable
 exit:
   ret void
 }
 
+define i32 @save_ip(ptr %buf) alwaysinline {
+  %new_slot = alloca [3 x ptr]
+  %local_ip_slot = getelementptr [3 x ptr], ptr %new_slot, i32 0, i32 1
+  %buf_ip_slot = getelementptr [3 x ptr], ptr %buf, i32 0, i32 1
+  %flag = call i32 @llvm.eh.sjlj.setjmp(ptr %new_slot) memory(none, argmem: readwrite)
+  %ip = load ptr, ptr %local_ip_slot
+  store ptr %ip, ptr %buf_ip_slot
+  ret i32 %flag
+}
+
 define void @print_i32(i32 %value) alwaysinline {
-  %print = call i32 (ptr, ...) @printf(ptr @print_i32_fmt, i32 %value)
-  %flush = call i32 @fflush(ptr null)
+  %print = call i32 (ptr, ...) @printf(ptr @print_i32_fmt, i32 %value) mustprogress nocallback nofree nosync nounwind willreturn memory(none, inaccessiblemem: readwrite)
+  %flush = call i32 @fflush(ptr null) mustprogress nocallback nofree nosync nounwind willreturn memory(none, inaccessiblemem: readwrite)
   ret void
 }
 
@@ -134,7 +146,13 @@ define ptr @load_context_sp(ptr %buf) alwaysinline {
   ret ptr %sp
 }
 
-define void @save_context(ptr %buf, ptr %fp, ptr %sp) alwaysinline {
+define void @store_context_sp(ptr %buf, ptr %sp) alwaysinline {
+  %slot = getelementptr [3 x ptr], ptr %buf, i32 0, i32 2
+  store ptr %sp, ptr %slot
+  ret void
+}
+
+define void @save_context(ptr %buf, ptr %sp, ptr %fp) alwaysinline {
   %slot_0 = getelementptr [3 x ptr], ptr %buf, i32 0, i32 0
   %slot_1 = getelementptr [3 x ptr], ptr %buf, i32 0, i32 1
   %slot_2 = getelementptr [3 x ptr], ptr %buf, i32 0, i32 2
@@ -145,6 +163,7 @@ define void @save_context(ptr %buf, ptr %fp, ptr %sp) alwaysinline {
 
 define void @init_coroutine(ptr %state, ptr %fn, ptr %tramp) alwaysinline {
   %copy_slot = call ptr @copy_slot(ptr %state)
+  %size_ptr = getelementptr %stack_copy, ptr %copy_slot, i32 0, i32 1
   store ptr null, ptr %copy_slot
   %args_slot = call ptr @args_slot(ptr %state)
   %started_slot = call ptr @started_slot(ptr %state)
@@ -154,6 +173,7 @@ define void @init_coroutine(ptr %state, ptr %fn, ptr %tramp) alwaysinline {
   store ptr %fn, ptr %fn_ptr
   store ptr %tramp, ptr %tramp_ptr
   store ptr null, ptr %args_slot
+  store i64 0, ptr %size_ptr
   store i1 false, ptr %started_slot
   store i1 false, ptr %done_slot
   ret void
@@ -185,7 +205,7 @@ define ptr @load_prepare_top() noinline {
 define void @longjmp_active_callee() noinline noreturn nounwind {
   %state = load ptr, ptr @active_coroutine
   %buf = call ptr @callee_buf(ptr %state)
-  call void @llvm.eh.sjlj.longjmp(ptr %buf) noreturn nounwind
+  call void @llvm.eh.sjlj.longjmp(ptr %buf) noreturn nounwind memory(read, inaccessiblemem: readwrite)
   unreachable
 }
 
@@ -213,13 +233,13 @@ done:
   ret ptr %result
 }
 
-define void @save_copy(ptr %copy, ptr %top_sp, ptr %bottom_sp) alwaysinline {
+define void @save_copy(ptr %copy, ptr %top_sp, ptr %bottom_sp) noinline {
   %size = call i64 @section_size(ptr %top_sp, ptr %bottom_sp)
   %size_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 1
   store i64 %size, ptr %size_slot
 
   %buf = call ptr @require_buf(ptr %copy, i64 %size)
-  call void @llvm.memcpy.p0.p0.i64(ptr %buf, ptr %bottom_sp, i64 %size, i1 false)
+  call void @llvm.memcpy.p0.p0.i64(ptr %buf, ptr %bottom_sp, i64 %size, i1 false) memory(none, argmem: readwrite)
   ret void
 }
 
@@ -239,36 +259,44 @@ define void @prepare_resume(ptr %state) alwaysinline {
   %copy = call ptr @copy_slot(ptr %state)
   %buf = call ptr @callee_buf(ptr %state)
   %buf_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 0
-  %saved = load ptr, ptr %buf_slot
   %size_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 1
   %size = load i64, ptr %size_slot
 
-  %top_sp = call ptr @llvm.stacksave()
-  %fp = call ptr @llvm.localaddress()
+  %top_sp = call ptr @llvm.stacksave() memory(none)
+  %slot = call ptr @top_slot(ptr %state)
+  store ptr %top_sp, ptr %slot
+  call void @store_context_sp(ptr %buf, ptr %top_sp)
+
+  %zero_size = icmp eq i64 %size, 0
+  br i1 %zero_size, label %exit, label %do_copy
+
+do_copy:
   %top_i = ptrtoint ptr %top_sp to i64
   %bottom_i = sub i64 %top_i, %size
   %bottom = inttoptr i64 %bottom_i to ptr
   %copy_sp_i = sub i64 %bottom_i, 32
   %copy_sp = inttoptr i64 %copy_sp_i to ptr
+  %saved = load ptr, ptr %buf_slot
 
   call void @commit_stack(ptr %copy_sp, i64 %size)
 
-  %slot = call ptr @top_slot(ptr %state)
-  store ptr %top_sp, ptr %slot
-  call void @save_context(ptr %buf, ptr %fp, ptr %bottom)
+  call void @store_context_sp(ptr %buf, ptr %bottom)
   call void @llvm.stackrestore(ptr %copy_sp)
-  call void @llvm.memcpy.p0.p0.i64(ptr %bottom, ptr %saved, i64 %size, i1 false)
+  call void @llvm.memcpy.p0.p0.i64(ptr %bottom, ptr %saved, i64 %size, i1 false) memory(none, argmem: readwrite)
   %restore_top = call ptr @load_prepare_top()
   call void @llvm.stackrestore(ptr %restore_top)
+  br label %exit
+
+exit:
   ret void
 }
 
 define %coroutine @coro_call(ptr %state, i1 %started, ptr %args) alwaysinline {
 entry:
   %caller_buf = call ptr @caller_buf(ptr %state)
-  %sp = call ptr @llvm.stacksave()
-  %fp = call ptr @llvm.localaddress()
-  %set = call i32 @llvm.eh.sjlj.setjmp(ptr %caller_buf)
+  %sp = call ptr @llvm.stacksave() memory(none)
+  %fp = call ptr @llvm.localaddress() memory(none)
+  %set = call i32 @save_ip(ptr %caller_buf)
   call void @save_context(ptr %caller_buf, ptr %sp, ptr %fp)
   %do_call = icmp eq i32 %set, 0
   br i1 %do_call, label %dispatch, label %exit
@@ -304,24 +332,29 @@ exit:
   ret %coroutine %coro
 }
 
-define void @coro_yield_inner(ptr %sp, ptr %fp, ptr %state) noinline {
+define void @coro_yield_inner(ptr %sp, ptr %fp, ptr %state) alwaysinline {
   %callee_buf = call ptr @callee_buf(ptr %state)
   call void @save_context(ptr %callee_buf, ptr %sp, ptr %fp)
   %caller_buf = call ptr @caller_buf(ptr %state)
   %callee_copy = call ptr @copy_slot(ptr %state)
   %caller_sp = call ptr @load_context_sp(ptr %caller_buf)
+  %same_sp = icmp eq ptr %caller_sp, %sp
+  br i1 %same_sp, label %do_jmp, label %do_copy
+do_copy:
   call void @save_copy(ptr %callee_copy, ptr %caller_sp, ptr %sp)
+  br label %do_jmp
+do_jmp:
   call void @leave_coroutine()
-  call void @llvm.eh.sjlj.longjmp(ptr %caller_buf) noreturn nounwind
+  call void @llvm.eh.sjlj.longjmp(ptr %caller_buf) noreturn nounwind memory(read, inaccessiblemem: readwrite)
   unreachable
 }
 
 define void @coro_yield() alwaysinline {
-  %sp = call ptr @llvm.stacksave()
-  %fp = call ptr @llvm.localaddress()
+  %sp = call ptr @llvm.stacksave() memory(none)
+  %fp = call ptr @llvm.localaddress() memory(none)
   %state = load ptr, ptr @active_coroutine
   %callee_buf = call ptr @callee_buf(ptr %state)
-  %set = call i32 @llvm.eh.sjlj.setjmp(ptr %callee_buf)
+  %set = call i32 @save_ip(ptr %callee_buf)
   %do_yield = icmp eq i32 %set, 0
   br i1 %do_yield, label %yield, label %exit
 
@@ -349,12 +382,7 @@ define i32 @yielding_fn(i32 %n) {
 
   %n3 = add i32 %n2, 1
   call void @print_i32(i32 %n3)
-
-  call void @coro_yield()
-
-  %n4 = add i32 %n3, 1
-  call void @print_i32(i32 %n4)
-  ret i32 %n4
+  ret i32 %n3
 }
 
 define i32 @passthru_fn(i32 %n) {
