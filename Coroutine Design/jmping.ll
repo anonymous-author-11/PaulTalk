@@ -20,6 +20,7 @@ declare ptr @llvm.localaddress() speculatable mustprogress nocallback nofree nos
 declare void @llvm.memcpy.p0.p0.i64(ptr, ptr, i64, i1) memory(none, argmem: readwrite)
 declare i32 @llvm.eh.sjlj.setjmp(ptr) memory(none, argmem: readwrite)
 declare void @llvm.eh.sjlj.longjmp(ptr) noreturn nounwind memory(read, inaccessiblemem: readwrite)
+declare ptr @llvm.threadlocal.address(ptr) nounwind willreturn memory(none)
 
 define i1 @returns_one() noinline {
   %retval = load i1, ptr @always_one, align 1
@@ -49,8 +50,8 @@ define i32 @save_ip(ptr %buf) alwaysinline {
 }
 
 define void @print_i32(i32 %value) alwaysinline {
-  %print = call i32 (ptr, ...) @printf(ptr @print_i32_fmt, i32 %value) mustprogress nocallback nofree nosync nounwind willreturn memory(none, inaccessiblemem: readwrite)
-  %flush = call i32 @fflush(ptr null) mustprogress nocallback nofree nosync nounwind willreturn memory(none, inaccessiblemem: readwrite)
+  %print = call i32 (ptr, ...) @printf(ptr @print_i32_fmt, i32 %value) mustprogress nocallback nofree nounwind willreturn memory(none, argmem: read, inaccessiblemem: readwrite)
+  %flush = call i32 @fflush(ptr null) mustprogress nocallback nofree nounwind willreturn memory(none, inaccessiblemem: readwrite)
   ret void
 }
 
@@ -117,11 +118,6 @@ define void @mark_started(ptr %state) alwaysinline {
   ret void
 }
 
-define i1 @started_flag(%coroutine %state) alwaysinline {
-  %flag = extractvalue %coroutine %state, 8
-  ret i1 %flag
-}
-
 define ptr @done_slot(ptr %state) alwaysinline {
   %slot = getelementptr %coroutine, ptr %state, i32 0, i32 9
   ret ptr %slot
@@ -181,32 +177,27 @@ define void @init_coroutine(ptr %state, ptr %fn, ptr %tramp) alwaysinline {
 
 define void @enter_coroutine(ptr %state) alwaysinline {
   %slot = call ptr @prev_slot(ptr %state)
-  %prev = load ptr, ptr @active_coroutine
+  %active = call ptr @llvm.threadlocal.address(ptr @active_coroutine) memory(none)
+  %prev = load ptr, ptr %active
   store ptr %prev, ptr %slot
-  store ptr %state, ptr @active_coroutine
+  store ptr %state, ptr %active
   ret void
 }
 
 define void @leave_coroutine() alwaysinline {
-  %state = load ptr, ptr @active_coroutine
+  %active = call ptr @llvm.threadlocal.address(ptr @active_coroutine) memory(none)
+  %state = load ptr, ptr %active
   %slot = call ptr @prev_slot(ptr %state)
   %prev = load ptr, ptr %slot
-  store ptr %prev, ptr @active_coroutine
+  store ptr %prev, ptr %active
   ret void
 }
 
-define ptr @load_prepare_top() noinline {
+define ptr @load_prepare_top() noinline memory(read) {
   %state = load ptr, ptr @active_coroutine
   %slot = call ptr @top_slot(ptr %state)
   %top = load ptr, ptr %slot
   ret ptr %top
-}
-
-define void @longjmp_active_callee() noinline noreturn nounwind {
-  %state = load ptr, ptr @active_coroutine
-  %buf = call ptr @callee_buf(ptr %state)
-  call void @llvm.eh.sjlj.longjmp(ptr %buf) noreturn nounwind memory(read, inaccessiblemem: readwrite)
-  unreachable
 }
 
 define ptr @require_buf(ptr %copy, i64 %size) alwaysinline {
@@ -283,7 +274,7 @@ do_copy:
   call void @store_context_sp(ptr %buf, ptr %bottom)
   call void @llvm.stackrestore(ptr %copy_sp)
   call void @llvm.memcpy.p0.p0.i64(ptr %bottom, ptr %saved, i64 %size, i1 false) memory(none, argmem: readwrite)
-  %restore_top = call ptr @load_prepare_top()
+  %restore_top = call ptr @load_prepare_top() memory(read)
   call void @llvm.stackrestore(ptr %restore_top)
   br label %exit
 
@@ -291,13 +282,14 @@ exit:
   ret void
 }
 
-define %coroutine @coro_call(ptr %state, i1 %started, ptr %args) alwaysinline {
+define i1 @coro_call(ptr %state, i1 %started, ptr %args) alwaysinline {
 entry:
   %caller_buf = call ptr @caller_buf(ptr %state)
   %sp = call ptr @llvm.stacksave() memory(none)
   %fp = call ptr @llvm.localaddress() memory(none)
   %set = call i32 @save_ip(ptr %caller_buf)
   call void @save_context(ptr %caller_buf, ptr %sp, ptr %fp)
+  call void @mark_started(ptr %state)
   %do_call = icmp eq i32 %set, 0
   br i1 %do_call, label %dispatch, label %exit
 
@@ -306,10 +298,10 @@ dispatch:
 
 start:
   call void @enter_coroutine(ptr %state)
-  call void @mark_started(ptr %state)
   %fn = call ptr @fn_of(ptr %state)
   %tramp = call ptr @tramp_of(ptr %state)
   call i32 %tramp(ptr %fn, ptr %args)
+  call void @leave_coroutine()
   call void @mark_done(ptr %state)
   call void @longjmp(ptr %caller_buf)
   br label %exit
@@ -321,15 +313,15 @@ resume:
 
 resume_go:
   call void @enter_coroutine(ptr %state)
+  %buf = call ptr @callee_buf(ptr %state)
   call void @prepare_resume(ptr %state)
-  call void @longjmp_active_callee()
+  call void @llvm.eh.sjlj.longjmp(ptr %buf) noreturn nounwind memory(read, inaccessiblemem: readwrite)
   unreachable
 
 exit:
   %started_slot_out = call ptr @started_slot(ptr %state)
   store i1 true, ptr %started_slot_out
-  %coro = load %coroutine, ptr %state
-  ret %coroutine %coro
+  ret i1 true
 }
 
 define void @coro_yield_inner(ptr %sp, ptr %fp, ptr %state) alwaysinline {
@@ -352,7 +344,8 @@ do_jmp:
 define void @coro_yield() alwaysinline {
   %sp = call ptr @llvm.stacksave() memory(none)
   %fp = call ptr @llvm.localaddress() memory(none)
-  %state = load ptr, ptr @active_coroutine
+  %active = call ptr @llvm.threadlocal.address(ptr @active_coroutine) memory(none)
+  %state = load ptr, ptr %active
   %callee_buf = call ptr @callee_buf(ptr %state)
   %set = call i32 @save_ip(ptr %callee_buf)
   %do_yield = icmp eq i32 %set, 0
@@ -405,14 +398,13 @@ define void @calling_fn(i32 %n) {
   store ptr %args, ptr %args_slot
   store i32 %n, ptr %args
   %started_slot = call ptr @started_slot(ptr %state)
-  %started_0 = call i1 @started_flag(%coroutine %coro_0)
-  %coro_1 = call %coroutine @coro_call(ptr %state, i1 %started_0, ptr %args)
+  %started_0 = load i1, ptr %started_slot
+  %started_1 = call i1 @coro_call(ptr %state, i1 %started_0, ptr %args)
 
   %n1 = add i32 %n, 10
   call void @print_i32(i32 %n1)
   
-  %started_1 = call i1 @started_flag(%coroutine %coro_1)
-  %coro_2 = call %coroutine @coro_call(ptr %state, i1 %started_1, ptr %args)
+  %started_2 = call i1 @coro_call(ptr %state, i1 %started_1, ptr %args)
 
   %n2 = add i32 %n1, 20
   call void @print_i32(i32 %n2)
