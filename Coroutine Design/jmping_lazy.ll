@@ -23,6 +23,11 @@ declare void @llvm.eh.sjlj.longjmp(ptr) noreturn nounwind memory(read, inaccessi
 declare ptr @llvm.threadlocal.address(ptr) nounwind willreturn memory(none)
 declare void @llvm.assume(i1)
 
+define i64 @observe_sink() {
+  %value = load i64, ptr @sink
+  ret i64 %value
+}
+
 define i1 @returns_one() noinline {
   %retval = load i1, ptr @always_one, align 1
   ret i1 %retval
@@ -282,11 +287,6 @@ exit:
   ret void
 }
 
-define i64 @observe_sink() {
-  %value = load i64, ptr @sink
-  ret i64 %value
-}
-
 define i64 @copy_rest_inner(ptr %state, ptr %copy, ptr %top_sp, i64 %frame_size, i64 %size) noinline nounwind willreturn memory(none) {
   %buf_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 0
   %saved = load ptr, ptr %buf_slot
@@ -296,7 +296,6 @@ define i64 @copy_rest_inner(ptr %state, ptr %copy, ptr %top_sp, i64 %frame_size,
   %bottom_i = sub i64 %top_i, %size
   %rest_bottom_i = add i64 %bottom_i, %frame_size
   %rest_bottom = inttoptr i64 %rest_bottom_i to ptr
-  call void @llvm.assume(i1 true) ["separate_storage"(ptr %state, ptr %rest_bottom)]
   call void @llvm.memcpy.p0.p0.i64(ptr %rest_bottom, ptr %src, i64 %rest_size, i1 false) memory(none, argmem: readwrite)
   ret i64 %rest_size
 }
@@ -449,7 +448,6 @@ do_frame_copy:
   br label %do_jmp
 
 do_full_copy:
-  call void @copy_rest(ptr %state)
   call void @save_copy(ptr %callee_copy, ptr %caller_sp, ptr %sp)
   %new_frame_size_slot = call ptr @frame_size_slot(ptr %state)
   store i64 %frame_size, ptr %new_frame_size_slot
@@ -466,6 +464,8 @@ define void @coro_yield() alwaysinline {
   %state = load ptr, ptr %active
   %sp = call ptr @llvm.stacksave() memory(none)
   %frame_top = call ptr @llvm.addressofreturnaddress() memory(none)
+  %frame_top_above_sp = icmp ugt ptr %frame_top, %sp
+  call void @llvm.assume(i1 %frame_top_above_sp)
   %fp = call ptr @llvm.localaddress() memory(none)
   %sink = call ptr @llvm.threadlocal.address(ptr @sink) memory(none)
   %callee_buf = call ptr @callee_buf(ptr %state)
@@ -520,6 +520,28 @@ define i32 @yielding_fn(i32 %n) {
   %n3 = add i32 %n2, 1
   call void @print_i32(i32 %n3)
   ret i32 %n3
+}
+
+define void @helper() {
+  call void @coro_yield()
+  ret void
+}
+
+define void @yielding_callee_in_loop(i32 %k) {
+entry:
+  call void @helper()
+  br label %preheader
+preheader:
+  %n = phi i32 [%k, %entry], [%new_n, %loop]
+  %lt_ten = icmp ult i32 %n, 10
+  br i1 %lt_ten, label %loop, label %exit
+loop:
+  call void @helper()
+  %new_n = add i32 %n, 1
+  br label %preheader
+exit:
+  call void @helper()
+  ret void
 }
 
 define i32 @passthru_fn(i32 %n) {
