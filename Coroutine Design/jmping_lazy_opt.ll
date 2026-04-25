@@ -53,7 +53,7 @@ define void @longjmp(ptr %buf) local_unnamed_addr #9 {
   br i1 %true, label %do_jmp, label %exit
 
 do_jmp:                                           ; preds = %0
-  tail call void @llvm.eh.sjlj.longjmp(ptr %buf) #31
+  tail call void @llvm.eh.sjlj.longjmp(ptr %buf) #32
   unreachable
 
 exit:                                             ; preds = %0
@@ -65,7 +65,7 @@ define i32 @save_ip(ptr nocapture writeonly %buf) local_unnamed_addr #10 {
   %new_slot = alloca [3 x ptr], align 8
   %local_ip_slot = getelementptr inbounds i8, ptr %new_slot, i64 8
   %buf_ip_slot = getelementptr i8, ptr %buf, i64 8
-  %flag = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot) #32
+  %flag = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot) #33
   %ip = load ptr, ptr %local_ip_slot, align 8
   store ptr %ip, ptr %buf_ip_slot, align 8
   ret i32 %flag
@@ -73,8 +73,8 @@ define i32 @save_ip(ptr nocapture writeonly %buf) local_unnamed_addr #10 {
 
 ; Function Attrs: alwaysinline mustprogress nofree nounwind willreturn memory(inaccessiblemem: readwrite)
 define void @print_i32(i32 %value) local_unnamed_addr #11 {
-  %print = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %value) #33
-  %flush = tail call i32 @fflush(ptr null) #34
+  %print = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %value) #34
+  %flush = tail call i32 @fflush(ptr null) #35
   ret void
 }
 
@@ -244,7 +244,7 @@ define void @init_coroutine(ptr nocapture writeonly %state, ptr %fn, ptr %tramp)
 
 ; Function Attrs: alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: write, inaccessiblemem: none)
 define void @enter_coroutine(ptr %state) local_unnamed_addr #15 {
-  %active = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+  %active = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %prev = load ptr, ptr %active, align 8
   store ptr %prev, ptr %state, align 8
   store ptr %state, ptr %active, align 8
@@ -253,23 +253,15 @@ define void @enter_coroutine(ptr %state) local_unnamed_addr #15 {
 
 ; Function Attrs: alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: read, inaccessiblemem: none)
 define void @leave_coroutine() local_unnamed_addr #16 {
-  %active = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+  %active = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %state = load ptr, ptr %active, align 8
   %prev = load ptr, ptr %state, align 8
   store ptr %prev, ptr %active, align 8
   ret void
 }
 
-; Function Attrs: mustprogress nofree noinline norecurse nosync nounwind willreturn memory(read, inaccessiblemem: none)
-define ptr @load_prepare_top() local_unnamed_addr #17 {
-  %state = load ptr, ptr @active_coroutine, align 8
-  %slot.i = getelementptr i8, ptr %state, i64 80
-  %top = load ptr, ptr %slot.i, align 8
-  ret ptr %top
-}
-
 ; Function Attrs: alwaysinline mustprogress nofree nounwind willreturn memory(argmem: readwrite, inaccessiblemem: readwrite)
-define ptr @require_buf(ptr nocapture %copy, i64 %size) local_unnamed_addr #18 {
+define ptr @require_buf(ptr nocapture %copy, i64 %size) local_unnamed_addr #17 {
 entry:
   %nonzero_size = icmp ne i64 %size, 0
   %buf = load ptr, ptr %copy, align 8
@@ -293,7 +285,7 @@ done:                                             ; preds = %alloc, %entry
 }
 
 ; Function Attrs: alwaysinline mustprogress nofree nounwind willreturn
-define void @save_copy(ptr nocapture %copy, ptr %top_sp, ptr %bottom_sp) local_unnamed_addr #19 {
+define void @save_copy(ptr nocapture %copy, ptr %top_sp, ptr %bottom_sp) local_unnamed_addr #18 {
   %top_i.i = ptrtoint ptr %top_sp to i64
   %bottom_i.i = ptrtoint ptr %bottom_sp to i64
   %size.i = sub i64 %top_i.i, %bottom_i.i
@@ -317,14 +309,14 @@ alloc.i:                                          ; preds = %0
 
 require_buf.exit:                                 ; preds = %0, %alloc.i
   %result.i = phi ptr [ %new_buf.i, %alloc.i ], [ %buf.i, %0 ]
-  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i, ptr align 1 %bottom_sp, i64 %size.i, i1 false) #36
+  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i, ptr align 1 %bottom_sp, i64 %size.i, i1 false) #37
   ret void
 }
 
 ; Function Attrs: alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, inaccessiblemem: none)
-define void @save_frame_copy(ptr nocapture readonly %copy, ptr nocapture readonly %bottom_sp, i64 %size) local_unnamed_addr #20 {
+define void @save_frame_copy(ptr nocapture readonly %copy, ptr nocapture readonly %bottom_sp, i64 %size) local_unnamed_addr #19 {
   %buf = load ptr, ptr %copy, align 8
-  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf, ptr align 1 %bottom_sp, i64 %size, i1 false) #36
+  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf, ptr align 1 %bottom_sp, i64 %size, i1 false) #37
   ret void
 }
 
@@ -335,7 +327,7 @@ exit:
 }
 
 ; Function Attrs: mustprogress nofree noinline norecurse nosync nounwind willreturn memory(none)
-define i64 @copy_rest_inner(ptr nocapture readnone %state, ptr nocapture readonly %copy, ptr %top_sp, i64 %frame_size, i64 %size) local_unnamed_addr #21 {
+define i64 @copy_rest_inner(ptr nocapture readnone %state, ptr nocapture readonly %copy, ptr %top_sp, i64 %frame_size, i64 %size) local_unnamed_addr #20 {
   %saved = load ptr, ptr %copy, align 8
   %base_i.i = ptrtoint ptr %saved to i64
   %result_i.i = add i64 %frame_size, %base_i.i
@@ -345,12 +337,12 @@ define i64 @copy_rest_inner(ptr nocapture readnone %state, ptr nocapture readonl
   %bottom_i = add i64 %frame_size, %top_i
   %rest_bottom_i = sub i64 %bottom_i, %size
   %rest_bottom = inttoptr i64 %rest_bottom_i to ptr
-  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %rest_bottom, ptr align 1 %result.i, i64 %rest_size, i1 false) #36
+  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %rest_bottom, ptr align 1 %result.i, i64 %rest_size, i1 false) #37
   ret i64 %rest_size
 }
 
 ; Function Attrs: alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: read, inaccessiblemem: none)
-define void @copy_rest(ptr nocapture readonly %state) local_unnamed_addr #22 {
+define void @copy_rest(ptr nocapture readonly %state) local_unnamed_addr #21 {
 entry:
   %size_slot = getelementptr i8, ptr %state, i64 64
   %size = load i64, ptr %size_slot, align 8
@@ -365,23 +357,23 @@ do_copy:                                          ; preds = %entry
   %slot.i = getelementptr i8, ptr %state, i64 80
   %copy.i = getelementptr i8, ptr %state, i64 56
   %top_sp = load ptr, ptr %slot.i, align 8
-  %rest_size = tail call i64 @copy_rest_inner(ptr nonnull poison, ptr %copy.i, ptr %top_sp, i64 %frame_size, i64 %size) #37
+  %rest_size = tail call i64 @copy_rest_inner(ptr nonnull poison, ptr %copy.i, ptr %top_sp, i64 %frame_size, i64 %size) #38
   br label %exit
 
 exit:                                             ; preds = %do_copy, %entry
   %token = phi i64 [ 0, %entry ], [ %rest_size, %do_copy ]
-  %sink = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #35
+  %sink = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #36
   store i64 %token, ptr %sink, align 8
   ret void
 }
 
 ; Function Attrs: alwaysinline
-define void @prepare_resume(ptr nocapture %state) local_unnamed_addr #23 {
+define void @prepare_resume(ptr nocapture %state) local_unnamed_addr #22 {
   %size_slot = getelementptr i8, ptr %state, i64 64
   %size = load i64, ptr %size_slot, align 8
   %slot.i1 = getelementptr i8, ptr %state, i64 120
   %frame_size = load i64, ptr %slot.i1, align 8
-  %top_sp = tail call ptr @llvm.stacksave.p0() #35
+  %top_sp = tail call ptr @llvm.stacksave.p0() #36
   %slot.i = getelementptr i8, ptr %state, i64 80
   store ptr %top_sp, ptr %slot.i, align 8
   %slot.i3 = getelementptr i8, ptr %state, i64 48
@@ -398,36 +390,41 @@ have_copy:                                        ; preds = %0
   %copy_sp = inttoptr i64 %copy_sp_i to ptr
   %saved = load ptr, ptr %copy.i, align 8
   %zero_frame = icmp eq i64 %frame_size, 0
-  %full_frame = icmp uge i64 %frame_size, %size
-  %full_copy = or i1 %zero_frame, %full_frame
   store ptr %bottom, ptr %slot.i3, align 8
+  %1 = tail call i64 @llvm.umin.i64(i64 %frame_size, i64 %size)
+  %memcpy_size = select i1 %zero_frame, i64 %size, i64 %1
+  %copy_sp_reg = tail call ptr asm "", "=r,0"(ptr %copy_sp) #4
   %bottom_reg = tail call ptr asm "", "=r,0"(ptr %bottom) #4
   %saved_reg = tail call ptr asm "", "=r,0"(ptr %saved) #4
-  %size_reg = tail call i64 asm "", "=r,0"(i64 %size) #4
-  %frame_size_reg = tail call i64 asm "", "=r,0"(i64 %frame_size) #4
-  %copy_sp_reg = tail call ptr asm "", "=r,0"(ptr %copy_sp) #4
+  %mempy_size_reg = tail call i64 asm "", "=r,0"(i64 %memcpy_size) #4
+  %restore_top_reg = tail call ptr asm "", "=r,0"(ptr %top_sp) #4
   call void @llvm.stackrestore.p0(ptr %copy_sp_reg)
-  %size_reg.frame_size_reg = select i1 %full_copy, i64 %size_reg, i64 %frame_size_reg
-  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %bottom_reg, ptr align 1 %saved_reg, i64 %size_reg.frame_size_reg, i1 false) #36
-  %restore_top = tail call ptr @load_prepare_top() #38
-  call void @llvm.stackrestore.p0(ptr %restore_top)
+  tail call preserve_mostcc void @memcpy_preserve(ptr %bottom_reg, ptr %saved_reg, i64 %mempy_size_reg, ptr %restore_top_reg) #37
+  call void @llvm.stackrestore.p0(ptr %restore_top_reg)
   br label %exit
 
 exit:                                             ; preds = %have_copy, %0
   ret void
 }
 
+; Function Attrs: noinline memory(argmem: readwrite)
+define preserve_mostcc void @memcpy_preserve(ptr inreg nocapture writeonly %dest, ptr inreg nocapture readonly %source, i64 inreg %size, ptr inreg %restore_top) local_unnamed_addr #23 {
+  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %dest, ptr align 1 %source, i64 %size, i1 false) #37
+  %use = tail call ptr asm "", "=r,0"(ptr %restore_top) #4
+  ret void
+}
+
 ; Function Attrs: alwaysinline
-define noundef i1 @coro_call(ptr %state, i1 %started, ptr %args) local_unnamed_addr #23 {
+define noundef i1 @coro_call(ptr %state, i1 %started, ptr %args) local_unnamed_addr #22 {
 entry:
   %new_slot.i = alloca [3 x ptr], align 8
   %buf.i = getelementptr i8, ptr %state, i64 8
-  %sp = tail call ptr @llvm.stacksave.p0() #35
-  %fp = tail call ptr @llvm.localaddress() #35
+  %sp = tail call ptr @llvm.stacksave.p0() #36
+  %fp = tail call ptr @llvm.localaddress() #36
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i)
   %local_ip_slot.i = getelementptr inbounds i8, ptr %new_slot.i, i64 8
   %buf_ip_slot.i = getelementptr i8, ptr %state, i64 16
-  %flag.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i) #32
+  %flag.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i) #33
   %ip.i = load ptr, ptr %local_ip_slot.i, align 8
   store ptr %ip.i, ptr %buf_ip_slot.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i)
@@ -443,7 +440,7 @@ dispatch:                                         ; preds = %entry
   br i1 %started, label %resume, label %start
 
 start:                                            ; preds = %dispatch
-  %active.i6 = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+  %active.i6 = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %prev.i7 = load ptr, ptr %active.i6, align 8
   store ptr %prev.i7, ptr %state, align 8
   store ptr %state, ptr %active.i6, align 8
@@ -461,7 +458,7 @@ start:                                            ; preds = %dispatch
   br i1 %true.i, label %do_jmp.i, label %exit
 
 do_jmp.i:                                         ; preds = %start
-  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i) #32
   unreachable
 
 resume:                                           ; preds = %dispatch
@@ -470,7 +467,7 @@ resume:                                           ; preds = %dispatch
   br i1 %done, label %exit, label %resume_go
 
 resume_go:                                        ; preds = %resume
-  %active.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+  %active.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %prev.i = load ptr, ptr %active.i, align 8
   store ptr %prev.i, ptr %state, align 8
   store ptr %state, ptr %active.i, align 8
@@ -494,24 +491,22 @@ have_copy.i:                                      ; preds = %resume_go
   %copy_sp.i = inttoptr i64 %copy_sp_i.i to ptr
   %saved.i = load ptr, ptr %copy.i.i, align 8
   %zero_frame.i = icmp eq i64 %frame_size.i, 0
-  %full_frame.i = icmp uge i64 %frame_size.i, %size.i
-  %full_copy.i = or i1 %zero_frame.i, %full_frame.i
   store ptr %bottom.i, ptr %slot.i3.i, align 8
+  %1 = call i64 @llvm.umin.i64(i64 %frame_size.i, i64 %size.i)
+  %memcpy_size.i = select i1 %zero_frame.i, i64 %size.i, i64 %1
+  %copy_sp_reg.i = call ptr asm "", "=r,0"(ptr %copy_sp.i) #4
   %bottom_reg.i = call ptr asm "", "=r,0"(ptr %bottom.i) #4
   %saved_reg.i = call ptr asm "", "=r,0"(ptr %saved.i) #4
-  %size_reg.i = call i64 asm "", "=r,0"(i64 %size.i) #4
-  %frame_size_reg.i = call i64 asm "", "=r,0"(i64 %frame_size.i) #4
-  %copy_sp_reg.i = call ptr asm "", "=r,0"(ptr %copy_sp.i) #4
+  %mempy_size_reg.i = call i64 asm "", "=r,0"(i64 %memcpy_size.i) #4
+  %restore_top_reg.i = call ptr asm "", "=r,0"(ptr %sp) #4
   call void @llvm.stackrestore.p0(ptr %copy_sp_reg.i)
-  %size_reg.i.frame_size_reg.i = select i1 %full_copy.i, i64 %size_reg.i, i64 %frame_size_reg.i
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %bottom_reg.i, ptr align 1 %saved_reg.i, i64 %size_reg.i.frame_size_reg.i, i1 false) #36
-  %restore_top.i = call ptr @load_prepare_top() #38
-  call void @llvm.stackrestore.p0(ptr %restore_top.i)
+  call preserve_mostcc void @memcpy_preserve(ptr %bottom_reg.i, ptr %saved_reg.i, i64 %mempy_size_reg.i, ptr %restore_top_reg.i) #37
+  call void @llvm.stackrestore.p0(ptr %restore_top_reg.i)
   br label %prepare_resume.exit
 
 prepare_resume.exit:                              ; preds = %resume_go, %have_copy.i
   %buf.i1 = getelementptr i8, ptr %state, i64 32
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i1) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i1) #32
   unreachable
 
 exit:                                             ; preds = %start, %resume, %entry
@@ -540,7 +535,7 @@ entry:
 
 do_frame_copy:                                    ; preds = %entry
   %buf.i = load ptr, ptr %callee_copy, align 8
-  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i, ptr align 1 %sp, i64 %size.i, i1 false) #36
+  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i, ptr align 1 %sp, i64 %size.i, i1 false) #37
   br label %do_jmp
 
 do_full_copy:                                     ; preds = %entry
@@ -566,33 +561,33 @@ alloc.i.i:                                        ; preds = %do_full_copy
 
 save_copy.exit:                                   ; preds = %do_full_copy, %alloc.i.i
   %result.i.i = phi ptr [ %new_buf.i.i, %alloc.i.i ], [ %buf.i.i, %do_full_copy ]
-  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i, ptr align 1 %sp, i64 %size.i.i, i1 false) #36
+  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i, ptr align 1 %sp, i64 %size.i.i, i1 false) #37
   store i64 %size.i, ptr %slot.i1, align 8
   br label %do_jmp
 
 do_jmp:                                           ; preds = %save_copy.exit, %do_frame_copy
-  %active.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+  %active.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %state.i = load ptr, ptr %active.i, align 8
   %prev.i = load ptr, ptr %state.i, align 8
   store ptr %prev.i, ptr %active.i, align 8
-  tail call void @llvm.eh.sjlj.longjmp(ptr %caller_buf) #31
+  tail call void @llvm.eh.sjlj.longjmp(ptr %caller_buf) #32
   unreachable
 }
 
 ; Function Attrs: alwaysinline nounwind
 define void @coro_yield() local_unnamed_addr #25 {
   %new_slot.i = alloca [3 x ptr], align 8
-  %active = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+  %active = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %state = load ptr, ptr %active, align 8
-  %sp = tail call ptr @llvm.stacksave.p0() #35
-  %frame_top = tail call ptr @llvm.addressofreturnaddress.p0() #35
+  %sp = tail call ptr @llvm.stacksave.p0() #36
+  %frame_top = tail call ptr @llvm.addressofreturnaddress.p0() #36
   %frame_top_above_sp = icmp ugt ptr %frame_top, %sp
   tail call void @llvm.assume(i1 %frame_top_above_sp)
-  %sink = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #35
+  %sink = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #36
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i)
   %local_ip_slot.i = getelementptr inbounds i8, ptr %new_slot.i, i64 8
   %buf_ip_slot.i = getelementptr i8, ptr %state, i64 40
-  %flag.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i) #32
+  %flag.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i) #33
   %ip.i = load ptr, ptr %local_ip_slot.i, align 8
   store ptr %ip.i, ptr %buf_ip_slot.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i)
@@ -602,7 +597,7 @@ define void @coro_yield() local_unnamed_addr #25 {
 
 yield:                                            ; preds = %0
   %buf.i1 = getelementptr i8, ptr %state, i64 32
-  %fp = tail call ptr @llvm.localaddress() #35
+  %fp = tail call ptr @llvm.localaddress() #36
   %slot_2.i = getelementptr i8, ptr %state, i64 48
   store ptr %fp, ptr %buf.i1, align 8
   store ptr %sp, ptr %slot_2.i, align 8
@@ -632,7 +627,7 @@ slow:                                             ; preds = %yield
 
 do_frame_copy.i:                                  ; preds = %slow
   %buf.i.i = load ptr, ptr %copy.i, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i, ptr align 1 %sp, i64 %size.i.i, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i, ptr align 1 %sp, i64 %size.i.i, i1 false) #37
   br label %do_jmp.i
 
 do_full_copy.i:                                   ; preds = %slow
@@ -656,20 +651,20 @@ alloc.i.i.i:                                      ; preds = %do_full_copy.i
 
 save_copy.exit.i:                                 ; preds = %alloc.i.i.i, %do_full_copy.i
   %result.i.i.i = phi ptr [ %new_buf.i.i.i, %alloc.i.i.i ], [ %buf.i.i.i, %do_full_copy.i ]
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i, ptr align 1 %sp, i64 %size.i.i.i, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i, ptr align 1 %sp, i64 %size.i.i.i, i1 false) #37
   store i64 %size.i.i, ptr %slot.i1.i6, align 8
   br label %do_jmp.i
 
 do_jmp.i:                                         ; preds = %save_copy.exit.i, %do_frame_copy.i
   %prev.i.i = load ptr, ptr %state, align 8
   store ptr %prev.i.i, ptr %active, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i) #32
   unreachable
 
 do_jmp:                                           ; preds = %yield
   %prev.i = load ptr, ptr %state, align 8
   store ptr %prev.i, ptr %active, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i) #32
   unreachable
 
 exit:                                             ; preds = %0
@@ -691,7 +686,7 @@ do_copy.i:                                        ; preds = %exit
   %slot.i.i = getelementptr i8, ptr %state, i64 80
   %copy.i.i = getelementptr i8, ptr %state, i64 56
   %top_sp.i = load ptr, ptr %slot.i.i, align 8
-  %rest_size.i = call i64 @copy_rest_inner(ptr nonnull poison, ptr %copy.i.i, ptr %top_sp.i, i64 %size.i, i64 %size.i5) #37
+  %rest_size.i = call i64 @copy_rest_inner(ptr nonnull poison, ptr %copy.i.i, ptr %top_sp.i, i64 %size.i, i64 %size.i5) #38
   br label %copy_rest.exit
 
 copy_rest.exit:                                   ; preds = %exit, %do_copy.i
@@ -705,20 +700,20 @@ define i32 @yielding_fn(i32 %n) local_unnamed_addr #4 {
   %new_slot.i.i93 = alloca [3 x ptr], align 8
   %new_slot.i.i7 = alloca [3 x ptr], align 8
   %new_slot.i.i = alloca [3 x ptr], align 8
-  %print.i5 = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n) #33
-  %flush.i6 = tail call i32 @fflush(ptr null) #34
-  %active.i94 = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+  %print.i5 = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n) #34
+  %flush.i6 = tail call i32 @fflush(ptr null) #35
+  %active.i94 = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %state.i95 = load ptr, ptr %active.i94, align 8
-  %sp.i96 = tail call ptr @llvm.stacksave.p0() #35
-  %frame_top.i97 = tail call ptr @llvm.addressofreturnaddress.p0() #35
+  %sp.i96 = tail call ptr @llvm.stacksave.p0() #36
+  %frame_top.i97 = tail call ptr @llvm.addressofreturnaddress.p0() #36
   %frame_top_above_sp.i98 = icmp ugt ptr %frame_top.i97, %sp.i96
   tail call void @llvm.assume(i1 %frame_top_above_sp.i98)
-  %sink.i99 = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #35
+  %sink.i99 = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #36
   %buf.i1.i100 = getelementptr i8, ptr %state.i95, i64 32
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i93)
   %local_ip_slot.i.i101 = getelementptr inbounds i8, ptr %new_slot.i.i93, i64 8
   %buf_ip_slot.i.i102 = getelementptr i8, ptr %state.i95, i64 40
-  %flag.i.i103 = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i93) #32
+  %flag.i.i103 = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i93) #33
   %ip.i.i104 = load ptr, ptr %local_ip_slot.i.i101, align 8
   store ptr %ip.i.i104, ptr %buf_ip_slot.i.i102, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i93)
@@ -727,7 +722,7 @@ define i32 @yielding_fn(i32 %n) local_unnamed_addr #4 {
   br i1 %do_yield.i105, label %yield.i127, label %exit.i106
 
 yield.i127:                                       ; preds = %0
-  %fp.i128 = tail call ptr @llvm.localaddress() #35
+  %fp.i128 = tail call ptr @llvm.localaddress() #36
   %slot_2.i.i129 = getelementptr i8, ptr %state.i95, i64 48
   store ptr %fp.i128, ptr %buf.i1.i100, align 8
   store ptr %sp.i96, ptr %slot_2.i.i129, align 8
@@ -757,7 +752,7 @@ slow.i135:                                        ; preds = %yield.i127
 
 do_frame_copy.i.i172:                             ; preds = %slow.i135
   %buf.i.i.i173 = load ptr, ptr %copy.i.i131, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i173, ptr align 1 %sp.i96, i64 %size.i.i.i138, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i173, ptr align 1 %sp.i96, i64 %size.i.i.i138, i1 false) #37
   br label %do_jmp.i.i166
 
 do_full_copy.i.i150:                              ; preds = %slow.i135
@@ -781,20 +776,20 @@ alloc.i.i.i.i170:                                 ; preds = %do_full_copy.i.i150
 
 save_copy.exit.i.i163:                            ; preds = %alloc.i.i.i.i170, %do_full_copy.i.i150
   %result.i.i.i.i164 = phi ptr [ %new_buf.i.i.i.i171, %alloc.i.i.i.i170 ], [ %buf.i.i.i.i156, %do_full_copy.i.i150 ]
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i.i164, ptr align 1 %sp.i96, i64 %size.i.i.i.i153, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i.i164, ptr align 1 %sp.i96, i64 %size.i.i.i.i153, i1 false) #37
   store i64 %size.i.i.i138, ptr %slot.i1.i6.i139, align 8
   br label %do_jmp.i.i166
 
 do_jmp.i.i166:                                    ; preds = %save_copy.exit.i.i163, %do_frame_copy.i.i172
   %prev.i.i.i169 = load ptr, ptr %state.i95, align 8
   store ptr %prev.i.i.i169, ptr %active.i94, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i130) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i130) #32
   unreachable
 
 do_jmp.i174:                                      ; preds = %yield.i127
   %prev.i.i177 = load ptr, ptr %state.i95, align 8
   store ptr %prev.i.i177, ptr %active.i94, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i130) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i130) #32
   unreachable
 
 exit.i106:                                        ; preds = %0
@@ -813,11 +808,11 @@ exit.i106:                                        ; preds = %0
   %slot.i.i.i118 = getelementptr i8, ptr %state.i95, i64 80
   %full_frame.i.i120.not = icmp ult i64 %size.i.i112, %size.i5.i115
   %n1 = add i32 %n, 1
-  %print.i3 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1) #33
-  %flush.i4 = call i32 @fflush(ptr null) #34
+  %print.i3 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1) #34
+  %flush.i4 = call i32 @fflush(ptr null) #35
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i7)
   %local_ip_slot.i.i15 = getelementptr inbounds i8, ptr %new_slot.i.i7, i64 8
-  %flag.i.i17 = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i7) #32
+  %flag.i.i17 = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i7) #33
   %ip.i.i18 = load ptr, ptr %local_ip_slot.i.i15, align 8
   store ptr %ip.i.i18, ptr %buf_ip_slot.i.i102, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i7)
@@ -826,7 +821,7 @@ exit.i106:                                        ; preds = %0
   br i1 %do_yield.i19, label %yield.i41, label %exit.i20
 
 yield.i41:                                        ; preds = %exit.i106
-  %fp.i42 = tail call ptr @llvm.localaddress() #35
+  %fp.i42 = tail call ptr @llvm.localaddress() #36
   %slot_2.i.i43 = getelementptr i8, ptr %state.i95, i64 48
   store ptr %fp.i42, ptr %buf.i1.i100, align 8
   store ptr %sp.i96, ptr %slot_2.i.i43, align 8
@@ -838,16 +833,16 @@ yield.i41:                                        ; preds = %exit.i106
 
 do_jmp.i.i80:                                     ; preds = %yield.i41
   %buf.i.i.i87 = load ptr, ptr %copy.i.i.i113, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i87, ptr align 1 %sp.i96, i64 %size.i.i112, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i87, ptr align 1 %sp.i96, i64 %size.i.i112, i1 false) #37
   %prev.i.i.i83.pre = load ptr, ptr %state.i95, align 8
   store ptr %prev.i.i.i83.pre, ptr %active.i94, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i44) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i44) #32
   unreachable
 
 do_jmp.i88:                                       ; preds = %yield.i41
   %prev.i.i91 = load ptr, ptr %state.i95, align 8
   store ptr %prev.i.i91, ptr %active.i94, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i44) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i44) #32
   unreachable
 
 exit.i20:                                         ; preds = %exit.i106
@@ -855,11 +850,11 @@ exit.i20:                                         ; preds = %exit.i106
   store ptr %frame_top.i97, ptr %slot.i3.i108, align 8
   store i64 %size.i.i112, ptr %slot.i.i109, align 8
   %n2 = add i32 %n, 2
-  %print.i1 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2) #33
-  %flush.i2 = call i32 @fflush(ptr null) #34
+  %print.i1 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2) #34
+  %flush.i2 = call i32 @fflush(ptr null) #35
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i)
   %local_ip_slot.i.i = getelementptr inbounds i8, ptr %new_slot.i.i, i64 8
-  %flag.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i) #32
+  %flag.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i) #33
   %ip.i.i = load ptr, ptr %local_ip_slot.i.i, align 8
   store ptr %ip.i.i, ptr %buf_ip_slot.i.i102, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i)
@@ -868,7 +863,7 @@ exit.i20:                                         ; preds = %exit.i106
   br i1 %do_yield.i, label %yield.i, label %exit.i
 
 yield.i:                                          ; preds = %exit.i20
-  %fp.i = tail call ptr @llvm.localaddress() #35
+  %fp.i = tail call ptr @llvm.localaddress() #36
   %slot_2.i.i = getelementptr i8, ptr %state.i95, i64 48
   store ptr %fp.i, ptr %buf.i1.i100, align 8
   store ptr %sp.i96, ptr %slot_2.i.i, align 8
@@ -880,16 +875,16 @@ yield.i:                                          ; preds = %exit.i20
 
 do_jmp.i.i:                                       ; preds = %yield.i
   %buf.i.i.i = load ptr, ptr %copy.i.i.i113, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i, ptr align 1 %sp.i96, i64 %size.i.i112, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i, ptr align 1 %sp.i96, i64 %size.i.i112, i1 false) #37
   %prev.i.i.i.pre = load ptr, ptr %state.i95, align 8
   store ptr %prev.i.i.i.pre, ptr %active.i94, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i) #32
   unreachable
 
 do_jmp.i:                                         ; preds = %yield.i
   %prev.i.i = load ptr, ptr %state.i95, align 8
   store ptr %prev.i.i, ptr %active.i94, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i) #32
   unreachable
 
 exit.i:                                           ; preds = %exit.i20
@@ -900,32 +895,32 @@ exit.i:                                           ; preds = %exit.i20
 
 do_copy.i.i:                                      ; preds = %exit.i
   %top_sp.i.i = load ptr, ptr %slot.i.i.i118, align 8
-  %rest_size.i.i = call i64 @copy_rest_inner(ptr nonnull poison, ptr %copy.i.i.i113, ptr %top_sp.i.i, i64 %size.i.i112, i64 %size.i5.i115) #37
+  %rest_size.i.i = call i64 @copy_rest_inner(ptr nonnull poison, ptr %copy.i.i.i113, ptr %top_sp.i.i, i64 %size.i.i112, i64 %size.i5.i115) #38
   br label %coro_yield.exit
 
 coro_yield.exit:                                  ; preds = %exit.i, %do_copy.i.i
   %token.i.i = phi i64 [ 0, %exit.i ], [ %rest_size.i.i, %do_copy.i.i ]
   store i64 %token.i.i, ptr %sink.i99, align 8
   %n3 = add i32 %n, 3
-  %print.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n3) #33
-  %flush.i = call i32 @fflush(ptr null) #34
+  %print.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n3) #34
+  %flush.i = call i32 @fflush(ptr null) #35
   ret i32 %n3
 }
 
 ; Function Attrs: nounwind
 define void @helper() local_unnamed_addr #4 {
   %new_slot.i.i = alloca [3 x ptr], align 8
-  %active.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+  %active.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %state.i = load ptr, ptr %active.i, align 8
-  %sp.i = tail call ptr @llvm.stacksave.p0() #35
-  %frame_top.i = tail call ptr @llvm.addressofreturnaddress.p0() #35
+  %sp.i = tail call ptr @llvm.stacksave.p0() #36
+  %frame_top.i = tail call ptr @llvm.addressofreturnaddress.p0() #36
   %frame_top_above_sp.i = icmp ugt ptr %frame_top.i, %sp.i
   tail call void @llvm.assume(i1 %frame_top_above_sp.i)
-  %sink.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #35
+  %sink.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #36
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i)
   %local_ip_slot.i.i = getelementptr inbounds i8, ptr %new_slot.i.i, i64 8
   %buf_ip_slot.i.i = getelementptr i8, ptr %state.i, i64 40
-  %flag.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i) #32
+  %flag.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i) #33
   %ip.i.i = load ptr, ptr %local_ip_slot.i.i, align 8
   store ptr %ip.i.i, ptr %buf_ip_slot.i.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i)
@@ -935,7 +930,7 @@ define void @helper() local_unnamed_addr #4 {
 
 yield.i:                                          ; preds = %0
   %buf.i1.i = getelementptr i8, ptr %state.i, i64 32
-  %fp.i = tail call ptr @llvm.localaddress() #35
+  %fp.i = tail call ptr @llvm.localaddress() #36
   %slot_2.i.i = getelementptr i8, ptr %state.i, i64 48
   store ptr %fp.i, ptr %buf.i1.i, align 8
   store ptr %sp.i, ptr %slot_2.i.i, align 8
@@ -965,7 +960,7 @@ slow.i:                                           ; preds = %yield.i
 
 do_frame_copy.i.i:                                ; preds = %slow.i
   %buf.i.i.i = load ptr, ptr %copy.i.i, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i, ptr align 1 %sp.i, i64 %size.i.i.i, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i, ptr align 1 %sp.i, i64 %size.i.i.i, i1 false) #37
   br label %do_jmp.i.i
 
 do_full_copy.i.i:                                 ; preds = %slow.i
@@ -989,20 +984,20 @@ alloc.i.i.i.i:                                    ; preds = %do_full_copy.i.i
 
 save_copy.exit.i.i:                               ; preds = %alloc.i.i.i.i, %do_full_copy.i.i
   %result.i.i.i.i = phi ptr [ %new_buf.i.i.i.i, %alloc.i.i.i.i ], [ %buf.i.i.i.i, %do_full_copy.i.i ]
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i.i, ptr align 1 %sp.i, i64 %size.i.i.i.i, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i.i, ptr align 1 %sp.i, i64 %size.i.i.i.i, i1 false) #37
   store i64 %size.i.i.i, ptr %slot.i1.i6.i, align 8
   br label %do_jmp.i.i
 
 do_jmp.i.i:                                       ; preds = %save_copy.exit.i.i, %do_frame_copy.i.i
   %prev.i.i.i = load ptr, ptr %state.i, align 8
   store ptr %prev.i.i.i, ptr %active.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i) #32
   unreachable
 
 do_jmp.i:                                         ; preds = %yield.i
   %prev.i.i = load ptr, ptr %state.i, align 8
   store ptr %prev.i.i, ptr %active.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i) #32
   unreachable
 
 exit.i:                                           ; preds = %0
@@ -1024,7 +1019,7 @@ do_copy.i.i:                                      ; preds = %exit.i
   %slot.i.i.i = getelementptr i8, ptr %state.i, i64 80
   %copy.i.i.i = getelementptr i8, ptr %state.i, i64 56
   %top_sp.i.i = load ptr, ptr %slot.i.i.i, align 8
-  %rest_size.i.i = call i64 @copy_rest_inner(ptr nonnull poison, ptr %copy.i.i.i, ptr %top_sp.i.i, i64 %size.i.i, i64 %size.i5.i) #37
+  %rest_size.i.i = call i64 @copy_rest_inner(ptr nonnull poison, ptr %copy.i.i.i, ptr %top_sp.i.i, i64 %size.i.i, i64 %size.i5.i) #38
   br label %coro_yield.exit
 
 coro_yield.exit:                                  ; preds = %exit.i, %do_copy.i.i
@@ -1039,17 +1034,17 @@ entry:
   %new_slot.i.i.i74 = alloca [3 x ptr], align 8
   %new_slot.i.i.i1 = alloca [3 x ptr], align 8
   %new_slot.i.i.i = alloca [3 x ptr], align 8
-  %active.i.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+  %active.i.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %state.i.i = load ptr, ptr %active.i.i, align 8
-  %sp.i.i = tail call ptr @llvm.stacksave.p0() #35
-  %frame_top.i.i = tail call ptr @llvm.addressofreturnaddress.p0() #35
+  %sp.i.i = tail call ptr @llvm.stacksave.p0() #36
+  %frame_top.i.i = tail call ptr @llvm.addressofreturnaddress.p0() #36
   %frame_top_above_sp.i.i = icmp ugt ptr %frame_top.i.i, %sp.i.i
   tail call void @llvm.assume(i1 %frame_top_above_sp.i.i)
-  %sink.i.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #35
+  %sink.i.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #36
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i.i)
   %local_ip_slot.i.i.i = getelementptr inbounds i8, ptr %new_slot.i.i.i, i64 8
   %buf_ip_slot.i.i.i = getelementptr i8, ptr %state.i.i, i64 40
-  %flag.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i) #32
+  %flag.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i) #33
   %ip.i.i.i = load ptr, ptr %local_ip_slot.i.i.i, align 8
   store ptr %ip.i.i.i, ptr %buf_ip_slot.i.i.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i.i)
@@ -1059,7 +1054,7 @@ entry:
 
 yield.i.i:                                        ; preds = %entry
   %buf.i1.i.i = getelementptr i8, ptr %state.i.i, i64 32
-  %fp.i.i = tail call ptr @llvm.localaddress() #35
+  %fp.i.i = tail call ptr @llvm.localaddress() #36
   %slot_2.i.i.i = getelementptr i8, ptr %state.i.i, i64 48
   store ptr %fp.i.i, ptr %buf.i1.i.i, align 8
   store ptr %sp.i.i, ptr %slot_2.i.i.i, align 8
@@ -1089,7 +1084,7 @@ slow.i.i:                                         ; preds = %yield.i.i
 
 do_frame_copy.i.i.i:                              ; preds = %slow.i.i
   %buf.i.i.i.i = load ptr, ptr %copy.i.i.i, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i.i, ptr align 1 %sp.i.i, i64 %size.i.i.i.i, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i.i, ptr align 1 %sp.i.i, i64 %size.i.i.i.i, i1 false) #37
   br label %do_jmp.i.i.i
 
 do_full_copy.i.i.i:                               ; preds = %slow.i.i
@@ -1113,20 +1108,20 @@ alloc.i.i.i.i.i:                                  ; preds = %do_full_copy.i.i.i
 
 save_copy.exit.i.i.i:                             ; preds = %alloc.i.i.i.i.i, %do_full_copy.i.i.i
   %result.i.i.i.i.i = phi ptr [ %new_buf.i.i.i.i.i, %alloc.i.i.i.i.i ], [ %buf.i.i.i.i.i, %do_full_copy.i.i.i ]
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i.i.i, ptr align 1 %sp.i.i, i64 %size.i.i.i.i.i, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i.i.i, ptr align 1 %sp.i.i, i64 %size.i.i.i.i.i, i1 false) #37
   store i64 %size.i.i.i.i, ptr %slot.i1.i6.i.i, align 8
   br label %do_jmp.i.i.i
 
 do_jmp.i.i.i:                                     ; preds = %save_copy.exit.i.i.i, %do_frame_copy.i.i.i
   %prev.i.i.i.i = load ptr, ptr %state.i.i, align 8
   store ptr %prev.i.i.i.i, ptr %active.i.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i) #32
   unreachable
 
 do_jmp.i.i:                                       ; preds = %yield.i.i
   %prev.i.i.i = load ptr, ptr %state.i.i, align 8
   store ptr %prev.i.i.i, ptr %active.i.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i) #32
   unreachable
 
 exit.i.i:                                         ; preds = %entry
@@ -1152,7 +1147,7 @@ loop.lr.ph:                                       ; preds = %exit.i.i
 loop:                                             ; preds = %loop.lr.ph, %exit.i.i13
   %n148 = phi i32 [ %k, %loop.lr.ph ], [ %new_n, %exit.i.i13 ]
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i.i1)
-  %flag.i.i.i10 = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i1) #32
+  %flag.i.i.i10 = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i1) #33
   %ip.i.i.i11 = load ptr, ptr %local_ip_slot.i.i.i8, align 8
   store ptr %ip.i.i.i11, ptr %buf_ip_slot.i.i.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i.i1)
@@ -1162,7 +1157,7 @@ loop:                                             ; preds = %loop.lr.ph, %exit.i
 yield.i.i29:                                      ; preds = %loop
   store i64 0, ptr %sink.i.i, align 8
   %buf.i1.i.i30 = getelementptr i8, ptr %state.i.i, i64 32
-  %fp.i.i31 = tail call ptr @llvm.localaddress() #35
+  %fp.i.i31 = tail call ptr @llvm.localaddress() #36
   %slot_2.i.i.i32 = getelementptr i8, ptr %state.i.i, i64 48
   store ptr %fp.i.i31, ptr %buf.i1.i.i30, align 8
   store ptr %sp.i.i, ptr %slot_2.i.i.i32, align 8
@@ -1175,16 +1170,16 @@ yield.i.i29:                                      ; preds = %loop
 do_jmp.i.i.i65:                                   ; preds = %yield.i.i29
   %copy.i.i.i.i26 = getelementptr i8, ptr %state.i.i, i64 56
   %buf.i.i.i.i70 = load ptr, ptr %copy.i.i.i.i26, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i.i70, ptr align 1 %sp.i.i, i64 %size.i.i.i, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i.i70, ptr align 1 %sp.i.i, i64 %size.i.i.i, i1 false) #37
   %prev.i.i.i.i66.pre = load ptr, ptr %state.i.i, align 8
   store ptr %prev.i.i.i.i66.pre, ptr %active.i.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i33) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i33) #32
   unreachable
 
 do_jmp.i.i71:                                     ; preds = %yield.i.i29
   %prev.i.i.i72 = load ptr, ptr %state.i.i, align 8
   store ptr %prev.i.i.i72, ptr %active.i.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i33) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i33) #32
   unreachable
 
 exit.i.i13:                                       ; preds = %loop
@@ -1198,7 +1193,7 @@ exit.i.i13:                                       ; preds = %loop
 exit:                                             ; preds = %exit.i.i13, %exit.i.i
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i.i74)
   %local_ip_slot.i.i.i81 = getelementptr inbounds i8, ptr %new_slot.i.i.i74, i64 8
-  %flag.i.i.i83 = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i74) #32
+  %flag.i.i.i83 = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i74) #33
   %ip.i.i.i84 = load ptr, ptr %local_ip_slot.i.i.i81, align 8
   store ptr %ip.i.i.i84, ptr %buf_ip_slot.i.i.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i.i74)
@@ -1208,7 +1203,7 @@ exit:                                             ; preds = %exit.i.i13, %exit.i
 
 yield.i.i102:                                     ; preds = %exit
   %buf.i1.i.i103 = getelementptr i8, ptr %state.i.i, i64 32
-  %fp.i.i104 = tail call ptr @llvm.localaddress() #35
+  %fp.i.i104 = tail call ptr @llvm.localaddress() #36
   %slot_2.i.i.i105 = getelementptr i8, ptr %state.i.i, i64 48
   store ptr %fp.i.i104, ptr %buf.i1.i.i103, align 8
   store ptr %sp.i.i, ptr %slot_2.i.i.i105, align 8
@@ -1221,16 +1216,16 @@ yield.i.i102:                                     ; preds = %exit
 do_jmp.i.i.i138:                                  ; preds = %yield.i.i102
   %copy.i.i.i107 = getelementptr i8, ptr %state.i.i, i64 56
   %buf.i.i.i.i143 = load ptr, ptr %copy.i.i.i107, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i.i143, ptr align 1 %sp.i.i, i64 %size.i.i.i, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i.i143, ptr align 1 %sp.i.i, i64 %size.i.i.i, i1 false) #37
   %prev.i.i.i.i139.pre = load ptr, ptr %state.i.i, align 8
   store ptr %prev.i.i.i.i139.pre, ptr %active.i.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i106) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i106) #32
   unreachable
 
 do_jmp.i.i144:                                    ; preds = %yield.i.i102
   %prev.i.i.i145 = load ptr, ptr %state.i.i, align 8
   store ptr %prev.i.i.i145, ptr %active.i.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i106) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i106) #32
   unreachable
 
 exit.i.i86:                                       ; preds = %exit
@@ -1243,7 +1238,7 @@ do_copy.i.i.i97:                                  ; preds = %exit.i.i86
   %slot.i.i.i.i98 = getelementptr i8, ptr %state.i.i, i64 80
   %copy.i.i.i.i99 = getelementptr i8, ptr %state.i.i, i64 56
   %top_sp.i.i.i100 = load ptr, ptr %slot.i.i.i.i98, align 8
-  %rest_size.i.i.i101 = call i64 @copy_rest_inner(ptr nonnull poison, ptr %copy.i.i.i.i99, ptr %top_sp.i.i.i100, i64 %size.i.i.i, i64 %size.i5.i.i) #37
+  %rest_size.i.i.i101 = call i64 @copy_rest_inner(ptr nonnull poison, ptr %copy.i.i.i.i99, ptr %top_sp.i.i.i100, i64 %size.i.i.i, i64 %size.i5.i.i) #38
   br label %helper.exit146
 
 helper.exit146:                                   ; preds = %exit.i.i86, %do_copy.i.i.i97
@@ -1257,20 +1252,20 @@ define i32 @passthru_fn(i32 %n) #4 {
   %new_slot.i.i93.i = alloca [3 x ptr], align 8
   %new_slot.i.i7.i = alloca [3 x ptr], align 8
   %new_slot.i.i.i = alloca [3 x ptr], align 8
-  %print.i5.i = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n) #33
-  %flush.i6.i = tail call i32 @fflush(ptr null) #34
-  %active.i94.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+  %print.i5.i = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n) #34
+  %flush.i6.i = tail call i32 @fflush(ptr null) #35
+  %active.i94.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %state.i95.i = load ptr, ptr %active.i94.i, align 8
-  %sp.i96.i = tail call ptr @llvm.stacksave.p0() #35
-  %frame_top.i97.i = tail call ptr @llvm.addressofreturnaddress.p0() #35
+  %sp.i96.i = tail call ptr @llvm.stacksave.p0() #36
+  %frame_top.i97.i = tail call ptr @llvm.addressofreturnaddress.p0() #36
   %frame_top_above_sp.i98.i = icmp ugt ptr %frame_top.i97.i, %sp.i96.i
   tail call void @llvm.assume(i1 %frame_top_above_sp.i98.i)
-  %sink.i99.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #35
+  %sink.i99.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #36
   %buf.i1.i100.i = getelementptr i8, ptr %state.i95.i, i64 32
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i93.i)
   %local_ip_slot.i.i101.i = getelementptr inbounds i8, ptr %new_slot.i.i93.i, i64 8
   %buf_ip_slot.i.i102.i = getelementptr i8, ptr %state.i95.i, i64 40
-  %flag.i.i103.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i93.i) #32
+  %flag.i.i103.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i93.i) #33
   %ip.i.i104.i = load ptr, ptr %local_ip_slot.i.i101.i, align 8
   store ptr %ip.i.i104.i, ptr %buf_ip_slot.i.i102.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i93.i)
@@ -1279,7 +1274,7 @@ define i32 @passthru_fn(i32 %n) #4 {
   br i1 %do_yield.i105.i, label %yield.i127.i, label %exit.i106.i
 
 yield.i127.i:                                     ; preds = %0
-  %fp.i128.i = tail call ptr @llvm.localaddress() #35
+  %fp.i128.i = tail call ptr @llvm.localaddress() #36
   %slot_2.i.i129.i = getelementptr i8, ptr %state.i95.i, i64 48
   store ptr %fp.i128.i, ptr %buf.i1.i100.i, align 8
   store ptr %sp.i96.i, ptr %slot_2.i.i129.i, align 8
@@ -1309,7 +1304,7 @@ slow.i135.i:                                      ; preds = %yield.i127.i
 
 do_frame_copy.i.i172.i:                           ; preds = %slow.i135.i
   %buf.i.i.i173.i = load ptr, ptr %copy.i.i131.i, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i173.i, ptr align 1 %sp.i96.i, i64 %size.i.i.i138.i, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i173.i, ptr align 1 %sp.i96.i, i64 %size.i.i.i138.i, i1 false) #37
   br label %do_jmp.i.i166.i
 
 do_full_copy.i.i150.i:                            ; preds = %slow.i135.i
@@ -1333,20 +1328,20 @@ alloc.i.i.i.i170.i:                               ; preds = %do_full_copy.i.i150
 
 save_copy.exit.i.i163.i:                          ; preds = %alloc.i.i.i.i170.i, %do_full_copy.i.i150.i
   %result.i.i.i.i164.i = phi ptr [ %new_buf.i.i.i.i171.i, %alloc.i.i.i.i170.i ], [ %buf.i.i.i.i156.i, %do_full_copy.i.i150.i ]
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i.i164.i, ptr align 1 %sp.i96.i, i64 %size.i.i.i.i153.i, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i.i.i164.i, ptr align 1 %sp.i96.i, i64 %size.i.i.i.i153.i, i1 false) #37
   store i64 %size.i.i.i138.i, ptr %slot.i1.i6.i139.i, align 8
   br label %do_jmp.i.i166.i
 
 do_jmp.i.i166.i:                                  ; preds = %save_copy.exit.i.i163.i, %do_frame_copy.i.i172.i
   %prev.i.i.i169.i = load ptr, ptr %state.i95.i, align 8
   store ptr %prev.i.i.i169.i, ptr %active.i94.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i130.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i130.i) #32
   unreachable
 
 do_jmp.i174.i:                                    ; preds = %yield.i127.i
   %prev.i.i177.i = load ptr, ptr %state.i95.i, align 8
   store ptr %prev.i.i177.i, ptr %active.i94.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i130.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i130.i) #32
   unreachable
 
 exit.i106.i:                                      ; preds = %0
@@ -1365,11 +1360,11 @@ exit.i106.i:                                      ; preds = %0
   %slot.i.i.i118.i = getelementptr i8, ptr %state.i95.i, i64 80
   %full_frame.i.i120.not.i = icmp ult i64 %size.i.i112.i, %size.i5.i115.i
   %n1.i = add i32 %n, 1
-  %print.i3.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i) #33
-  %flush.i4.i = call i32 @fflush(ptr null) #34
+  %print.i3.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i) #34
+  %flush.i4.i = call i32 @fflush(ptr null) #35
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i7.i)
   %local_ip_slot.i.i15.i = getelementptr inbounds i8, ptr %new_slot.i.i7.i, i64 8
-  %flag.i.i17.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i7.i) #32
+  %flag.i.i17.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i7.i) #33
   %ip.i.i18.i = load ptr, ptr %local_ip_slot.i.i15.i, align 8
   store ptr %ip.i.i18.i, ptr %buf_ip_slot.i.i102.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i7.i)
@@ -1378,7 +1373,7 @@ exit.i106.i:                                      ; preds = %0
   br i1 %do_yield.i19.i, label %yield.i41.i, label %exit.i20.i
 
 yield.i41.i:                                      ; preds = %exit.i106.i
-  %fp.i42.i = tail call ptr @llvm.localaddress() #35
+  %fp.i42.i = tail call ptr @llvm.localaddress() #36
   %slot_2.i.i43.i = getelementptr i8, ptr %state.i95.i, i64 48
   store ptr %fp.i42.i, ptr %buf.i1.i100.i, align 8
   store ptr %sp.i96.i, ptr %slot_2.i.i43.i, align 8
@@ -1390,16 +1385,16 @@ yield.i41.i:                                      ; preds = %exit.i106.i
 
 do_jmp.i.i80.i:                                   ; preds = %yield.i41.i
   %buf.i.i.i87.i = load ptr, ptr %copy.i.i.i113.i, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i87.i, ptr align 1 %sp.i96.i, i64 %size.i.i112.i, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i87.i, ptr align 1 %sp.i96.i, i64 %size.i.i112.i, i1 false) #37
   %prev.i.i.i83.pre.i = load ptr, ptr %state.i95.i, align 8
   store ptr %prev.i.i.i83.pre.i, ptr %active.i94.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i44.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i44.i) #32
   unreachable
 
 do_jmp.i88.i:                                     ; preds = %yield.i41.i
   %prev.i.i91.i = load ptr, ptr %state.i95.i, align 8
   store ptr %prev.i.i91.i, ptr %active.i94.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i44.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i44.i) #32
   unreachable
 
 exit.i20.i:                                       ; preds = %exit.i106.i
@@ -1407,11 +1402,11 @@ exit.i20.i:                                       ; preds = %exit.i106.i
   store ptr %frame_top.i97.i, ptr %slot.i3.i108.i, align 8
   store i64 %size.i.i112.i, ptr %slot.i.i109.i, align 8
   %n2.i = add i32 %n, 2
-  %print.i1.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2.i) #33
-  %flush.i2.i = call i32 @fflush(ptr null) #34
+  %print.i1.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2.i) #34
+  %flush.i2.i = call i32 @fflush(ptr null) #35
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i.i)
   %local_ip_slot.i.i.i = getelementptr inbounds i8, ptr %new_slot.i.i.i, i64 8
-  %flag.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i) #32
+  %flag.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i) #33
   %ip.i.i.i = load ptr, ptr %local_ip_slot.i.i.i, align 8
   store ptr %ip.i.i.i, ptr %buf_ip_slot.i.i102.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i.i)
@@ -1420,7 +1415,7 @@ exit.i20.i:                                       ; preds = %exit.i106.i
   br i1 %do_yield.i.i, label %yield.i.i, label %exit.i.i
 
 yield.i.i:                                        ; preds = %exit.i20.i
-  %fp.i.i = tail call ptr @llvm.localaddress() #35
+  %fp.i.i = tail call ptr @llvm.localaddress() #36
   %slot_2.i.i.i = getelementptr i8, ptr %state.i95.i, i64 48
   store ptr %fp.i.i, ptr %buf.i1.i100.i, align 8
   store ptr %sp.i96.i, ptr %slot_2.i.i.i, align 8
@@ -1432,16 +1427,16 @@ yield.i.i:                                        ; preds = %exit.i20.i
 
 do_jmp.i.i.i:                                     ; preds = %yield.i.i
   %buf.i.i.i.i = load ptr, ptr %copy.i.i.i113.i, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i.i, ptr align 1 %sp.i96.i, i64 %size.i.i112.i, i1 false) #36
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i.i, ptr align 1 %sp.i96.i, i64 %size.i.i112.i, i1 false) #37
   %prev.i.i.i.pre.i = load ptr, ptr %state.i95.i, align 8
   store ptr %prev.i.i.i.pre.i, ptr %active.i94.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i) #32
   unreachable
 
 do_jmp.i.i:                                       ; preds = %yield.i.i
   %prev.i.i.i = load ptr, ptr %state.i95.i, align 8
   store ptr %prev.i.i.i, ptr %active.i94.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr %buf.i.i.i) #32
   unreachable
 
 exit.i.i:                                         ; preds = %exit.i20.i
@@ -1452,15 +1447,15 @@ exit.i.i:                                         ; preds = %exit.i20.i
 
 do_copy.i.i.i:                                    ; preds = %exit.i.i
   %top_sp.i.i.i = load ptr, ptr %slot.i.i.i118.i, align 8
-  %rest_size.i.i.i = call i64 @copy_rest_inner(ptr nonnull poison, ptr %copy.i.i.i113.i, ptr %top_sp.i.i.i, i64 %size.i.i112.i, i64 %size.i5.i115.i) #37
+  %rest_size.i.i.i = call i64 @copy_rest_inner(ptr nonnull poison, ptr %copy.i.i.i113.i, ptr %top_sp.i.i.i, i64 %size.i.i112.i, i64 %size.i5.i115.i) #38
   br label %yielding_fn.exit
 
 yielding_fn.exit:                                 ; preds = %exit.i.i, %do_copy.i.i.i
   %token.i.i.i = phi i64 [ 0, %exit.i.i ], [ %rest_size.i.i.i, %do_copy.i.i.i ]
   store i64 %token.i.i.i, ptr %sink.i99.i, align 8
   %n3.i = add i32 %n, 3
-  %print.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n3.i) #33
-  %flush.i.i = call i32 @fflush(ptr null) #34
+  %print.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n3.i) #34
+  %flush.i.i = call i32 @fflush(ptr null) #35
   ret i32 %n3.i
 }
 
@@ -1496,12 +1491,12 @@ define void @calling_fn(i32 %n) local_unnamed_addr #26 {
   store ptr %args, ptr %slot.i2.i, align 8
   store i32 %n, ptr %args, align 4
   %buf.i.i7 = getelementptr inbounds i8, ptr %state, i64 8
-  %sp.i8 = tail call ptr @llvm.stacksave.p0() #35
-  %fp.i9 = tail call ptr @llvm.localaddress() #35
+  %sp.i8 = tail call ptr @llvm.stacksave.p0() #36
+  %fp.i9 = tail call ptr @llvm.localaddress() #36
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i6)
   %local_ip_slot.i.i10 = getelementptr inbounds i8, ptr %new_slot.i.i6, i64 8
   %buf_ip_slot.i.i11 = getelementptr inbounds i8, ptr %state, i64 16
-  %flag.i.i12 = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i6) #32
+  %flag.i.i12 = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i6) #33
   %ip.i.i13 = load ptr, ptr %local_ip_slot.i.i10, align 8
   store ptr %ip.i.i13, ptr %buf_ip_slot.i.i11, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i6)
@@ -1510,23 +1505,23 @@ define void @calling_fn(i32 %n) local_unnamed_addr #26 {
   store ptr %sp.i8, ptr %slot_2.i.i14, align 8
   store i1 true, ptr %slot.i3.i, align 8
   %do_call.i16 = icmp eq i32 %flag.i.i12, 0
-  br i1 %do_call.i16, label %start.i, label %coro_call.exit56
+  br i1 %do_call.i16, label %start.i, label %coro_call.exit52
 
 start.i:                                          ; preds = %0
-  %active.i6.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+  %active.i6.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %prev.i7.i = load ptr, ptr %active.i6.i, align 8
   store ptr %prev.i7.i, ptr %state, align 8
-  %print.i5.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n) #33
-  %flush.i6.i.i = call i32 @fflush(ptr null) #34
-  %frame_top.i97.i.i = tail call ptr @llvm.addressofreturnaddress.p0() #35
+  %print.i5.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n) #34
+  %flush.i6.i.i = call i32 @fflush(ptr null) #35
+  %frame_top.i97.i.i = tail call ptr @llvm.addressofreturnaddress.p0() #36
   %frame_top_above_sp.i98.i.i = icmp ugt ptr %frame_top.i97.i.i, %sp.i8
   call void @llvm.assume(i1 %frame_top_above_sp.i98.i.i)
-  %sink.i99.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #35
+  %sink.i99.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #36
   %buf.i1.i100.i.i = getelementptr inbounds i8, ptr %state, i64 32
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i93.i.i)
   %local_ip_slot.i.i101.i.i = getelementptr inbounds i8, ptr %new_slot.i.i93.i.i, i64 8
   %buf_ip_slot.i.i102.i.i = getelementptr inbounds i8, ptr %state, i64 40
-  %flag.i.i103.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i93.i.i) #32
+  %flag.i.i103.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i93.i.i) #33
   %ip.i.i104.i.i = load ptr, ptr %local_ip_slot.i.i101.i.i, align 8
   store ptr %ip.i.i104.i.i, ptr %buf_ip_slot.i.i102.i.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i93.i.i)
@@ -1539,7 +1534,7 @@ do_jmp.i174.i.i:                                  ; preds = %start.i
   store ptr %fp.i9, ptr %buf.i1.i100.i.i, align 8
   store ptr %sp.i8, ptr %slot_2.i.i129.i.i, align 8
   store ptr %prev.i7.i, ptr %active.i6.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7) #31
+  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7) #32
   unreachable
 
 exit.i106.i.i:                                    ; preds = %start.i
@@ -1552,11 +1547,11 @@ exit.i106.i.i:                                    ; preds = %start.i
   store ptr %frame_top.i97.i.i, ptr %slot.i3.i108.i.i, align 8
   store i64 %size.i.i112.i.i, ptr %slot.i5.i, align 8
   %n1.i.i = add i32 %n, 1
-  %print.i3.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i.i) #33
-  %flush.i4.i.i = call i32 @fflush(ptr null) #34
+  %print.i3.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i.i) #34
+  %flush.i4.i.i = call i32 @fflush(ptr null) #35
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i7.i.i)
   %local_ip_slot.i.i15.i.i = getelementptr inbounds i8, ptr %new_slot.i.i7.i.i, i64 8
-  %flag.i.i17.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i7.i.i) #32
+  %flag.i.i17.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i7.i.i) #33
   %ip.i.i18.i.i = load ptr, ptr %local_ip_slot.i.i15.i.i, align 8
   store ptr %ip.i.i18.i.i, ptr %buf_ip_slot.i.i102.i.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i7.i.i)
@@ -1569,7 +1564,7 @@ yield.i41.i.i:                                    ; preds = %exit.i106.i.i
   store ptr %fp.i9, ptr %buf.i1.i100.i.i, align 8
   store ptr %sp.i8, ptr %slot_2.i.i43.i.i, align 8
   store ptr %prev.i7.i, ptr %active.i6.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7) #31
+  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7) #32
   unreachable
 
 exit.i20.i.i:                                     ; preds = %exit.i106.i.i
@@ -1577,11 +1572,11 @@ exit.i20.i.i:                                     ; preds = %exit.i106.i.i
   store ptr %frame_top.i97.i.i, ptr %slot.i3.i108.i.i, align 8
   store i64 %size.i.i112.i.i, ptr %slot.i5.i, align 8
   %n2.i.i = add i32 %n, 2
-  %print.i1.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2.i.i) #33
-  %flush.i2.i.i = call i32 @fflush(ptr null) #34
+  %print.i1.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2.i.i) #34
+  %flush.i2.i.i = call i32 @fflush(ptr null) #35
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i.i.i)
   %local_ip_slot.i.i.i.i = getelementptr inbounds i8, ptr %new_slot.i.i.i.i, i64 8
-  %flag.i.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i.i) #32
+  %flag.i.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i.i) #33
   %ip.i.i.i.i = load ptr, ptr %local_ip_slot.i.i.i.i, align 8
   store ptr %ip.i.i.i.i, ptr %buf_ip_slot.i.i102.i.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i.i.i)
@@ -1594,7 +1589,7 @@ yield.i.i.i:                                      ; preds = %exit.i20.i.i
   store ptr %fp.i9, ptr %buf.i1.i100.i.i, align 8
   store ptr %sp.i8, ptr %slot_2.i.i.i.i, align 8
   store ptr %prev.i7.i, ptr %active.i6.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7) #31
+  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7) #32
   unreachable
 
 passthru_fn.exit:                                 ; preds = %exit.i20.i.i
@@ -1602,24 +1597,24 @@ passthru_fn.exit:                                 ; preds = %exit.i20.i.i
   store ptr %frame_top.i97.i.i, ptr %slot.i3.i108.i.i, align 8
   store i64 %size.i.i112.i.i, ptr %slot.i5.i, align 8
   %n3.i.i = add i32 %n, 3
-  %print.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n3.i.i) #33
-  %flush.i.i.i = call i32 @fflush(ptr null) #34
+  %print.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n3.i.i) #34
+  %flush.i.i.i = call i32 @fflush(ptr null) #35
   store ptr %prev.i7.i, ptr %active.i6.i, align 8
   store i1 true, ptr %slot.i4.i, align 1
   %true.i.i = call i1 @returns_one()
-  br i1 %true.i.i, label %do_jmp.i.i, label %coro_call.exit56
+  br i1 %true.i.i, label %do_jmp.i.i, label %coro_call.exit52
 
 do_jmp.i.i:                                       ; preds = %passthru_fn.exit
-  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7) #31
+  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7) #32
   unreachable
 
-coro_call.exit56:                                 ; preds = %passthru_fn.exit, %0
+coro_call.exit52:                                 ; preds = %passthru_fn.exit, %0
   %n1 = add i32 %n, 10
-  %print.i1 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1) #33
-  %flush.i2 = call i32 @fflush(ptr null) #34
+  %print.i1 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1) #34
+  %flush.i2 = call i32 @fflush(ptr null) #35
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i)
   %local_ip_slot.i.i = getelementptr inbounds i8, ptr %new_slot.i.i, i64 8
-  %flag.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i) #32
+  %flag.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i) #33
   %ip.i.i = load ptr, ptr %local_ip_slot.i.i, align 8
   store ptr %ip.i.i, ptr %buf_ip_slot.i.i11, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i)
@@ -1630,8 +1625,8 @@ coro_call.exit56:                                 ; preds = %passthru_fn.exit, %
   %brmerge = or i1 %do_call.i16, %do_call.i
   br i1 %brmerge, label %coro_call.exit, label %prepare_resume.exit.i
 
-prepare_resume.exit.i:                            ; preds = %coro_call.exit56
-  %active.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+prepare_resume.exit.i:                            ; preds = %coro_call.exit52
+  %active.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %prev.i.i = load ptr, ptr %active.i.i, align 8
   store ptr %prev.i.i, ptr %state, align 8
   store ptr %state, ptr %active.i.i, align 8
@@ -1640,13 +1635,13 @@ prepare_resume.exit.i:                            ; preds = %coro_call.exit56
   %slot.i3.i.i = getelementptr inbounds i8, ptr %state, i64 48
   store ptr %sp.i8, ptr %slot.i3.i.i, align 8
   %buf.i1.i = getelementptr inbounds i8, ptr %state, i64 32
-  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i1.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i1.i) #32
   unreachable
 
-coro_call.exit:                                   ; preds = %coro_call.exit56
+coro_call.exit:                                   ; preds = %coro_call.exit52
   %n2 = add i32 %n, 30
-  %print.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2) #33
-  %flush.i = call i32 @fflush(ptr null) #34
+  %print.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2) #34
+  %flush.i = call i32 @fflush(ptr null) #35
   ret void
 }
 
@@ -1678,12 +1673,12 @@ define noundef i32 @main() local_unnamed_addr #26 {
   store ptr %args.i, ptr %slot.i2.i.i, align 8
   store i32 5, ptr %args.i, align 4
   %buf.i.i7.i = getelementptr inbounds i8, ptr %state.i, i64 8
-  %sp.i8.i = tail call ptr @llvm.stacksave.p0() #35
-  %fp.i9.i = tail call ptr @llvm.localaddress() #35
+  %sp.i8.i = tail call ptr @llvm.stacksave.p0() #36
+  %fp.i9.i = tail call ptr @llvm.localaddress() #36
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i6.i)
   %local_ip_slot.i.i10.i = getelementptr inbounds i8, ptr %new_slot.i.i6.i, i64 8
   %buf_ip_slot.i.i11.i = getelementptr inbounds i8, ptr %state.i, i64 16
-  %flag.i.i12.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i6.i) #32
+  %flag.i.i12.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i6.i) #33
   %ip.i.i13.i = load ptr, ptr %local_ip_slot.i.i10.i, align 8
   store ptr %ip.i.i13.i, ptr %buf_ip_slot.i.i11.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i6.i)
@@ -1692,23 +1687,23 @@ define noundef i32 @main() local_unnamed_addr #26 {
   store ptr %sp.i8.i, ptr %slot_2.i.i14.i, align 8
   store i1 true, ptr %slot.i3.i.i, align 8
   %do_call.i16.i = icmp eq i32 %flag.i.i12.i, 0
-  br i1 %do_call.i16.i, label %start.i.i, label %coro_call.exit56.i
+  br i1 %do_call.i16.i, label %start.i.i, label %coro_call.exit52.i
 
 start.i.i:                                        ; preds = %0
-  %active.i6.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+  %active.i6.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %prev.i7.i.i = load ptr, ptr %active.i6.i.i, align 8
   store ptr %prev.i7.i.i, ptr %state.i, align 8
-  %print.i5.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 5) #33
-  %flush.i6.i.i.i = call i32 @fflush(ptr null) #34
-  %frame_top.i97.i.i.i = tail call ptr @llvm.addressofreturnaddress.p0() #35
+  %print.i5.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 5) #34
+  %flush.i6.i.i.i = call i32 @fflush(ptr null) #35
+  %frame_top.i97.i.i.i = tail call ptr @llvm.addressofreturnaddress.p0() #36
   %frame_top_above_sp.i98.i.i.i = icmp ugt ptr %frame_top.i97.i.i.i, %sp.i8.i
   call void @llvm.assume(i1 %frame_top_above_sp.i98.i.i.i)
-  %sink.i99.i.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #35
+  %sink.i99.i.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #36
   %buf.i1.i100.i.i.i = getelementptr inbounds i8, ptr %state.i, i64 32
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i93.i.i.i)
   %local_ip_slot.i.i101.i.i.i = getelementptr inbounds i8, ptr %new_slot.i.i93.i.i.i, i64 8
   %buf_ip_slot.i.i102.i.i.i = getelementptr inbounds i8, ptr %state.i, i64 40
-  %flag.i.i103.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i93.i.i.i) #32
+  %flag.i.i103.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i93.i.i.i) #33
   %ip.i.i104.i.i.i = load ptr, ptr %local_ip_slot.i.i101.i.i.i, align 8
   store ptr %ip.i.i104.i.i.i, ptr %buf_ip_slot.i.i102.i.i.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i93.i.i.i)
@@ -1720,7 +1715,7 @@ do_jmp.i174.i.i.i:                                ; preds = %start.i.i
   %slot_2.i.i129.i.i.i = getelementptr inbounds i8, ptr %state.i, i64 48
   store ptr %fp.i9.i, ptr %buf.i1.i100.i.i.i, align 8
   store ptr %sp.i8.i, ptr %slot_2.i.i129.i.i.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7.i) #32
   unreachable
 
 exit.i106.i.i.i:                                  ; preds = %start.i.i
@@ -1732,11 +1727,11 @@ exit.i106.i.i.i:                                  ; preds = %start.i.i
   store ptr %sp.i8.i, ptr %slot.i2.i107.i.i.i, align 8
   store ptr %frame_top.i97.i.i.i, ptr %slot.i3.i108.i.i.i, align 8
   store i64 %size.i.i112.i.i.i, ptr %slot.i5.i.i, align 8
-  %print.i3.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 6) #33
-  %flush.i4.i.i.i = call i32 @fflush(ptr null) #34
+  %print.i3.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 6) #34
+  %flush.i4.i.i.i = call i32 @fflush(ptr null) #35
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i7.i.i.i)
   %local_ip_slot.i.i15.i.i.i = getelementptr inbounds i8, ptr %new_slot.i.i7.i.i.i, i64 8
-  %flag.i.i17.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i7.i.i.i) #32
+  %flag.i.i17.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i7.i.i.i) #33
   %ip.i.i18.i.i.i = load ptr, ptr %local_ip_slot.i.i15.i.i.i, align 8
   store ptr %ip.i.i18.i.i.i, ptr %buf_ip_slot.i.i102.i.i.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i7.i.i.i)
@@ -1748,18 +1743,18 @@ yield.i41.i.i.i:                                  ; preds = %exit.i106.i.i.i
   %slot_2.i.i43.i.i.i = getelementptr inbounds i8, ptr %state.i, i64 48
   store ptr %fp.i9.i, ptr %buf.i1.i100.i.i.i, align 8
   store ptr %sp.i8.i, ptr %slot_2.i.i43.i.i.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7.i) #32
   unreachable
 
 exit.i20.i.i.i:                                   ; preds = %exit.i106.i.i.i
   store ptr %sp.i8.i, ptr %slot.i2.i107.i.i.i, align 8
   store ptr %frame_top.i97.i.i.i, ptr %slot.i3.i108.i.i.i, align 8
   store i64 %size.i.i112.i.i.i, ptr %slot.i5.i.i, align 8
-  %print.i1.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 7) #33
-  %flush.i2.i.i.i = call i32 @fflush(ptr null) #34
+  %print.i1.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 7) #34
+  %flush.i2.i.i.i = call i32 @fflush(ptr null) #35
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i.i.i.i)
   %local_ip_slot.i.i.i.i.i = getelementptr inbounds i8, ptr %new_slot.i.i.i.i.i, i64 8
-  %flag.i.i.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i.i.i) #32
+  %flag.i.i.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i.i.i) #33
   %ip.i.i.i.i.i = load ptr, ptr %local_ip_slot.i.i.i.i.i, align 8
   store ptr %ip.i.i.i.i.i, ptr %buf_ip_slot.i.i102.i.i.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i.i.i.i)
@@ -1771,29 +1766,29 @@ yield.i.i.i.i:                                    ; preds = %exit.i20.i.i.i
   %slot_2.i.i.i.i.i = getelementptr inbounds i8, ptr %state.i, i64 48
   store ptr %fp.i9.i, ptr %buf.i1.i100.i.i.i, align 8
   store ptr %sp.i8.i, ptr %slot_2.i.i.i.i.i, align 8
-  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7.i) #32
   unreachable
 
 passthru_fn.exit.i:                               ; preds = %exit.i20.i.i.i
   store ptr %sp.i8.i, ptr %slot.i2.i107.i.i.i, align 8
   store ptr %frame_top.i97.i.i.i, ptr %slot.i3.i108.i.i.i, align 8
   store i64 %size.i.i112.i.i.i, ptr %slot.i5.i.i, align 8
-  %print.i.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 8) #33
-  %flush.i.i.i.i = call i32 @fflush(ptr null) #34
+  %print.i.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 8) #34
+  %flush.i.i.i.i = call i32 @fflush(ptr null) #35
   store i1 true, ptr %slot.i4.i.i, align 1
   %true.i.i.i = call i1 @returns_one()
-  br i1 %true.i.i.i, label %do_jmp.i.i.i, label %coro_call.exit56.i
+  br i1 %true.i.i.i, label %do_jmp.i.i.i, label %coro_call.exit52.i
 
 do_jmp.i.i.i:                                     ; preds = %passthru_fn.exit.i
-  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i.i7.i) #32
   unreachable
 
-coro_call.exit56.i:                               ; preds = %passthru_fn.exit.i, %0
-  %print.i1.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 15) #33
-  %flush.i2.i = call i32 @fflush(ptr null) #34
+coro_call.exit52.i:                               ; preds = %passthru_fn.exit.i, %0
+  %print.i1.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 15) #34
+  %flush.i2.i = call i32 @fflush(ptr null) #35
   call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %new_slot.i.i.i)
   %local_ip_slot.i.i.i = getelementptr inbounds i8, ptr %new_slot.i.i.i, i64 8
-  %flag.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i) #32
+  %flag.i.i.i = call i32 @llvm.eh.sjlj.setjmp(ptr nonnull %new_slot.i.i.i) #33
   %ip.i.i.i = load ptr, ptr %local_ip_slot.i.i.i, align 8
   store ptr %ip.i.i.i, ptr %buf_ip_slot.i.i11.i, align 8
   call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %new_slot.i.i.i)
@@ -1804,8 +1799,8 @@ coro_call.exit56.i:                               ; preds = %passthru_fn.exit.i,
   %brmerge.i = or i1 %do_call.i16.i, %do_call.i.i
   br i1 %brmerge.i, label %calling_fn.exit, label %prepare_resume.exit.i.i
 
-prepare_resume.exit.i.i:                          ; preds = %coro_call.exit56.i
-  %active.i.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #35
+prepare_resume.exit.i.i:                          ; preds = %coro_call.exit52.i
+  %active.i.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #36
   %prev.i.i.i = load ptr, ptr %active.i.i.i, align 8
   store ptr %prev.i.i.i, ptr %state.i, align 8
   store ptr %state.i, ptr %active.i.i.i, align 8
@@ -1814,12 +1809,12 @@ prepare_resume.exit.i.i:                          ; preds = %coro_call.exit56.i
   %slot.i3.i.i.i = getelementptr inbounds i8, ptr %state.i, i64 48
   store ptr %sp.i8.i, ptr %slot.i3.i.i.i, align 8
   %buf.i1.i.i = getelementptr inbounds i8, ptr %state.i, i64 32
-  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i1.i.i) #31
+  call void @llvm.eh.sjlj.longjmp(ptr nonnull %buf.i1.i.i) #32
   unreachable
 
-calling_fn.exit:                                  ; preds = %coro_call.exit56.i
-  %print.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 35) #33
-  %flush.i.i = call i32 @fflush(ptr null) #34
+calling_fn.exit:                                  ; preds = %coro_call.exit52.i
+  %print.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 35) #34
+  %flush.i.i = call i32 @fflush(ptr null) #35
   call void @llvm.lifetime.end.p0(i64 144, ptr nonnull %state.i)
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %args.i)
   ret i32 0
@@ -1837,14 +1832,17 @@ declare void @llvm.stackrestore.p0(ptr) #27
 ; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
 declare nonnull ptr @llvm.threadlocal.address.p0(ptr nonnull) #28
 
-; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr nocapture) #29
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare i64 @llvm.umin.i64(i64, i64) #29
 
 ; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.end.p0(i64 immarg, ptr nocapture) #29
+declare void @llvm.lifetime.start.p0(i64 immarg, ptr nocapture) #30
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.end.p0(i64 immarg, ptr nocapture) #30
 
 ; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
-declare void @llvm.memset.p0.i64(ptr nocapture writeonly, i8, i64, i1 immarg) #30
+declare void @llvm.memset.p0.i64(ptr nocapture writeonly, i8, i64, i1 immarg) #31
 
 attributes #0 = { nofree nounwind }
 attributes #1 = { mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) memory(inaccessiblemem: readwrite) "alloc-family"="malloc" }
@@ -1863,27 +1861,27 @@ attributes #13 = { alwaysinline mustprogress nofree norecurse nosync nounwind wi
 attributes #14 = { alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write) }
 attributes #15 = { alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: write, inaccessiblemem: none) }
 attributes #16 = { alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: read, inaccessiblemem: none) }
-attributes #17 = { mustprogress nofree noinline norecurse nosync nounwind willreturn memory(read, inaccessiblemem: none) }
-attributes #18 = { alwaysinline mustprogress nofree nounwind willreturn memory(argmem: readwrite, inaccessiblemem: readwrite) }
-attributes #19 = { alwaysinline mustprogress nofree nounwind willreturn }
-attributes #20 = { alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, inaccessiblemem: none) }
-attributes #21 = { mustprogress nofree noinline norecurse nosync nounwind willreturn memory(none) }
-attributes #22 = { alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: read, inaccessiblemem: none) }
-attributes #23 = { alwaysinline }
+attributes #17 = { alwaysinline mustprogress nofree nounwind willreturn memory(argmem: readwrite, inaccessiblemem: readwrite) }
+attributes #18 = { alwaysinline mustprogress nofree nounwind willreturn }
+attributes #19 = { alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, inaccessiblemem: none) }
+attributes #20 = { mustprogress nofree noinline norecurse nosync nounwind willreturn memory(none) }
+attributes #21 = { alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: read, inaccessiblemem: none) }
+attributes #22 = { alwaysinline }
+attributes #23 = { noinline memory(argmem: readwrite) }
 attributes #24 = { alwaysinline noreturn nounwind }
 attributes #25 = { alwaysinline nounwind }
 attributes #26 = { nounwind memory(readwrite, argmem: read) }
 attributes #27 = { mustprogress nocallback nofree nosync nounwind willreturn }
 attributes #28 = { mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none) }
-attributes #29 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #30 = { nocallback nofree nounwind willreturn memory(argmem: write) }
-attributes #31 = { noreturn nounwind memory(read, inaccessiblemem: readwrite) }
-attributes #32 = { willreturn memory(argmem: readwrite) }
-attributes #33 = { mustprogress nocallback nofree nounwind willreturn memory(argmem: read, inaccessiblemem: readwrite) }
-attributes #34 = { mustprogress nocallback nofree nounwind willreturn memory(inaccessiblemem: readwrite) }
-attributes #35 = { memory(none) }
-attributes #36 = { memory(argmem: readwrite) }
-attributes #37 = { willreturn memory(none) }
-attributes #38 = { memory(read) }
+attributes #29 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #30 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #31 = { nocallback nofree nounwind willreturn memory(argmem: write) }
+attributes #32 = { noreturn nounwind memory(read, inaccessiblemem: readwrite) }
+attributes #33 = { willreturn memory(argmem: readwrite) }
+attributes #34 = { mustprogress nocallback nofree nounwind willreturn memory(argmem: read, inaccessiblemem: readwrite) }
+attributes #35 = { mustprogress nocallback nofree nounwind willreturn memory(inaccessiblemem: readwrite) }
+attributes #36 = { memory(none) }
+attributes #37 = { memory(argmem: readwrite) }
+attributes #38 = { willreturn memory(none) }
 
 !0 = !{}

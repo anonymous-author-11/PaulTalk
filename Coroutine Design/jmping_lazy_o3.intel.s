@@ -426,20 +426,6 @@ leave_coroutine:                        # @leave_coroutine
 	mov	qword ptr [rax + active_coroutine@SECREL32], rcx
 	ret
                                         # -- End function
-	.def	load_prepare_top;
-	.scl	2;
-	.type	32;
-	.endef
-	.globl	load_prepare_top                # -- Begin function load_prepare_top
-	.p2align	4, 0x90
-load_prepare_top:                       # @load_prepare_top
-# %bb.0:
-	mov	rax, qword ptr gs:[88]
-	mov	rax, qword ptr [rax]
-	mov	rax, qword ptr [rax + active_coroutine@SECREL32]
-	mov	rax, qword ptr [rax + 80]
-	ret
-                                        # -- End function
 	.def	require_buf;
 	.scl	2;
 	.type	32;
@@ -458,17 +444,17 @@ require_buf:                            # @require_buf
 	cmp	qword ptr [rsi + 16], rdx
 	setb	r8b
 	test	rdx, rdx
-	je	.LBB31_3
+	je	.LBB30_3
 # %bb.1:                                # %entry
 	or	cl, r8b
-	je	.LBB31_3
+	je	.LBB30_3
 # %bb.2:                                # %alloc
 	mov	rcx, rdx
 	mov	rdi, rdx
 	call	malloc
 	mov	qword ptr [rsi], rax
 	mov	qword ptr [rsi + 16], rdi
-.LBB31_3:                               # %done
+.LBB30_3:                               # %done
 	add	rsp, 40
 	pop	rdi
 	pop	rsi
@@ -497,17 +483,17 @@ save_copy:                              # @save_copy
 	setb	dl
 	sub	rdi, r8
 	mov	qword ptr [rbx + 8], rdi
-	je	.LBB32_3
+	je	.LBB31_3
 # %bb.1:
 	or	al, dl
-	je	.LBB32_3
+	je	.LBB31_3
 # %bb.2:                                # %alloc.i
 	mov	rcx, rdi
 	call	malloc
 	mov	rcx, rax
 	mov	qword ptr [rbx], rax
 	mov	qword ptr [rbx + 16], rdi
-.LBB32_3:                               # %require_buf.exit
+.LBB31_3:                               # %require_buf.exit
 	mov	rdx, rsi
 	mov	r8, rdi
 	add	rsp, 32
@@ -576,17 +562,17 @@ copy_rest:                              # @copy_rest
 	cmp	r9, rax
 	setae	r8b
 	or	r8b, dl
-	je	.LBB36_2
+	je	.LBB35_2
 # %bb.1:
 	xor	eax, eax
-	jmp	.LBB36_3
-.LBB36_2:                               # %do_copy
+	jmp	.LBB35_3
+.LBB35_2:                               # %do_copy
 	mov	r8, qword ptr [rcx + 80]
 	add	rcx, 56
 	mov	qword ptr [rsp + 32], rax
 	mov	rdx, rcx
 	call	copy_rest_inner
-.LBB36_3:                               # %exit
+.LBB35_3:                               # %exit
 	mov	rcx, qword ptr gs:[88]
 	mov	rcx, qword ptr [rcx]
 	mov	qword ptr [rcx + sink@SECREL32], rax
@@ -602,45 +588,58 @@ copy_rest:                              # @copy_rest
 prepare_resume:                         # @prepare_resume
 .seh_proc prepare_resume
 # %bb.0:
-	sub	rsp, 40
-	.seh_stackalloc 40
+	push	rsi
+	.seh_pushreg rsi
+	sub	rsp, 32
+	.seh_stackalloc 32
 	.seh_endprologue
 	mov	r9, qword ptr [rcx + 64]
-	mov	r10, qword ptr [rcx + 120]
+	mov	rdx, qword ptr [rcx + 120]
 	mov	qword ptr [rcx + 80], rsp
 	mov	qword ptr [rcx + 48], rsp
 	test	r9, r9
-	je	.LBB37_2
+	je	.LBB36_2
 # %bb.1:                                # %have_copy
 	mov	rax, rsp
+	mov	rsi, rsp
 	sub	rax, r9
-	lea	r11, [rax - 32]
+	lea	r10, [rax - 32]
+	cmp	rdx, r9
+	mov	r8, r9
+	cmovb	r8, rdx
+	test	rdx, rdx
 	mov	rdx, qword ptr [rcx + 56]
-	cmp	r10, r9
 	mov	qword ptr [rcx + 48], rax
-	#APP
-	#NO_APP
-	mov	r8, r10
-	#APP
-	#NO_APP
-	cmovae	r8, r9
-	test	r10, r10
-	#APP
-	#NO_APP
-	#APP
-	#NO_APP
-	#APP
-	#NO_APP
-	mov	rsp, r11
 	cmove	r8, r9
+	#APP
+	#NO_APP
+	#APP
+	#NO_APP
+	#APP
+	#NO_APP
+	#APP
+	#NO_APP
+	#APP
+	#NO_APP
+	mov	rsp, r10
 	mov	rcx, rax
-	call	memcpy
-	call	load_prepare_top
-	mov	rsp, rax
-.LBB37_2:                               # %exit
-	add	rsp, 40
+	call	memcpy_preserve
+	mov	rsp, rsi
+.LBB36_2:                               # %exit
+	add	rsp, 32
+	pop	rsi
 	ret
 	.seh_endproc
+                                        # -- End function
+	.def	memcpy_preserve;
+	.scl	2;
+	.type	32;
+	.endef
+	.globl	memcpy_preserve                 # -- Begin function memcpy_preserve
+	.p2align	4, 0x90
+memcpy_preserve:                        # @memcpy_preserve
+# %bb.0:
+	jmp	memcpy                          # TAILCALL
                                         # -- End function
 	.def	coro_call;
 	.scl	2;
@@ -726,38 +725,38 @@ coro_call:                              # @coro_call
 	mov	qword ptr [rdi], rcx
 	mov	qword ptr [rax + active_coroutine@SECREL32], rdi
 	mov	rax, qword ptr [rdi + 64]
-	mov	r10, qword ptr [rdi + 120]
+	mov	r9, qword ptr [rdi + 120]
 	mov	rcx, qword ptr [rsp + 48]       # 8-byte Reload
 	mov	qword ptr [rdi + 80], rcx
 	mov	qword ptr [rdi + 48], rcx
 	test	rax, rax
 	je	.LBB38_9
 # %bb.8:                                # %have_copy.i
-	mov	rcx, qword ptr [rsp + 48]       # 8-byte Reload
+	mov	rsi, qword ptr [rsp + 48]       # 8-byte Reload
+	mov	rcx, rsi
 	sub	rcx, rax
-	lea	r9, [rcx - 32]
-	mov	r8, qword ptr [rsp + 56]        # 8-byte Reload
-	mov	rdx, qword ptr [r8 + 56]
-	cmp	r10, rax
-	mov	qword ptr [r8 + 48], rcx
-	#APP
-	#NO_APP
-	mov	r8, r10
-	#APP
-	#NO_APP
-	cmovae	r8, rax
-	test	r10, r10
-	#APP
-	#NO_APP
-	#APP
-	#NO_APP
-	#APP
-	#NO_APP
-	mov	rsp, r9
+	lea	r10, [rcx - 32]
+	mov	r11, qword ptr [rsp + 56]       # 8-byte Reload
+	mov	rdx, qword ptr [r11 + 56]
+	cmp	r9, rax
+	mov	r8, rax
+	cmovb	r8, r9
+	test	r9, r9
+	mov	qword ptr [r11 + 48], rcx
 	cmove	r8, rax
-	call	memcpy
-	call	load_prepare_top
-	mov	rsp, rax
+	#APP
+	#NO_APP
+	#APP
+	#NO_APP
+	#APP
+	#NO_APP
+	#APP
+	#NO_APP
+	#APP
+	#NO_APP
+	mov	rsp, r10
+	call	memcpy_preserve
+	mov	rsp, rsi
 .LBB38_9:                               # %prepare_resume.exit
 	mov	rcx, qword ptr [rsp + 56]       # 8-byte Reload
 	mov	rbp, qword ptr [rcx + 32]
@@ -2169,7 +2168,7 @@ calling_fn:                             # @calling_fn
 	test	al, 1
 	mov	ecx, dword ptr [rsp + 72]       # 4-byte Reload
 	jne	.LBB46_7
-.LBB46_15:                              # %coro_call.exit56
+.LBB46_15:                              # %coro_call.exit52
 	test	ecx, ecx
 	sete	byte ptr [rsp + 47]             # 1-byte Folded Spill
 	mov	rax, qword ptr [rsp + 48]       # 8-byte Reload
@@ -2181,13 +2180,13 @@ calling_fn:                             # @calling_fn
 	lea	rax, [rip + .LBB46_23]
 	mov	qword ptr [rsp + 88], rax
 	#EH_SjLj_Setup	.LBB46_23
-# %bb.16:                               # %coro_call.exit56
+# %bb.16:                               # %coro_call.exit52
 	xor	eax, eax
 	jmp	.LBB46_17
 .LBB46_23:                              # Block address taken
-                                        # %coro_call.exit56
+                                        # %coro_call.exit52
 	mov	eax, 1
-.LBB46_17:                              # %coro_call.exit56
+.LBB46_17:                              # %coro_call.exit52
 	mov	rcx, qword ptr [rsp + 88]
 	mov	qword ptr [rsp + 136], rcx
 	mov	rcx, qword ptr [rsp + 56]       # 8-byte Reload
@@ -2415,7 +2414,7 @@ main:                                   # @main
 	test	al, 1
 	mov	ecx, dword ptr [rsp + 56]       # 4-byte Reload
 	jne	.LBB47_7
-.LBB47_15:                              # %coro_call.exit56.i
+.LBB47_15:                              # %coro_call.exit52.i
 	test	ecx, ecx
 	sete	byte ptr [rsp + 39]             # 1-byte Folded Spill
 	lea	rcx, [rip + .Lprint_i32_fmt]
@@ -2426,13 +2425,13 @@ main:                                   # @main
 	lea	rax, [rip + .LBB47_23]
 	mov	qword ptr [rsp + 72], rax
 	#EH_SjLj_Setup	.LBB47_23
-# %bb.16:                               # %coro_call.exit56.i
+# %bb.16:                               # %coro_call.exit52.i
 	xor	eax, eax
 	jmp	.LBB47_17
 .LBB47_23:                              # Block address taken
-                                        # %coro_call.exit56.i
+                                        # %coro_call.exit52.i
 	mov	eax, 1
-.LBB47_17:                              # %coro_call.exit56.i
+.LBB47_17:                              # %coro_call.exit52.i
 	mov	rcx, qword ptr [rsp + 72]
 	mov	qword ptr [rsp + 120], rcx
 	mov	rcx, qword ptr [rsp + 40]       # 8-byte Reload

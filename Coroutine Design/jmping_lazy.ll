@@ -227,13 +227,6 @@ define void @leave_coroutine() alwaysinline {
   ret void
 }
 
-define ptr @load_prepare_top() noinline memory(read) {
-  %state = load ptr, ptr @active_coroutine
-  %slot = call ptr @top_slot(ptr %state)
-  %top = load ptr, ptr %slot
-  ret ptr %top
-}
-
 define ptr @require_buf(ptr %copy, i64 %size) alwaysinline {
 entry:
   %nonzero_size = icmp ne i64 %size, 0
@@ -359,29 +352,27 @@ have_copy:
   call void @commit_stack(ptr %copy_sp, i64 %size)
 
   call void @store_context_sp(ptr %buf, ptr %bottom)
+  %memcpy_size = select i1 %full_copy, i64 %size, i64 %frame_size
+  %restore_top = load ptr, ptr %slot
+
+  %copy_sp_reg = call ptr asm "", "=r,0"(ptr %copy_sp)
   %bottom_reg = call ptr asm "", "=r,0"(ptr %bottom)
   %saved_reg = call ptr asm "", "=r,0"(ptr %saved)
-  %size_reg = call i64 asm "", "=r,0"(i64 %size)
-  %frame_size_reg = call i64 asm "", "=r,0"(i64 %frame_size)
-  %copy_sp_reg = call ptr asm "", "=r,0"(ptr %copy_sp)
-  br i1 %full_copy, label %copy_full, label %copy_frame
-
-copy_full:
+  %mempy_size_reg = call i64 asm "", "=r,0"(i64 %memcpy_size)
+  %restore_top_reg = call ptr asm "", "=r,0"(ptr %restore_top)
+  
   call void @llvm.stackrestore(ptr %copy_sp_reg)
-  call void @llvm.memcpy.p0.p0.i64(ptr %bottom_reg, ptr %saved_reg, i64 %size_reg, i1 false) memory(none, argmem: readwrite)
-  br label %restore_stack
-
-copy_frame:
-  call void @llvm.stackrestore(ptr %copy_sp_reg)
-  call void @llvm.memcpy.p0.p0.i64(ptr %bottom_reg, ptr %saved_reg, i64 %frame_size_reg, i1 false) memory(none, argmem: readwrite)
-  br label %restore_stack
-
-restore_stack:
-  %restore_top = call ptr @load_prepare_top() memory(read)
-  call void @llvm.stackrestore(ptr %restore_top)
+  call preserve_mostcc void @memcpy_preserve(ptr %bottom_reg, ptr %saved_reg, i64 %mempy_size_reg, ptr %restore_top_reg) memory(none, argmem: readwrite)
+  call void @llvm.stackrestore(ptr %restore_top_reg)
   br label %exit
 
 exit:
+  ret void
+}
+
+define preserve_mostcc void @memcpy_preserve(ptr inreg %dest, ptr inreg %source, i64 inreg %size, ptr inreg %restore_top) noinline memory(none, argmem: readwrite) {
+  call void @llvm.memcpy.p0.p0.i64(ptr %dest, ptr %source, i64 %size, i1 false) memory(none, argmem: readwrite)
+  %use = call ptr asm "", "=r,0"(ptr %restore_top)
   ret void
 }
 
