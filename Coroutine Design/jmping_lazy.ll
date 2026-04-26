@@ -9,6 +9,7 @@ target triple = "x86_64-pc-windows-msvc"
 
 @active_coroutine = internal dso_local thread_local(localexec) global ptr null
 @sink = internal dso_local thread_local(localexec) global i64 0
+@flag = internal dso_local thread_local(localexec) global i1 false
 
 declare i32 @printf(ptr, ...)
 declare i32 @fflush(ptr)
@@ -18,10 +19,10 @@ declare ptr @llvm.stacksave() speculatable mustprogress nocallback nofree nosync
 declare void @llvm.stackrestore(ptr)
 declare ptr @llvm.localaddress() speculatable mustprogress nocallback nofree nosync nounwind willreturn memory(none)
 declare void @llvm.memcpy.p0.p0.i64(ptr, ptr, i64, i1) memory(none, argmem: readwrite)
-declare i32 @llvm.eh.sjlj.setjmp(ptr) memory(none, argmem: readwrite)
 declare void @llvm.eh.sjlj.longjmp(ptr) noreturn nounwind memory(read, inaccessiblemem: readwrite)
 declare ptr @llvm.threadlocal.address(ptr) nounwind willreturn memory(none)
 declare void @llvm.assume(i1)
+declare void @llvm.trap() cold noreturn nounwind
 
 define i64 @observe_sink() {
   %value = load i64, ptr @sink
@@ -35,6 +36,7 @@ define i1 @returns_one() noinline {
 
 ; Stupid inliner won't inline a call in a block terminated by unreachable
 ; So we trick it and pretend that it might be reachable
+; This enables inlining of *other* calls leading up to @longjmp
 define void @longjmp(ptr %buf) alwaysinline {
   %true = call i1 @returns_one()
   br i1 %true, label %do_jmp, label %exit
@@ -45,14 +47,48 @@ exit:
   ret void
 }
 
-define i32 @save_ip(ptr %buf) alwaysinline {
-  %new_slot = alloca [3 x ptr]
-  %local_ip_slot = getelementptr [3 x ptr], ptr %new_slot, i32 0, i32 1
-  %buf_ip_slot = getelementptr [3 x ptr], ptr %buf, i32 0, i32 1
-  %flag = call i32 @llvm.eh.sjlj.setjmp(ptr %new_slot) willreturn memory(none, argmem: readwrite)
+define void @use(ptr %flag, ptr %ip_slot) noinline memory(none, argmem: read) {
+  call void asm "", "r"(ptr %flag)
+  call void asm "", "r"(ptr %ip_slot)
+  ret void
+}
+
+; Spill live registers to the stack
+define void @spill_live(ptr %flag, ptr %ip_slot) alwaysinline personality ptr @spill_personality {
+  invoke void asm unwind "", ""() memory(none) to label %exit unwind label %dispatch
+
+dispatch:
+  %pad = cleanuppad within none []
+  call void @use(ptr %flag, ptr %ip_slot) memory(none, argmem: read) [ "funclet"(token %pad) ]
+  br label %exit
+
+exit:
+  ret void
+}
+
+define internal i32 @spill_personality(...) {
+  ret i32 1
+}
+
+define i1 @save_ip(ptr %buf) alwaysinline {
+  %local_ip_slot = alloca ptr
+  %flag = alloca ptr
+  %buf_ip_slot = getelementptr ptr, ptr %buf, i64 1
+  call void @spill_live(ptr %flag, ptr %local_ip_slot)
+  call void @save_ip_inner(ptr %flag, ptr %local_ip_slot) memory(none, argmem: write) willreturn
   %ip = load ptr, ptr %local_ip_slot
   store ptr %ip, ptr %buf_ip_slot
-  ret i32 %flag
+  %flag_val = load i1, ptr %flag
+  store volatile i1 false, ptr %flag
+  ret i1 %flag_val
+}
+
+define void @save_ip_inner(ptr %flag, ptr %slot) noinline memory(none, argmem: write) willreturn {
+  %raddr = call ptr @llvm.addressofreturnaddress()
+  %ip = load ptr, ptr %raddr
+  store i1 true, ptr %flag
+  store ptr %ip, ptr %slot
+  ret void
 }
 
 define void @print_i32(i32 %value) alwaysinline {
@@ -354,26 +390,21 @@ have_copy:
   call void @store_context_sp(ptr %buf, ptr %bottom)
   %memcpy_size = select i1 %full_copy, i64 %size, i64 %frame_size
   %restore_top = load ptr, ptr %slot
-
-  %copy_sp_reg = call ptr asm "", "=r,0"(ptr %copy_sp)
-  %bottom_reg = call ptr asm "", "=r,0"(ptr %bottom)
-  %saved_reg = call ptr asm "", "=r,0"(ptr %saved)
-  %mempy_size_reg = call i64 asm "", "=r,0"(i64 %memcpy_size)
-  %restore_top_reg = call ptr asm "", "=r,0"(ptr %restore_top)
   
+  ; ensure we don't spill/reload anything between stackrestores
+  %copy_sp_reg = call ptr asm "", "=r,0"(ptr %copy_sp)
   call void @llvm.stackrestore(ptr %copy_sp_reg)
-  call preserve_mostcc void @memcpy_preserve(ptr %bottom_reg, ptr %saved_reg, i64 %mempy_size_reg, ptr %restore_top_reg) memory(none, argmem: readwrite)
-  call void @llvm.stackrestore(ptr %restore_top_reg)
+  %restored = call ptr @memcpy_preserve(ptr %bottom, ptr %saved, i64 %memcpy_size, ptr %restore_top) memory(none, argmem: readwrite)
+  call void @llvm.stackrestore(ptr %restored)
   br label %exit
 
 exit:
   ret void
 }
 
-define preserve_mostcc void @memcpy_preserve(ptr inreg %dest, ptr inreg %source, i64 inreg %size, ptr inreg %restore_top) noinline memory(none, argmem: readwrite) {
+define ptr @memcpy_preserve(ptr %dest, ptr %source, i64 %size, ptr %restore_top) noinline memory(none, argmem: readwrite) {
   call void @llvm.memcpy.p0.p0.i64(ptr %dest, ptr %source, i64 %size, i1 false) memory(none, argmem: readwrite)
-  %use = call ptr asm "", "=r,0"(ptr %restore_top)
-  ret void
+  ret ptr %restore_top
 }
 
 define i1 @coro_call(ptr %state, i1 %started, ptr %args) alwaysinline {
@@ -381,10 +412,9 @@ entry:
   %caller_buf = call ptr @caller_buf(ptr %state)
   %sp = call ptr @llvm.stacksave() memory(none)
   %fp = call ptr @llvm.localaddress() memory(none)
-  %set = call i32 @save_ip(ptr %caller_buf)
+  %do_call = call i1 @save_ip(ptr %caller_buf) memory(none, argmem: write) willreturn
   call void @save_context(ptr %caller_buf, ptr %sp, ptr %fp)
   call void @mark_started(ptr %state)
-  %do_call = icmp eq i32 %set, 0
   br i1 %do_call, label %dispatch, label %exit
 
 dispatch:
@@ -409,7 +439,8 @@ resume_go:
   call void @enter_coroutine(ptr %state)
   %buf = call ptr @callee_buf(ptr %state)
   call void @prepare_resume(ptr %state)
-  call void @llvm.eh.sjlj.longjmp(ptr %buf) noreturn nounwind memory(read, inaccessiblemem: readwrite)
+  %buf_reg = call ptr asm "", "=r,0"(ptr %buf)
+  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg) noreturn nounwind memory(read, inaccessiblemem: readwrite)
   unreachable
 
 exit:
@@ -460,9 +491,8 @@ define void @coro_yield() alwaysinline {
   %fp = call ptr @llvm.localaddress() memory(none)
   %sink = call ptr @llvm.threadlocal.address(ptr @sink) memory(none)
   %callee_buf = call ptr @callee_buf(ptr %state)
-  %set = call i32 @save_ip(ptr %callee_buf)
+  %do_yield = call i1 @save_ip(ptr %callee_buf) memory(none, argmem: write) willreturn
   store i64 0, ptr %sink
-  %do_yield = icmp eq i32 %set, 0
   br i1 %do_yield, label %yield, label %exit
 
 yield:
