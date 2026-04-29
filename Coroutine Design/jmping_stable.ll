@@ -19,7 +19,7 @@ declare void @llvm.stackrestore(ptr)
 declare ptr @llvm.localaddress() speculatable mustprogress nocallback nofree nosync nounwind willreturn memory(none)
 declare void @llvm.memcpy.p0.p0.i64(ptr, ptr, i64, i1) memory(none, argmem: readwrite)
 declare void @llvm.eh.sjlj.longjmp(ptr) noreturn nounwind memory(read, inaccessiblemem: readwrite)
-declare ptr @llvm.threadlocal.address(ptr) nounwind willreturn memory(none)
+declare ptr @llvm.threadlocal.address(ptr) speculatable nounwind willreturn memory(none)
 declare void @llvm.assume(i1)
 
 define i64 @observe_sink() {
@@ -228,17 +228,15 @@ define internal void @init_coroutine(ptr %state, ptr %fn, ptr %tramp) alwaysinli
   ret void
 }
 
-define internal void @enter_coroutine(ptr %state) alwaysinline {
+define internal void @enter_coroutine(ptr %state, ptr %active) alwaysinline {
   %slot = call ptr @prev_slot(ptr %state)
-  %active = call ptr @llvm.threadlocal.address(ptr @active_coroutine) memory(none)
   %prev = load ptr, ptr %active
   store ptr %prev, ptr %slot
   store ptr %state, ptr %active
   ret void
 }
 
-define internal void @leave_coroutine() alwaysinline {
-  %active = call ptr @llvm.threadlocal.address(ptr @active_coroutine) memory(none)
+define internal void @leave_coroutine(ptr %active) alwaysinline {
   %state = load ptr, ptr %active
   %slot = call ptr @prev_slot(ptr %state)
   %prev = load ptr, ptr %slot
@@ -318,24 +316,20 @@ exit:
 define internal void @displace_range_inner(ptr %state, ptr %range_bottom, i64 %range_size, ptr %caller_sp) willreturn memory(none, argmem: readwrite) noinline {
 entry:
   %range_top = getelementptr i8, ptr %range_bottom, i64 %range_size
-  %caller_i = ptrtoint ptr %caller_sp to i64
-  %range_bottom_i = ptrtoint ptr %range_bottom to i64
-  %range_top_i = ptrtoint ptr %range_top to i64
-  %caller_above_bottom = icmp ugt i64 %caller_i, %range_bottom_i
-  %overlap_bottom_i = select i1 %caller_above_bottom, i64 %caller_i, i64 %range_bottom_i
-  %overlap_bottom = inttoptr i64 %overlap_bottom_i to ptr
-  %overlap_size = sub i64 %range_top_i, %overlap_bottom_i
+  %caller_above_bottom = icmp ugt ptr %caller_sp, %range_bottom
+  %overlap_bottom = select i1 %caller_above_bottom, ptr %caller_sp, ptr %range_bottom
+  %overlap_size = call i64 @section_size(ptr %range_top, ptr %overlap_bottom)
 
   %copy_slot = call ptr @copy_slot(ptr %state)
   %size_slot = getelementptr %stack_copy, ptr %copy_slot, i32 0, i32 1
   %section_size = load i64, ptr %size_slot
   %section_top_slot = call ptr @top_slot(ptr %state)
   %section_top = load ptr, ptr %section_top_slot
-  %section_top_i = ptrtoint ptr %section_top to i64
-  %section_bottom_i = sub i64 %section_top_i, %section_size
+  %negative_section_size = sub i64 0, %section_size
+  %section_bottom = getelementptr i8, ptr %section_top, i64 %negative_section_size
   %displaced_copy = call ptr @displaced_copy_slot(ptr %state)
   %displaced_buf = call ptr @require_buf(ptr %displaced_copy, i64 %section_size) memory(none, argmem: readwrite)
-  %offset = sub i64 %overlap_bottom_i, %section_bottom_i
+  %offset = call i64 @section_size(ptr %overlap_bottom, ptr %section_bottom)
   %displaced_dest = getelementptr i8, ptr %displaced_buf, i64 %offset
   call void @llvm.memcpy.p0.p0.i64(ptr %displaced_dest, ptr %overlap_bottom, i64 %overlap_size, i1 false) memory(none, argmem: readwrite)
 
@@ -344,16 +338,12 @@ entry:
   %old_bottom = load ptr, ptr %old_bottom_slot
   %old_top = load ptr, ptr %old_top_slot
   %old_empty = icmp eq ptr %old_top, null
-  %old_bottom_i = ptrtoint ptr %old_bottom to i64
-  %old_top_i = ptrtoint ptr %old_top to i64
-  %use_new_bottom = icmp ult i64 %overlap_bottom_i, %old_bottom_i
-  %min_bottom_i = select i1 %use_new_bottom, i64 %overlap_bottom_i, i64 %old_bottom_i
-  %new_bottom_i = select i1 %old_empty, i64 %overlap_bottom_i, i64 %min_bottom_i
-  %use_new_top = icmp ugt i64 %range_top_i, %old_top_i
-  %max_top_i = select i1 %use_new_top, i64 %range_top_i, i64 %old_top_i
-  %new_top_i = select i1 %old_empty, i64 %range_top_i, i64 %max_top_i
-  %new_bottom = inttoptr i64 %new_bottom_i to ptr
-  %new_top = inttoptr i64 %new_top_i to ptr
+  %use_new_bottom = icmp ult ptr %overlap_bottom, %old_bottom
+  %min_bottom = select i1 %use_new_bottom, ptr %overlap_bottom, ptr %old_bottom
+  %new_bottom = select i1 %old_empty, ptr %overlap_bottom, ptr %min_bottom
+  %use_new_top = icmp ugt ptr %range_top, %old_top
+  %max_top = select i1 %use_new_top, ptr %range_top, ptr %old_top
+  %new_top = select i1 %old_empty, ptr %range_top, ptr %max_top
   store ptr %new_bottom, ptr %old_bottom_slot
   store ptr %new_top, ptr %old_top_slot
   ret void
@@ -380,21 +370,19 @@ entry:
   %top_slot = call ptr @displaced_top_slot(ptr %state)
   %bottom = load ptr, ptr %bottom_slot
   %top = load ptr, ptr %top_slot
-  %bottom_i = ptrtoint ptr %bottom to i64
-  %top_i = ptrtoint ptr %top to i64
   %copy_slot = call ptr @copy_slot(ptr %state)
   %size_slot = getelementptr %stack_copy, ptr %copy_slot, i32 0, i32 1
   %section_size = load i64, ptr %size_slot
   %section_top_slot = call ptr @top_slot(ptr %state)
   %section_top = load ptr, ptr %section_top_slot
-  %section_top_i = ptrtoint ptr %section_top to i64
-  %section_bottom_i = sub i64 %section_top_i, %section_size
+  %negative_section_size = sub i64 0, %section_size
+  %section_bottom = getelementptr i8, ptr %section_top, i64 %negative_section_size
   %displaced_copy = call ptr @displaced_copy_slot(ptr %state)
   %displaced_buf_slot = getelementptr %stack_copy, ptr %displaced_copy, i32 0, i32 0
   %displaced_buf = load ptr, ptr %displaced_buf_slot
-  %offset = sub i64 %bottom_i, %section_bottom_i
+  %offset = call i64 @section_size(ptr %bottom, ptr %section_bottom)
   %source = getelementptr i8, ptr %displaced_buf, i64 %offset
-  %restore_size = sub i64 %top_i, %bottom_i
+  %restore_size = call i64 @section_size(ptr %top, ptr %bottom)
   store ptr null, ptr %bottom_slot
   store ptr null, ptr %top_slot
   call void @llvm.memcpy.p0.p0.i64(ptr %bottom, ptr %source, i64 %restore_size, i1 false) memory(none, argmem: readwrite)
@@ -406,10 +394,8 @@ define internal i64 @copy_rest_inner(ptr %state, ptr %copy, ptr %top_sp, i64 %fr
   %saved = load ptr, ptr %buf_slot
   %src = getelementptr i8, ptr %saved, i64 %frame_size
   %rest_size = sub i64 %size, %frame_size
-  %top_i = ptrtoint ptr %top_sp to i64
-  %bottom_i = sub i64 %top_i, %size
-  %rest_bottom_i = add i64 %bottom_i, %frame_size
-  %rest_bottom = inttoptr i64 %rest_bottom_i to ptr
+  %rest_offset = sub i64 %frame_size, %size
+  %rest_bottom = getelementptr i8, ptr %top_sp, i64 %rest_offset
   %displace_sp_slot = call ptr @displace_sp_slot(ptr %state)
   %displace_sp = load ptr, ptr %displace_sp_slot
   call void @displace_range(ptr %state, ptr %rest_bottom, i64 %rest_size, ptr %displace_sp) memory(none, argmem: readwrite) willreturn
@@ -417,7 +403,7 @@ define internal i64 @copy_rest_inner(ptr %state, ptr %copy, ptr %top_sp, i64 %fr
   ret i64 %rest_size
 }
 
-define internal void @copy_rest(ptr %state) alwaysinline {
+define internal void @copy_rest(ptr %state, ptr %sink) alwaysinline {
 entry:
   %copy = call ptr @copy_slot(ptr %state)
   %size_slot = getelementptr %stack_copy, ptr %copy, i32 0, i32 1
@@ -440,7 +426,6 @@ do_copy:
 
 exit:
   %token = phi i64 [ 0, %entry ], [ %rest_size, %do_copy ]
-  %sink = call ptr @llvm.threadlocal.address(ptr @sink) memory(none)
   store i64 %token, ptr %sink
   ret void
 }
@@ -463,15 +448,12 @@ define internal void @prepare_resume(ptr %state, ptr %buf) alwaysinline {
 have_copy:
   %slot = call ptr @top_slot(ptr %state)
   %top_sp = load ptr, ptr %slot
-  %top_i = ptrtoint ptr %top_sp to i64
-  %bottom_i = sub i64 %top_i, %size
-  %bottom = inttoptr i64 %bottom_i to ptr
-  %current_i = ptrtoint ptr %current_sp to i64
-  %current_below_bottom = icmp ult i64 %current_i, %bottom_i
-  %scratch_base_i = select i1 %current_below_bottom, i64 %current_i, i64 %bottom_i
-  %copy_sp_i = sub i64 %scratch_base_i, 32
-  %copy_sp = inttoptr i64 %copy_sp_i to ptr
-  %commit_size = sub i64 %current_i, %copy_sp_i
+  %negative_size = sub i64 0, %size
+  %bottom = getelementptr i8, ptr %top_sp, i64 %negative_size
+  %current_below_bottom = icmp ult ptr %current_sp, %bottom
+  %scratch_base = select i1 %current_below_bottom, ptr %current_sp, ptr %bottom
+  %copy_sp = getelementptr i8, ptr %scratch_base, i64 -32
+  %commit_size = call i64 @section_size(ptr %current_sp, ptr %copy_sp)
   %saved = load ptr, ptr %buf_slot
   %zero_frame = icmp eq i64 %frame_size, 0
   %full_frame = icmp uge i64 %frame_size, %size
@@ -508,6 +490,7 @@ entry:
   %caller_buf = call ptr @caller_buf(ptr %state)
   %sp = call ptr @llvm.stacksave() memory(none)
   %fp = call ptr @llvm.localaddress() memory(none)
+  %active = call ptr @llvm.threadlocal.address(ptr @active_coroutine) memory(none)
   %do_call = call i1 @save_ip(ptr %caller_buf) memory(none, argmem: write) willreturn
   call void @save_context(ptr %caller_buf, ptr %sp, ptr %fp)
   %started_slot_in = call ptr @started_slot(ptr %state)
@@ -518,15 +501,16 @@ dispatch:
   br i1 %started, label %resume, label %start
 
 start:
-  call void @enter_coroutine(ptr %state)
+  call void @enter_coroutine(ptr %state, ptr %active)
   %fn = call ptr @fn_of(ptr %state)
   %tramp = call ptr @tramp_of(ptr %state)
   call i32 %tramp(ptr %fn, ptr %args)
-  call void @leave_coroutine()
+  call void @leave_coroutine(ptr %active)
   %done_slot_start = call ptr @done_slot(ptr %state)
   store i1 true, ptr %done_slot_start
   call void @restore_displaced(ptr %state)
   call void @longjmp(ptr %caller_buf)
+  store i1 false, ptr %done_slot_start
   br label %exit
 
 resume:
@@ -535,7 +519,7 @@ resume:
   br i1 %done, label %exit, label %resume_go
 
 resume_go:
-  call void @enter_coroutine(ptr %state)
+  call void @enter_coroutine(ptr %state, ptr %active)
   %buf = call ptr @callee_buf(ptr %state)
   call void @prepare_resume(ptr %state, ptr %buf)
   call void @longjmp_nomerge(ptr %buf)
@@ -602,7 +586,7 @@ slow:
   br label %do_jmp
 
 do_jmp:
-  call void @leave_coroutine()
+  call void @leave_coroutine(ptr %active)
   call void @restore_displaced(ptr %state)
   call void @longjmp_nomerge(ptr %caller_buf)
   unreachable
@@ -626,7 +610,7 @@ record_copy_in:
   br label %exit
 
 exit:
-  call void @copy_rest(ptr %state)
+  call void @copy_rest(ptr %state, ptr %sink)
   ret void
 }
 
