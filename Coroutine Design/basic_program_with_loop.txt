@@ -13,6 +13,21 @@ def yielding_fn(n : i32) -> i32 {
 	return n;
 }
 
+def helper() {
+	yield();
+}
+
+def yielding_callee_in_loop(k : i32) {
+	helper();
+
+	while k < 10 {
+		helper();
+		k = k + 1;
+	}
+
+	helper();
+}
+
 def passthru_fn(n : i32) -> i32 {
 	return yielding_fn(n : i32);
 }
