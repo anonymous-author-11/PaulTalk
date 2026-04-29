@@ -8,7 +8,6 @@ target triple = "x86_64-pc-windows-msvc"
 @always_one = linkonce dso_local global i1 true
 
 @active_coroutine = internal dso_local thread_local(localexec) global ptr null
-@flag = internal dso_local thread_local(localexec) global i1 false
 
 declare i32 @printf(ptr, ...)
 declare i32 @fflush(ptr)
@@ -56,13 +55,14 @@ define internal i1 @save_ip(ptr %buf) alwaysinline personality ptr @spill_person
   %local_ip_slot = alloca ptr
   %buf_ip_slot = getelementptr ptr, ptr %buf, i64 1
 
-  ; spill all live registers before saving instruction ptr
+  ; spill all live registers before saving instruction ptr (program counter)
   invoke void @save_ip_inner(ptr %flag, ptr %local_ip_slot) memory(none, argmem: write) willreturn
       to label %after_save unwind label %dispatch
 
 dispatch:
   %pad = cleanuppad within none []
   call void asm "", "r,r"(ptr %flag, ptr %local_ip_slot) memory(none) [ "funclet"(token %pad) ]
+  ; this continuation branch is critical to force the spill of live registers
   br label %after_save
 
 after_save:
