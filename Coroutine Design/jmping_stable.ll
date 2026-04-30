@@ -1,7 +1,7 @@
 source_filename = "Coroutine Design\\jmping_stable.ll"
 target triple = "x86_64-pc-windows-msvc"
 
-%coroutine = type { ptr, [3 x ptr], [3 x ptr], %stack_copy, ptr, ptr, ptr, ptr, i1, i1, i64, ptr, ptr, %stack_copy, ptr, ptr, ptr }
+%coroutine = type { ptr, [3 x ptr], [3 x ptr], %stack_copy, ptr, ptr, ptr, ptr, i1, i1, i64, ptr, ptr, %stack_copy, ptr, ptr, ptr, ptr }
 %stack_copy = type { ptr, i64, i64 }
 
 @print_i32_fmt = private unnamed_addr constant [4 x i8] c"%d\0A\00"
@@ -9,6 +9,7 @@ target triple = "x86_64-pc-windows-msvc"
 
 @active_coroutine = internal dso_local thread_local(localexec) global ptr null
 @sink = internal dso_local thread_local(localexec) global i64 0
+@resume_token = internal dso_local thread_local(localexec) global ptr null
 
 declare i32 @printf(ptr, ...)
 declare i32 @fflush(ptr)
@@ -30,6 +31,10 @@ define i64 @observe_sink() {
 define internal i1 @returns_one() noinline {
   %retval = load i1, ptr @always_one, align 1
   ret i1 %retval
+}
+
+define internal ptr @token_identity(ptr %token) alwaysinline memory(none) willreturn {
+  ret ptr %token
 }
 
 ; Stupid inliner won't inline a call in a block terminated by unreachable
@@ -192,6 +197,11 @@ define internal ptr @displaced_top_slot(ptr %state) alwaysinline {
   ret ptr %slot
 }
 
+define internal ptr @token_fn_slot(ptr %state) alwaysinline {
+  %slot = getelementptr %coroutine, ptr %state, i32 0, i32 17
+  ret ptr %slot
+}
+
 define internal i64 @section_size(ptr %top_sp, ptr %bottom_sp) alwaysinline {
   %top_i = ptrtoint ptr %top_sp to i64
   %bottom_i = ptrtoint ptr %bottom_sp to i64
@@ -223,8 +233,10 @@ define internal void @init_coroutine(ptr %state, ptr %fn, ptr %tramp) alwaysinli
   store %coroutine zeroinitializer, ptr %state
   %fn_ptr = call ptr @fn_slot(ptr %state)
   %tramp_ptr = call ptr @tramp_slot(ptr %state)
+  %token_fn_ptr = call ptr @token_fn_slot(ptr %state)
   store ptr %fn, ptr %fn_ptr
   store ptr %tramp, ptr %tramp_ptr
+  store ptr @token_identity, ptr %token_fn_ptr
   ret void
 }
 
@@ -441,7 +453,6 @@ define internal void @prepare_resume(ptr %state, ptr %buf) alwaysinline {
   %current_sp = call ptr @llvm.stacksave() memory(none)
   %displace_sp_slot = call ptr @displace_sp_slot(ptr %state)
   store ptr %current_sp, ptr %displace_sp_slot
-
   %zero_size = icmp eq i64 %size, 0
   br i1 %zero_size, label %exit, label %have_copy
 
@@ -490,7 +501,6 @@ entry:
   %caller_buf = call ptr @caller_buf(ptr %state)
   %sp = call ptr @llvm.stacksave() memory(none)
   %fp = call ptr @llvm.localaddress() memory(none)
-  %active = call ptr @llvm.threadlocal.address(ptr @active_coroutine) memory(none)
   %do_call = call i1 @save_ip(ptr %caller_buf) memory(none, argmem: write) willreturn
   call void @save_context(ptr %caller_buf, ptr %sp, ptr %fp)
   %started_slot_in = call ptr @started_slot(ptr %state)
@@ -501,11 +511,12 @@ dispatch:
   br i1 %started, label %resume, label %start
 
 start:
-  call void @enter_coroutine(ptr %state, ptr %active)
+  %active_start = call ptr @llvm.threadlocal.address(ptr @active_coroutine) memory(none)
+  call void @enter_coroutine(ptr %state, ptr %active_start)
   %fn = call ptr @fn_of(ptr %state)
   %tramp = call ptr @tramp_of(ptr %state)
   call i32 %tramp(ptr %fn, ptr %args)
-  call void @leave_coroutine(ptr %active)
+  call void @leave_coroutine(ptr %active_start)
   %done_slot_start = call ptr @done_slot(ptr %state)
   store i1 true, ptr %done_slot_start
   call void @restore_displaced(ptr %state)
@@ -519,7 +530,8 @@ resume:
   br i1 %done, label %exit, label %resume_go
 
 resume_go:
-  call void @enter_coroutine(ptr %state, ptr %active)
+  %active_resume = call ptr @llvm.threadlocal.address(ptr @active_coroutine) memory(none)
+  call void @enter_coroutine(ptr %state, ptr %active_resume)
   %buf = call ptr @callee_buf(ptr %state)
   call void @prepare_resume(ptr %state, ptr %buf)
   call void @longjmp_nomerge(ptr %buf)
@@ -560,6 +572,7 @@ exit:
 }
 
 define internal void @coro_yield() alwaysinline {
+  %raw_token = alloca i8
   %active = call ptr @llvm.threadlocal.address(ptr @active_coroutine) memory(none)
   %state = load ptr, ptr %active
   %sp = call ptr @llvm.stacksave() memory(none)
@@ -569,10 +582,15 @@ define internal void @coro_yield() alwaysinline {
   %fp = call ptr @llvm.localaddress() memory(none)
   %sink = call ptr @llvm.threadlocal.address(ptr @sink) memory(none)
   %callee_buf = call ptr @callee_buf(ptr %state)
+  %token_fn_slot = call ptr @token_fn_slot(ptr %state)
+  %token_fn = load ptr, ptr %token_fn_slot, !invariant.load !0
+  %token = call ptr %token_fn(ptr %raw_token) memory(none) willreturn
+  %token_slot = call ptr @llvm.threadlocal.address(ptr @resume_token) memory(none)
   %do_yield = call i1 @save_ip(ptr %callee_buf) memory(none, argmem: write) willreturn
-  br i1 %do_yield, label %yield, label %check_copy_in
+  br i1 %do_yield, label %yield, label %resume
 
 yield:
+  store ptr %token, ptr %token_slot
   store i64 0, ptr %sink
   call void @save_context(ptr %callee_buf, ptr %sp, ptr %fp)
   %caller_buf = call ptr @caller_buf(ptr %state)
@@ -591,7 +609,10 @@ do_jmp:
   call void @longjmp_nomerge(ptr %caller_buf)
   unreachable
 
-check_copy_in:
+resume:
+  %resume_token = load ptr, ptr %token_slot
+  %same_token = icmp eq ptr %resume_token, %token
+  call void @llvm.assume(i1 %same_token)
   %bottom_slot_out = call ptr @copy_in_bottom_slot(ptr %state)
   %top_slot_out = call ptr @copy_in_top_slot(ptr %state)
   %copy_in_bottom_out = load ptr, ptr %bottom_slot_out
