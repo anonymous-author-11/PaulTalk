@@ -3,7 +3,7 @@ source_filename = "Coroutine Design\\jmping_stable.ll"
 target datalayout = "e-m:w-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-pc-windows-msvc"
 
-%coroutine = type { ptr, [3 x ptr], [3 x ptr], %stack_copy, ptr, ptr, ptr, ptr, i1, i1, i64, ptr, ptr, %stack_copy, ptr, ptr, ptr, ptr }
+%coroutine = type { ptr, ptr, ptr, %stack_copy, ptr, ptr, ptr, ptr, i1, i1, i64, ptr, ptr, %stack_copy, ptr, ptr, ptr, ptr, i64 }
 %stack_copy = type { ptr, i64, i64 }
 
 @print_i32_fmt = private unnamed_addr constant [4 x i8] c"%d\0A\00"
@@ -81,6 +81,22 @@ done:                                             ; preds = %alloc, %entry
   ret ptr %result
 }
 
+; Function Attrs: mustprogress nofree noinline nosync nounwind willreturn memory(none)
+define internal fastcc i64 @save_same_sp_frame(ptr nocapture writeonly %state, ptr nocapture %copy, ptr %frame_top, ptr %sp) unnamed_addr #10 {
+  %top_i.i = ptrtoint ptr %frame_top to i64
+  %bottom_i.i = ptrtoint ptr %sp to i64
+  %size.i = sub i64 %top_i.i, %bottom_i.i
+  %size_slot.i = getelementptr i8, ptr %copy, i64 8
+  store i64 %size.i, ptr %size_slot.i, align 8
+  %buf.i = tail call fastcc ptr @require_buf(ptr %copy, i64 %size.i) #17
+  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i, ptr align 1 %sp, i64 %size.i, i1 false) #18
+  %slot.i = getelementptr i8, ptr %state, i64 48
+  %slot.i1 = getelementptr i8, ptr %state, i64 88
+  store ptr %frame_top, ptr %slot.i, align 8
+  store i64 %size.i, ptr %slot.i1, align 8
+  ret i64 %size.i
+}
+
 ; Function Attrs: mustprogress nofree noinline nounwind willreturn memory(argmem: readwrite)
 define internal fastcc void @displace_range_inner(ptr nocapture %state, ptr %range_bottom, i64 range(i64 1, 0) %range_size, ptr %caller_sp) unnamed_addr #9 {
 entry:
@@ -90,20 +106,20 @@ entry:
   %top_i.i4 = ptrtoint ptr %range_top to i64
   %bottom_i.i5 = ptrtoint ptr %overlap_bottom to i64
   %size.i6 = sub i64 %top_i.i4, %bottom_i.i5
-  %size_slot = getelementptr i8, ptr %state, i64 64
+  %size_slot = getelementptr i8, ptr %state, i64 32
   %section_size = load i64, ptr %size_slot, align 8
-  %slot.i = getelementptr i8, ptr %state, i64 80
+  %slot.i = getelementptr i8, ptr %state, i64 48
   %section_top = load ptr, ptr %slot.i, align 8
   %negative_section_size = sub i64 0, %section_size
   %section_bottom = getelementptr i8, ptr %section_top, i64 %negative_section_size
-  %slot.i1 = getelementptr i8, ptr %state, i64 144
-  %displaced_buf = tail call fastcc ptr @require_buf(ptr %slot.i1, i64 %section_size) #17
+  %slot.i1 = getelementptr i8, ptr %state, i64 112
+  %displaced_buf = tail call fastcc ptr @require_buf(ptr %slot.i1, i64 %section_size) #18
   %bottom_i.i = ptrtoint ptr %section_bottom to i64
   %size.i = sub i64 %bottom_i.i5, %bottom_i.i
   %displaced_dest = getelementptr i8, ptr %displaced_buf, i64 %size.i
-  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %displaced_dest, ptr align 1 %overlap_bottom, i64 %size.i6, i1 false) #17
-  %slot.i2 = getelementptr i8, ptr %state, i64 176
-  %slot.i3 = getelementptr i8, ptr %state, i64 184
+  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %displaced_dest, ptr align 1 %overlap_bottom, i64 %size.i6, i1 false) #18
+  %slot.i2 = getelementptr i8, ptr %state, i64 144
+  %slot.i3 = getelementptr i8, ptr %state, i64 152
   %old_bottom = load ptr, ptr %slot.i2, align 8
   %old_top = load ptr, ptr %slot.i3, align 8
   %old_empty = icmp eq ptr %old_top, null
@@ -119,19 +135,35 @@ entry:
 }
 
 ; Function Attrs: mustprogress nofree noinline norecurse nosync nounwind willreturn memory(argmem: readwrite)
-define internal fastcc void @restore_displaced_inner(ptr nocapture %state) unnamed_addr #10 {
+define internal fastcc void @restore_displaced(ptr nocapture %state) unnamed_addr #11 {
 entry:
-  %slot.i2 = getelementptr i8, ptr %state, i64 176
-  %slot.i3 = getelementptr i8, ptr %state, i64 184
+  %slot.i = getelementptr i8, ptr %state, i64 144
+  %bottom = load ptr, ptr %slot.i, align 8
+  %skip = icmp eq ptr %bottom, null
+  br i1 %skip, label %exit, label %copy
+
+copy:                                             ; preds = %entry
+  tail call fastcc void @restore_displaced_inner(ptr nonnull %state) #19
+  br label %exit
+
+exit:                                             ; preds = %copy, %entry
+  ret void
+}
+
+; Function Attrs: mustprogress nofree noinline norecurse nosync nounwind willreturn memory(argmem: readwrite)
+define internal fastcc void @restore_displaced_inner(ptr nocapture %state) unnamed_addr #11 {
+entry:
+  %slot.i2 = getelementptr i8, ptr %state, i64 144
+  %slot.i3 = getelementptr i8, ptr %state, i64 152
   %bottom = load ptr, ptr %slot.i2, align 8
   %top = load ptr, ptr %slot.i3, align 8
-  %size_slot = getelementptr i8, ptr %state, i64 64
+  %size_slot = getelementptr i8, ptr %state, i64 32
   %section_size = load i64, ptr %size_slot, align 8
-  %slot.i = getelementptr i8, ptr %state, i64 80
+  %slot.i = getelementptr i8, ptr %state, i64 48
   %section_top = load ptr, ptr %slot.i, align 8
   %negative_section_size = sub i64 0, %section_size
   %section_bottom = getelementptr i8, ptr %section_top, i64 %negative_section_size
-  %slot.i1 = getelementptr i8, ptr %state, i64 144
+  %slot.i1 = getelementptr i8, ptr %state, i64 112
   %displaced_buf = load ptr, ptr %slot.i1, align 8
   %top_i.i4 = ptrtoint ptr %bottom to i64
   %bottom_i.i5 = ptrtoint ptr %section_bottom to i64
@@ -140,16 +172,16 @@ entry:
   %top_i.i = ptrtoint ptr %top to i64
   %size.i = sub i64 %top_i.i, %top_i.i4
   tail call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(16) %slot.i2, i8 0, i64 16, i1 false)
-  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %bottom, ptr align 1 %source, i64 %size.i, i1 false) #17
+  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %bottom, ptr align 1 %source, i64 %size.i, i1 false) #18
   ret void
 }
 
 ; Function Attrs: mustprogress nofree noinline nosync nounwind willreturn memory(none)
-define internal fastcc i64 @copy_rest_inner(ptr nocapture %state, ptr nocapture readonly %copy.0.val, ptr %top_sp, i64 range(i64 1, 0) %frame_size, i64 range(i64 1, 0) %size) unnamed_addr #11 {
+define internal fastcc i64 @copy_rest_inner(ptr nocapture %state, ptr nocapture readonly %copy.0.val, ptr %top_sp, i64 range(i64 1, 0) %frame_size, i64 range(i64 1, 0) %size) unnamed_addr #10 {
   %rest_size = sub i64 %size, %frame_size
   %rest_offset = sub i64 %frame_size, %size
   %rest_bottom = getelementptr i8, ptr %top_sp, i64 %rest_offset
-  %slot.i = getelementptr i8, ptr %state, i64 168
+  %slot.i = getelementptr i8, ptr %state, i64 136
   %displace_sp = load ptr, ptr %slot.i, align 8
   %zero_size.i = icmp eq i64 %size, %frame_size
   %no_overlap.i = icmp uge ptr %displace_sp, %top_sp
@@ -157,327 +189,351 @@ define internal fastcc i64 @copy_rest_inner(ptr nocapture %state, ptr nocapture 
   br i1 %skip.i, label %displace_range.exit, label %slow.i
 
 slow.i:                                           ; preds = %0
-  tail call fastcc void @displace_range_inner(ptr nonnull %state, ptr %rest_bottom, i64 %rest_size, ptr %displace_sp) #18
+  tail call fastcc void @displace_range_inner(ptr nonnull %state, ptr %rest_bottom, i64 %rest_size, ptr %displace_sp) #20
   br label %displace_range.exit
 
 displace_range.exit:                              ; preds = %0, %slow.i
   %src = getelementptr i8, ptr %copy.0.val, i64 %frame_size
-  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %rest_bottom, ptr align 1 %src, i64 %rest_size, i1 false) #17
+  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %rest_bottom, ptr align 1 %src, i64 %rest_size, i1 false) #18
   ret i64 %rest_size
 }
 
+; Function Attrs: mustprogress nofree noinline nosync nounwind willreturn memory(none)
+define internal fastcc i64 @copy_rest(ptr nocapture readonly %state) unnamed_addr #10 {
+entry:
+  %size_slot = getelementptr i8, ptr %state, i64 32
+  %size = load i64, ptr %size_slot, align 8
+  %slot.i1 = getelementptr i8, ptr %state, i64 88
+  %frame_size = load i64, ptr %slot.i1, align 8
+  %zero_frame = icmp eq i64 %frame_size, 0
+  %full_frame = icmp uge i64 %frame_size, %size
+  %skip = or i1 %full_frame, %zero_frame
+  br i1 %skip, label %exit, label %do_copy
+
+do_copy:                                          ; preds = %entry
+  %slot.i = getelementptr i8, ptr %state, i64 48
+  %copy.i = getelementptr i8, ptr %state, i64 24
+  %top_sp = load ptr, ptr %slot.i, align 8
+  %copy.i.val = load ptr, ptr %copy.i, align 8
+  %rest_size = tail call fastcc i64 @copy_rest_inner(ptr nonnull %state, ptr %copy.i.val, ptr %top_sp, i64 %frame_size, i64 %size) #21
+  br label %exit
+
+exit:                                             ; preds = %do_copy, %entry
+  %token = phi i64 [ 0, %entry ], [ %rest_size, %do_copy ]
+  ret i64 %token
+}
+
+; Function Attrs: mustprogress nofree noinline nounwind willreturn memory(argmem: readwrite)
+define internal fastcc void @coro_yield_slow(ptr %sp, ptr nocapture %state, ptr %frame_top, ptr nocapture %callee_copy, ptr %caller_sp) unnamed_addr #9 {
+entry:
+  %top_i.i = ptrtoint ptr %frame_top to i64
+  %bottom_i.i = ptrtoint ptr %sp to i64
+  %size.i = sub i64 %top_i.i, %bottom_i.i
+  %slot.i2 = getelementptr i8, ptr %state, i64 96
+  %slot.i3 = getelementptr i8, ptr %state, i64 104
+  %copy_in_bottom = load ptr, ptr %slot.i2, align 8
+  %copy_in_top = load ptr, ptr %slot.i3, align 8
+  %same_bottom = icmp eq ptr %copy_in_bottom, %sp
+  %same_top = icmp eq ptr %copy_in_top, %frame_top
+  %same_frame = and i1 %same_bottom, %same_top
+  br i1 %same_frame, label %do_frame_copy, label %do_full_copy
+
+do_frame_copy:                                    ; preds = %entry
+  %buf.i4 = load ptr, ptr %callee_copy, align 8
+  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i4, ptr align 1 %sp, i64 %size.i, i1 false) #18
+  br label %exit
+
+do_full_copy:                                     ; preds = %entry
+  %top_i.i.i = ptrtoint ptr %caller_sp to i64
+  %size.i.i = sub i64 %top_i.i.i, %bottom_i.i
+  %size_slot.i = getelementptr i8, ptr %callee_copy, i64 8
+  store i64 %size.i.i, ptr %size_slot.i, align 8
+  %buf.i = tail call fastcc ptr @require_buf(ptr %callee_copy, i64 %size.i.i) #17
+  tail call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i, ptr align 1 %sp, i64 %size.i.i, i1 false) #18
+  %slot.i1 = getelementptr i8, ptr %state, i64 88
+  %slot.i = getelementptr i8, ptr %state, i64 48
+  store ptr %caller_sp, ptr %slot.i, align 8
+  store i64 %size.i, ptr %slot.i1, align 8
+  br label %exit
+
+exit:                                             ; preds = %do_full_copy, %do_frame_copy
+  ret void
+}
+
 define i32 @yielding_fn(i32 %n) local_unnamed_addr personality ptr @spill_personality {
-  %flag.i.i96 = alloca i1, align 1
-  %local_ip_slot.i.i97 = alloca ptr, align 8
-  %raw_token.i98 = alloca i8, align 1
+  %flag.i.i69 = alloca i1, align 1
+  %local_ip_slot.i.i70 = alloca ptr, align 8
+  %raw_token.i71 = alloca i8, align 1
   %flag.i.i7 = alloca i1, align 1
   %local_ip_slot.i.i8 = alloca ptr, align 8
   %raw_token.i9 = alloca i8, align 1
   %flag.i.i = alloca i1, align 1
   %local_ip_slot.i.i = alloca ptr, align 8
   %raw_token.i = alloca i8, align 1
-  %print.i5 = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n) #19
-  %flush.i6 = tail call i32 @fflush(ptr null) #20
-  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i98)
-  %active.i99 = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #16
-  %state.i100 = load ptr, ptr %active.i99, align 8
-  %sp.i101 = tail call ptr @llvm.stacksave.p0() #16
-  %frame_top.i102 = tail call ptr @llvm.addressofreturnaddress.p0() #16
-  %frame_top_above_sp.i103 = icmp ugt ptr %frame_top.i102, %sp.i101
-  tail call void @llvm.assume(i1 %frame_top_above_sp.i103)
-  %sink.i104 = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #16
-  %buf.i1.i105 = getelementptr i8, ptr %state.i100, i64 32
-  %slot.i4.i106 = getelementptr i8, ptr %state.i100, i64 192
-  %token_fn.i107 = load ptr, ptr %slot.i4.i106, align 8, !invariant.load !0
-  %token.i108 = call ptr %token_fn.i107(ptr nonnull %raw_token.i98) #21
-  %token_slot.i109 = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @resume_token) #16
-  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i96)
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i97)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i96, ptr %local_ip_slot.i.i97) #22
-          to label %save_ip.exit.i112 unwind label %dispatch.i.i110
+  %print.i5 = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n) #22
+  %flush.i6 = tail call i32 @fflush(ptr null) #23
+  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i71)
+  %active.i72 = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #16
+  %state.i73 = load ptr, ptr %active.i72, align 8
+  %sp.i74 = tail call ptr @llvm.stacksave.p0() #16
+  %frame_top.i75 = tail call ptr @llvm.addressofreturnaddress.p0() #16
+  %frame_top_above_sp.i76 = icmp ugt ptr %frame_top.i75, %sp.i74
+  tail call void @llvm.assume(i1 %frame_top_above_sp.i76)
+  %sink.i77 = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #16
+  %slot.i1.i78 = getelementptr i8, ptr %state.i73, i64 16
+  %buf.i2.i79 = load ptr, ptr %slot.i1.i78, align 8, !invariant.load !0
+  %slot.i9.i80 = getelementptr i8, ptr %state.i73, i64 160
+  %token_fn.i81 = load ptr, ptr %slot.i9.i80, align 8, !invariant.load !0
+  %token.i82 = call ptr %token_fn.i81(ptr nonnull %raw_token.i71) #21
+  %token_slot.i83 = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @resume_token) #16
+  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i69)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i70)
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i69, ptr %local_ip_slot.i.i70) #24
+          to label %save_ip.exit.i86 unwind label %dispatch.i.i84
 
-dispatch.i.i110:                                  ; preds = %0
-  %pad.i.i111 = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i96, ptr nonnull %local_ip_slot.i.i97) #23 [ "funclet"(token %pad.i.i111) ]
-  br label %save_ip.exit.i112
+dispatch.i.i84:                                   ; preds = %0
+  %pad.i.i85 = cleanuppad within none []
+  call void asm "", "r,r"(ptr nonnull %flag.i.i69, ptr nonnull %local_ip_slot.i.i70) #25 [ "funclet"(token %pad.i.i85) ]
+  br label %save_ip.exit.i86
 
-save_ip.exit.i112:                                ; preds = %dispatch.i.i110, %0
-  %buf_ip_slot.i.i113 = getelementptr i8, ptr %state.i100, i64 40
-  %ip.i.i114 = load ptr, ptr %local_ip_slot.i.i97, align 8
-  store ptr %ip.i.i114, ptr %buf_ip_slot.i.i113, align 8
-  %flag_val.i.i115 = load i1, ptr %flag.i.i96, align 1
-  store volatile i1 false, ptr %flag.i.i96, align 1
-  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i96)
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i97)
-  br i1 %flag_val.i.i115, label %yield.i145, label %resume.i116
+save_ip.exit.i86:                                 ; preds = %dispatch.i.i84, %0
+  %buf_ip_slot.i.i87 = getelementptr i8, ptr %buf.i2.i79, i64 8
+  %ip.i.i88 = load ptr, ptr %local_ip_slot.i.i70, align 8
+  store volatile ptr %ip.i.i88, ptr %buf_ip_slot.i.i87, align 8
+  %flag_val.i.i89 = load i1, ptr %flag.i.i69, align 1
+  store volatile i1 false, ptr %flag.i.i69, align 1
+  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i69)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i70)
+  br i1 %flag_val.i.i89, label %yield.i113, label %resume.i90
 
-yield.i145:                                       ; preds = %save_ip.exit.i112
-  %fp.i146 = tail call ptr @llvm.localaddress() #16
-  store ptr %token.i108, ptr %token_slot.i109, align 8
-  store i64 0, ptr %sink.i104, align 8
-  %slot_2.i.i147 = getelementptr i8, ptr %state.i100, i64 48
-  store ptr %fp.i146, ptr %buf.i1.i105, align 8
-  store ptr %sp.i101, ptr %slot_2.i.i147, align 8
-  %copy.i.i149 = getelementptr i8, ptr %state.i100, i64 56
-  %slot.i5.i150 = getelementptr i8, ptr %state.i100, i64 24
-  %sp.i.i151 = load ptr, ptr %slot.i5.i150, align 8
-  %same_sp.i152 = icmp eq ptr %sp.i.i151, %sp.i101
-  br i1 %same_sp.i152, label %do_jmp.i173, label %slow.i153
+yield.i113:                                       ; preds = %save_ip.exit.i86
+  %fp.i114 = tail call ptr @llvm.localaddress() #16
+  store ptr %token.i82, ptr %token_slot.i83, align 8
+  store i64 0, ptr %sink.i77, align 8
+  %slot_2.i.i115 = getelementptr i8, ptr %buf.i2.i79, i64 16
+  store ptr %fp.i114, ptr %buf.i2.i79, align 8
+  store ptr %sp.i74, ptr %slot_2.i.i115, align 8
+  %slot.i.i116 = getelementptr i8, ptr %state.i73, i64 8
+  %buf.i.i117 = load ptr, ptr %slot.i.i116, align 8, !invariant.load !0
+  %copy.i3.i118 = getelementptr i8, ptr %state.i73, i64 24
+  %slot.i11.i119 = getelementptr i8, ptr %buf.i.i117, i64 16
+  %sp.i.i120 = load ptr, ptr %slot.i11.i119, align 8
+  %same_sp.i121 = icmp eq ptr %sp.i.i120, %sp.i74
+  br i1 %same_sp.i121, label %same.i127, label %slow.i122
 
-slow.i153:                                        ; preds = %yield.i145
-  %top_i.i.i.i154 = ptrtoint ptr %frame_top.i102 to i64
-  %bottom_i.i.i.i155 = ptrtoint ptr %sp.i101 to i64
-  %size.i.i.i156 = sub i64 %top_i.i.i.i154, %bottom_i.i.i.i155
-  %slot.i2.i.i157 = getelementptr i8, ptr %state.i100, i64 128
-  %slot.i3.i.i158 = getelementptr i8, ptr %state.i100, i64 136
-  %copy_in_bottom.i.i159 = load ptr, ptr %slot.i2.i.i157, align 8
-  %copy_in_top.i.i160 = load ptr, ptr %slot.i3.i.i158, align 8
-  %same_bottom.i.i161 = icmp eq ptr %copy_in_bottom.i.i159, %sp.i101
-  %same_top.i.i162 = icmp eq ptr %copy_in_top.i.i160, %frame_top.i102
-  %same_frame.i.i163 = and i1 %same_bottom.i.i161, %same_top.i.i162
-  br i1 %same_frame.i.i163, label %do_frame_copy.i.i182, label %do_full_copy.i.i164
+same.i127:                                        ; preds = %yield.i113
+  %same_sp_token.i128 = call fastcc i64 @save_same_sp_frame(ptr nonnull %state.i73, ptr %copy.i3.i118, ptr nonnull %frame_top.i75, ptr %sp.i74) #21
+  %slot.i10.i129 = getelementptr i8, ptr %state.i73, i64 168
+  store i64 %same_sp_token.i128, ptr %slot.i10.i129, align 8
+  br label %do_jmp.i123
 
-do_frame_copy.i.i182:                             ; preds = %slow.i153
-  %buf.i4.i.i183 = load ptr, ptr %copy.i.i149, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i4.i.i183, ptr align 1 %sp.i101, i64 %size.i.i.i156, i1 false) #17
-  br label %do_jmp.i173
+slow.i122:                                        ; preds = %yield.i113
+  call fastcc void @coro_yield_slow(ptr %sp.i74, ptr nonnull %state.i73, ptr nonnull %frame_top.i75, ptr %copy.i3.i118, ptr %sp.i.i120) #20
+  br label %do_jmp.i123
 
-do_full_copy.i.i164:                              ; preds = %slow.i153
-  %top_i.i.i.i.i165 = ptrtoint ptr %sp.i.i151 to i64
-  %size.i.i.i.i167 = sub i64 %top_i.i.i.i.i165, %bottom_i.i.i.i155
-  %size_slot.i.i.i168 = getelementptr i8, ptr %state.i100, i64 64
-  store i64 %size.i.i.i.i167, ptr %size_slot.i.i.i168, align 8
-  %buf.i.i.i169 = call fastcc ptr @require_buf(ptr %copy.i.i149, i64 %size.i.i.i.i167) #17
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i169, ptr align 1 %sp.i101, i64 %size.i.i.i.i167, i1 false) #17
-  %slot.i1.i10.i170 = getelementptr i8, ptr %state.i100, i64 120
-  %slot.i.i11.i171 = getelementptr i8, ptr %state.i100, i64 80
-  store ptr %sp.i.i151, ptr %slot.i.i11.i171, align 8
-  store i64 %size.i.i.i156, ptr %slot.i1.i10.i170, align 8
-  br label %do_jmp.i173
-
-do_jmp.i173:                                      ; preds = %do_frame_copy.i.i182, %do_full_copy.i.i164, %yield.i145
-  %prev.i.i175 = load ptr, ptr %state.i100, align 8
-  store ptr %prev.i.i175, ptr %active.i99, align 8
-  %slot.i.i.i176 = getelementptr i8, ptr %state.i100, i64 176
-  %bottom.i.i177 = load ptr, ptr %slot.i.i.i176, align 8
-  %skip.i.i178 = icmp eq ptr %bottom.i.i177, null
-  br i1 %skip.i.i178, label %restore_displaced.exit.i180, label %copy.i6.i179
-
-copy.i6.i179:                                     ; preds = %do_jmp.i173
-  call fastcc void @restore_displaced_inner(ptr nonnull %state.i100) #24
-  br label %restore_displaced.exit.i180
-
-restore_displaced.exit.i180:                      ; preds = %copy.i6.i179, %do_jmp.i173
-  %buf.i.i148 = getelementptr i8, ptr %state.i100, i64 8
-  %buf_reg.i.i181 = call ptr asm "", "=r,0"(ptr %buf.i.i148) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i181) #26
+do_jmp.i123:                                      ; preds = %slow.i122, %same.i127
+  %prev.i.i125 = load ptr, ptr %state.i73, align 8
+  store ptr %prev.i.i125, ptr %active.i72, align 8
+  call fastcc void @restore_displaced(ptr nonnull %state.i73)
+  %buf_reg.i.i126 = call ptr asm "", "=r,0"(ptr nonnull %buf.i.i117) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i126) #27
   unreachable
 
-resume.i116:                                      ; preds = %save_ip.exit.i112
-  %resume_token.i117 = load ptr, ptr %token_slot.i109, align 8
-  %same_token.i118 = icmp eq ptr %resume_token.i117, %token.i108
-  call void @llvm.assume(i1 %same_token.i118)
-  %slot.i2.i119 = getelementptr i8, ptr %state.i100, i64 128
-  %slot.i3.i120 = getelementptr i8, ptr %state.i100, i64 136
-  %copy_in_bottom_out.i121 = load ptr, ptr %slot.i2.i119, align 8
-  %copy_in_top_out.i122 = load ptr, ptr %slot.i3.i120, align 8
-  %same_bottom_out.i123 = icmp eq ptr %copy_in_bottom_out.i121, %sp.i101
-  %same_top_out.i124 = icmp eq ptr %copy_in_top_out.i122, %frame_top.i102
-  %same_frame_out.i125 = and i1 %same_bottom_out.i123, %same_top_out.i124
-  %slot.i1.i.i135.phi.trans.insert = getelementptr i8, ptr %state.i100, i64 120
-  br i1 %same_frame_out.i125, label %resume.i116.exit.i131_crit_edge, label %record_copy_in.i126
+resume.i90:                                       ; preds = %save_ip.exit.i86
+  %resume_token.i91 = load ptr, ptr %token_slot.i83, align 8
+  %same_token.i92 = icmp eq ptr %resume_token.i91, %token.i82
+  call void @llvm.assume(i1 %same_token.i92)
+  %slot.i7.i93 = getelementptr i8, ptr %state.i73, i64 96
+  %slot.i8.i94 = getelementptr i8, ptr %state.i73, i64 104
+  %copy_in_bottom_out.i95 = load ptr, ptr %slot.i7.i93, align 8
+  %copy_in_top_out.i96 = load ptr, ptr %slot.i8.i94, align 8
+  %same_bottom_out.i97 = icmp eq ptr %copy_in_bottom_out.i95, %sp.i74
+  %same_top_out.i98 = icmp eq ptr %copy_in_top_out.i96, %frame_top.i75
+  %same_frame_out.i99 = and i1 %same_bottom_out.i97, %same_top_out.i98
+  br i1 %same_frame_out.i99, label %coro_yield.exit130, label %record_copy_in.i100
 
-resume.i116.exit.i131_crit_edge:                  ; preds = %resume.i116
-  %frame_size.i.i136.pre = load i64, ptr %slot.i1.i.i135.phi.trans.insert, align 8
-  br label %exit.i131
+record_copy_in.i100:                              ; preds = %resume.i90
+  %slot.i6.i101 = getelementptr i8, ptr %state.i73, i64 88
+  %top_i.i.i102 = ptrtoint ptr %frame_top.i75 to i64
+  %bottom_i.i.i103 = ptrtoint ptr %sp.i74 to i64
+  %size.i.i104 = sub i64 %top_i.i.i102, %bottom_i.i.i103
+  store ptr %sp.i74, ptr %slot.i7.i93, align 8
+  store ptr %frame_top.i75, ptr %slot.i8.i94, align 8
+  store i64 %size.i.i104, ptr %slot.i6.i101, align 8
+  br label %coro_yield.exit130
 
-record_copy_in.i126:                              ; preds = %resume.i116
-  %top_i.i.i128 = ptrtoint ptr %frame_top.i102 to i64
-  %bottom_i.i.i129 = ptrtoint ptr %sp.i101 to i64
-  %size.i.i130 = sub i64 %top_i.i.i128, %bottom_i.i.i129
-  store ptr %sp.i101, ptr %slot.i2.i119, align 8
-  store ptr %frame_top.i102, ptr %slot.i3.i120, align 8
-  store i64 %size.i.i130, ptr %slot.i1.i.i135.phi.trans.insert, align 8
-  br label %exit.i131
-
-exit.i131:                                        ; preds = %resume.i116.exit.i131_crit_edge, %record_copy_in.i126
-  %frame_size.i.i = phi i64 [ %frame_size.i.i136.pre, %resume.i116.exit.i131_crit_edge ], [ %size.i.i130, %record_copy_in.i126 ]
-  %copy.i.i.i132 = getelementptr i8, ptr %state.i100, i64 56
-  %size_slot.i.i133 = getelementptr i8, ptr %state.i100, i64 64
-  %size.i7.i134 = load i64, ptr %size_slot.i.i133, align 8
-  %slot.i.i8.i137 = getelementptr i8, ptr %state.i100, i64 80
-  %zero_frame.i.i138 = icmp eq i64 %frame_size.i.i, 0
-  %full_frame.i.i139 = icmp uge i64 %frame_size.i.i, %size.i7.i134
-  %skip.i9.i140 = or i1 %full_frame.i.i139, %zero_frame.i.i138
-  br i1 %skip.i9.i140, label %coro_yield.exit184, label %do_copy.i.i141
-
-do_copy.i.i141:                                   ; preds = %exit.i131
-  %top_sp.i.i142 = load ptr, ptr %slot.i.i8.i137, align 8
-  %copy.i.i.i132.val = load ptr, ptr %copy.i.i.i132, align 8
-  %rest_size.i.i143 = call fastcc i64 @copy_rest_inner(ptr nonnull %state.i100, ptr %copy.i.i.i132.val, ptr %top_sp.i.i142, i64 %frame_size.i.i, i64 %size.i7.i134) #27
-  br label %coro_yield.exit184
-
-coro_yield.exit184:                               ; preds = %exit.i131, %do_copy.i.i141
-  %token.i.i144 = phi i64 [ 0, %exit.i131 ], [ %rest_size.i.i143, %do_copy.i.i141 ]
-  store i64 %token.i.i144, ptr %sink.i104, align 8
-  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i98)
+coro_yield.exit130:                               ; preds = %resume.i90, %record_copy_in.i100
+  %copy.i.i105 = getelementptr i8, ptr %state.i73, i64 24
+  %slot.i5.i108 = getelementptr i8, ptr %state.i73, i64 88
+  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i71)
   %n1 = add i32 %n, 1
-  %print.i3 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1) #19
-  %flush.i4 = call i32 @fflush(ptr null) #20
+  %print.i3 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1) #22
+  %flush.i4 = call i32 @fflush(ptr null) #23
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i9)
-  %token.i19 = call ptr %token_fn.i107(ptr nonnull %raw_token.i9) #21
+  %token.i20 = call ptr %token_fn.i81(ptr nonnull %raw_token.i9) #21
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i7)
   call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i8)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i7, ptr %local_ip_slot.i.i8) #22
-          to label %save_ip.exit.i23 unwind label %dispatch.i.i21
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i7, ptr %local_ip_slot.i.i8) #24
+          to label %save_ip.exit.i24 unwind label %dispatch.i.i22
 
-dispatch.i.i21:                                   ; preds = %coro_yield.exit184
-  %pad.i.i22 = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i7, ptr nonnull %local_ip_slot.i.i8) #23 [ "funclet"(token %pad.i.i22) ]
-  br label %save_ip.exit.i23
+dispatch.i.i22:                                   ; preds = %coro_yield.exit130
+  %pad.i.i23 = cleanuppad within none []
+  call void asm "", "r,r"(ptr nonnull %flag.i.i7, ptr nonnull %local_ip_slot.i.i8) #25 [ "funclet"(token %pad.i.i23) ]
+  br label %save_ip.exit.i24
 
-save_ip.exit.i23:                                 ; preds = %dispatch.i.i21, %coro_yield.exit184
-  %ip.i.i25 = load ptr, ptr %local_ip_slot.i.i8, align 8
-  store ptr %ip.i.i25, ptr %buf_ip_slot.i.i113, align 8
-  %flag_val.i.i26 = load i1, ptr %flag.i.i7, align 1
+save_ip.exit.i24:                                 ; preds = %dispatch.i.i22, %coro_yield.exit130
+  %ip.i.i26 = load ptr, ptr %local_ip_slot.i.i8, align 8
+  store volatile ptr %ip.i.i26, ptr %buf_ip_slot.i.i87, align 8
+  %flag_val.i.i27 = load i1, ptr %flag.i.i7, align 1
   store volatile i1 false, ptr %flag.i.i7, align 1
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i7)
   call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i8)
-  br i1 %flag_val.i.i26, label %yield.i56, label %exit.i42
+  br i1 %flag_val.i.i27, label %yield.i51, label %resume.i28
 
-yield.i56:                                        ; preds = %save_ip.exit.i23
-  %fp.i57 = tail call ptr @llvm.localaddress() #16
-  store ptr %token.i19, ptr %token_slot.i109, align 8
-  store i64 0, ptr %sink.i104, align 8
-  %slot_2.i.i58 = getelementptr i8, ptr %state.i100, i64 48
-  store ptr %fp.i57, ptr %buf.i1.i105, align 8
-  store ptr %sp.i101, ptr %slot_2.i.i58, align 8
-  %slot.i5.i61 = getelementptr i8, ptr %state.i100, i64 24
-  %sp.i.i62 = load ptr, ptr %slot.i5.i61, align 8
-  %same_sp.i63 = icmp eq ptr %sp.i.i62, %sp.i101
-  br i1 %same_sp.i63, label %do_jmp.i84, label %do_frame_copy.i.i93
+yield.i51:                                        ; preds = %save_ip.exit.i24
+  %fp.i52 = tail call ptr @llvm.localaddress() #16
+  store ptr %token.i20, ptr %token_slot.i83, align 8
+  store i64 0, ptr %sink.i77, align 8
+  %slot_2.i.i53 = getelementptr i8, ptr %buf.i2.i79, i64 16
+  store ptr %fp.i52, ptr %buf.i2.i79, align 8
+  store ptr %sp.i74, ptr %slot_2.i.i53, align 8
+  %slot.i.i54 = getelementptr i8, ptr %state.i73, i64 8
+  %buf.i.i55 = load ptr, ptr %slot.i.i54, align 8, !invariant.load !0
+  %slot.i11.i57 = getelementptr i8, ptr %buf.i.i55, i64 16
+  %sp.i.i58 = load ptr, ptr %slot.i11.i57, align 8
+  %same_sp.i59 = icmp eq ptr %sp.i.i58, %sp.i74
+  br i1 %same_sp.i59, label %same.i65, label %slow.i60
 
-do_frame_copy.i.i93:                              ; preds = %yield.i56
-  %top_i.i.i.i65 = ptrtoint ptr %frame_top.i102 to i64
-  %bottom_i.i.i.i66 = ptrtoint ptr %sp.i101 to i64
-  %size.i.i.i67 = sub i64 %top_i.i.i.i65, %bottom_i.i.i.i66
-  %buf.i4.i.i94 = load ptr, ptr %copy.i.i.i132, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i4.i.i94, ptr align 1 %sp.i101, i64 %size.i.i.i67, i1 false) #17
-  br label %do_jmp.i84
+same.i65:                                         ; preds = %yield.i51
+  %same_sp_token.i66 = call fastcc i64 @save_same_sp_frame(ptr nonnull %state.i73, ptr %copy.i.i105, ptr nonnull %frame_top.i75, ptr %sp.i74) #21
+  %slot.i10.i67 = getelementptr i8, ptr %state.i73, i64 168
+  store i64 %same_sp_token.i66, ptr %slot.i10.i67, align 8
+  br label %do_jmp.i61
 
-do_jmp.i84:                                       ; preds = %do_frame_copy.i.i93, %yield.i56
-  %prev.i.i86 = load ptr, ptr %state.i100, align 8
-  store ptr %prev.i.i86, ptr %active.i99, align 8
-  %slot.i.i.i87 = getelementptr i8, ptr %state.i100, i64 176
-  %bottom.i.i88 = load ptr, ptr %slot.i.i.i87, align 8
-  %skip.i.i89 = icmp eq ptr %bottom.i.i88, null
-  br i1 %skip.i.i89, label %restore_displaced.exit.i91, label %copy.i6.i90
+slow.i60:                                         ; preds = %yield.i51
+  call fastcc void @coro_yield_slow(ptr %sp.i74, ptr nonnull %state.i73, ptr nonnull %frame_top.i75, ptr %copy.i.i105, ptr %sp.i.i58) #20
+  br label %do_jmp.i61
 
-copy.i6.i90:                                      ; preds = %do_jmp.i84
-  call fastcc void @restore_displaced_inner(ptr nonnull %state.i100) #24
-  br label %restore_displaced.exit.i91
-
-restore_displaced.exit.i91:                       ; preds = %copy.i6.i90, %do_jmp.i84
-  %buf.i.i59 = getelementptr i8, ptr %state.i100, i64 8
-  %buf_reg.i.i92 = call ptr asm "", "=r,0"(ptr %buf.i.i59) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i92) #26
+do_jmp.i61:                                       ; preds = %slow.i60, %same.i65
+  %prev.i.i63 = load ptr, ptr %state.i73, align 8
+  store ptr %prev.i.i63, ptr %active.i72, align 8
+  call fastcc void @restore_displaced(ptr nonnull %state.i73)
+  %buf_reg.i.i64 = call ptr asm "", "=r,0"(ptr nonnull %buf.i.i55) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i64) #27
   unreachable
 
-exit.i42:                                         ; preds = %save_ip.exit.i23
-  %same_token.i29 = icmp eq ptr %token.i108, %token.i19
-  call void @llvm.assume(i1 %same_token.i29)
-  br i1 %skip.i9.i140, label %coro_yield.exit95, label %do_copy.i.i52
+resume.i28:                                       ; preds = %save_ip.exit.i24
+  %same_token.i30 = icmp eq ptr %token.i82, %token.i20
+  call void @llvm.assume(i1 %same_token.i30)
+  %copy_in_bottom_out.i33 = load ptr, ptr %slot.i7.i93, align 8
+  %copy_in_top_out.i34 = load ptr, ptr %slot.i8.i94, align 8
+  %same_bottom_out.i35 = icmp eq ptr %copy_in_bottom_out.i33, %sp.i74
+  %same_top_out.i36 = icmp eq ptr %copy_in_top_out.i34, %frame_top.i75
+  %same_frame_out.i37 = and i1 %same_bottom_out.i35, %same_top_out.i36
+  br i1 %same_frame_out.i37, label %coro_yield.exit68, label %record_copy_in.i38
 
-do_copy.i.i52:                                    ; preds = %exit.i42
-  %top_sp.i.i53 = load ptr, ptr %slot.i.i8.i137, align 8
-  %copy.i.i.i43.val = load ptr, ptr %copy.i.i.i132, align 8
-  %rest_size.i.i54 = call fastcc i64 @copy_rest_inner(ptr nonnull %state.i100, ptr %copy.i.i.i43.val, ptr %top_sp.i.i53, i64 %frame_size.i.i, i64 %size.i7.i134) #27
-  br label %coro_yield.exit95
+record_copy_in.i38:                               ; preds = %resume.i28
+  %top_i.i.i40 = ptrtoint ptr %frame_top.i75 to i64
+  %bottom_i.i.i41 = ptrtoint ptr %sp.i74 to i64
+  %size.i.i42 = sub i64 %top_i.i.i40, %bottom_i.i.i41
+  store ptr %sp.i74, ptr %slot.i7.i93, align 8
+  store ptr %frame_top.i75, ptr %slot.i8.i94, align 8
+  store i64 %size.i.i42, ptr %slot.i5.i108, align 8
+  br label %coro_yield.exit68
 
-coro_yield.exit95:                                ; preds = %exit.i42, %do_copy.i.i52
-  %token.i.i55 = phi i64 [ 0, %exit.i42 ], [ %rest_size.i.i54, %do_copy.i.i52 ]
-  store i64 %token.i.i55, ptr %sink.i104, align 8
+coro_yield.exit68:                                ; preds = %resume.i28, %record_copy_in.i38
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i9)
   %n2 = add i32 %n, 2
-  %print.i1 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2) #19
-  %flush.i2 = call i32 @fflush(ptr null) #20
+  %print.i1 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2) #22
+  %flush.i2 = call i32 @fflush(ptr null) #23
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i)
-  %token.i = call ptr %token_fn.i107(ptr nonnull %raw_token.i) #21
+  %token.i = call ptr %token_fn.i81(ptr nonnull %raw_token.i) #21
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i)
   call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i, ptr %local_ip_slot.i.i) #22
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i, ptr %local_ip_slot.i.i) #24
           to label %save_ip.exit.i unwind label %dispatch.i.i
 
-dispatch.i.i:                                     ; preds = %coro_yield.exit95
+dispatch.i.i:                                     ; preds = %coro_yield.exit68
   %pad.i.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i, ptr nonnull %local_ip_slot.i.i) #23 [ "funclet"(token %pad.i.i) ]
+  call void asm "", "r,r"(ptr nonnull %flag.i.i, ptr nonnull %local_ip_slot.i.i) #25 [ "funclet"(token %pad.i.i) ]
   br label %save_ip.exit.i
 
-save_ip.exit.i:                                   ; preds = %dispatch.i.i, %coro_yield.exit95
+save_ip.exit.i:                                   ; preds = %dispatch.i.i, %coro_yield.exit68
   %ip.i.i = load ptr, ptr %local_ip_slot.i.i, align 8
-  store ptr %ip.i.i, ptr %buf_ip_slot.i.i113, align 8
+  store volatile ptr %ip.i.i, ptr %buf_ip_slot.i.i87, align 8
   %flag_val.i.i = load i1, ptr %flag.i.i, align 1
   store volatile i1 false, ptr %flag.i.i, align 1
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i)
   call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i)
-  br i1 %flag_val.i.i, label %yield.i, label %exit.i
+  br i1 %flag_val.i.i, label %yield.i, label %resume.i
 
 yield.i:                                          ; preds = %save_ip.exit.i
   %fp.i = tail call ptr @llvm.localaddress() #16
-  store ptr %token.i, ptr %token_slot.i109, align 8
-  store i64 0, ptr %sink.i104, align 8
-  %slot_2.i.i = getelementptr i8, ptr %state.i100, i64 48
-  store ptr %fp.i, ptr %buf.i1.i105, align 8
-  store ptr %sp.i101, ptr %slot_2.i.i, align 8
-  %slot.i5.i = getelementptr i8, ptr %state.i100, i64 24
-  %sp.i.i = load ptr, ptr %slot.i5.i, align 8
-  %same_sp.i = icmp eq ptr %sp.i.i, %sp.i101
-  br i1 %same_sp.i, label %do_jmp.i, label %do_frame_copy.i.i
+  store ptr %token.i, ptr %token_slot.i83, align 8
+  store i64 0, ptr %sink.i77, align 8
+  %slot_2.i.i = getelementptr i8, ptr %buf.i2.i79, i64 16
+  store ptr %fp.i, ptr %buf.i2.i79, align 8
+  store ptr %sp.i74, ptr %slot_2.i.i, align 8
+  %slot.i.i = getelementptr i8, ptr %state.i73, i64 8
+  %buf.i.i = load ptr, ptr %slot.i.i, align 8, !invariant.load !0
+  %slot.i11.i = getelementptr i8, ptr %buf.i.i, i64 16
+  %sp.i.i = load ptr, ptr %slot.i11.i, align 8
+  %same_sp.i = icmp eq ptr %sp.i.i, %sp.i74
+  br i1 %same_sp.i, label %same.i, label %slow.i
 
-do_frame_copy.i.i:                                ; preds = %yield.i
-  %top_i.i.i.i = ptrtoint ptr %frame_top.i102 to i64
-  %bottom_i.i.i.i = ptrtoint ptr %sp.i101 to i64
-  %size.i.i.i = sub i64 %top_i.i.i.i, %bottom_i.i.i.i
-  %buf.i4.i.i = load ptr, ptr %copy.i.i.i132, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i4.i.i, ptr align 1 %sp.i101, i64 %size.i.i.i, i1 false) #17
+same.i:                                           ; preds = %yield.i
+  %same_sp_token.i = call fastcc i64 @save_same_sp_frame(ptr nonnull %state.i73, ptr %copy.i.i105, ptr nonnull %frame_top.i75, ptr %sp.i74) #21
+  %slot.i10.i = getelementptr i8, ptr %state.i73, i64 168
+  store i64 %same_sp_token.i, ptr %slot.i10.i, align 8
   br label %do_jmp.i
 
-do_jmp.i:                                         ; preds = %do_frame_copy.i.i, %yield.i
-  %prev.i.i = load ptr, ptr %state.i100, align 8
-  store ptr %prev.i.i, ptr %active.i99, align 8
-  %slot.i.i.i = getelementptr i8, ptr %state.i100, i64 176
-  %bottom.i.i = load ptr, ptr %slot.i.i.i, align 8
-  %skip.i.i = icmp eq ptr %bottom.i.i, null
-  br i1 %skip.i.i, label %restore_displaced.exit.i, label %copy.i6.i
+slow.i:                                           ; preds = %yield.i
+  call fastcc void @coro_yield_slow(ptr %sp.i74, ptr nonnull %state.i73, ptr nonnull %frame_top.i75, ptr %copy.i.i105, ptr %sp.i.i) #20
+  br label %do_jmp.i
 
-copy.i6.i:                                        ; preds = %do_jmp.i
-  call fastcc void @restore_displaced_inner(ptr nonnull %state.i100) #24
-  br label %restore_displaced.exit.i
-
-restore_displaced.exit.i:                         ; preds = %copy.i6.i, %do_jmp.i
-  %buf.i.i = getelementptr i8, ptr %state.i100, i64 8
-  %buf_reg.i.i = call ptr asm "", "=r,0"(ptr %buf.i.i) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i) #26
+do_jmp.i:                                         ; preds = %slow.i, %same.i
+  %prev.i.i = load ptr, ptr %state.i73, align 8
+  store ptr %prev.i.i, ptr %active.i72, align 8
+  call fastcc void @restore_displaced(ptr nonnull %state.i73)
+  %buf_reg.i.i = call ptr asm "", "=r,0"(ptr nonnull %buf.i.i) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i) #27
   unreachable
 
-exit.i:                                           ; preds = %save_ip.exit.i
-  %same_token.i = icmp eq ptr %token.i108, %token.i
+resume.i:                                         ; preds = %save_ip.exit.i
+  %same_token.i = icmp eq ptr %token.i82, %token.i
   call void @llvm.assume(i1 %same_token.i)
-  br i1 %skip.i9.i140, label %coro_yield.exit, label %do_copy.i.i
+  %copy_in_bottom_out.i = load ptr, ptr %slot.i7.i93, align 8
+  %copy_in_top_out.i = load ptr, ptr %slot.i8.i94, align 8
+  %same_bottom_out.i = icmp eq ptr %copy_in_bottom_out.i, %sp.i74
+  %same_top_out.i = icmp eq ptr %copy_in_top_out.i, %frame_top.i75
+  %same_frame_out.i = and i1 %same_bottom_out.i, %same_top_out.i
+  br i1 %same_frame_out.i, label %resume.i.coro_yield.exit_crit_edge, label %record_copy_in.i
 
-do_copy.i.i:                                      ; preds = %exit.i
-  %top_sp.i.i = load ptr, ptr %slot.i.i8.i137, align 8
-  %copy.i.i.i.val = load ptr, ptr %copy.i.i.i132, align 8
-  %rest_size.i.i = call fastcc i64 @copy_rest_inner(ptr nonnull %state.i100, ptr %copy.i.i.i.val, ptr %top_sp.i.i, i64 %frame_size.i.i, i64 %size.i7.i134) #27
+resume.i.coro_yield.exit_crit_edge:               ; preds = %resume.i
+  %frame_size.i.pre = load i64, ptr %slot.i5.i108, align 8
   br label %coro_yield.exit
 
-coro_yield.exit:                                  ; preds = %exit.i, %do_copy.i.i
-  %token.i.i = phi i64 [ 0, %exit.i ], [ %rest_size.i.i, %do_copy.i.i ]
-  store i64 %token.i.i, ptr %sink.i104, align 8
+record_copy_in.i:                                 ; preds = %resume.i
+  %top_i.i.i = ptrtoint ptr %frame_top.i75 to i64
+  %bottom_i.i.i = ptrtoint ptr %sp.i74 to i64
+  %size.i.i = sub i64 %top_i.i.i, %bottom_i.i.i
+  store ptr %sp.i74, ptr %slot.i7.i93, align 8
+  store ptr %frame_top.i75, ptr %slot.i8.i94, align 8
+  store i64 %size.i.i, ptr %slot.i5.i108, align 8
+  br label %coro_yield.exit
+
+coro_yield.exit:                                  ; preds = %resume.i.coro_yield.exit_crit_edge, %record_copy_in.i
+  %frame_size.i = phi i64 [ %frame_size.i.pre, %resume.i.coro_yield.exit_crit_edge ], [ %size.i.i, %record_copy_in.i ]
+  %slot.i4.i110 = getelementptr i8, ptr %state.i73, i64 48
+  %size_slot.i106 = getelementptr i8, ptr %state.i73, i64 32
+  %size.i = load i64, ptr %size_slot.i106, align 8
+  %top_sp.i = load ptr, ptr %slot.i4.i110, align 8
+  %copy_rest_token.i = call fastcc i64 @copy_rest(ptr nonnull %state.i73) #21 [ "copy_rest"(ptr %copy.i.i105, ptr %top_sp.i, i64 %frame_size.i, i64 %size.i) ]
+  store i64 %copy_rest_token.i, ptr %sink.i77, align 8
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i)
   %n3 = add i32 %n, 3
-  %print.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n3) #19
-  %flush.i = call i32 @fflush(ptr null) #20
+  %print.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n3) #22
+  %flush.i = call i32 @fflush(ptr null) #23
   ret i32 %n3
 }
 
@@ -493,25 +549,26 @@ define void @helper() local_unnamed_addr personality ptr @spill_personality {
   %frame_top_above_sp.i = icmp ugt ptr %frame_top.i, %sp.i
   tail call void @llvm.assume(i1 %frame_top_above_sp.i)
   %sink.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #16
-  %buf.i1.i = getelementptr i8, ptr %state.i, i64 32
-  %slot.i4.i = getelementptr i8, ptr %state.i, i64 192
-  %token_fn.i = load ptr, ptr %slot.i4.i, align 8, !invariant.load !0
+  %slot.i1.i = getelementptr i8, ptr %state.i, i64 16
+  %buf.i2.i = load ptr, ptr %slot.i1.i, align 8, !invariant.load !0
+  %slot.i9.i = getelementptr i8, ptr %state.i, i64 160
+  %token_fn.i = load ptr, ptr %slot.i9.i, align 8, !invariant.load !0
   %token.i = call ptr %token_fn.i(ptr nonnull %raw_token.i) #21
   %token_slot.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @resume_token) #16
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i)
   call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i, ptr %local_ip_slot.i.i) #22
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i, ptr %local_ip_slot.i.i) #24
           to label %save_ip.exit.i unwind label %dispatch.i.i
 
 dispatch.i.i:                                     ; preds = %0
   %pad.i.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i, ptr nonnull %local_ip_slot.i.i) #23 [ "funclet"(token %pad.i.i) ]
+  call void asm "", "r,r"(ptr nonnull %flag.i.i, ptr nonnull %local_ip_slot.i.i) #25 [ "funclet"(token %pad.i.i) ]
   br label %save_ip.exit.i
 
 save_ip.exit.i:                                   ; preds = %dispatch.i.i, %0
-  %buf_ip_slot.i.i = getelementptr i8, ptr %state.i, i64 40
+  %buf_ip_slot.i.i = getelementptr i8, ptr %buf.i2.i, i64 8
   %ip.i.i = load ptr, ptr %local_ip_slot.i.i, align 8
-  store ptr %ip.i.i, ptr %buf_ip_slot.i.i, align 8
+  store volatile ptr %ip.i.i, ptr %buf_ip_slot.i.i, align 8
   %flag_val.i.i = load i1, ptr %flag.i.i, align 1
   store volatile i1 false, ptr %flag.i.i, align 1
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i)
@@ -522,120 +579,80 @@ yield.i:                                          ; preds = %save_ip.exit.i
   %fp.i = tail call ptr @llvm.localaddress() #16
   store ptr %token.i, ptr %token_slot.i, align 8
   store i64 0, ptr %sink.i, align 8
-  %slot_2.i.i = getelementptr i8, ptr %state.i, i64 48
-  store ptr %fp.i, ptr %buf.i1.i, align 8
+  %slot_2.i.i = getelementptr i8, ptr %buf.i2.i, i64 16
+  store ptr %fp.i, ptr %buf.i2.i, align 8
   store ptr %sp.i, ptr %slot_2.i.i, align 8
-  %copy.i.i = getelementptr i8, ptr %state.i, i64 56
-  %slot.i5.i = getelementptr i8, ptr %state.i, i64 24
-  %sp.i.i = load ptr, ptr %slot.i5.i, align 8
+  %slot.i.i = getelementptr i8, ptr %state.i, i64 8
+  %buf.i.i = load ptr, ptr %slot.i.i, align 8, !invariant.load !0
+  %copy.i3.i = getelementptr i8, ptr %state.i, i64 24
+  %slot.i11.i = getelementptr i8, ptr %buf.i.i, i64 16
+  %sp.i.i = load ptr, ptr %slot.i11.i, align 8
   %same_sp.i = icmp eq ptr %sp.i.i, %sp.i
-  br i1 %same_sp.i, label %do_jmp.i, label %slow.i
+  br i1 %same_sp.i, label %same.i, label %slow.i
+
+same.i:                                           ; preds = %yield.i
+  %same_sp_token.i = call fastcc i64 @save_same_sp_frame(ptr nonnull %state.i, ptr %copy.i3.i, ptr nonnull %frame_top.i, ptr %sp.i) #21
+  %slot.i10.i = getelementptr i8, ptr %state.i, i64 168
+  store i64 %same_sp_token.i, ptr %slot.i10.i, align 8
+  br label %do_jmp.i
 
 slow.i:                                           ; preds = %yield.i
-  %top_i.i.i.i = ptrtoint ptr %frame_top.i to i64
-  %bottom_i.i.i.i = ptrtoint ptr %sp.i to i64
-  %size.i.i.i = sub i64 %top_i.i.i.i, %bottom_i.i.i.i
-  %slot.i2.i.i = getelementptr i8, ptr %state.i, i64 128
-  %slot.i3.i.i = getelementptr i8, ptr %state.i, i64 136
-  %copy_in_bottom.i.i = load ptr, ptr %slot.i2.i.i, align 8
-  %copy_in_top.i.i = load ptr, ptr %slot.i3.i.i, align 8
-  %same_bottom.i.i = icmp eq ptr %copy_in_bottom.i.i, %sp.i
-  %same_top.i.i = icmp eq ptr %copy_in_top.i.i, %frame_top.i
-  %same_frame.i.i = and i1 %same_bottom.i.i, %same_top.i.i
-  br i1 %same_frame.i.i, label %do_frame_copy.i.i, label %do_full_copy.i.i
-
-do_frame_copy.i.i:                                ; preds = %slow.i
-  %buf.i4.i.i = load ptr, ptr %copy.i.i, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i4.i.i, ptr align 1 %sp.i, i64 %size.i.i.i, i1 false) #17
+  call fastcc void @coro_yield_slow(ptr %sp.i, ptr nonnull %state.i, ptr nonnull %frame_top.i, ptr %copy.i3.i, ptr %sp.i.i) #20
   br label %do_jmp.i
 
-do_full_copy.i.i:                                 ; preds = %slow.i
-  %top_i.i.i.i.i = ptrtoint ptr %sp.i.i to i64
-  %size.i.i.i.i = sub i64 %top_i.i.i.i.i, %bottom_i.i.i.i
-  %size_slot.i.i.i = getelementptr i8, ptr %state.i, i64 64
-  store i64 %size.i.i.i.i, ptr %size_slot.i.i.i, align 8
-  %buf.i.i.i = call fastcc ptr @require_buf(ptr %copy.i.i, i64 %size.i.i.i.i) #17
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i, ptr align 1 %sp.i, i64 %size.i.i.i.i, i1 false) #17
-  %slot.i1.i10.i = getelementptr i8, ptr %state.i, i64 120
-  %slot.i.i11.i = getelementptr i8, ptr %state.i, i64 80
-  store ptr %sp.i.i, ptr %slot.i.i11.i, align 8
-  store i64 %size.i.i.i, ptr %slot.i1.i10.i, align 8
-  br label %do_jmp.i
-
-do_jmp.i:                                         ; preds = %do_frame_copy.i.i, %do_full_copy.i.i, %yield.i
+do_jmp.i:                                         ; preds = %slow.i, %same.i
   %prev.i.i = load ptr, ptr %state.i, align 8
   store ptr %prev.i.i, ptr %active.i, align 8
-  %slot.i.i.i = getelementptr i8, ptr %state.i, i64 176
-  %bottom.i.i = load ptr, ptr %slot.i.i.i, align 8
-  %skip.i.i = icmp eq ptr %bottom.i.i, null
-  br i1 %skip.i.i, label %restore_displaced.exit.i, label %copy.i6.i
-
-copy.i6.i:                                        ; preds = %do_jmp.i
-  call fastcc void @restore_displaced_inner(ptr nonnull %state.i) #24
-  br label %restore_displaced.exit.i
-
-restore_displaced.exit.i:                         ; preds = %copy.i6.i, %do_jmp.i
-  %buf.i.i = getelementptr i8, ptr %state.i, i64 8
-  %buf_reg.i.i = call ptr asm "", "=r,0"(ptr %buf.i.i) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i) #26
+  call fastcc void @restore_displaced(ptr nonnull %state.i)
+  %buf_reg.i.i = call ptr asm "", "=r,0"(ptr nonnull %buf.i.i) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i) #27
   unreachable
 
 resume.i:                                         ; preds = %save_ip.exit.i
   %resume_token.i = load ptr, ptr %token_slot.i, align 8
   %same_token.i = icmp eq ptr %resume_token.i, %token.i
   call void @llvm.assume(i1 %same_token.i)
-  %slot.i2.i = getelementptr i8, ptr %state.i, i64 128
-  %slot.i3.i = getelementptr i8, ptr %state.i, i64 136
-  %copy_in_bottom_out.i = load ptr, ptr %slot.i2.i, align 8
-  %copy_in_top_out.i = load ptr, ptr %slot.i3.i, align 8
+  %slot.i7.i = getelementptr i8, ptr %state.i, i64 96
+  %slot.i8.i = getelementptr i8, ptr %state.i, i64 104
+  %copy_in_bottom_out.i = load ptr, ptr %slot.i7.i, align 8
+  %copy_in_top_out.i = load ptr, ptr %slot.i8.i, align 8
   %same_bottom_out.i = icmp eq ptr %copy_in_bottom_out.i, %sp.i
   %same_top_out.i = icmp eq ptr %copy_in_top_out.i, %frame_top.i
   %same_frame_out.i = and i1 %same_bottom_out.i, %same_top_out.i
-  %slot.i1.i.i.phi.trans.insert = getelementptr i8, ptr %state.i, i64 120
-  br i1 %same_frame_out.i, label %resume.i.exit.i_crit_edge, label %record_copy_in.i
+  %slot.i5.i.phi.trans.insert = getelementptr i8, ptr %state.i, i64 88
+  br i1 %same_frame_out.i, label %resume.i.coro_yield.exit_crit_edge, label %record_copy_in.i
 
-resume.i.exit.i_crit_edge:                        ; preds = %resume.i
-  %frame_size.i.i.pre = load i64, ptr %slot.i1.i.i.phi.trans.insert, align 8
-  br label %exit.i
+resume.i.coro_yield.exit_crit_edge:               ; preds = %resume.i
+  %frame_size.i.pre = load i64, ptr %slot.i5.i.phi.trans.insert, align 8
+  br label %coro_yield.exit
 
 record_copy_in.i:                                 ; preds = %resume.i
   %top_i.i.i = ptrtoint ptr %frame_top.i to i64
   %bottom_i.i.i = ptrtoint ptr %sp.i to i64
   %size.i.i = sub i64 %top_i.i.i, %bottom_i.i.i
-  store ptr %sp.i, ptr %slot.i2.i, align 8
-  store ptr %frame_top.i, ptr %slot.i3.i, align 8
-  store i64 %size.i.i, ptr %slot.i1.i.i.phi.trans.insert, align 8
-  br label %exit.i
-
-exit.i:                                           ; preds = %resume.i.exit.i_crit_edge, %record_copy_in.i
-  %frame_size.i.i = phi i64 [ %frame_size.i.i.pre, %resume.i.exit.i_crit_edge ], [ %size.i.i, %record_copy_in.i ]
-  %size_slot.i.i = getelementptr i8, ptr %state.i, i64 64
-  %size.i7.i = load i64, ptr %size_slot.i.i, align 8
-  %zero_frame.i.i = icmp eq i64 %frame_size.i.i, 0
-  %full_frame.i.i = icmp uge i64 %frame_size.i.i, %size.i7.i
-  %skip.i9.i = or i1 %full_frame.i.i, %zero_frame.i.i
-  br i1 %skip.i9.i, label %coro_yield.exit, label %do_copy.i.i
-
-do_copy.i.i:                                      ; preds = %exit.i
-  %slot.i.i8.i = getelementptr i8, ptr %state.i, i64 80
-  %copy.i.i.i = getelementptr i8, ptr %state.i, i64 56
-  %top_sp.i.i = load ptr, ptr %slot.i.i8.i, align 8
-  %copy.i.i.i.val = load ptr, ptr %copy.i.i.i, align 8
-  %rest_size.i.i = call fastcc i64 @copy_rest_inner(ptr nonnull %state.i, ptr %copy.i.i.i.val, ptr %top_sp.i.i, i64 %frame_size.i.i, i64 %size.i7.i) #27
+  store ptr %sp.i, ptr %slot.i7.i, align 8
+  store ptr %frame_top.i, ptr %slot.i8.i, align 8
+  store i64 %size.i.i, ptr %slot.i5.i.phi.trans.insert, align 8
   br label %coro_yield.exit
 
-coro_yield.exit:                                  ; preds = %exit.i, %do_copy.i.i
-  %token.i.i = phi i64 [ 0, %exit.i ], [ %rest_size.i.i, %do_copy.i.i ]
-  store i64 %token.i.i, ptr %sink.i, align 8
+coro_yield.exit:                                  ; preds = %resume.i.coro_yield.exit_crit_edge, %record_copy_in.i
+  %frame_size.i = phi i64 [ %frame_size.i.pre, %resume.i.coro_yield.exit_crit_edge ], [ %size.i.i, %record_copy_in.i ]
+  %copy.i.i = getelementptr i8, ptr %state.i, i64 24
+  %size_slot.i = getelementptr i8, ptr %state.i, i64 32
+  %size.i = load i64, ptr %size_slot.i, align 8
+  %slot.i4.i = getelementptr i8, ptr %state.i, i64 48
+  %top_sp.i = load ptr, ptr %slot.i4.i, align 8
+  %copy_rest_token.i = call fastcc i64 @copy_rest(ptr nonnull %state.i) #21 [ "copy_rest"(ptr %copy.i.i, ptr %top_sp.i, i64 %frame_size.i, i64 %size.i) ]
+  store i64 %copy_rest_token.i, ptr %sink.i, align 8
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i)
   ret void
 }
 
 define void @yielding_callee_in_loop(i32 %k) local_unnamed_addr personality ptr @spill_personality {
 entry:
-  %flag.i.i.i89 = alloca i1, align 1
-  %local_ip_slot.i.i.i90 = alloca ptr, align 8
-  %raw_token.i.i91 = alloca i8, align 1
+  %flag.i.i.i63 = alloca i1, align 1
+  %local_ip_slot.i.i.i64 = alloca ptr, align 8
+  %raw_token.i.i65 = alloca i8, align 1
   %flag.i.i.i1 = alloca i1, align 1
   %local_ip_slot.i.i.i2 = alloca ptr, align 8
   %raw_token.i.i3 = alloca i8, align 1
@@ -650,25 +667,26 @@ entry:
   %frame_top_above_sp.i.i = icmp ugt ptr %frame_top.i.i, %sp.i.i
   tail call void @llvm.assume(i1 %frame_top_above_sp.i.i)
   %sink.i.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #16
-  %buf.i1.i.i = getelementptr i8, ptr %state.i.i, i64 32
-  %slot.i4.i.i = getelementptr i8, ptr %state.i.i, i64 192
-  %token_fn.i.i = load ptr, ptr %slot.i4.i.i, align 8, !invariant.load !0
+  %slot.i1.i.i = getelementptr i8, ptr %state.i.i, i64 16
+  %buf.i2.i.i = load ptr, ptr %slot.i1.i.i, align 8, !invariant.load !0
+  %slot.i9.i.i = getelementptr i8, ptr %state.i.i, i64 160
+  %token_fn.i.i = load ptr, ptr %slot.i9.i.i, align 8, !invariant.load !0
   %token.i.i = call ptr %token_fn.i.i(ptr nonnull %raw_token.i.i) #21
   %token_slot.i.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @resume_token) #16
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i.i)
   call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i.i, ptr %local_ip_slot.i.i.i) #22
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i.i, ptr %local_ip_slot.i.i.i) #24
           to label %save_ip.exit.i.i unwind label %dispatch.i.i.i
 
 dispatch.i.i.i:                                   ; preds = %entry
   %pad.i.i.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i.i, ptr nonnull %local_ip_slot.i.i.i) #23 [ "funclet"(token %pad.i.i.i) ]
+  call void asm "", "r,r"(ptr nonnull %flag.i.i.i, ptr nonnull %local_ip_slot.i.i.i) #25 [ "funclet"(token %pad.i.i.i) ]
   br label %save_ip.exit.i.i
 
 save_ip.exit.i.i:                                 ; preds = %dispatch.i.i.i, %entry
-  %buf_ip_slot.i.i.i = getelementptr i8, ptr %state.i.i, i64 40
+  %buf_ip_slot.i.i.i = getelementptr i8, ptr %buf.i2.i.i, i64 8
   %ip.i.i.i = load ptr, ptr %local_ip_slot.i.i.i, align 8
-  store ptr %ip.i.i.i, ptr %buf_ip_slot.i.i.i, align 8
+  store volatile ptr %ip.i.i.i, ptr %buf_ip_slot.i.i.i, align 8
   %flag_val.i.i.i = load i1, ptr %flag.i.i.i, align 1
   store volatile i1 false, ptr %flag.i.i.i, align 1
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i.i)
@@ -679,593 +697,510 @@ yield.i.i:                                        ; preds = %save_ip.exit.i.i
   %fp.i.i = tail call ptr @llvm.localaddress() #16
   store ptr %token.i.i, ptr %token_slot.i.i, align 8
   store i64 0, ptr %sink.i.i, align 8
-  %slot_2.i.i.i = getelementptr i8, ptr %state.i.i, i64 48
-  store ptr %fp.i.i, ptr %buf.i1.i.i, align 8
+  %slot_2.i.i.i = getelementptr i8, ptr %buf.i2.i.i, i64 16
+  store ptr %fp.i.i, ptr %buf.i2.i.i, align 8
   store ptr %sp.i.i, ptr %slot_2.i.i.i, align 8
-  %copy.i.i.i = getelementptr i8, ptr %state.i.i, i64 56
-  %slot.i5.i.i = getelementptr i8, ptr %state.i.i, i64 24
-  %sp.i.i.i = load ptr, ptr %slot.i5.i.i, align 8
+  %slot.i.i.i = getelementptr i8, ptr %state.i.i, i64 8
+  %buf.i.i.i = load ptr, ptr %slot.i.i.i, align 8, !invariant.load !0
+  %copy.i3.i.i = getelementptr i8, ptr %state.i.i, i64 24
+  %slot.i11.i.i = getelementptr i8, ptr %buf.i.i.i, i64 16
+  %sp.i.i.i = load ptr, ptr %slot.i11.i.i, align 8
   %same_sp.i.i = icmp eq ptr %sp.i.i.i, %sp.i.i
-  br i1 %same_sp.i.i, label %do_jmp.i.i, label %slow.i.i
+  br i1 %same_sp.i.i, label %same.i.i, label %slow.i.i
+
+same.i.i:                                         ; preds = %yield.i.i
+  %same_sp_token.i.i = call fastcc i64 @save_same_sp_frame(ptr nonnull %state.i.i, ptr %copy.i3.i.i, ptr nonnull %frame_top.i.i, ptr %sp.i.i) #21
+  %slot.i10.i.i = getelementptr i8, ptr %state.i.i, i64 168
+  store i64 %same_sp_token.i.i, ptr %slot.i10.i.i, align 8
+  br label %do_jmp.i.i
 
 slow.i.i:                                         ; preds = %yield.i.i
-  %top_i.i.i.i.i = ptrtoint ptr %frame_top.i.i to i64
-  %bottom_i.i.i.i.i = ptrtoint ptr %sp.i.i to i64
-  %size.i.i.i.i = sub i64 %top_i.i.i.i.i, %bottom_i.i.i.i.i
-  %slot.i2.i.i.i = getelementptr i8, ptr %state.i.i, i64 128
-  %slot.i3.i.i.i = getelementptr i8, ptr %state.i.i, i64 136
-  %copy_in_bottom.i.i.i = load ptr, ptr %slot.i2.i.i.i, align 8
-  %copy_in_top.i.i.i = load ptr, ptr %slot.i3.i.i.i, align 8
-  %same_bottom.i.i.i = icmp eq ptr %copy_in_bottom.i.i.i, %sp.i.i
-  %same_top.i.i.i = icmp eq ptr %copy_in_top.i.i.i, %frame_top.i.i
-  %same_frame.i.i.i = and i1 %same_bottom.i.i.i, %same_top.i.i.i
-  br i1 %same_frame.i.i.i, label %do_frame_copy.i.i.i, label %do_full_copy.i.i.i
-
-do_frame_copy.i.i.i:                              ; preds = %slow.i.i
-  %buf.i4.i.i.i = load ptr, ptr %copy.i.i.i, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i4.i.i.i, ptr align 1 %sp.i.i, i64 %size.i.i.i.i, i1 false) #17
+  call fastcc void @coro_yield_slow(ptr %sp.i.i, ptr nonnull %state.i.i, ptr nonnull %frame_top.i.i, ptr %copy.i3.i.i, ptr %sp.i.i.i) #20
   br label %do_jmp.i.i
 
-do_full_copy.i.i.i:                               ; preds = %slow.i.i
-  %top_i.i.i.i.i.i = ptrtoint ptr %sp.i.i.i to i64
-  %size.i.i.i.i.i = sub i64 %top_i.i.i.i.i.i, %bottom_i.i.i.i.i
-  %size_slot.i.i.i.i = getelementptr i8, ptr %state.i.i, i64 64
-  store i64 %size.i.i.i.i.i, ptr %size_slot.i.i.i.i, align 8
-  %buf.i.i.i.i = call fastcc ptr @require_buf(ptr %copy.i.i.i, i64 %size.i.i.i.i.i) #17
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i.i, ptr align 1 %sp.i.i, i64 %size.i.i.i.i.i, i1 false) #17
-  %slot.i1.i10.i.i = getelementptr i8, ptr %state.i.i, i64 120
-  %slot.i.i11.i.i = getelementptr i8, ptr %state.i.i, i64 80
-  store ptr %sp.i.i.i, ptr %slot.i.i11.i.i, align 8
-  store i64 %size.i.i.i.i, ptr %slot.i1.i10.i.i, align 8
-  br label %do_jmp.i.i
-
-do_jmp.i.i:                                       ; preds = %do_full_copy.i.i.i, %do_frame_copy.i.i.i, %yield.i.i
+do_jmp.i.i:                                       ; preds = %slow.i.i, %same.i.i
   %prev.i.i.i = load ptr, ptr %state.i.i, align 8
   store ptr %prev.i.i.i, ptr %active.i.i, align 8
-  %slot.i.i.i.i = getelementptr i8, ptr %state.i.i, i64 176
-  %bottom.i.i.i = load ptr, ptr %slot.i.i.i.i, align 8
-  %skip.i.i.i = icmp eq ptr %bottom.i.i.i, null
-  br i1 %skip.i.i.i, label %restore_displaced.exit.i.i, label %copy.i6.i.i
-
-copy.i6.i.i:                                      ; preds = %do_jmp.i.i
-  call fastcc void @restore_displaced_inner(ptr nonnull %state.i.i) #24
-  br label %restore_displaced.exit.i.i
-
-restore_displaced.exit.i.i:                       ; preds = %copy.i6.i.i, %do_jmp.i.i
-  %buf.i.i.i = getelementptr i8, ptr %state.i.i, i64 8
-  %buf_reg.i.i.i = call ptr asm "", "=r,0"(ptr %buf.i.i.i) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i.i) #26
+  call fastcc void @restore_displaced(ptr nonnull %state.i.i)
+  %buf_reg.i.i.i = call ptr asm "", "=r,0"(ptr nonnull %buf.i.i.i) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i.i) #27
   unreachable
 
 resume.i.i:                                       ; preds = %save_ip.exit.i.i
   %resume_token.i.i = load ptr, ptr %token_slot.i.i, align 8
   %same_token.i.i = icmp eq ptr %resume_token.i.i, %token.i.i
   call void @llvm.assume(i1 %same_token.i.i)
-  %slot.i2.i.i = getelementptr i8, ptr %state.i.i, i64 128
-  %slot.i3.i.i = getelementptr i8, ptr %state.i.i, i64 136
-  %copy_in_bottom_out.i.i = load ptr, ptr %slot.i2.i.i, align 8
-  %copy_in_top_out.i.i = load ptr, ptr %slot.i3.i.i, align 8
+  %slot.i7.i.i = getelementptr i8, ptr %state.i.i, i64 96
+  %slot.i8.i.i = getelementptr i8, ptr %state.i.i, i64 104
+  %copy_in_bottom_out.i.i = load ptr, ptr %slot.i7.i.i, align 8
+  %copy_in_top_out.i.i = load ptr, ptr %slot.i8.i.i, align 8
   %same_bottom_out.i.i = icmp eq ptr %copy_in_bottom_out.i.i, %sp.i.i
   %same_top_out.i.i = icmp eq ptr %copy_in_top_out.i.i, %frame_top.i.i
   %same_frame_out.i.i = and i1 %same_bottom_out.i.i, %same_top_out.i.i
-  %slot.i1.i.i.phi.trans.insert.i = getelementptr i8, ptr %state.i.i, i64 120
-  br i1 %same_frame_out.i.i, label %resume.i.exit.i_crit_edge.i, label %record_copy_in.i.i
-
-resume.i.exit.i_crit_edge.i:                      ; preds = %resume.i.i
-  %frame_size.i.i.pre.i = load i64, ptr %slot.i1.i.i.phi.trans.insert.i, align 8
-  br label %exit.i.i
+  %slot.i5.i.phi.trans.insert.i = getelementptr i8, ptr %state.i.i, i64 88
+  br i1 %same_frame_out.i.i, label %helper.exit, label %record_copy_in.i.i
 
 record_copy_in.i.i:                               ; preds = %resume.i.i
   %top_i.i.i.i = ptrtoint ptr %frame_top.i.i to i64
   %bottom_i.i.i.i = ptrtoint ptr %sp.i.i to i64
   %size.i.i.i = sub i64 %top_i.i.i.i, %bottom_i.i.i.i
-  store ptr %sp.i.i, ptr %slot.i2.i.i, align 8
-  store ptr %frame_top.i.i, ptr %slot.i3.i.i, align 8
-  store i64 %size.i.i.i, ptr %slot.i1.i.i.phi.trans.insert.i, align 8
-  br label %exit.i.i
-
-exit.i.i:                                         ; preds = %record_copy_in.i.i, %resume.i.exit.i_crit_edge.i
-  %frame_size.i.i.pre.i139 = phi i64 [ %frame_size.i.i.pre.i, %resume.i.exit.i_crit_edge.i ], [ %size.i.i.i, %record_copy_in.i.i ]
-  %size_slot.i.i.i = getelementptr i8, ptr %state.i.i, i64 64
-  %size.i7.i.i = load i64, ptr %size_slot.i.i.i, align 8
-  %zero_frame.i.i.i = icmp eq i64 %frame_size.i.i.pre.i139, 0
-  %full_frame.i.i.i = icmp uge i64 %frame_size.i.i.pre.i139, %size.i7.i.i
-  %skip.i9.i.i = or i1 %zero_frame.i.i.i, %full_frame.i.i.i
-  br i1 %skip.i9.i.i, label %helper.exit, label %do_copy.i.i.i
-
-do_copy.i.i.i:                                    ; preds = %exit.i.i
-  %slot.i.i8.i.i = getelementptr i8, ptr %state.i.i, i64 80
-  %copy.i.i.i.i = getelementptr i8, ptr %state.i.i, i64 56
-  %top_sp.i.i.i = load ptr, ptr %slot.i.i8.i.i, align 8
-  %copy.i.i.i.val.i = load ptr, ptr %copy.i.i.i.i, align 8
-  %rest_size.i.i.i = call fastcc i64 @copy_rest_inner(ptr nonnull %state.i.i, ptr %copy.i.i.i.val.i, ptr %top_sp.i.i.i, i64 %frame_size.i.i.pre.i139, i64 %size.i7.i.i) #27
+  store ptr %sp.i.i, ptr %slot.i7.i.i, align 8
+  store ptr %frame_top.i.i, ptr %slot.i8.i.i, align 8
+  store i64 %size.i.i.i, ptr %slot.i5.i.phi.trans.insert.i, align 8
   br label %helper.exit
 
-helper.exit:                                      ; preds = %exit.i.i, %do_copy.i.i.i
-  %token.i.i.i = phi i64 [ 0, %exit.i.i ], [ %rest_size.i.i.i, %do_copy.i.i.i ]
-  store i64 %token.i.i.i, ptr %sink.i.i, align 8
+helper.exit:                                      ; preds = %resume.i.i, %record_copy_in.i.i
+  %copy.i.i.i = getelementptr i8, ptr %state.i.i, i64 24
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i.i)
-  %lt_ten177 = icmp ult i32 %k, 10
-  br i1 %lt_ten177, label %loop.lr.ph, label %exit
+  %lt_ten125 = icmp ult i32 %k, 10
+  br i1 %lt_ten125, label %loop.lr.ph, label %exit
 
 loop.lr.ph:                                       ; preds = %helper.exit
-  %top_i.i.i.i33 = ptrtoint ptr %frame_top.i.i to i64
-  %bottom_i.i.i.i34 = ptrtoint ptr %sp.i.i to i64
-  %size.i.i.i35 = sub i64 %top_i.i.i.i33, %bottom_i.i.i.i34
-  %slot.i.i8.i.i44 = getelementptr i8, ptr %state.i.i, i64 80
-  %copy.i.i.i.i45 = getelementptr i8, ptr %state.i.i, i64 56
+  %token.i.i14 = call ptr %token_fn.i.i(ptr nonnull %raw_token.i.i3) #21
+  %same_token.i.i24 = icmp eq ptr %token.i.i, %token.i.i14
+  %top_i.i.i.i34 = ptrtoint ptr %frame_top.i.i to i64
+  %bottom_i.i.i.i35 = ptrtoint ptr %sp.i.i to i64
+  %size.i.i.i36 = sub i64 %top_i.i.i.i34, %bottom_i.i.i.i35
   br label %loop
 
-loop:                                             ; preds = %loop.lr.ph, %helper.exit88
-  %n178 = phi i32 [ %k, %loop.lr.ph ], [ %new_n, %helper.exit88 ]
+loop:                                             ; preds = %loop.lr.ph, %helper.exit62
+  %n126 = phi i32 [ %k, %loop.lr.ph ], [ %new_n, %helper.exit62 ]
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i.i3)
-  %token.i.i13 = call ptr %token_fn.i.i(ptr nonnull %raw_token.i.i3) #21
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i.i1)
   call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i.i2)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i.i1, ptr %local_ip_slot.i.i.i2) #22
-          to label %save_ip.exit.i.i17 unwind label %dispatch.i.i.i15
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i.i1, ptr %local_ip_slot.i.i.i2) #24
+          to label %save_ip.exit.i.i18 unwind label %dispatch.i.i.i16
 
-dispatch.i.i.i15:                                 ; preds = %loop
-  %pad.i.i.i16 = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i.i1, ptr nonnull %local_ip_slot.i.i.i2) #23 [ "funclet"(token %pad.i.i.i16) ]
-  br label %save_ip.exit.i.i17
+dispatch.i.i.i16:                                 ; preds = %loop
+  %pad.i.i.i17 = cleanuppad within none []
+  call void asm "", "r,r"(ptr nonnull %flag.i.i.i1, ptr nonnull %local_ip_slot.i.i.i2) #25 [ "funclet"(token %pad.i.i.i17) ]
+  br label %save_ip.exit.i.i18
 
-save_ip.exit.i.i17:                               ; preds = %dispatch.i.i.i15, %loop
-  %ip.i.i.i19 = load ptr, ptr %local_ip_slot.i.i.i2, align 8
-  store ptr %ip.i.i.i19, ptr %buf_ip_slot.i.i.i, align 8
-  %flag_val.i.i.i20 = load i1, ptr %flag.i.i.i1, align 1
+save_ip.exit.i.i18:                               ; preds = %dispatch.i.i.i16, %loop
+  %ip.i.i.i20 = load ptr, ptr %local_ip_slot.i.i.i2, align 8
+  store volatile ptr %ip.i.i.i20, ptr %buf_ip_slot.i.i.i, align 8
+  %flag_val.i.i.i21 = load i1, ptr %flag.i.i.i1, align 1
   store volatile i1 false, ptr %flag.i.i.i1, align 1
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i.i1)
   call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i.i2)
-  br i1 %flag_val.i.i.i20, label %yield.i.i52, label %exit.i.i36
+  br i1 %flag_val.i.i.i21, label %yield.i.i46, label %resume.i.i22
 
-yield.i.i52:                                      ; preds = %save_ip.exit.i.i17
-  %fp.i.i53 = tail call ptr @llvm.localaddress() #16
-  store ptr %token.i.i13, ptr %token_slot.i.i, align 8
+yield.i.i46:                                      ; preds = %save_ip.exit.i.i18
+  %fp.i.i47 = tail call ptr @llvm.localaddress() #16
+  store ptr %token.i.i14, ptr %token_slot.i.i, align 8
   store i64 0, ptr %sink.i.i, align 8
-  %slot_2.i.i.i54 = getelementptr i8, ptr %state.i.i, i64 48
-  store ptr %fp.i.i53, ptr %buf.i1.i.i, align 8
-  store ptr %sp.i.i, ptr %slot_2.i.i.i54, align 8
-  %slot.i5.i.i56 = getelementptr i8, ptr %state.i.i, i64 24
-  %sp.i.i.i57 = load ptr, ptr %slot.i5.i.i56, align 8
-  %same_sp.i.i58 = icmp eq ptr %sp.i.i.i57, %sp.i.i
-  br i1 %same_sp.i.i58, label %do_jmp.i.i77, label %do_frame_copy.i.i.i86
+  %slot_2.i.i.i48 = getelementptr i8, ptr %buf.i2.i.i, i64 16
+  store ptr %fp.i.i47, ptr %buf.i2.i.i, align 8
+  store ptr %sp.i.i, ptr %slot_2.i.i.i48, align 8
+  %slot.i.i.i49 = getelementptr i8, ptr %state.i.i, i64 8
+  %buf.i.i.i50 = load ptr, ptr %slot.i.i.i49, align 8, !invariant.load !0
+  %slot.i11.i.i52 = getelementptr i8, ptr %buf.i.i.i50, i64 16
+  %sp.i.i.i53 = load ptr, ptr %slot.i11.i.i52, align 8
+  %same_sp.i.i54 = icmp eq ptr %sp.i.i.i53, %sp.i.i
+  br i1 %same_sp.i.i54, label %same.i.i59, label %slow.i.i55
 
-do_frame_copy.i.i.i86:                            ; preds = %yield.i.i52
-  %buf.i4.i.i.i87 = load ptr, ptr %copy.i.i.i.i45, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i4.i.i.i87, ptr align 1 %sp.i.i, i64 %size.i.i.i35, i1 false) #17
-  br label %do_jmp.i.i77
+same.i.i59:                                       ; preds = %yield.i.i46
+  %same_sp_token.i.i60 = call fastcc i64 @save_same_sp_frame(ptr nonnull %state.i.i, ptr %copy.i.i.i, ptr nonnull %frame_top.i.i, ptr %sp.i.i) #21
+  %slot.i10.i.i61 = getelementptr i8, ptr %state.i.i, i64 168
+  store i64 %same_sp_token.i.i60, ptr %slot.i10.i.i61, align 8
+  br label %do_jmp.i.i56
 
-do_jmp.i.i77:                                     ; preds = %do_frame_copy.i.i.i86, %yield.i.i52
-  %prev.i.i.i78 = load ptr, ptr %state.i.i, align 8
-  store ptr %prev.i.i.i78, ptr %active.i.i, align 8
-  %slot.i.i.i.i79 = getelementptr i8, ptr %state.i.i, i64 176
-  %bottom.i.i.i80 = load ptr, ptr %slot.i.i.i.i79, align 8
-  %skip.i.i.i81 = icmp eq ptr %bottom.i.i.i80, null
-  br i1 %skip.i.i.i81, label %restore_displaced.exit.i.i83, label %copy.i6.i.i82
+slow.i.i55:                                       ; preds = %yield.i.i46
+  call fastcc void @coro_yield_slow(ptr %sp.i.i, ptr nonnull %state.i.i, ptr nonnull %frame_top.i.i, ptr %copy.i.i.i, ptr %sp.i.i.i53) #20
+  br label %do_jmp.i.i56
 
-copy.i6.i.i82:                                    ; preds = %do_jmp.i.i77
-  call fastcc void @restore_displaced_inner(ptr nonnull %state.i.i) #24
-  br label %restore_displaced.exit.i.i83
-
-restore_displaced.exit.i.i83:                     ; preds = %copy.i6.i.i82, %do_jmp.i.i77
-  %buf.i.i.i84 = getelementptr i8, ptr %state.i.i, i64 8
-  %buf_reg.i.i.i85 = call ptr asm "", "=r,0"(ptr %buf.i.i.i84) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i.i85) #26
+do_jmp.i.i56:                                     ; preds = %slow.i.i55, %same.i.i59
+  %prev.i.i.i57 = load ptr, ptr %state.i.i, align 8
+  store ptr %prev.i.i.i57, ptr %active.i.i, align 8
+  call fastcc void @restore_displaced(ptr nonnull %state.i.i)
+  %buf_reg.i.i.i58 = call ptr asm "", "=r,0"(ptr nonnull %buf.i.i.i50) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i.i58) #27
   unreachable
 
-exit.i.i36:                                       ; preds = %save_ip.exit.i.i17
-  %same_token.i.i23 = icmp eq ptr %token.i.i, %token.i.i13
-  call void @llvm.assume(i1 %same_token.i.i23)
-  br i1 %skip.i9.i.i, label %helper.exit88, label %do_copy.i.i.i43
+resume.i.i22:                                     ; preds = %save_ip.exit.i.i18
+  call void @llvm.assume(i1 %same_token.i.i24)
+  %copy_in_bottom_out.i.i27 = load ptr, ptr %slot.i7.i.i, align 8
+  %copy_in_top_out.i.i28 = load ptr, ptr %slot.i8.i.i, align 8
+  %same_bottom_out.i.i29 = icmp eq ptr %copy_in_bottom_out.i.i27, %sp.i.i
+  %same_top_out.i.i30 = icmp eq ptr %copy_in_top_out.i.i28, %frame_top.i.i
+  %same_frame_out.i.i31 = and i1 %same_bottom_out.i.i29, %same_top_out.i.i30
+  br i1 %same_frame_out.i.i31, label %helper.exit62, label %record_copy_in.i.i33
 
-do_copy.i.i.i43:                                  ; preds = %exit.i.i36
-  %top_sp.i.i.i46 = load ptr, ptr %slot.i.i8.i.i44, align 8
-  %copy.i.i.i.val.i47 = load ptr, ptr %copy.i.i.i.i45, align 8
-  %rest_size.i.i.i48 = call fastcc i64 @copy_rest_inner(ptr nonnull %state.i.i, ptr %copy.i.i.i.val.i47, ptr %top_sp.i.i.i46, i64 %frame_size.i.i.pre.i139, i64 %size.i7.i.i) #27
-  br label %helper.exit88
+record_copy_in.i.i33:                             ; preds = %resume.i.i22
+  store ptr %sp.i.i, ptr %slot.i7.i.i, align 8
+  store ptr %frame_top.i.i, ptr %slot.i8.i.i, align 8
+  store i64 %size.i.i.i36, ptr %slot.i5.i.phi.trans.insert.i, align 8
+  br label %helper.exit62
 
-helper.exit88:                                    ; preds = %exit.i.i36, %do_copy.i.i.i43
-  %token.i.i.i49 = phi i64 [ 0, %exit.i.i36 ], [ %rest_size.i.i.i48, %do_copy.i.i.i43 ]
-  store i64 %token.i.i.i49, ptr %sink.i.i, align 8
+helper.exit62:                                    ; preds = %resume.i.i22, %record_copy_in.i.i33
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i.i3)
-  %new_n = add nuw nsw i32 %n178, 1
+  %new_n = add nuw nsw i32 %n126, 1
   %exitcond.not = icmp eq i32 %new_n, 10
   br i1 %exitcond.not, label %exit, label %loop
 
-exit:                                             ; preds = %helper.exit88, %helper.exit
-  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i.i91)
-  %token.i.i101 = call ptr %token_fn.i.i(ptr nonnull %raw_token.i.i91) #21
-  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i.i89)
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i.i90)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i.i89, ptr %local_ip_slot.i.i.i90) #22
-          to label %save_ip.exit.i.i105 unwind label %dispatch.i.i.i103
+exit:                                             ; preds = %helper.exit62, %helper.exit
+  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i.i65)
+  %token.i.i76 = call ptr %token_fn.i.i(ptr nonnull %raw_token.i.i65) #21
+  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i.i63)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i.i64)
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i.i63, ptr %local_ip_slot.i.i.i64) #24
+          to label %save_ip.exit.i.i80 unwind label %dispatch.i.i.i78
 
-dispatch.i.i.i103:                                ; preds = %exit
-  %pad.i.i.i104 = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i.i89, ptr nonnull %local_ip_slot.i.i.i90) #23 [ "funclet"(token %pad.i.i.i104) ]
-  br label %save_ip.exit.i.i105
+dispatch.i.i.i78:                                 ; preds = %exit
+  %pad.i.i.i79 = cleanuppad within none []
+  call void asm "", "r,r"(ptr nonnull %flag.i.i.i63, ptr nonnull %local_ip_slot.i.i.i64) #25 [ "funclet"(token %pad.i.i.i79) ]
+  br label %save_ip.exit.i.i80
 
-save_ip.exit.i.i105:                              ; preds = %dispatch.i.i.i103, %exit
-  %ip.i.i.i107 = load ptr, ptr %local_ip_slot.i.i.i90, align 8
-  store ptr %ip.i.i.i107, ptr %buf_ip_slot.i.i.i, align 8
-  %flag_val.i.i.i108 = load i1, ptr %flag.i.i.i89, align 1
-  store volatile i1 false, ptr %flag.i.i.i89, align 1
-  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i.i89)
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i.i90)
-  br i1 %flag_val.i.i.i108, label %yield.i.i140, label %exit.i.i124
+save_ip.exit.i.i80:                               ; preds = %dispatch.i.i.i78, %exit
+  %ip.i.i.i82 = load ptr, ptr %local_ip_slot.i.i.i64, align 8
+  store volatile ptr %ip.i.i.i82, ptr %buf_ip_slot.i.i.i, align 8
+  %flag_val.i.i.i83 = load i1, ptr %flag.i.i.i63, align 1
+  store volatile i1 false, ptr %flag.i.i.i63, align 1
+  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i.i63)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i.i64)
+  br i1 %flag_val.i.i.i83, label %yield.i.i108, label %resume.i.i84
 
-yield.i.i140:                                     ; preds = %save_ip.exit.i.i105
-  %fp.i.i141 = tail call ptr @llvm.localaddress() #16
-  store ptr %token.i.i101, ptr %token_slot.i.i, align 8
+yield.i.i108:                                     ; preds = %save_ip.exit.i.i80
+  %fp.i.i109 = tail call ptr @llvm.localaddress() #16
+  store ptr %token.i.i76, ptr %token_slot.i.i, align 8
   store i64 0, ptr %sink.i.i, align 8
-  %slot_2.i.i.i142 = getelementptr i8, ptr %state.i.i, i64 48
-  store ptr %fp.i.i141, ptr %buf.i1.i.i, align 8
-  store ptr %sp.i.i, ptr %slot_2.i.i.i142, align 8
-  %slot.i5.i.i144 = getelementptr i8, ptr %state.i.i, i64 24
-  %sp.i.i.i145 = load ptr, ptr %slot.i5.i.i144, align 8
-  %same_sp.i.i146 = icmp eq ptr %sp.i.i.i145, %sp.i.i
-  br i1 %same_sp.i.i146, label %do_jmp.i.i165, label %do_frame_copy.i.i.i174
+  %slot_2.i.i.i110 = getelementptr i8, ptr %buf.i2.i.i, i64 16
+  store ptr %fp.i.i109, ptr %buf.i2.i.i, align 8
+  store ptr %sp.i.i, ptr %slot_2.i.i.i110, align 8
+  %slot.i.i.i111 = getelementptr i8, ptr %state.i.i, i64 8
+  %buf.i.i.i112 = load ptr, ptr %slot.i.i.i111, align 8, !invariant.load !0
+  %slot.i11.i.i114 = getelementptr i8, ptr %buf.i.i.i112, i64 16
+  %sp.i.i.i115 = load ptr, ptr %slot.i11.i.i114, align 8
+  %same_sp.i.i116 = icmp eq ptr %sp.i.i.i115, %sp.i.i
+  br i1 %same_sp.i.i116, label %same.i.i121, label %slow.i.i117
 
-do_frame_copy.i.i.i174:                           ; preds = %yield.i.i140
-  %copy.i.i.i143 = getelementptr i8, ptr %state.i.i, i64 56
-  %top_i.i.i.i.i148 = ptrtoint ptr %frame_top.i.i to i64
-  %bottom_i.i.i.i.i149 = ptrtoint ptr %sp.i.i to i64
-  %size.i.i.i.i150 = sub i64 %top_i.i.i.i.i148, %bottom_i.i.i.i.i149
-  %buf.i4.i.i.i175 = load ptr, ptr %copy.i.i.i143, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i4.i.i.i175, ptr align 1 %sp.i.i, i64 %size.i.i.i.i150, i1 false) #17
-  br label %do_jmp.i.i165
+same.i.i121:                                      ; preds = %yield.i.i108
+  %same_sp_token.i.i122 = call fastcc i64 @save_same_sp_frame(ptr nonnull %state.i.i, ptr %copy.i.i.i, ptr nonnull %frame_top.i.i, ptr %sp.i.i) #21
+  %slot.i10.i.i123 = getelementptr i8, ptr %state.i.i, i64 168
+  store i64 %same_sp_token.i.i122, ptr %slot.i10.i.i123, align 8
+  br label %do_jmp.i.i118
 
-do_jmp.i.i165:                                    ; preds = %do_frame_copy.i.i.i174, %yield.i.i140
-  %prev.i.i.i166 = load ptr, ptr %state.i.i, align 8
-  store ptr %prev.i.i.i166, ptr %active.i.i, align 8
-  %slot.i.i.i.i167 = getelementptr i8, ptr %state.i.i, i64 176
-  %bottom.i.i.i168 = load ptr, ptr %slot.i.i.i.i167, align 8
-  %skip.i.i.i169 = icmp eq ptr %bottom.i.i.i168, null
-  br i1 %skip.i.i.i169, label %restore_displaced.exit.i.i171, label %copy.i6.i.i170
+slow.i.i117:                                      ; preds = %yield.i.i108
+  call fastcc void @coro_yield_slow(ptr %sp.i.i, ptr nonnull %state.i.i, ptr nonnull %frame_top.i.i, ptr %copy.i.i.i, ptr %sp.i.i.i115) #20
+  br label %do_jmp.i.i118
 
-copy.i6.i.i170:                                   ; preds = %do_jmp.i.i165
-  call fastcc void @restore_displaced_inner(ptr nonnull %state.i.i) #24
-  br label %restore_displaced.exit.i.i171
-
-restore_displaced.exit.i.i171:                    ; preds = %copy.i6.i.i170, %do_jmp.i.i165
-  %buf.i.i.i172 = getelementptr i8, ptr %state.i.i, i64 8
-  %buf_reg.i.i.i173 = call ptr asm "", "=r,0"(ptr %buf.i.i.i172) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i.i173) #26
+do_jmp.i.i118:                                    ; preds = %slow.i.i117, %same.i.i121
+  %prev.i.i.i119 = load ptr, ptr %state.i.i, align 8
+  store ptr %prev.i.i.i119, ptr %active.i.i, align 8
+  call fastcc void @restore_displaced(ptr nonnull %state.i.i)
+  %buf_reg.i.i.i120 = call ptr asm "", "=r,0"(ptr nonnull %buf.i.i.i112) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i.i120) #27
   unreachable
 
-exit.i.i124:                                      ; preds = %save_ip.exit.i.i105
-  %same_token.i.i111 = icmp eq ptr %token.i.i, %token.i.i101
-  call void @llvm.assume(i1 %same_token.i.i111)
-  br i1 %skip.i9.i.i, label %helper.exit176, label %do_copy.i.i.i131
+resume.i.i84:                                     ; preds = %save_ip.exit.i.i80
+  %same_token.i.i86 = icmp eq ptr %token.i.i, %token.i.i76
+  call void @llvm.assume(i1 %same_token.i.i86)
+  %copy_in_bottom_out.i.i89 = load ptr, ptr %slot.i7.i.i, align 8
+  %copy_in_top_out.i.i90 = load ptr, ptr %slot.i8.i.i, align 8
+  %same_bottom_out.i.i91 = icmp eq ptr %copy_in_bottom_out.i.i89, %sp.i.i
+  %same_top_out.i.i92 = icmp eq ptr %copy_in_top_out.i.i90, %frame_top.i.i
+  %same_frame_out.i.i93 = and i1 %same_bottom_out.i.i91, %same_top_out.i.i92
+  br i1 %same_frame_out.i.i93, label %resume.i.coro_yield.exit_crit_edge.i106, label %record_copy_in.i.i95
 
-do_copy.i.i.i131:                                 ; preds = %exit.i.i124
-  %slot.i.i8.i.i132 = getelementptr i8, ptr %state.i.i, i64 80
-  %copy.i.i.i.i133 = getelementptr i8, ptr %state.i.i, i64 56
-  %top_sp.i.i.i134 = load ptr, ptr %slot.i.i8.i.i132, align 8
-  %copy.i.i.i.val.i135 = load ptr, ptr %copy.i.i.i.i133, align 8
-  %rest_size.i.i.i136 = call fastcc i64 @copy_rest_inner(ptr nonnull %state.i.i, ptr %copy.i.i.i.val.i135, ptr %top_sp.i.i.i134, i64 %frame_size.i.i.pre.i139, i64 %size.i7.i.i) #27
-  br label %helper.exit176
+resume.i.coro_yield.exit_crit_edge.i106:          ; preds = %resume.i.i84
+  %frame_size.i.pre.i107 = load i64, ptr %slot.i5.i.phi.trans.insert.i, align 8
+  br label %helper.exit124
 
-helper.exit176:                                   ; preds = %exit.i.i124, %do_copy.i.i.i131
-  %token.i.i.i137 = phi i64 [ 0, %exit.i.i124 ], [ %rest_size.i.i.i136, %do_copy.i.i.i131 ]
-  store i64 %token.i.i.i137, ptr %sink.i.i, align 8
-  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i.i91)
+record_copy_in.i.i95:                             ; preds = %resume.i.i84
+  %top_i.i.i.i96 = ptrtoint ptr %frame_top.i.i to i64
+  %bottom_i.i.i.i97 = ptrtoint ptr %sp.i.i to i64
+  %size.i.i.i98 = sub i64 %top_i.i.i.i96, %bottom_i.i.i.i97
+  store ptr %sp.i.i, ptr %slot.i7.i.i, align 8
+  store ptr %frame_top.i.i, ptr %slot.i8.i.i, align 8
+  store i64 %size.i.i.i98, ptr %slot.i5.i.phi.trans.insert.i, align 8
+  br label %helper.exit124
+
+helper.exit124:                                   ; preds = %resume.i.coro_yield.exit_crit_edge.i106, %record_copy_in.i.i95
+  %frame_size.i.i99 = phi i64 [ %frame_size.i.pre.i107, %resume.i.coro_yield.exit_crit_edge.i106 ], [ %size.i.i.i98, %record_copy_in.i.i95 ]
+  %slot.i4.i.i = getelementptr i8, ptr %state.i.i, i64 48
+  %size_slot.i.i = getelementptr i8, ptr %state.i.i, i64 32
+  %size.i.i102 = load i64, ptr %size_slot.i.i, align 8
+  %top_sp.i.i104 = load ptr, ptr %slot.i4.i.i, align 8
+  %copy_rest_token.i.i105 = call fastcc i64 @copy_rest(ptr nonnull %state.i.i) #21 [ "copy_rest"(ptr %copy.i.i.i, ptr %top_sp.i.i104, i64 %frame_size.i.i99, i64 %size.i.i102) ]
+  store i64 %copy_rest_token.i.i105, ptr %sink.i.i, align 8
+  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i.i65)
   ret void
 }
 
 define i32 @passthru_fn(i32 %n) personality ptr @spill_personality {
-  %flag.i.i96.i = alloca i1, align 1
-  %local_ip_slot.i.i97.i = alloca ptr, align 8
-  %raw_token.i98.i = alloca i8, align 1
+  %flag.i.i69.i = alloca i1, align 1
+  %local_ip_slot.i.i70.i = alloca ptr, align 8
+  %raw_token.i71.i = alloca i8, align 1
   %flag.i.i7.i = alloca i1, align 1
   %local_ip_slot.i.i8.i = alloca ptr, align 8
   %raw_token.i9.i = alloca i8, align 1
   %flag.i.i.i = alloca i1, align 1
   %local_ip_slot.i.i.i = alloca ptr, align 8
   %raw_token.i.i = alloca i8, align 1
-  %print.i5.i = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n) #19
-  %flush.i6.i = tail call i32 @fflush(ptr null) #20
-  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i98.i)
-  %active.i99.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #16
-  %state.i100.i = load ptr, ptr %active.i99.i, align 8
-  %sp.i101.i = tail call ptr @llvm.stacksave.p0() #16
-  %frame_top.i102.i = tail call ptr @llvm.addressofreturnaddress.p0() #16
-  %frame_top_above_sp.i103.i = icmp ugt ptr %frame_top.i102.i, %sp.i101.i
-  tail call void @llvm.assume(i1 %frame_top_above_sp.i103.i)
-  %sink.i104.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #16
-  %buf.i1.i105.i = getelementptr i8, ptr %state.i100.i, i64 32
-  %slot.i4.i106.i = getelementptr i8, ptr %state.i100.i, i64 192
-  %token_fn.i107.i = load ptr, ptr %slot.i4.i106.i, align 8, !invariant.load !0
-  %token.i108.i = call ptr %token_fn.i107.i(ptr nonnull %raw_token.i98.i) #21
-  %token_slot.i109.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @resume_token) #16
-  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i96.i)
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i97.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i96.i, ptr %local_ip_slot.i.i97.i) #22
-          to label %save_ip.exit.i112.i unwind label %dispatch.i.i110.i
+  %print.i5.i = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n) #22
+  %flush.i6.i = tail call i32 @fflush(ptr null) #23
+  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i71.i)
+  %active.i72.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #16
+  %state.i73.i = load ptr, ptr %active.i72.i, align 8
+  %sp.i74.i = tail call ptr @llvm.stacksave.p0() #16
+  %frame_top.i75.i = tail call ptr @llvm.addressofreturnaddress.p0() #16
+  %frame_top_above_sp.i76.i = icmp ugt ptr %frame_top.i75.i, %sp.i74.i
+  tail call void @llvm.assume(i1 %frame_top_above_sp.i76.i)
+  %sink.i77.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #16
+  %slot.i1.i78.i = getelementptr i8, ptr %state.i73.i, i64 16
+  %buf.i2.i79.i = load ptr, ptr %slot.i1.i78.i, align 8, !invariant.load !0
+  %slot.i9.i80.i = getelementptr i8, ptr %state.i73.i, i64 160
+  %token_fn.i81.i = load ptr, ptr %slot.i9.i80.i, align 8, !invariant.load !0
+  %token.i82.i = call ptr %token_fn.i81.i(ptr nonnull %raw_token.i71.i) #21
+  %token_slot.i83.i = tail call align 8 ptr @llvm.threadlocal.address.p0(ptr @resume_token) #16
+  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i69.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i70.i)
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i69.i, ptr %local_ip_slot.i.i70.i) #24
+          to label %save_ip.exit.i86.i unwind label %dispatch.i.i84.i
 
-dispatch.i.i110.i:                                ; preds = %0
-  %pad.i.i111.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i96.i, ptr nonnull %local_ip_slot.i.i97.i) #23 [ "funclet"(token %pad.i.i111.i) ]
-  br label %save_ip.exit.i112.i
+dispatch.i.i84.i:                                 ; preds = %0
+  %pad.i.i85.i = cleanuppad within none []
+  call void asm "", "r,r"(ptr nonnull %flag.i.i69.i, ptr nonnull %local_ip_slot.i.i70.i) #25 [ "funclet"(token %pad.i.i85.i) ]
+  br label %save_ip.exit.i86.i
 
-save_ip.exit.i112.i:                              ; preds = %dispatch.i.i110.i, %0
-  %buf_ip_slot.i.i113.i = getelementptr i8, ptr %state.i100.i, i64 40
-  %ip.i.i114.i = load ptr, ptr %local_ip_slot.i.i97.i, align 8
-  store ptr %ip.i.i114.i, ptr %buf_ip_slot.i.i113.i, align 8
-  %flag_val.i.i115.i = load i1, ptr %flag.i.i96.i, align 1
-  store volatile i1 false, ptr %flag.i.i96.i, align 1
-  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i96.i)
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i97.i)
-  br i1 %flag_val.i.i115.i, label %yield.i145.i, label %resume.i116.i
+save_ip.exit.i86.i:                               ; preds = %dispatch.i.i84.i, %0
+  %buf_ip_slot.i.i87.i = getelementptr i8, ptr %buf.i2.i79.i, i64 8
+  %ip.i.i88.i = load ptr, ptr %local_ip_slot.i.i70.i, align 8
+  store volatile ptr %ip.i.i88.i, ptr %buf_ip_slot.i.i87.i, align 8
+  %flag_val.i.i89.i = load i1, ptr %flag.i.i69.i, align 1
+  store volatile i1 false, ptr %flag.i.i69.i, align 1
+  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i69.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i70.i)
+  br i1 %flag_val.i.i89.i, label %yield.i113.i, label %resume.i90.i
 
-yield.i145.i:                                     ; preds = %save_ip.exit.i112.i
-  %fp.i146.i = tail call ptr @llvm.localaddress() #16
-  store ptr %token.i108.i, ptr %token_slot.i109.i, align 8
-  store i64 0, ptr %sink.i104.i, align 8
-  %slot_2.i.i147.i = getelementptr i8, ptr %state.i100.i, i64 48
-  store ptr %fp.i146.i, ptr %buf.i1.i105.i, align 8
-  store ptr %sp.i101.i, ptr %slot_2.i.i147.i, align 8
-  %copy.i.i149.i = getelementptr i8, ptr %state.i100.i, i64 56
-  %slot.i5.i150.i = getelementptr i8, ptr %state.i100.i, i64 24
-  %sp.i.i151.i = load ptr, ptr %slot.i5.i150.i, align 8
-  %same_sp.i152.i = icmp eq ptr %sp.i.i151.i, %sp.i101.i
-  br i1 %same_sp.i152.i, label %do_jmp.i173.i, label %slow.i153.i
+yield.i113.i:                                     ; preds = %save_ip.exit.i86.i
+  %fp.i114.i = tail call ptr @llvm.localaddress() #16
+  store ptr %token.i82.i, ptr %token_slot.i83.i, align 8
+  store i64 0, ptr %sink.i77.i, align 8
+  %slot_2.i.i115.i = getelementptr i8, ptr %buf.i2.i79.i, i64 16
+  store ptr %fp.i114.i, ptr %buf.i2.i79.i, align 8
+  store ptr %sp.i74.i, ptr %slot_2.i.i115.i, align 8
+  %slot.i.i116.i = getelementptr i8, ptr %state.i73.i, i64 8
+  %buf.i.i117.i = load ptr, ptr %slot.i.i116.i, align 8, !invariant.load !0
+  %copy.i3.i118.i = getelementptr i8, ptr %state.i73.i, i64 24
+  %slot.i11.i119.i = getelementptr i8, ptr %buf.i.i117.i, i64 16
+  %sp.i.i120.i = load ptr, ptr %slot.i11.i119.i, align 8
+  %same_sp.i121.i = icmp eq ptr %sp.i.i120.i, %sp.i74.i
+  br i1 %same_sp.i121.i, label %same.i127.i, label %slow.i122.i
 
-slow.i153.i:                                      ; preds = %yield.i145.i
-  %top_i.i.i.i154.i = ptrtoint ptr %frame_top.i102.i to i64
-  %bottom_i.i.i.i155.i = ptrtoint ptr %sp.i101.i to i64
-  %size.i.i.i156.i = sub i64 %top_i.i.i.i154.i, %bottom_i.i.i.i155.i
-  %slot.i2.i.i157.i = getelementptr i8, ptr %state.i100.i, i64 128
-  %slot.i3.i.i158.i = getelementptr i8, ptr %state.i100.i, i64 136
-  %copy_in_bottom.i.i159.i = load ptr, ptr %slot.i2.i.i157.i, align 8
-  %copy_in_top.i.i160.i = load ptr, ptr %slot.i3.i.i158.i, align 8
-  %same_bottom.i.i161.i = icmp eq ptr %copy_in_bottom.i.i159.i, %sp.i101.i
-  %same_top.i.i162.i = icmp eq ptr %copy_in_top.i.i160.i, %frame_top.i102.i
-  %same_frame.i.i163.i = and i1 %same_bottom.i.i161.i, %same_top.i.i162.i
-  br i1 %same_frame.i.i163.i, label %do_frame_copy.i.i182.i, label %do_full_copy.i.i164.i
+same.i127.i:                                      ; preds = %yield.i113.i
+  %same_sp_token.i128.i = call fastcc i64 @save_same_sp_frame(ptr nonnull %state.i73.i, ptr %copy.i3.i118.i, ptr nonnull %frame_top.i75.i, ptr %sp.i74.i) #21
+  %slot.i10.i129.i = getelementptr i8, ptr %state.i73.i, i64 168
+  store i64 %same_sp_token.i128.i, ptr %slot.i10.i129.i, align 8
+  br label %do_jmp.i123.i
 
-do_frame_copy.i.i182.i:                           ; preds = %slow.i153.i
-  %buf.i4.i.i183.i = load ptr, ptr %copy.i.i149.i, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i4.i.i183.i, ptr align 1 %sp.i101.i, i64 %size.i.i.i156.i, i1 false) #17
-  br label %do_jmp.i173.i
+slow.i122.i:                                      ; preds = %yield.i113.i
+  call fastcc void @coro_yield_slow(ptr %sp.i74.i, ptr nonnull %state.i73.i, ptr nonnull %frame_top.i75.i, ptr %copy.i3.i118.i, ptr %sp.i.i120.i) #20
+  br label %do_jmp.i123.i
 
-do_full_copy.i.i164.i:                            ; preds = %slow.i153.i
-  %top_i.i.i.i.i165.i = ptrtoint ptr %sp.i.i151.i to i64
-  %size.i.i.i.i167.i = sub i64 %top_i.i.i.i.i165.i, %bottom_i.i.i.i155.i
-  %size_slot.i.i.i168.i = getelementptr i8, ptr %state.i100.i, i64 64
-  store i64 %size.i.i.i.i167.i, ptr %size_slot.i.i.i168.i, align 8
-  %buf.i.i.i169.i = call fastcc ptr @require_buf(ptr %copy.i.i149.i, i64 %size.i.i.i.i167.i) #17
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i.i.i169.i, ptr align 1 %sp.i101.i, i64 %size.i.i.i.i167.i, i1 false) #17
-  %slot.i1.i10.i170.i = getelementptr i8, ptr %state.i100.i, i64 120
-  %slot.i.i11.i171.i = getelementptr i8, ptr %state.i100.i, i64 80
-  store ptr %sp.i.i151.i, ptr %slot.i.i11.i171.i, align 8
-  store i64 %size.i.i.i156.i, ptr %slot.i1.i10.i170.i, align 8
-  br label %do_jmp.i173.i
-
-do_jmp.i173.i:                                    ; preds = %do_full_copy.i.i164.i, %do_frame_copy.i.i182.i, %yield.i145.i
-  %prev.i.i175.i = load ptr, ptr %state.i100.i, align 8
-  store ptr %prev.i.i175.i, ptr %active.i99.i, align 8
-  %slot.i.i.i176.i = getelementptr i8, ptr %state.i100.i, i64 176
-  %bottom.i.i177.i = load ptr, ptr %slot.i.i.i176.i, align 8
-  %skip.i.i178.i = icmp eq ptr %bottom.i.i177.i, null
-  br i1 %skip.i.i178.i, label %restore_displaced.exit.i180.i, label %copy.i6.i179.i
-
-copy.i6.i179.i:                                   ; preds = %do_jmp.i173.i
-  call fastcc void @restore_displaced_inner(ptr nonnull %state.i100.i) #24
-  br label %restore_displaced.exit.i180.i
-
-restore_displaced.exit.i180.i:                    ; preds = %copy.i6.i179.i, %do_jmp.i173.i
-  %buf.i.i148.i = getelementptr i8, ptr %state.i100.i, i64 8
-  %buf_reg.i.i181.i = call ptr asm "", "=r,0"(ptr %buf.i.i148.i) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i181.i) #26
+do_jmp.i123.i:                                    ; preds = %slow.i122.i, %same.i127.i
+  %prev.i.i125.i = load ptr, ptr %state.i73.i, align 8
+  store ptr %prev.i.i125.i, ptr %active.i72.i, align 8
+  call fastcc void @restore_displaced(ptr nonnull %state.i73.i)
+  %buf_reg.i.i126.i = call ptr asm "", "=r,0"(ptr nonnull %buf.i.i117.i) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i126.i) #27
   unreachable
 
-resume.i116.i:                                    ; preds = %save_ip.exit.i112.i
-  %resume_token.i117.i = load ptr, ptr %token_slot.i109.i, align 8
-  %same_token.i118.i = icmp eq ptr %resume_token.i117.i, %token.i108.i
-  call void @llvm.assume(i1 %same_token.i118.i)
-  %slot.i2.i119.i = getelementptr i8, ptr %state.i100.i, i64 128
-  %slot.i3.i120.i = getelementptr i8, ptr %state.i100.i, i64 136
-  %copy_in_bottom_out.i121.i = load ptr, ptr %slot.i2.i119.i, align 8
-  %copy_in_top_out.i122.i = load ptr, ptr %slot.i3.i120.i, align 8
-  %same_bottom_out.i123.i = icmp eq ptr %copy_in_bottom_out.i121.i, %sp.i101.i
-  %same_top_out.i124.i = icmp eq ptr %copy_in_top_out.i122.i, %frame_top.i102.i
-  %same_frame_out.i125.i = and i1 %same_bottom_out.i123.i, %same_top_out.i124.i
-  %slot.i1.i.i135.phi.trans.insert.i = getelementptr i8, ptr %state.i100.i, i64 120
-  br i1 %same_frame_out.i125.i, label %resume.i116.exit.i131_crit_edge.i, label %record_copy_in.i126.i
+resume.i90.i:                                     ; preds = %save_ip.exit.i86.i
+  %resume_token.i91.i = load ptr, ptr %token_slot.i83.i, align 8
+  %same_token.i92.i = icmp eq ptr %resume_token.i91.i, %token.i82.i
+  call void @llvm.assume(i1 %same_token.i92.i)
+  %slot.i7.i93.i = getelementptr i8, ptr %state.i73.i, i64 96
+  %slot.i8.i94.i = getelementptr i8, ptr %state.i73.i, i64 104
+  %copy_in_bottom_out.i95.i = load ptr, ptr %slot.i7.i93.i, align 8
+  %copy_in_top_out.i96.i = load ptr, ptr %slot.i8.i94.i, align 8
+  %same_bottom_out.i97.i = icmp eq ptr %copy_in_bottom_out.i95.i, %sp.i74.i
+  %same_top_out.i98.i = icmp eq ptr %copy_in_top_out.i96.i, %frame_top.i75.i
+  %same_frame_out.i99.i = and i1 %same_bottom_out.i97.i, %same_top_out.i98.i
+  br i1 %same_frame_out.i99.i, label %coro_yield.exit130.i, label %record_copy_in.i100.i
 
-resume.i116.exit.i131_crit_edge.i:                ; preds = %resume.i116.i
-  %frame_size.i.i136.pre.i = load i64, ptr %slot.i1.i.i135.phi.trans.insert.i, align 8
-  br label %exit.i131.i
+record_copy_in.i100.i:                            ; preds = %resume.i90.i
+  %slot.i6.i101.i = getelementptr i8, ptr %state.i73.i, i64 88
+  %top_i.i.i102.i = ptrtoint ptr %frame_top.i75.i to i64
+  %bottom_i.i.i103.i = ptrtoint ptr %sp.i74.i to i64
+  %size.i.i104.i = sub i64 %top_i.i.i102.i, %bottom_i.i.i103.i
+  store ptr %sp.i74.i, ptr %slot.i7.i93.i, align 8
+  store ptr %frame_top.i75.i, ptr %slot.i8.i94.i, align 8
+  store i64 %size.i.i104.i, ptr %slot.i6.i101.i, align 8
+  br label %coro_yield.exit130.i
 
-record_copy_in.i126.i:                            ; preds = %resume.i116.i
-  %top_i.i.i128.i = ptrtoint ptr %frame_top.i102.i to i64
-  %bottom_i.i.i129.i = ptrtoint ptr %sp.i101.i to i64
-  %size.i.i130.i = sub i64 %top_i.i.i128.i, %bottom_i.i.i129.i
-  store ptr %sp.i101.i, ptr %slot.i2.i119.i, align 8
-  store ptr %frame_top.i102.i, ptr %slot.i3.i120.i, align 8
-  store i64 %size.i.i130.i, ptr %slot.i1.i.i135.phi.trans.insert.i, align 8
-  br label %exit.i131.i
-
-exit.i131.i:                                      ; preds = %record_copy_in.i126.i, %resume.i116.exit.i131_crit_edge.i
-  %frame_size.i.i.i = phi i64 [ %frame_size.i.i136.pre.i, %resume.i116.exit.i131_crit_edge.i ], [ %size.i.i130.i, %record_copy_in.i126.i ]
-  %copy.i.i.i132.i = getelementptr i8, ptr %state.i100.i, i64 56
-  %size_slot.i.i133.i = getelementptr i8, ptr %state.i100.i, i64 64
-  %size.i7.i134.i = load i64, ptr %size_slot.i.i133.i, align 8
-  %slot.i.i8.i137.i = getelementptr i8, ptr %state.i100.i, i64 80
-  %zero_frame.i.i138.i = icmp eq i64 %frame_size.i.i.i, 0
-  %full_frame.i.i139.i = icmp uge i64 %frame_size.i.i.i, %size.i7.i134.i
-  %skip.i9.i140.i = or i1 %zero_frame.i.i138.i, %full_frame.i.i139.i
-  br i1 %skip.i9.i140.i, label %coro_yield.exit184.i, label %do_copy.i.i141.i
-
-do_copy.i.i141.i:                                 ; preds = %exit.i131.i
-  %top_sp.i.i142.i = load ptr, ptr %slot.i.i8.i137.i, align 8
-  %copy.i.i.i132.val.i = load ptr, ptr %copy.i.i.i132.i, align 8
-  %rest_size.i.i143.i = call fastcc i64 @copy_rest_inner(ptr nonnull %state.i100.i, ptr %copy.i.i.i132.val.i, ptr %top_sp.i.i142.i, i64 %frame_size.i.i.i, i64 %size.i7.i134.i) #27
-  br label %coro_yield.exit184.i
-
-coro_yield.exit184.i:                             ; preds = %do_copy.i.i141.i, %exit.i131.i
-  %token.i.i144.i = phi i64 [ 0, %exit.i131.i ], [ %rest_size.i.i143.i, %do_copy.i.i141.i ]
-  store i64 %token.i.i144.i, ptr %sink.i104.i, align 8
-  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i98.i)
+coro_yield.exit130.i:                             ; preds = %record_copy_in.i100.i, %resume.i90.i
+  %copy.i.i105.i = getelementptr i8, ptr %state.i73.i, i64 24
+  %slot.i5.i108.i = getelementptr i8, ptr %state.i73.i, i64 88
+  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i71.i)
   %n1.i = add i32 %n, 1
-  %print.i3.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i) #19
-  %flush.i4.i = call i32 @fflush(ptr null) #20
+  %print.i3.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i) #22
+  %flush.i4.i = call i32 @fflush(ptr null) #23
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i9.i)
-  %token.i19.i = call ptr %token_fn.i107.i(ptr nonnull %raw_token.i9.i) #21
+  %token.i20.i = call ptr %token_fn.i81.i(ptr nonnull %raw_token.i9.i) #21
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i7.i)
   call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i8.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i7.i, ptr %local_ip_slot.i.i8.i) #22
-          to label %save_ip.exit.i23.i unwind label %dispatch.i.i21.i
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i7.i, ptr %local_ip_slot.i.i8.i) #24
+          to label %save_ip.exit.i24.i unwind label %dispatch.i.i22.i
 
-dispatch.i.i21.i:                                 ; preds = %coro_yield.exit184.i
-  %pad.i.i22.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i7.i, ptr nonnull %local_ip_slot.i.i8.i) #23 [ "funclet"(token %pad.i.i22.i) ]
-  br label %save_ip.exit.i23.i
+dispatch.i.i22.i:                                 ; preds = %coro_yield.exit130.i
+  %pad.i.i23.i = cleanuppad within none []
+  call void asm "", "r,r"(ptr nonnull %flag.i.i7.i, ptr nonnull %local_ip_slot.i.i8.i) #25 [ "funclet"(token %pad.i.i23.i) ]
+  br label %save_ip.exit.i24.i
 
-save_ip.exit.i23.i:                               ; preds = %dispatch.i.i21.i, %coro_yield.exit184.i
-  %ip.i.i25.i = load ptr, ptr %local_ip_slot.i.i8.i, align 8
-  store ptr %ip.i.i25.i, ptr %buf_ip_slot.i.i113.i, align 8
-  %flag_val.i.i26.i = load i1, ptr %flag.i.i7.i, align 1
+save_ip.exit.i24.i:                               ; preds = %dispatch.i.i22.i, %coro_yield.exit130.i
+  %ip.i.i26.i = load ptr, ptr %local_ip_slot.i.i8.i, align 8
+  store volatile ptr %ip.i.i26.i, ptr %buf_ip_slot.i.i87.i, align 8
+  %flag_val.i.i27.i = load i1, ptr %flag.i.i7.i, align 1
   store volatile i1 false, ptr %flag.i.i7.i, align 1
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i7.i)
   call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i8.i)
-  br i1 %flag_val.i.i26.i, label %yield.i56.i, label %exit.i42.i
+  br i1 %flag_val.i.i27.i, label %yield.i51.i, label %resume.i28.i
 
-yield.i56.i:                                      ; preds = %save_ip.exit.i23.i
-  %fp.i57.i = tail call ptr @llvm.localaddress() #16
-  store ptr %token.i19.i, ptr %token_slot.i109.i, align 8
-  store i64 0, ptr %sink.i104.i, align 8
-  %slot_2.i.i58.i = getelementptr i8, ptr %state.i100.i, i64 48
-  store ptr %fp.i57.i, ptr %buf.i1.i105.i, align 8
-  store ptr %sp.i101.i, ptr %slot_2.i.i58.i, align 8
-  %slot.i5.i61.i = getelementptr i8, ptr %state.i100.i, i64 24
-  %sp.i.i62.i = load ptr, ptr %slot.i5.i61.i, align 8
-  %same_sp.i63.i = icmp eq ptr %sp.i.i62.i, %sp.i101.i
-  br i1 %same_sp.i63.i, label %do_jmp.i84.i, label %do_frame_copy.i.i93.i
+yield.i51.i:                                      ; preds = %save_ip.exit.i24.i
+  %fp.i52.i = tail call ptr @llvm.localaddress() #16
+  store ptr %token.i20.i, ptr %token_slot.i83.i, align 8
+  store i64 0, ptr %sink.i77.i, align 8
+  %slot_2.i.i53.i = getelementptr i8, ptr %buf.i2.i79.i, i64 16
+  store ptr %fp.i52.i, ptr %buf.i2.i79.i, align 8
+  store ptr %sp.i74.i, ptr %slot_2.i.i53.i, align 8
+  %slot.i.i54.i = getelementptr i8, ptr %state.i73.i, i64 8
+  %buf.i.i55.i = load ptr, ptr %slot.i.i54.i, align 8, !invariant.load !0
+  %slot.i11.i57.i = getelementptr i8, ptr %buf.i.i55.i, i64 16
+  %sp.i.i58.i = load ptr, ptr %slot.i11.i57.i, align 8
+  %same_sp.i59.i = icmp eq ptr %sp.i.i58.i, %sp.i74.i
+  br i1 %same_sp.i59.i, label %same.i65.i, label %slow.i60.i
 
-do_frame_copy.i.i93.i:                            ; preds = %yield.i56.i
-  %top_i.i.i.i65.i = ptrtoint ptr %frame_top.i102.i to i64
-  %bottom_i.i.i.i66.i = ptrtoint ptr %sp.i101.i to i64
-  %size.i.i.i67.i = sub i64 %top_i.i.i.i65.i, %bottom_i.i.i.i66.i
-  %buf.i4.i.i94.i = load ptr, ptr %copy.i.i.i132.i, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i4.i.i94.i, ptr align 1 %sp.i101.i, i64 %size.i.i.i67.i, i1 false) #17
-  br label %do_jmp.i84.i
+same.i65.i:                                       ; preds = %yield.i51.i
+  %same_sp_token.i66.i = call fastcc i64 @save_same_sp_frame(ptr nonnull %state.i73.i, ptr %copy.i.i105.i, ptr nonnull %frame_top.i75.i, ptr %sp.i74.i) #21
+  %slot.i10.i67.i = getelementptr i8, ptr %state.i73.i, i64 168
+  store i64 %same_sp_token.i66.i, ptr %slot.i10.i67.i, align 8
+  br label %do_jmp.i61.i
 
-do_jmp.i84.i:                                     ; preds = %do_frame_copy.i.i93.i, %yield.i56.i
-  %prev.i.i86.i = load ptr, ptr %state.i100.i, align 8
-  store ptr %prev.i.i86.i, ptr %active.i99.i, align 8
-  %slot.i.i.i87.i = getelementptr i8, ptr %state.i100.i, i64 176
-  %bottom.i.i88.i = load ptr, ptr %slot.i.i.i87.i, align 8
-  %skip.i.i89.i = icmp eq ptr %bottom.i.i88.i, null
-  br i1 %skip.i.i89.i, label %restore_displaced.exit.i91.i, label %copy.i6.i90.i
+slow.i60.i:                                       ; preds = %yield.i51.i
+  call fastcc void @coro_yield_slow(ptr %sp.i74.i, ptr nonnull %state.i73.i, ptr nonnull %frame_top.i75.i, ptr %copy.i.i105.i, ptr %sp.i.i58.i) #20
+  br label %do_jmp.i61.i
 
-copy.i6.i90.i:                                    ; preds = %do_jmp.i84.i
-  call fastcc void @restore_displaced_inner(ptr nonnull %state.i100.i) #24
-  br label %restore_displaced.exit.i91.i
-
-restore_displaced.exit.i91.i:                     ; preds = %copy.i6.i90.i, %do_jmp.i84.i
-  %buf.i.i59.i = getelementptr i8, ptr %state.i100.i, i64 8
-  %buf_reg.i.i92.i = call ptr asm "", "=r,0"(ptr %buf.i.i59.i) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i92.i) #26
+do_jmp.i61.i:                                     ; preds = %slow.i60.i, %same.i65.i
+  %prev.i.i63.i = load ptr, ptr %state.i73.i, align 8
+  store ptr %prev.i.i63.i, ptr %active.i72.i, align 8
+  call fastcc void @restore_displaced(ptr nonnull %state.i73.i)
+  %buf_reg.i.i64.i = call ptr asm "", "=r,0"(ptr nonnull %buf.i.i55.i) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i64.i) #27
   unreachable
 
-exit.i42.i:                                       ; preds = %save_ip.exit.i23.i
-  %same_token.i29.i = icmp eq ptr %token.i108.i, %token.i19.i
-  call void @llvm.assume(i1 %same_token.i29.i)
-  br i1 %skip.i9.i140.i, label %coro_yield.exit95.i, label %do_copy.i.i52.i
+resume.i28.i:                                     ; preds = %save_ip.exit.i24.i
+  %same_token.i30.i = icmp eq ptr %token.i82.i, %token.i20.i
+  call void @llvm.assume(i1 %same_token.i30.i)
+  %copy_in_bottom_out.i33.i = load ptr, ptr %slot.i7.i93.i, align 8
+  %copy_in_top_out.i34.i = load ptr, ptr %slot.i8.i94.i, align 8
+  %same_bottom_out.i35.i = icmp eq ptr %copy_in_bottom_out.i33.i, %sp.i74.i
+  %same_top_out.i36.i = icmp eq ptr %copy_in_top_out.i34.i, %frame_top.i75.i
+  %same_frame_out.i37.i = and i1 %same_bottom_out.i35.i, %same_top_out.i36.i
+  br i1 %same_frame_out.i37.i, label %coro_yield.exit68.i, label %record_copy_in.i38.i
 
-do_copy.i.i52.i:                                  ; preds = %exit.i42.i
-  %top_sp.i.i53.i = load ptr, ptr %slot.i.i8.i137.i, align 8
-  %copy.i.i.i43.val.i = load ptr, ptr %copy.i.i.i132.i, align 8
-  %rest_size.i.i54.i = call fastcc i64 @copy_rest_inner(ptr nonnull %state.i100.i, ptr %copy.i.i.i43.val.i, ptr %top_sp.i.i53.i, i64 %frame_size.i.i.i, i64 %size.i7.i134.i) #27
-  br label %coro_yield.exit95.i
+record_copy_in.i38.i:                             ; preds = %resume.i28.i
+  %top_i.i.i40.i = ptrtoint ptr %frame_top.i75.i to i64
+  %bottom_i.i.i41.i = ptrtoint ptr %sp.i74.i to i64
+  %size.i.i42.i = sub i64 %top_i.i.i40.i, %bottom_i.i.i41.i
+  store ptr %sp.i74.i, ptr %slot.i7.i93.i, align 8
+  store ptr %frame_top.i75.i, ptr %slot.i8.i94.i, align 8
+  store i64 %size.i.i42.i, ptr %slot.i5.i108.i, align 8
+  br label %coro_yield.exit68.i
 
-coro_yield.exit95.i:                              ; preds = %do_copy.i.i52.i, %exit.i42.i
-  %token.i.i55.i = phi i64 [ 0, %exit.i42.i ], [ %rest_size.i.i54.i, %do_copy.i.i52.i ]
-  store i64 %token.i.i55.i, ptr %sink.i104.i, align 8
+coro_yield.exit68.i:                              ; preds = %record_copy_in.i38.i, %resume.i28.i
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i9.i)
   %n2.i = add i32 %n, 2
-  %print.i1.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2.i) #19
-  %flush.i2.i = call i32 @fflush(ptr null) #20
+  %print.i1.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2.i) #22
+  %flush.i2.i = call i32 @fflush(ptr null) #23
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i.i)
-  %token.i.i = call ptr %token_fn.i107.i(ptr nonnull %raw_token.i.i) #21
+  %token.i.i = call ptr %token_fn.i81.i(ptr nonnull %raw_token.i.i) #21
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i.i)
   call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i.i, ptr %local_ip_slot.i.i.i) #22
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i.i, ptr %local_ip_slot.i.i.i) #24
           to label %save_ip.exit.i.i unwind label %dispatch.i.i.i
 
-dispatch.i.i.i:                                   ; preds = %coro_yield.exit95.i
+dispatch.i.i.i:                                   ; preds = %coro_yield.exit68.i
   %pad.i.i.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i.i, ptr nonnull %local_ip_slot.i.i.i) #23 [ "funclet"(token %pad.i.i.i) ]
+  call void asm "", "r,r"(ptr nonnull %flag.i.i.i, ptr nonnull %local_ip_slot.i.i.i) #25 [ "funclet"(token %pad.i.i.i) ]
   br label %save_ip.exit.i.i
 
-save_ip.exit.i.i:                                 ; preds = %dispatch.i.i.i, %coro_yield.exit95.i
+save_ip.exit.i.i:                                 ; preds = %dispatch.i.i.i, %coro_yield.exit68.i
   %ip.i.i.i = load ptr, ptr %local_ip_slot.i.i.i, align 8
-  store ptr %ip.i.i.i, ptr %buf_ip_slot.i.i113.i, align 8
+  store volatile ptr %ip.i.i.i, ptr %buf_ip_slot.i.i87.i, align 8
   %flag_val.i.i.i = load i1, ptr %flag.i.i.i, align 1
   store volatile i1 false, ptr %flag.i.i.i, align 1
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i.i)
   call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i.i)
-  br i1 %flag_val.i.i.i, label %yield.i.i, label %exit.i.i
+  br i1 %flag_val.i.i.i, label %yield.i.i, label %resume.i.i
 
 yield.i.i:                                        ; preds = %save_ip.exit.i.i
   %fp.i.i = tail call ptr @llvm.localaddress() #16
-  store ptr %token.i.i, ptr %token_slot.i109.i, align 8
-  store i64 0, ptr %sink.i104.i, align 8
-  %slot_2.i.i.i = getelementptr i8, ptr %state.i100.i, i64 48
-  store ptr %fp.i.i, ptr %buf.i1.i105.i, align 8
-  store ptr %sp.i101.i, ptr %slot_2.i.i.i, align 8
-  %slot.i5.i.i = getelementptr i8, ptr %state.i100.i, i64 24
-  %sp.i.i.i = load ptr, ptr %slot.i5.i.i, align 8
-  %same_sp.i.i = icmp eq ptr %sp.i.i.i, %sp.i101.i
-  br i1 %same_sp.i.i, label %do_jmp.i.i, label %do_frame_copy.i.i.i
+  store ptr %token.i.i, ptr %token_slot.i83.i, align 8
+  store i64 0, ptr %sink.i77.i, align 8
+  %slot_2.i.i.i = getelementptr i8, ptr %buf.i2.i79.i, i64 16
+  store ptr %fp.i.i, ptr %buf.i2.i79.i, align 8
+  store ptr %sp.i74.i, ptr %slot_2.i.i.i, align 8
+  %slot.i.i.i = getelementptr i8, ptr %state.i73.i, i64 8
+  %buf.i.i.i = load ptr, ptr %slot.i.i.i, align 8, !invariant.load !0
+  %slot.i11.i.i = getelementptr i8, ptr %buf.i.i.i, i64 16
+  %sp.i.i.i = load ptr, ptr %slot.i11.i.i, align 8
+  %same_sp.i.i = icmp eq ptr %sp.i.i.i, %sp.i74.i
+  br i1 %same_sp.i.i, label %same.i.i, label %slow.i.i
 
-do_frame_copy.i.i.i:                              ; preds = %yield.i.i
-  %top_i.i.i.i.i = ptrtoint ptr %frame_top.i102.i to i64
-  %bottom_i.i.i.i.i = ptrtoint ptr %sp.i101.i to i64
-  %size.i.i.i.i = sub i64 %top_i.i.i.i.i, %bottom_i.i.i.i.i
-  %buf.i4.i.i.i = load ptr, ptr %copy.i.i.i132.i, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %buf.i4.i.i.i, ptr align 1 %sp.i101.i, i64 %size.i.i.i.i, i1 false) #17
+same.i.i:                                         ; preds = %yield.i.i
+  %same_sp_token.i.i = call fastcc i64 @save_same_sp_frame(ptr nonnull %state.i73.i, ptr %copy.i.i105.i, ptr nonnull %frame_top.i75.i, ptr %sp.i74.i) #21
+  %slot.i10.i.i = getelementptr i8, ptr %state.i73.i, i64 168
+  store i64 %same_sp_token.i.i, ptr %slot.i10.i.i, align 8
   br label %do_jmp.i.i
 
-do_jmp.i.i:                                       ; preds = %do_frame_copy.i.i.i, %yield.i.i
-  %prev.i.i.i = load ptr, ptr %state.i100.i, align 8
-  store ptr %prev.i.i.i, ptr %active.i99.i, align 8
-  %slot.i.i.i.i = getelementptr i8, ptr %state.i100.i, i64 176
-  %bottom.i.i.i = load ptr, ptr %slot.i.i.i.i, align 8
-  %skip.i.i.i = icmp eq ptr %bottom.i.i.i, null
-  br i1 %skip.i.i.i, label %restore_displaced.exit.i.i, label %copy.i6.i.i
+slow.i.i:                                         ; preds = %yield.i.i
+  call fastcc void @coro_yield_slow(ptr %sp.i74.i, ptr nonnull %state.i73.i, ptr nonnull %frame_top.i75.i, ptr %copy.i.i105.i, ptr %sp.i.i.i) #20
+  br label %do_jmp.i.i
 
-copy.i6.i.i:                                      ; preds = %do_jmp.i.i
-  call fastcc void @restore_displaced_inner(ptr nonnull %state.i100.i) #24
-  br label %restore_displaced.exit.i.i
-
-restore_displaced.exit.i.i:                       ; preds = %copy.i6.i.i, %do_jmp.i.i
-  %buf.i.i.i = getelementptr i8, ptr %state.i100.i, i64 8
-  %buf_reg.i.i.i = call ptr asm "", "=r,0"(ptr %buf.i.i.i) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i.i) #26
+do_jmp.i.i:                                       ; preds = %slow.i.i, %same.i.i
+  %prev.i.i.i = load ptr, ptr %state.i73.i, align 8
+  store ptr %prev.i.i.i, ptr %active.i72.i, align 8
+  call fastcc void @restore_displaced(ptr nonnull %state.i73.i)
+  %buf_reg.i.i.i = call ptr asm "", "=r,0"(ptr nonnull %buf.i.i.i) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i.i) #27
   unreachable
 
-exit.i.i:                                         ; preds = %save_ip.exit.i.i
-  %same_token.i.i = icmp eq ptr %token.i108.i, %token.i.i
+resume.i.i:                                       ; preds = %save_ip.exit.i.i
+  %same_token.i.i = icmp eq ptr %token.i82.i, %token.i.i
   call void @llvm.assume(i1 %same_token.i.i)
-  br i1 %skip.i9.i140.i, label %yielding_fn.exit, label %do_copy.i.i.i
+  %copy_in_bottom_out.i.i = load ptr, ptr %slot.i7.i93.i, align 8
+  %copy_in_top_out.i.i = load ptr, ptr %slot.i8.i94.i, align 8
+  %same_bottom_out.i.i = icmp eq ptr %copy_in_bottom_out.i.i, %sp.i74.i
+  %same_top_out.i.i = icmp eq ptr %copy_in_top_out.i.i, %frame_top.i75.i
+  %same_frame_out.i.i = and i1 %same_bottom_out.i.i, %same_top_out.i.i
+  br i1 %same_frame_out.i.i, label %resume.i.coro_yield.exit_crit_edge.i, label %record_copy_in.i.i
 
-do_copy.i.i.i:                                    ; preds = %exit.i.i
-  %top_sp.i.i.i = load ptr, ptr %slot.i.i8.i137.i, align 8
-  %copy.i.i.i.val.i = load ptr, ptr %copy.i.i.i132.i, align 8
-  %rest_size.i.i.i = call fastcc i64 @copy_rest_inner(ptr nonnull %state.i100.i, ptr %copy.i.i.i.val.i, ptr %top_sp.i.i.i, i64 %frame_size.i.i.i, i64 %size.i7.i134.i) #27
+resume.i.coro_yield.exit_crit_edge.i:             ; preds = %resume.i.i
+  %frame_size.i.pre.i = load i64, ptr %slot.i5.i108.i, align 8
   br label %yielding_fn.exit
 
-yielding_fn.exit:                                 ; preds = %exit.i.i, %do_copy.i.i.i
-  %token.i.i.i = phi i64 [ 0, %exit.i.i ], [ %rest_size.i.i.i, %do_copy.i.i.i ]
-  store i64 %token.i.i.i, ptr %sink.i104.i, align 8
+record_copy_in.i.i:                               ; preds = %resume.i.i
+  %top_i.i.i.i = ptrtoint ptr %frame_top.i75.i to i64
+  %bottom_i.i.i.i = ptrtoint ptr %sp.i74.i to i64
+  %size.i.i.i = sub i64 %top_i.i.i.i, %bottom_i.i.i.i
+  store ptr %sp.i74.i, ptr %slot.i7.i93.i, align 8
+  store ptr %frame_top.i75.i, ptr %slot.i8.i94.i, align 8
+  store i64 %size.i.i.i, ptr %slot.i5.i108.i, align 8
+  br label %yielding_fn.exit
+
+yielding_fn.exit:                                 ; preds = %resume.i.coro_yield.exit_crit_edge.i, %record_copy_in.i.i
+  %frame_size.i.i = phi i64 [ %frame_size.i.pre.i, %resume.i.coro_yield.exit_crit_edge.i ], [ %size.i.i.i, %record_copy_in.i.i ]
+  %slot.i4.i110.i = getelementptr i8, ptr %state.i73.i, i64 48
+  %size_slot.i106.i = getelementptr i8, ptr %state.i73.i, i64 32
+  %size.i.i = load i64, ptr %size_slot.i106.i, align 8
+  %top_sp.i.i = load ptr, ptr %slot.i4.i110.i, align 8
+  %copy_rest_token.i.i = call fastcc i64 @copy_rest(ptr nonnull %state.i73.i) #21 [ "copy_rest"(ptr %copy.i.i105.i, ptr %top_sp.i.i, i64 %frame_size.i.i, i64 %size.i.i) ]
+  store i64 %copy_rest_token.i.i, ptr %sink.i77.i, align 8
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i.i)
   %n3.i = add i32 %n, 3
-  %print.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n3.i) #19
-  %flush.i.i = call i32 @fflush(ptr null) #20
+  %print.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n3.i) #22
+  %flush.i.i = call i32 @fflush(ptr null) #23
   ret i32 %n3.i
 }
 
@@ -1276,372 +1211,389 @@ define internal i32 @i32_i32_tramp(ptr nocapture readonly %fn, ptr nocapture rea
 }
 
 define void @calling_fn(i32 %n) local_unnamed_addr personality ptr @spill_personality {
-  %flag.i.i96.i.i = alloca i1, align 1
-  %local_ip_slot.i.i97.i.i = alloca ptr, align 8
-  %raw_token.i98.i.i = alloca i8, align 1
+  %flag.i.i69.i.i = alloca i1, align 1
+  %local_ip_slot.i.i70.i.i = alloca ptr, align 8
+  %raw_token.i71.i.i = alloca i8, align 1
   %flag.i.i7.i.i = alloca i1, align 1
   %local_ip_slot.i.i8.i.i = alloca ptr, align 8
   %raw_token.i9.i.i = alloca i8, align 1
-  %flag.i.i5 = alloca i1, align 1
-  %local_ip_slot.i.i6 = alloca ptr, align 8
+  %flag.i.i6 = alloca i1, align 1
+  %local_ip_slot.i.i7 = alloca ptr, align 8
   %flag.i.i = alloca i1, align 1
   %local_ip_slot.i.i = alloca ptr, align 8
   %state = alloca %coroutine, align 8
+  %caller_buf = alloca [3 x ptr], align 8
+  %callee_buf = alloca [3 x ptr], align 8
   %args = alloca i32, align 4
-  %.fca.1.0.gep = getelementptr inbounds i8, ptr %state, i64 8
-  %.fca.1.1.gep = getelementptr inbounds i8, ptr %state, i64 16
-  %.fca.1.2.gep = getelementptr inbounds i8, ptr %state, i64 24
-  %.fca.2.2.gep = getelementptr inbounds i8, ptr %state, i64 48
-  %.fca.5.gep = getelementptr inbounds i8, ptr %state, i64 88
-  %.fca.6.gep = getelementptr inbounds i8, ptr %state, i64 96
-  %.fca.7.gep = getelementptr inbounds i8, ptr %state, i64 104
-  %.fca.8.gep = getelementptr inbounds i8, ptr %state, i64 112
-  %.fca.10.gep = getelementptr inbounds i8, ptr %state, i64 120
-  %.fca.11.gep = getelementptr inbounds i8, ptr %state, i64 128
-  %.fca.12.gep = getelementptr inbounds i8, ptr %state, i64 136
-  %.fca.17.gep = getelementptr inbounds i8, ptr %state, i64 192
-  call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(114) %state, i8 0, i64 114, i1 false)
-  call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(72) %.fca.10.gep, i8 0, i64 72, i1 false)
+  %.fca.1.gep = getelementptr inbounds i8, ptr %state, i64 8
+  %.fca.2.gep = getelementptr inbounds i8, ptr %state, i64 16
+  %.fca.3.0.gep = getelementptr inbounds i8, ptr %state, i64 24
+  %.fca.5.gep = getelementptr inbounds i8, ptr %state, i64 56
+  %.fca.6.gep = getelementptr inbounds i8, ptr %state, i64 64
+  %.fca.7.gep = getelementptr inbounds i8, ptr %state, i64 72
+  %.fca.8.gep = getelementptr inbounds i8, ptr %state, i64 80
+  %.fca.10.gep = getelementptr inbounds i8, ptr %state, i64 88
+  %.fca.11.gep = getelementptr inbounds i8, ptr %state, i64 96
+  %.fca.12.gep = getelementptr inbounds i8, ptr %state, i64 104
+  %.fca.17.gep = getelementptr inbounds i8, ptr %state, i64 160
+  call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(82) %state, i8 0, i64 82, i1 false)
+  call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(88) %.fca.10.gep, i8 0, i64 88, i1 false)
+  %caller_buf.repack1.i = getelementptr inbounds i8, ptr %caller_buf, i64 8
+  %caller_buf.repack2.i = getelementptr inbounds i8, ptr %caller_buf, i64 16
+  %callee_buf.repack4.i = getelementptr inbounds i8, ptr %callee_buf, i64 16
+  call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(24) %callee_buf, i8 0, i64 24, i1 false)
+  store ptr %caller_buf, ptr %.fca.1.gep, align 8
+  store ptr %callee_buf, ptr %.fca.2.gep, align 8
   store ptr @passthru_fn, ptr %.fca.5.gep, align 8
   store ptr @i32_i32_tramp, ptr %.fca.6.gep, align 8
   store ptr @token_identity, ptr %.fca.17.gep, align 8
   store ptr %args, ptr %.fca.7.gep, align 8
   store i32 %n, ptr %args, align 4
-  %sp.i8 = tail call ptr @llvm.stacksave.p0() #16
-  %fp.i9 = tail call ptr @llvm.localaddress() #16
-  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i5)
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i6)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i5, ptr %local_ip_slot.i.i6) #22
-          to label %save_ip.exit.i12 unwind label %dispatch.i.i10
+  %sp.i10 = tail call ptr @llvm.stacksave.p0() #16
+  %fp.i11 = tail call ptr @llvm.localaddress() #16
+  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i6)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i7)
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i6, ptr %local_ip_slot.i.i7) #24
+          to label %save_ip.exit.i14 unwind label %dispatch.i.i12
 
-dispatch.i.i10:                                   ; preds = %0
-  %pad.i.i11 = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i5, ptr nonnull %local_ip_slot.i.i6) #23 [ "funclet"(token %pad.i.i11) ]
-  br label %save_ip.exit.i12
+dispatch.i.i12:                                   ; preds = %0
+  %pad.i.i13 = cleanuppad within none []
+  call void asm "", "r,r"(ptr nonnull %flag.i.i6, ptr nonnull %local_ip_slot.i.i7) #25 [ "funclet"(token %pad.i.i13) ]
+  br label %save_ip.exit.i14
 
-save_ip.exit.i12:                                 ; preds = %dispatch.i.i10, %0
-  %ip.i.i14 = load ptr, ptr %local_ip_slot.i.i6, align 8
-  store ptr %ip.i.i14, ptr %.fca.1.1.gep, align 8
-  %flag_val.i.i15 = load i1, ptr %flag.i.i5, align 1
-  store volatile i1 false, ptr %flag.i.i5, align 1
-  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i5)
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i6)
-  store ptr %fp.i9, ptr %.fca.1.0.gep, align 8
-  store ptr %sp.i8, ptr %.fca.1.2.gep, align 8
+save_ip.exit.i14:                                 ; preds = %dispatch.i.i12, %0
+  %ip.i.i16 = load ptr, ptr %local_ip_slot.i.i7, align 8
+  store volatile ptr %ip.i.i16, ptr %caller_buf.repack1.i, align 8
+  %flag_val.i.i17 = load i1, ptr %flag.i.i6, align 1
+  store volatile i1 false, ptr %flag.i.i6, align 1
+  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i6)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i7)
+  store ptr %fp.i11, ptr %caller_buf, align 8
+  store ptr %sp.i10, ptr %caller_buf.repack2.i, align 8
   store i1 true, ptr %.fca.8.gep, align 8
-  br i1 %flag_val.i.i15, label %start.i, label %coro_call.exit61
+  br i1 %flag_val.i.i17, label %start.i, label %coro_call.exit70
 
-start.i:                                          ; preds = %save_ip.exit.i12
+start.i:                                          ; preds = %save_ip.exit.i14
   %active_start.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #16
-  %prev.i8.i = load ptr, ptr %active_start.i, align 8
-  store ptr %prev.i8.i, ptr %state, align 8
-  %print.i5.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n) #19
-  %flush.i6.i.i = call i32 @fflush(ptr null) #20
-  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i98.i.i)
-  %frame_top.i102.i.i = tail call ptr @llvm.addressofreturnaddress.p0() #16
-  %frame_top_above_sp.i103.i.i = icmp ugt ptr %frame_top.i102.i.i, %sp.i8
-  call void @llvm.assume(i1 %frame_top_above_sp.i103.i.i)
-  %sink.i104.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #16
-  %buf.i1.i105.i.i = getelementptr inbounds i8, ptr %state, i64 32
-  %token_slot.i109.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @resume_token) #16
-  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i96.i.i)
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i97.i.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i96.i.i, ptr %local_ip_slot.i.i97.i.i) #22
-          to label %save_ip.exit.i112.i.i unwind label %dispatch.i.i110.i.i
+  %prev.i10.i = load ptr, ptr %active_start.i, align 8
+  store ptr %prev.i10.i, ptr %state, align 8
+  %print.i5.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n) #22
+  %flush.i6.i.i = call i32 @fflush(ptr null) #23
+  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i71.i.i)
+  %frame_top.i75.i.i = tail call ptr @llvm.addressofreturnaddress.p0() #16
+  %frame_top_above_sp.i76.i.i = icmp ugt ptr %frame_top.i75.i.i, %sp.i10
+  call void @llvm.assume(i1 %frame_top_above_sp.i76.i.i)
+  %sink.i77.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #16
+  %token_slot.i83.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @resume_token) #16
+  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i69.i.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i70.i.i)
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i69.i.i, ptr %local_ip_slot.i.i70.i.i) #24
+          to label %save_ip.exit.i86.i.i unwind label %dispatch.i.i84.i.i
 
-dispatch.i.i110.i.i:                              ; preds = %start.i
-  %pad.i.i111.i.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i96.i.i, ptr nonnull %local_ip_slot.i.i97.i.i) #23 [ "funclet"(token %pad.i.i111.i.i) ]
-  br label %save_ip.exit.i112.i.i
+dispatch.i.i84.i.i:                               ; preds = %start.i
+  %pad.i.i85.i.i = cleanuppad within none []
+  call void asm "", "r,r"(ptr nonnull %flag.i.i69.i.i, ptr nonnull %local_ip_slot.i.i70.i.i) #25 [ "funclet"(token %pad.i.i85.i.i) ]
+  br label %save_ip.exit.i86.i.i
 
-save_ip.exit.i112.i.i:                            ; preds = %dispatch.i.i110.i.i, %start.i
-  %buf_ip_slot.i.i113.i.i = getelementptr inbounds i8, ptr %state, i64 40
-  %ip.i.i114.i.i = load ptr, ptr %local_ip_slot.i.i97.i.i, align 8
-  store ptr %ip.i.i114.i.i, ptr %buf_ip_slot.i.i113.i.i, align 8
-  %flag_val.i.i115.i.i = load i1, ptr %flag.i.i96.i.i, align 1
-  store volatile i1 false, ptr %flag.i.i96.i.i, align 1
-  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i96.i.i)
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i97.i.i)
-  br i1 %flag_val.i.i115.i.i, label %restore_displaced.exit.i180.i.i, label %coro_yield.exit184.i.i
+save_ip.exit.i86.i.i:                             ; preds = %dispatch.i.i84.i.i, %start.i
+  %buf_ip_slot.i.i87.i.i = getelementptr inbounds i8, ptr %callee_buf, i64 8
+  %ip.i.i88.i.i = load ptr, ptr %local_ip_slot.i.i70.i.i, align 8
+  store volatile ptr %ip.i.i88.i.i, ptr %buf_ip_slot.i.i87.i.i, align 8
+  %flag_val.i.i89.i.i = load i1, ptr %flag.i.i69.i.i, align 1
+  store volatile i1 false, ptr %flag.i.i69.i.i, align 1
+  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i69.i.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i70.i.i)
+  br i1 %flag_val.i.i89.i.i, label %do_jmp.i123.i.i, label %coro_yield.exit130.i.i
 
-restore_displaced.exit.i180.i.i:                  ; preds = %save_ip.exit.i112.i.i
-  store ptr %raw_token.i98.i.i, ptr %token_slot.i109.i.i, align 8
-  store i64 0, ptr %sink.i104.i.i, align 8
-  store ptr %fp.i9, ptr %buf.i1.i105.i.i, align 8
-  store ptr %sp.i8, ptr %.fca.2.2.gep, align 8
-  store ptr %prev.i8.i, ptr %active_start.i, align 8
-  %buf_reg.i.i181.i.i = call ptr asm "", "=r,0"(ptr nonnull %.fca.1.0.gep) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i181.i.i) #26
+do_jmp.i123.i.i:                                  ; preds = %save_ip.exit.i86.i.i
+  store ptr %raw_token.i71.i.i, ptr %token_slot.i83.i.i, align 8
+  store i64 0, ptr %sink.i77.i.i, align 8
+  store ptr %fp.i11, ptr %callee_buf, align 8
+  store ptr %sp.i10, ptr %callee_buf.repack4.i, align 8
+  %same_sp_token.i128.i.i = call fastcc i64 @save_same_sp_frame(ptr nonnull %state, ptr nonnull %.fca.3.0.gep, ptr nonnull %frame_top.i75.i.i, ptr %sp.i10) #21
+  %slot.i10.i129.i.i = getelementptr inbounds i8, ptr %state, i64 168
+  store i64 %same_sp_token.i128.i.i, ptr %slot.i10.i129.i.i, align 8
+  store ptr %prev.i10.i, ptr %active_start.i, align 8
+  call fastcc void @restore_displaced(ptr nonnull %state)
+  %buf_reg.i.i126.i.i = call ptr asm "", "=r,0"(ptr nonnull %caller_buf) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i126.i.i) #27
   unreachable
 
-coro_yield.exit184.i.i:                           ; preds = %save_ip.exit.i112.i.i
-  %resume_token.i117.i.i = load ptr, ptr %token_slot.i109.i.i, align 8
-  %same_token.i118.i.i = icmp eq ptr %resume_token.i117.i.i, %raw_token.i98.i.i
-  call void @llvm.assume(i1 %same_token.i118.i.i)
-  %top_i.i.i128.i.i = ptrtoint ptr %frame_top.i102.i.i to i64
-  %bottom_i.i.i129.i.i = ptrtoint ptr %sp.i8 to i64
-  %size.i.i130.i.i = sub i64 %top_i.i.i128.i.i, %bottom_i.i.i129.i.i
-  store ptr %sp.i8, ptr %.fca.11.gep, align 8
-  store ptr %frame_top.i102.i.i, ptr %.fca.12.gep, align 8
-  store i64 %size.i.i130.i.i, ptr %.fca.10.gep, align 8
-  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i98.i.i)
+coro_yield.exit130.i.i:                           ; preds = %save_ip.exit.i86.i.i
+  %resume_token.i91.i.i = load ptr, ptr %token_slot.i83.i.i, align 8
+  %same_token.i92.i.i = icmp eq ptr %resume_token.i91.i.i, %raw_token.i71.i.i
+  call void @llvm.assume(i1 %same_token.i92.i.i)
+  %top_i.i.i102.i.i = ptrtoint ptr %frame_top.i75.i.i to i64
+  %bottom_i.i.i103.i.i = ptrtoint ptr %sp.i10 to i64
+  %size.i.i104.i.i = sub i64 %top_i.i.i102.i.i, %bottom_i.i.i103.i.i
+  store ptr %sp.i10, ptr %.fca.11.gep, align 8
+  store ptr %frame_top.i75.i.i, ptr %.fca.12.gep, align 8
+  store i64 %size.i.i104.i.i, ptr %.fca.10.gep, align 8
+  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i71.i.i)
   %n1.i.i = add i32 %n, 1
-  %print.i3.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i.i) #19
-  %flush.i4.i.i = call i32 @fflush(ptr null) #20
+  %print.i3.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1.i.i) #22
+  %flush.i4.i.i = call i32 @fflush(ptr null) #23
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i9.i.i)
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i7.i.i)
   call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i8.i.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i7.i.i, ptr %local_ip_slot.i.i8.i.i) #22
-          to label %restore_displaced.exit.i91.i.i unwind label %dispatch.i.i21.i.i
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i7.i.i, ptr %local_ip_slot.i.i8.i.i) #24
+          to label %do_jmp.i61.i.i unwind label %dispatch.i.i22.i.i
 
-dispatch.i.i21.i.i:                               ; preds = %coro_yield.exit184.i.i
-  %pad.i.i22.i.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i7.i.i, ptr nonnull %local_ip_slot.i.i8.i.i) #23 [ "funclet"(token %pad.i.i22.i.i) ]
-  br label %restore_displaced.exit.i91.i.i
+dispatch.i.i22.i.i:                               ; preds = %coro_yield.exit130.i.i
+  %pad.i.i23.i.i = cleanuppad within none []
+  call void asm "", "r,r"(ptr nonnull %flag.i.i7.i.i, ptr nonnull %local_ip_slot.i.i8.i.i) #25 [ "funclet"(token %pad.i.i23.i.i) ]
+  br label %do_jmp.i61.i.i
 
-restore_displaced.exit.i91.i.i:                   ; preds = %dispatch.i.i21.i.i, %coro_yield.exit184.i.i
-  %ip.i.i25.i.i = load ptr, ptr %local_ip_slot.i.i8.i.i, align 8
-  store ptr %ip.i.i25.i.i, ptr %buf_ip_slot.i.i113.i.i, align 8
-  %flag_val.i.i26.i.i = load i1, ptr %flag.i.i7.i.i, align 1
+do_jmp.i61.i.i:                                   ; preds = %dispatch.i.i22.i.i, %coro_yield.exit130.i.i
+  %ip.i.i26.i.i = load ptr, ptr %local_ip_slot.i.i8.i.i, align 8
+  store volatile ptr %ip.i.i26.i.i, ptr %buf_ip_slot.i.i87.i.i, align 8
+  %flag_val.i.i27.i.i = load i1, ptr %flag.i.i7.i.i, align 1
   store volatile i1 false, ptr %flag.i.i7.i.i, align 1
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i7.i.i)
   call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i8.i.i)
-  call void @llvm.assume(i1 %flag_val.i.i26.i.i)
-  store ptr %raw_token.i9.i.i, ptr %token_slot.i109.i.i, align 8
-  store i64 0, ptr %sink.i104.i.i, align 8
-  store ptr %fp.i9, ptr %buf.i1.i105.i.i, align 8
-  store ptr %sp.i8, ptr %.fca.2.2.gep, align 8
-  store ptr %prev.i8.i, ptr %active_start.i, align 8
-  %buf_reg.i.i92.i.i = call ptr asm "", "=r,0"(ptr nonnull %.fca.1.0.gep) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i92.i.i) #26
+  call void @llvm.assume(i1 %flag_val.i.i27.i.i)
+  store ptr %raw_token.i9.i.i, ptr %token_slot.i83.i.i, align 8
+  store i64 0, ptr %sink.i77.i.i, align 8
+  store ptr %fp.i11, ptr %callee_buf, align 8
+  store ptr %sp.i10, ptr %callee_buf.repack4.i, align 8
+  %same_sp_token.i66.i.i = call fastcc i64 @save_same_sp_frame(ptr nonnull %state, ptr nonnull %.fca.3.0.gep, ptr nonnull %frame_top.i75.i.i, ptr %sp.i10) #21
+  %slot.i10.i67.i.i = getelementptr inbounds i8, ptr %state, i64 168
+  store i64 %same_sp_token.i66.i.i, ptr %slot.i10.i67.i.i, align 8
+  store ptr %prev.i10.i, ptr %active_start.i, align 8
+  call fastcc void @restore_displaced(ptr nonnull %state)
+  %buf_reg.i.i64.i.i = call ptr asm "", "=r,0"(ptr nonnull %caller_buf) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i64.i.i) #27
   unreachable
 
-coro_call.exit61:                                 ; preds = %save_ip.exit.i12
+coro_call.exit70:                                 ; preds = %save_ip.exit.i14
   %n1 = add i32 %n, 10
-  %print.i1 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1) #19
-  %flush.i2 = call i32 @fflush(ptr null) #20
+  %print.i1 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n1) #22
+  %flush.i2 = call i32 @fflush(ptr null) #23
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i)
   call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i, ptr %local_ip_slot.i.i) #22
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i, ptr %local_ip_slot.i.i) #24
           to label %save_ip.exit.i unwind label %dispatch.i.i
 
-dispatch.i.i:                                     ; preds = %coro_call.exit61
+dispatch.i.i:                                     ; preds = %coro_call.exit70
   %pad.i.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i, ptr nonnull %local_ip_slot.i.i) #23 [ "funclet"(token %pad.i.i) ]
+  call void asm "", "r,r"(ptr nonnull %flag.i.i, ptr nonnull %local_ip_slot.i.i) #25 [ "funclet"(token %pad.i.i) ]
   br label %save_ip.exit.i
 
-save_ip.exit.i:                                   ; preds = %dispatch.i.i, %coro_call.exit61
+save_ip.exit.i:                                   ; preds = %dispatch.i.i, %coro_call.exit70
   %ip.i.i = load ptr, ptr %local_ip_slot.i.i, align 8
-  store ptr %ip.i.i, ptr %.fca.1.1.gep, align 8
+  store volatile ptr %ip.i.i, ptr %caller_buf.repack1.i, align 8
   %flag_val.i.i = load i1, ptr %flag.i.i, align 1
   store volatile i1 false, ptr %flag.i.i, align 1
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i)
   call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i)
-  store ptr %fp.i9, ptr %.fca.1.0.gep, align 8
-  store ptr %sp.i8, ptr %.fca.1.2.gep, align 8
+  store ptr %fp.i11, ptr %caller_buf, align 8
+  store ptr %sp.i10, ptr %caller_buf.repack2.i, align 8
   store i1 true, ptr %.fca.8.gep, align 8
   br i1 %flag_val.i.i, label %prepare_resume.exit.i, label %coro_call.exit
 
 prepare_resume.exit.i:                            ; preds = %save_ip.exit.i
-  %.fca.14.gep = getelementptr inbounds i8, ptr %state, i64 168
   %active_resume.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #16
   %prev.i.i = load ptr, ptr %active_resume.i, align 8
   store ptr %prev.i.i, ptr %state, align 8
   store ptr %state, ptr %active_resume.i, align 8
-  store ptr %sp.i8, ptr %.fca.14.gep, align 8
-  %.fca.2.0.gep = getelementptr inbounds i8, ptr %state, i64 32
-  %buf_reg.i1.i = call ptr asm "", "=r,0"(ptr nonnull %.fca.2.0.gep) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i1.i) #26
+  %buf_reg.i1.i = call ptr asm "", "=r,0"(ptr nonnull %callee_buf) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i1.i) #27
   unreachable
 
 coro_call.exit:                                   ; preds = %save_ip.exit.i
   %n2 = add i32 %n, 30
-  %print.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2) #19
-  %flush.i = call i32 @fflush(ptr null) #20
+  %print.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 %n2) #22
+  %flush.i = call i32 @fflush(ptr null) #23
   ret void
 }
 
 define noundef i32 @main() local_unnamed_addr personality ptr @spill_personality {
-  %flag.i.i96.i.i.i = alloca i1, align 1
-  %local_ip_slot.i.i97.i.i.i = alloca ptr, align 8
-  %raw_token.i98.i.i.i = alloca i8, align 1
+  %flag.i.i69.i.i.i = alloca i1, align 1
+  %local_ip_slot.i.i70.i.i.i = alloca ptr, align 8
+  %raw_token.i71.i.i.i = alloca i8, align 1
   %flag.i.i7.i.i.i = alloca i1, align 1
   %local_ip_slot.i.i8.i.i.i = alloca ptr, align 8
   %raw_token.i9.i.i.i = alloca i8, align 1
-  %flag.i.i5.i = alloca i1, align 1
-  %local_ip_slot.i.i6.i = alloca ptr, align 8
+  %flag.i.i6.i = alloca i1, align 1
+  %local_ip_slot.i.i7.i = alloca ptr, align 8
   %flag.i.i.i = alloca i1, align 1
   %local_ip_slot.i.i.i = alloca ptr, align 8
   %state.i = alloca %coroutine, align 8
+  %caller_buf.i = alloca [3 x ptr], align 8
+  %callee_buf.i = alloca [3 x ptr], align 8
   %args.i = alloca i32, align 4
-  call void @llvm.lifetime.start.p0(i64 200, ptr nonnull %state.i)
+  call void @llvm.lifetime.start.p0(i64 176, ptr nonnull %state.i)
+  call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %caller_buf.i)
+  call void @llvm.lifetime.start.p0(i64 24, ptr nonnull %callee_buf.i)
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %args.i)
-  %.fca.1.0.gep.i = getelementptr inbounds i8, ptr %state.i, i64 8
-  %.fca.1.1.gep.i = getelementptr inbounds i8, ptr %state.i, i64 16
-  %.fca.1.2.gep.i = getelementptr inbounds i8, ptr %state.i, i64 24
-  %.fca.2.2.gep.i = getelementptr inbounds i8, ptr %state.i, i64 48
-  %.fca.5.gep.i = getelementptr inbounds i8, ptr %state.i, i64 88
-  %.fca.6.gep.i = getelementptr inbounds i8, ptr %state.i, i64 96
-  %.fca.7.gep.i = getelementptr inbounds i8, ptr %state.i, i64 104
-  %.fca.8.gep.i = getelementptr inbounds i8, ptr %state.i, i64 112
-  %.fca.10.gep.i = getelementptr inbounds i8, ptr %state.i, i64 120
-  %.fca.11.gep.i = getelementptr inbounds i8, ptr %state.i, i64 128
-  %.fca.12.gep.i = getelementptr inbounds i8, ptr %state.i, i64 136
-  %.fca.17.gep.i = getelementptr inbounds i8, ptr %state.i, i64 192
-  call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(114) %state.i, i8 0, i64 114, i1 false)
-  call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(72) %.fca.10.gep.i, i8 0, i64 72, i1 false)
+  %.fca.1.gep.i = getelementptr inbounds i8, ptr %state.i, i64 8
+  %.fca.2.gep.i = getelementptr inbounds i8, ptr %state.i, i64 16
+  %.fca.5.gep.i = getelementptr inbounds i8, ptr %state.i, i64 56
+  %.fca.6.gep.i = getelementptr inbounds i8, ptr %state.i, i64 64
+  %.fca.7.gep.i = getelementptr inbounds i8, ptr %state.i, i64 72
+  %.fca.8.gep.i = getelementptr inbounds i8, ptr %state.i, i64 80
+  %.fca.10.gep.i = getelementptr inbounds i8, ptr %state.i, i64 88
+  %.fca.11.gep.i = getelementptr inbounds i8, ptr %state.i, i64 96
+  %.fca.12.gep.i = getelementptr inbounds i8, ptr %state.i, i64 104
+  %.fca.17.gep.i = getelementptr inbounds i8, ptr %state.i, i64 160
+  call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(82) %state.i, i8 0, i64 82, i1 false)
+  call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(88) %.fca.10.gep.i, i8 0, i64 88, i1 false)
+  %caller_buf.repack1.i.i = getelementptr inbounds i8, ptr %caller_buf.i, i64 8
+  %caller_buf.repack2.i.i = getelementptr inbounds i8, ptr %caller_buf.i, i64 16
+  %callee_buf.repack4.i.i = getelementptr inbounds i8, ptr %callee_buf.i, i64 16
+  call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(24) %callee_buf.i, i8 0, i64 24, i1 false)
+  store ptr %caller_buf.i, ptr %.fca.1.gep.i, align 8
+  store ptr %callee_buf.i, ptr %.fca.2.gep.i, align 8
   store ptr @passthru_fn, ptr %.fca.5.gep.i, align 8
   store ptr @i32_i32_tramp, ptr %.fca.6.gep.i, align 8
   store ptr @token_identity, ptr %.fca.17.gep.i, align 8
   store ptr %args.i, ptr %.fca.7.gep.i, align 8
   store i32 5, ptr %args.i, align 4
-  %sp.i8.i = tail call ptr @llvm.stacksave.p0() #16
-  %fp.i9.i = tail call ptr @llvm.localaddress() #16
-  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i5.i)
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i6.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i5.i, ptr %local_ip_slot.i.i6.i) #22
-          to label %save_ip.exit.i12.i unwind label %dispatch.i.i10.i
+  %sp.i10.i = tail call ptr @llvm.stacksave.p0() #16
+  %fp.i11.i = tail call ptr @llvm.localaddress() #16
+  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i6.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i7.i)
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i6.i, ptr %local_ip_slot.i.i7.i) #24
+          to label %save_ip.exit.i14.i unwind label %dispatch.i.i12.i
 
-dispatch.i.i10.i:                                 ; preds = %0
-  %pad.i.i11.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i5.i, ptr nonnull %local_ip_slot.i.i6.i) #23 [ "funclet"(token %pad.i.i11.i) ]
-  br label %save_ip.exit.i12.i
+dispatch.i.i12.i:                                 ; preds = %0
+  %pad.i.i13.i = cleanuppad within none []
+  call void asm "", "r,r"(ptr nonnull %flag.i.i6.i, ptr nonnull %local_ip_slot.i.i7.i) #25 [ "funclet"(token %pad.i.i13.i) ]
+  br label %save_ip.exit.i14.i
 
-save_ip.exit.i12.i:                               ; preds = %dispatch.i.i10.i, %0
-  %ip.i.i14.i = load ptr, ptr %local_ip_slot.i.i6.i, align 8
-  store ptr %ip.i.i14.i, ptr %.fca.1.1.gep.i, align 8
-  %flag_val.i.i15.i = load i1, ptr %flag.i.i5.i, align 1
-  store volatile i1 false, ptr %flag.i.i5.i, align 1
-  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i5.i)
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i6.i)
-  store ptr %fp.i9.i, ptr %.fca.1.0.gep.i, align 8
-  store ptr %sp.i8.i, ptr %.fca.1.2.gep.i, align 8
+save_ip.exit.i14.i:                               ; preds = %dispatch.i.i12.i, %0
+  %ip.i.i16.i = load ptr, ptr %local_ip_slot.i.i7.i, align 8
+  store volatile ptr %ip.i.i16.i, ptr %caller_buf.repack1.i.i, align 8
+  %flag_val.i.i17.i = load i1, ptr %flag.i.i6.i, align 1
+  store volatile i1 false, ptr %flag.i.i6.i, align 1
+  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i6.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i7.i)
+  store ptr %fp.i11.i, ptr %caller_buf.i, align 8
+  store ptr %sp.i10.i, ptr %caller_buf.repack2.i.i, align 8
   store i1 true, ptr %.fca.8.gep.i, align 8
-  br i1 %flag_val.i.i15.i, label %start.i.i, label %coro_call.exit61.i
+  br i1 %flag_val.i.i17.i, label %start.i.i, label %coro_call.exit70.i
 
-start.i.i:                                        ; preds = %save_ip.exit.i12.i
+start.i.i:                                        ; preds = %save_ip.exit.i14.i
   %active_start.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #16
-  %prev.i8.i.i = load ptr, ptr %active_start.i.i, align 8
-  store ptr %prev.i8.i.i, ptr %state.i, align 8
-  %print.i5.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 5) #19
-  %flush.i6.i.i.i = call i32 @fflush(ptr null) #20
-  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i98.i.i.i)
-  %frame_top.i102.i.i.i = tail call ptr @llvm.addressofreturnaddress.p0() #16
-  %frame_top_above_sp.i103.i.i.i = icmp ugt ptr %frame_top.i102.i.i.i, %sp.i8.i
-  call void @llvm.assume(i1 %frame_top_above_sp.i103.i.i.i)
-  %sink.i104.i.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #16
-  %buf.i1.i105.i.i.i = getelementptr inbounds i8, ptr %state.i, i64 32
-  %token_slot.i109.i.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @resume_token) #16
-  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i96.i.i.i)
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i97.i.i.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i96.i.i.i, ptr %local_ip_slot.i.i97.i.i.i) #22
-          to label %save_ip.exit.i112.i.i.i unwind label %dispatch.i.i110.i.i.i
+  %prev.i10.i.i = load ptr, ptr %active_start.i.i, align 8
+  store ptr %prev.i10.i.i, ptr %state.i, align 8
+  %print.i5.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 5) #22
+  %flush.i6.i.i.i = call i32 @fflush(ptr null) #23
+  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i71.i.i.i)
+  %frame_top.i75.i.i.i = tail call ptr @llvm.addressofreturnaddress.p0() #16
+  %frame_top_above_sp.i76.i.i.i = icmp ugt ptr %frame_top.i75.i.i.i, %sp.i10.i
+  call void @llvm.assume(i1 %frame_top_above_sp.i76.i.i.i)
+  %sink.i77.i.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @sink) #16
+  %token_slot.i83.i.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @resume_token) #16
+  call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i69.i.i.i)
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i70.i.i.i)
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i69.i.i.i, ptr %local_ip_slot.i.i70.i.i.i) #24
+          to label %save_ip.exit.i86.i.i.i unwind label %dispatch.i.i84.i.i.i
 
-dispatch.i.i110.i.i.i:                            ; preds = %start.i.i
-  %pad.i.i111.i.i.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i96.i.i.i, ptr nonnull %local_ip_slot.i.i97.i.i.i) #23 [ "funclet"(token %pad.i.i111.i.i.i) ]
-  br label %save_ip.exit.i112.i.i.i
+dispatch.i.i84.i.i.i:                             ; preds = %start.i.i
+  %pad.i.i85.i.i.i = cleanuppad within none []
+  call void asm "", "r,r"(ptr nonnull %flag.i.i69.i.i.i, ptr nonnull %local_ip_slot.i.i70.i.i.i) #25 [ "funclet"(token %pad.i.i85.i.i.i) ]
+  br label %save_ip.exit.i86.i.i.i
 
-save_ip.exit.i112.i.i.i:                          ; preds = %dispatch.i.i110.i.i.i, %start.i.i
-  %buf_ip_slot.i.i113.i.i.i = getelementptr inbounds i8, ptr %state.i, i64 40
-  %ip.i.i114.i.i.i = load ptr, ptr %local_ip_slot.i.i97.i.i.i, align 8
-  store ptr %ip.i.i114.i.i.i, ptr %buf_ip_slot.i.i113.i.i.i, align 8
-  %flag_val.i.i115.i.i.i = load i1, ptr %flag.i.i96.i.i.i, align 1
-  store volatile i1 false, ptr %flag.i.i96.i.i.i, align 1
-  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i96.i.i.i)
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i97.i.i.i)
-  br i1 %flag_val.i.i115.i.i.i, label %restore_displaced.exit.i180.i.i.i, label %coro_yield.exit184.i.i.i
+save_ip.exit.i86.i.i.i:                           ; preds = %dispatch.i.i84.i.i.i, %start.i.i
+  %buf_ip_slot.i.i87.i.i.i = getelementptr inbounds i8, ptr %callee_buf.i, i64 8
+  %ip.i.i88.i.i.i = load ptr, ptr %local_ip_slot.i.i70.i.i.i, align 8
+  store volatile ptr %ip.i.i88.i.i.i, ptr %buf_ip_slot.i.i87.i.i.i, align 8
+  %flag_val.i.i89.i.i.i = load i1, ptr %flag.i.i69.i.i.i, align 1
+  store volatile i1 false, ptr %flag.i.i69.i.i.i, align 1
+  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i69.i.i.i)
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i70.i.i.i)
+  br i1 %flag_val.i.i89.i.i.i, label %do_jmp.i123.i.i.i, label %coro_yield.exit130.i.i.i
 
-restore_displaced.exit.i180.i.i.i:                ; preds = %save_ip.exit.i112.i.i.i
-  store ptr %raw_token.i98.i.i.i, ptr %token_slot.i109.i.i.i, align 8
-  store i64 0, ptr %sink.i104.i.i.i, align 8
-  store ptr %fp.i9.i, ptr %buf.i1.i105.i.i.i, align 8
-  store ptr %sp.i8.i, ptr %.fca.2.2.gep.i, align 8
-  %buf_reg.i.i181.i.i.i = call ptr asm "", "=r,0"(ptr nonnull %.fca.1.0.gep.i) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i181.i.i.i) #26
+do_jmp.i123.i.i.i:                                ; preds = %save_ip.exit.i86.i.i.i
+  store ptr %raw_token.i71.i.i.i, ptr %token_slot.i83.i.i.i, align 8
+  store i64 0, ptr %sink.i77.i.i.i, align 8
+  store ptr %fp.i11.i, ptr %callee_buf.i, align 8
+  store ptr %sp.i10.i, ptr %callee_buf.repack4.i.i, align 8
+  %buf_reg.i.i126.i.i.i = call ptr asm "", "=r,0"(ptr nonnull %caller_buf.i) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i126.i.i.i) #27
   unreachable
 
-coro_yield.exit184.i.i.i:                         ; preds = %save_ip.exit.i112.i.i.i
-  %resume_token.i117.i.i.i = load ptr, ptr %token_slot.i109.i.i.i, align 8
-  %same_token.i118.i.i.i = icmp eq ptr %resume_token.i117.i.i.i, %raw_token.i98.i.i.i
-  call void @llvm.assume(i1 %same_token.i118.i.i.i)
-  %top_i.i.i128.i.i.i = ptrtoint ptr %frame_top.i102.i.i.i to i64
-  %bottom_i.i.i129.i.i.i = ptrtoint ptr %sp.i8.i to i64
-  %size.i.i130.i.i.i = sub i64 %top_i.i.i128.i.i.i, %bottom_i.i.i129.i.i.i
-  store ptr %sp.i8.i, ptr %.fca.11.gep.i, align 8
-  store ptr %frame_top.i102.i.i.i, ptr %.fca.12.gep.i, align 8
-  store i64 %size.i.i130.i.i.i, ptr %.fca.10.gep.i, align 8
-  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i98.i.i.i)
-  %print.i3.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 6) #19
-  %flush.i4.i.i.i = call i32 @fflush(ptr null) #20
+coro_yield.exit130.i.i.i:                         ; preds = %save_ip.exit.i86.i.i.i
+  %resume_token.i91.i.i.i = load ptr, ptr %token_slot.i83.i.i.i, align 8
+  %same_token.i92.i.i.i = icmp eq ptr %resume_token.i91.i.i.i, %raw_token.i71.i.i.i
+  call void @llvm.assume(i1 %same_token.i92.i.i.i)
+  %top_i.i.i102.i.i.i = ptrtoint ptr %frame_top.i75.i.i.i to i64
+  %bottom_i.i.i103.i.i.i = ptrtoint ptr %sp.i10.i to i64
+  %size.i.i104.i.i.i = sub i64 %top_i.i.i102.i.i.i, %bottom_i.i.i103.i.i.i
+  store ptr %sp.i10.i, ptr %.fca.11.gep.i, align 8
+  store ptr %frame_top.i75.i.i.i, ptr %.fca.12.gep.i, align 8
+  store i64 %size.i.i104.i.i.i, ptr %.fca.10.gep.i, align 8
+  call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %raw_token.i71.i.i.i)
+  %print.i3.i.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 6) #22
+  %flush.i4.i.i.i = call i32 @fflush(ptr null) #23
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %raw_token.i9.i.i.i)
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i7.i.i.i)
   call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i8.i.i.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i7.i.i.i, ptr %local_ip_slot.i.i8.i.i.i) #22
-          to label %restore_displaced.exit.i91.i.i.i unwind label %dispatch.i.i21.i.i.i
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i7.i.i.i, ptr %local_ip_slot.i.i8.i.i.i) #24
+          to label %do_jmp.i61.i.i.i unwind label %dispatch.i.i22.i.i.i
 
-dispatch.i.i21.i.i.i:                             ; preds = %coro_yield.exit184.i.i.i
-  %pad.i.i22.i.i.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i7.i.i.i, ptr nonnull %local_ip_slot.i.i8.i.i.i) #23 [ "funclet"(token %pad.i.i22.i.i.i) ]
-  br label %restore_displaced.exit.i91.i.i.i
+dispatch.i.i22.i.i.i:                             ; preds = %coro_yield.exit130.i.i.i
+  %pad.i.i23.i.i.i = cleanuppad within none []
+  call void asm "", "r,r"(ptr nonnull %flag.i.i7.i.i.i, ptr nonnull %local_ip_slot.i.i8.i.i.i) #25 [ "funclet"(token %pad.i.i23.i.i.i) ]
+  br label %do_jmp.i61.i.i.i
 
-restore_displaced.exit.i91.i.i.i:                 ; preds = %dispatch.i.i21.i.i.i, %coro_yield.exit184.i.i.i
-  %ip.i.i25.i.i.i = load ptr, ptr %local_ip_slot.i.i8.i.i.i, align 8
-  store ptr %ip.i.i25.i.i.i, ptr %buf_ip_slot.i.i113.i.i.i, align 8
-  %flag_val.i.i26.i.i.i = load i1, ptr %flag.i.i7.i.i.i, align 1
+do_jmp.i61.i.i.i:                                 ; preds = %dispatch.i.i22.i.i.i, %coro_yield.exit130.i.i.i
+  %ip.i.i26.i.i.i = load ptr, ptr %local_ip_slot.i.i8.i.i.i, align 8
+  store volatile ptr %ip.i.i26.i.i.i, ptr %buf_ip_slot.i.i87.i.i.i, align 8
+  %flag_val.i.i27.i.i.i = load i1, ptr %flag.i.i7.i.i.i, align 1
   store volatile i1 false, ptr %flag.i.i7.i.i.i, align 1
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i7.i.i.i)
   call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i8.i.i.i)
-  call void @llvm.assume(i1 %flag_val.i.i26.i.i.i)
-  store ptr %raw_token.i9.i.i.i, ptr %token_slot.i109.i.i.i, align 8
-  store i64 0, ptr %sink.i104.i.i.i, align 8
-  store ptr %fp.i9.i, ptr %buf.i1.i105.i.i.i, align 8
-  store ptr %sp.i8.i, ptr %.fca.2.2.gep.i, align 8
-  %buf_reg.i.i92.i.i.i = call ptr asm "", "=r,0"(ptr nonnull %.fca.1.0.gep.i) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i.i92.i.i.i) #26
+  call void @llvm.assume(i1 %flag_val.i.i27.i.i.i)
+  store ptr %raw_token.i9.i.i.i, ptr %token_slot.i83.i.i.i, align 8
+  store i64 0, ptr %sink.i77.i.i.i, align 8
+  store ptr %fp.i11.i, ptr %callee_buf.i, align 8
+  store ptr %sp.i10.i, ptr %callee_buf.repack4.i.i, align 8
+  %buf_reg.i.i64.i.i.i = call ptr asm "", "=r,0"(ptr nonnull %caller_buf.i) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i.i64.i.i.i) #27
   unreachable
 
-coro_call.exit61.i:                               ; preds = %save_ip.exit.i12.i
-  %print.i1.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 15) #19
-  %flush.i2.i = call i32 @fflush(ptr null) #20
+coro_call.exit70.i:                               ; preds = %save_ip.exit.i14.i
+  %print.i1.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 15) #22
+  %flush.i2.i = call i32 @fflush(ptr null) #23
   call void @llvm.lifetime.start.p0(i64 1, ptr nonnull %flag.i.i.i)
   call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %local_ip_slot.i.i.i)
-  invoke fastcc void @save_ip_inner(ptr %flag.i.i.i, ptr %local_ip_slot.i.i.i) #22
+  invoke fastcc void @save_ip_inner(ptr %flag.i.i.i, ptr %local_ip_slot.i.i.i) #24
           to label %save_ip.exit.i.i unwind label %dispatch.i.i.i
 
-dispatch.i.i.i:                                   ; preds = %coro_call.exit61.i
+dispatch.i.i.i:                                   ; preds = %coro_call.exit70.i
   %pad.i.i.i = cleanuppad within none []
-  call void asm "", "r,r"(ptr nonnull %flag.i.i.i, ptr nonnull %local_ip_slot.i.i.i) #23 [ "funclet"(token %pad.i.i.i) ]
+  call void asm "", "r,r"(ptr nonnull %flag.i.i.i, ptr nonnull %local_ip_slot.i.i.i) #25 [ "funclet"(token %pad.i.i.i) ]
   br label %save_ip.exit.i.i
 
-save_ip.exit.i.i:                                 ; preds = %dispatch.i.i.i, %coro_call.exit61.i
+save_ip.exit.i.i:                                 ; preds = %dispatch.i.i.i, %coro_call.exit70.i
   %ip.i.i.i = load ptr, ptr %local_ip_slot.i.i.i, align 8
-  store ptr %ip.i.i.i, ptr %.fca.1.1.gep.i, align 8
+  store volatile ptr %ip.i.i.i, ptr %caller_buf.repack1.i.i, align 8
   %flag_val.i.i.i = load i1, ptr %flag.i.i.i, align 1
   store volatile i1 false, ptr %flag.i.i.i, align 1
   call void @llvm.lifetime.end.p0(i64 1, ptr nonnull %flag.i.i.i)
   call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %local_ip_slot.i.i.i)
-  store ptr %fp.i9.i, ptr %.fca.1.0.gep.i, align 8
-  store ptr %sp.i8.i, ptr %.fca.1.2.gep.i, align 8
+  store ptr %fp.i11.i, ptr %caller_buf.i, align 8
+  store ptr %sp.i10.i, ptr %caller_buf.repack2.i.i, align 8
   store i1 true, ptr %.fca.8.gep.i, align 8
   br i1 %flag_val.i.i.i, label %prepare_resume.exit.i.i, label %calling_fn.exit
 
 prepare_resume.exit.i.i:                          ; preds = %save_ip.exit.i.i
-  %.fca.14.gep.i = getelementptr inbounds i8, ptr %state.i, i64 168
   %active_resume.i.i = call align 8 ptr @llvm.threadlocal.address.p0(ptr @active_coroutine) #16
   %prev.i.i.i = load ptr, ptr %active_resume.i.i, align 8
   store ptr %prev.i.i.i, ptr %state.i, align 8
   store ptr %state.i, ptr %active_resume.i.i, align 8
-  store ptr %sp.i8.i, ptr %.fca.14.gep.i, align 8
-  %.fca.2.0.gep.i = getelementptr inbounds i8, ptr %state.i, i64 32
-  %buf_reg.i1.i.i = call ptr asm "", "=r,0"(ptr nonnull %.fca.2.0.gep.i) #25
-  call void @llvm.eh.sjlj.longjmp(ptr %buf_reg.i1.i.i) #26
+  %buf_reg.i1.i.i = call ptr asm "", "=r,0"(ptr nonnull %callee_buf.i) #26
+  call void @llvm.eh.sjlj.longjmp(ptr nocapture readonly dereferenceable(24) %buf_reg.i1.i.i) #27
   unreachable
 
 calling_fn.exit:                                  ; preds = %save_ip.exit.i.i
-  %print.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 35) #19
-  %flush.i.i = call i32 @fflush(ptr null) #20
-  call void @llvm.lifetime.end.p0(i64 200, ptr nonnull %state.i)
+  %print.i.i = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @print_i32_fmt, i32 35) #22
+  %flush.i.i = call i32 @fflush(ptr null) #23
+  call void @llvm.lifetime.end.p0(i64 176, ptr nonnull %state.i)
+  call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %caller_buf.i)
+  call void @llvm.lifetime.end.p0(i64 24, ptr nonnull %callee_buf.i)
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %args.i)
   ret i32 0
 }
@@ -1674,23 +1626,23 @@ attributes #6 = { mustprogress nofree norecurse nosync nounwind willreturn memor
 attributes #7 = { alwaysinline mustprogress nofree norecurse nosync nounwind willreturn memory(none) }
 attributes #8 = { mustprogress noinline willreturn memory(argmem: write) }
 attributes #9 = { mustprogress nofree noinline nounwind willreturn memory(argmem: readwrite) }
-attributes #10 = { mustprogress nofree noinline norecurse nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #11 = { mustprogress nofree noinline nosync nounwind willreturn memory(none) }
+attributes #10 = { mustprogress nofree noinline nosync nounwind willreturn memory(none) }
+attributes #11 = { mustprogress nofree noinline norecurse nosync nounwind willreturn memory(argmem: readwrite) }
 attributes #12 = { mustprogress nocallback nofree nosync nounwind willreturn }
 attributes #13 = { mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none) }
 attributes #14 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
 attributes #15 = { nocallback nofree nounwind willreturn memory(argmem: write) }
 attributes #16 = { memory(none) }
-attributes #17 = { memory(argmem: readwrite) }
-attributes #18 = { nounwind willreturn memory(argmem: readwrite) }
-attributes #19 = { mustprogress nocallback nofree nounwind willreturn memory(argmem: read, inaccessiblemem: readwrite) }
-attributes #20 = { mustprogress nocallback nofree nounwind willreturn memory(inaccessiblemem: readwrite) }
-attributes #21 = { willreturn memory(none) }
-attributes #22 = { willreturn memory(argmem: write) }
-attributes #23 = { nounwind memory(none) }
-attributes #24 = { willreturn memory(argmem: readwrite) }
-attributes #25 = { nomerge nounwind }
-attributes #26 = { noreturn nounwind memory(read, inaccessiblemem: readwrite) }
-attributes #27 = { nounwind willreturn memory(none) }
+attributes #17 = { nounwind memory(argmem: readwrite) }
+attributes #18 = { memory(argmem: readwrite) }
+attributes #19 = { willreturn memory(argmem: readwrite) }
+attributes #20 = { nounwind willreturn memory(argmem: readwrite) }
+attributes #21 = { nounwind willreturn memory(none) }
+attributes #22 = { mustprogress nocallback nofree nounwind willreturn memory(argmem: read, inaccessiblemem: readwrite) }
+attributes #23 = { mustprogress nocallback nofree nounwind willreturn memory(inaccessiblemem: readwrite) }
+attributes #24 = { willreturn memory(argmem: write) }
+attributes #25 = { nounwind memory(none) }
+attributes #26 = { nomerge nounwind }
+attributes #27 = { noreturn nounwind memory(argmem: read, inaccessiblemem: readwrite) }
 
 !0 = !{}
