@@ -10,7 +10,7 @@ target triple = "x86_64-pc-windows-msvc"
 
 @active_coroutine = internal dso_local thread_local(localexec) global ptr null
 @sink = internal dso_local thread_local(localexec) global i64 0
-@resume_seed = internal dso_local global ptr null
+@resume_seed = internal dso_local thread_local(localexec) global ptr null
 @same_sp_sink = internal dso_local thread_local(localexec) global ptr null
 @llvm.used = appending global [1 x ptr] [ptr @resume_seed], section "llvm.metadata"
 
@@ -262,7 +262,8 @@ define internal void @init_coroutine(ptr %state, ptr %active, ptr %caller_buf, p
   %tramp_ptr = call ptr @tramp_slot(ptr %state)
   %token_fn_ptr = call ptr @token_fn_slot(ptr %active)
   %resume_token_ptr = call ptr @resume_token_slot(ptr %active)
-  %seed = load ptr, ptr @resume_seed
+  %seed_addr = call ptr @llvm.threadlocal.address(ptr @resume_seed) memory(none)
+  %seed = load ptr, ptr %seed_addr
   store ptr %active, ptr %active_ptr
   store ptr %caller_buf, ptr %caller_buf_ptr
   store ptr %callee_buf, ptr %callee_buf_ptr
