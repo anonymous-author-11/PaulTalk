@@ -741,7 +741,7 @@ class CompilerPositiveTestsMixin:
             IO.print(normalized.stem());
 
             ext = normalized.extension();
-            if ext is String { IO.print(ext); } else { IO.print("nil"); }
+            IO.print(ext);
 
             joined = normalized.dirname().join("qux.log");
             IO.print(joined.to_string());
@@ -788,7 +788,7 @@ class CompilerPositiveTestsMixin:
             IO.print(Path{".gitignore"}.stem());
 
             hidden_ext = Path{".gitignore"}.extension();
-            if hidden_ext is String { IO.print(hidden_ext); } else { IO.print("nil"); }
+            IO.print(hidden_ext);
 
             IO.print(Path{"foo.tar.gz"}.with_extension("").to_string());
         """
