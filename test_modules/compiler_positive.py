@@ -83,6 +83,139 @@ class CompilerPositiveTestsMixin:
         expected_output = "7"
         self.compile_and_run(mini_code, expected_output, "generic_self_return")
 
+    def test_coro_steps(self):
+        mini_code = """
+            import std;
+
+            def count(n : i32) yields i32 {
+                yield(n);
+                yield(n + 1);
+                yield(n + 2);
+            }
+
+            co = Coroutine.new(count, 4);
+            IO.print(co.call());
+            IO.print(co.call());
+            IO.print(co.call());
+        """
+        expected_output = "4\n5\n6"
+        self.compile_and_run(mini_code, expected_output, "coro_steps")
+
+    def test_coro_resume(self):
+        mini_code = """
+            import std;
+
+            def interesting(a : i32, b : i32) yields i32 {
+                c = 7;
+                while true {
+                    inc = yield(a + b + c);
+                    if inc is i32 { c = c + inc; }
+                }
+            }
+
+            co = Coroutine.new(interesting, 6, 4);
+            IO.print(co.call(2));
+            IO.print(co.call(3));
+        """
+        expected_output = "17\n20"
+        self.compile_and_run(mini_code, expected_output, "coro_resume")
+
+    def test_coro_result(self):
+        mini_code = """
+            import std;
+
+            def next(n : i32) -> i32 yields i32 {
+                yield(n);
+                return n + 1;
+            }
+
+            co = Coroutine.new(next, 8);
+            IO.print(co.call());
+            co.call();
+            IO.print(co.result());
+        """
+        expected_output = "8\n9"
+        self.compile_and_run(mini_code, expected_output, "coro_result")
+
+    def test_coro_nil(self):
+        mini_code = """
+            import std;
+
+            def pause() {
+                IO.print(1);
+                yield();
+                IO.print(2);
+            }
+
+            co = Coroutine.new(pause);
+            first = co.call();
+            IO.print(first is Nil);
+            co.call();
+        """
+        expected_output = "1\ntrue\n2"
+        self.compile_and_run(mini_code, expected_output, "coro_nil")
+
+    def test_coro_nested(self):
+        mini_code = """
+            import std;
+
+            def inner(n : i32) -> i32 yields i32 {
+                yield(n);
+                yield(n + 1);
+                return n + 2;
+            }
+
+            def outer(n : i32) -> i32 yields i32 {
+                co = Coroutine.new(inner, n);
+                yield(co.call());
+                yield(co.call());
+                co.call();
+                result = co.result();
+                if result is i32 { return result; }
+                return 0;
+            }
+
+            co = Coroutine.new(outer, 5);
+            IO.print(co.call());
+            IO.print(co.call());
+            co.call();
+            IO.print(co.result());
+        """
+        expected_output = "5\n6\n7"
+        self.compile_and_run(mini_code, expected_output, "coro_nested")
+
+    def test_coro_exc(self):
+        mini_code = """
+            import std;
+
+            def fail() yields Exception {
+                yield(Exception.new("boom"));
+            }
+
+            co = Coroutine.new(fail);
+            err = co.call();
+            if err is Exception { IO.print(err.message()); }
+            co.call();
+        """
+        expected_output = "boom"
+        self.compile_and_run(mini_code, expected_output, "coro_exc")
+
+    def test_coro_done(self):
+        mini_code = """
+            import std;
+
+            def once() yields i32 {
+                yield(9);
+            }
+
+            co = Coroutine.new(once);
+            IO.print(co.call());
+            IO.print(co.call());
+            IO.print(co.call());
+        """
+        expected_output = "9\n9\n9"
+        self.compile_and_run(mini_code, expected_output, "coro_done")
+
     def test_string_interpolation_escape(self):
         mini_code = """
             import std;
