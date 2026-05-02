@@ -12,6 +12,7 @@ from test_modules.contracts import (
     LintContractTests,
     ParserContractTests,
 )
+from test_modules.codegen_quality import CompilerCodegenQualityTests
 from test_modules.performance import CompilerPerformanceTests
 
 
