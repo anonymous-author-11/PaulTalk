@@ -892,6 +892,18 @@ class CompilerPositiveTestsMixin:
         expected_output = "6\nabc"
         self.compile_and_run(mini_code, expected_output, "string_bytes_iterator_slice")
 
+    def test_string_bytes_view_validate(self):
+        mini_code = """
+            import std;
+
+            text = "电脑abc电脑";
+            view = StringBytesView{text, 6, 9};
+            valid = ValidStringBytesView{text, 6, 9};
+            IO.print(view.size());
+            IO.print(valid.size());
+        """
+        self.compile_and_run(mini_code, "3\n3", "string_bytes_view_validate")
+
     def test_string_codepoint_iterator_slice(self):
         mini_code = """
             import std;
