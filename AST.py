@@ -4146,12 +4146,7 @@ class ClassDef(Statement):
         scope.region.last_block.add_op(data_size_fn)
         scope.comp_unit.toplevel_ops.append(data_size_fn)
 
-        not_instantiable = any(isinstance(elem.definition, AbstractMethodDef) for elem in self.vtable() if isinstance(elem, Method))
-        if not_instantiable:
-            offender = next(elem for elem in self.vtable() if isinstance(elem, Method) and isinstance(elem.definition, AbstractMethodDef))
-            #debug_print(any(m for m in self.vtable() if isinstance(m, Method) and m.is_override_of(offender)))
-            #debug_print(f"{self.name} is not instantiable because of abstract method {self.name}.{offender.definition.name}")
-        combined = ArrayAttr([]) if not_instantiable else ArrayAttr([thing.symbol() for thing in self.vtable()])
+        combined = ArrayAttr([self.vtable_entry_symbol(thing) for thing in self.vtable()])
         hash_tbl, prime = build_hashtable(scope, self.type())
         offset_tbl = build_offset_table(scope, self.type())
         hashid = IntegerAttr.from_int_and_width(hash_id(self.type().symbol().data), 64)
@@ -4173,6 +4168,11 @@ class ClassDef(Statement):
             if isinstance(elem, Behavior): elem.codegen(self_scope)
         scope.merge_ops(self_scope)
         scope.comp_unit.codegenned.add(class_name)
+
+    def vtable_entry_symbol(self, thing):
+        if isinstance(thing, Method) and isinstance(thing.definition, AbstractMethodDef):
+            return IntegerAttr.from_int_and_width(0, 64)
+        return thing.symbol()
 
     def self_scope(self, scope):
         self_scope = Scope(scope, cls=self)
