@@ -607,6 +607,29 @@ class CompilerPositiveTestsMixin:
         expected_output = "this\nis how\nwe do\nit\njolly good"
         self.run_mini_code(mini_code, expected_output, "file_stuff")
 
+    def test_abstract_base_factory(self):
+        mini_code = """
+            import std;
+
+            class Base {
+                def Self.make() -> Base {
+                    return Child{};
+                }
+                abstract def value() -> i32 {}
+            }
+
+            class Child extends Base {
+                def init() {}
+                def value() -> i32 {
+                    return 7;
+                }
+            }
+
+            item = Base.make();
+            IO.print(item.value());
+        """
+        self.run_mini_code(mini_code, "7", "abstract_base_factory")
+
     def test_filesystem_read_write_append(self):
         mini_code = """
             import core;
