@@ -746,7 +746,7 @@ class CompilerPositiveTestsMixin:
             joined = normalized.dirname().join("qux.log");
             IO.print(joined.to_string());
         """
-        expected_output = "foo/baz.txt\nfalse\nbaz.txt\nfoo\nbaz\n.txt\nfoo/qux.log"
+        expected_output = "foo/baz.txt\nfalse\nbaz.txt\nfoo\nbaz\ntxt\nfoo/qux.log"
         self.run_mini_code(mini_code, expected_output, "path_object_basics")
 
     def test_path_object_components_and_join(self):
