@@ -408,6 +408,12 @@ class Expression(Node):
     def exprtype(self, scope):
         pass
 
+    def narrow_true(self, scope, codegen=False):
+        return
+
+    def narrow_false(self, scope, codegen=False):
+        return
+
     @property
     def subexpressions(self):
         return set()
@@ -659,8 +665,12 @@ class Logical(BinaryOp):
 
     def codegen(self, scope):
         left_type = self.left.exprtype(scope)
-        right_type = self.right.exprtype(scope)
         right_scope = Scope(scope)
+        if self.operator == "and": self.left.narrow_true(right_scope, codegen=True)
+        if self.operator == "or": self.left.narrow_false(right_scope, codegen=True)
+        right_type = self.right.exprtype(right_scope)
+        if left_type != Bool() or right_type != Bool():
+            raise Exception(f"{self.info} Logical operator {self.operator} must take two booleans, not {left_type} and {right_type}")
         right_value = self.right.codegen(right_scope)
 
         # this is intentional-- the func.return is a placeholder removed in lowering
@@ -675,10 +685,23 @@ class Logical(BinaryOp):
 
     def exprtype(self, scope):
         left_type = self.left.exprtype(scope)
-        right_type = self.right.exprtype(scope)
+        right_scope = Scope(scope)
+        if self.operator == "and": self.left.narrow_true(right_scope)
+        if self.operator == "or": self.left.narrow_false(right_scope)
+        right_type = self.right.exprtype(right_scope)
         if left_type != Bool() or right_type != Bool():
             raise Exception(f"{self.info} Logical operator {self.operator} must take two booleans, not {left_type} and {right_type}")
         return Bool()
+
+    def narrow_true(self, scope, codegen=False):
+        if self.operator != "and": return
+        self.left.narrow_true(scope, codegen)
+        self.right.narrow_true(scope, codegen)
+
+    def narrow_false(self, scope, codegen=False):
+        if self.operator != "or": return
+        self.left.narrow_false(scope, codegen)
+        self.right.narrow_false(scope, codegen)
 
 @dataclass
 class Not(Expression):
@@ -697,6 +720,12 @@ class Not(Expression):
         if not operand_type == Bool():
             raise Exception(f"{self.inf}: 'not' operator can only accept a boolean, not {operand_type}")
         return Bool()
+
+    def narrow_true(self, scope, codegen=False):
+        self.operand.narrow_false(scope, codegen)
+
+    def narrow_false(self, scope, codegen=False):
+        self.operand.narrow_true(scope, codegen)
 
 @dataclass
 class OverloadedBinaryOp(BinaryOp):
@@ -1347,9 +1376,10 @@ class TypeCheck(Expression):
         if isinstance(self.right, Union) or isinstance(self.right, Intersection):
             raise Exception(f"{self.info}: Cannot type-check {self.right} yet.")
 
-    def narrow_true(self, scope):
+    def narrow_true(self, scope, codegen=False):
         if not isinstance(self.left, Identifier): return None
         if "@" in self.left.name: return None
+        if self.left.name not in scope.type_table: return None
         old_typ = scope.type_table[self.left.name]
         right_type = scope.simplify(self.right)
         intersection = Intersection.from_list([right_type, old_typ])
@@ -1368,12 +1398,17 @@ class TypeCheck(Expression):
                 #debug_print(f'{right_type} ancestors: {scope.ancestors(right_type)}')
                 #debug_print(old_typ in scope.ancestors(right_type))
         scope.type_table[self.left.name] = new_typ
+        if codegen and new_typ != old_typ:
+            cast = CastOp.make(scope.symbol_table[self.left.name], old_typ, new_typ)
+            scope.region.first_block.add_op(cast)
+            scope.symbol_table[self.left.name] = cast.results[0]
         #print(f"narrowed {self.left.name} from {old_typ} to {new_typ} in true branch")
-        return new_typ
+        return
 
-    def narrow_false(self, scope):
+    def narrow_false(self, scope, codegen=False):
         if not isinstance(self.left, Identifier): return None
         if "@" in self.left.name: return None
+        if self.left.name not in scope.type_table: return None
         old_typ = scope.type_table[self.left.name]
         right_type = scope.simplify(self.right)
         new_typ = old_typ
@@ -1386,8 +1421,12 @@ class TypeCheck(Expression):
         if isinstance(old_typ, Buffer) and right_type == Nil(): new_typ = old_typ
 
         scope.type_table[self.left.name] = new_typ
+        if codegen and new_typ != old_typ:
+            cast = CastOp.make(scope.symbol_table[self.left.name], old_typ, new_typ)
+            scope.region.first_block.add_op(cast)
+            scope.symbol_table[self.left.name] = cast.results[0]
         #print(f"narrowed {self.left.name} from {old_typ} to {new_typ} in false branch")
-        return new_typ
+        return
 
     def exprtype(self, scope):
         self.ensure_rhs_simple()
@@ -1408,11 +1447,11 @@ class NegatedTypeCheck(TypeCheck):
         typecheck = TypeCheck(self.info, self.left, self.right)
         return Comparison(self.info, false, "EQ", typecheck).codegen(scope)
 
-    def narrow_true(self, scope):
-        return super().narrow_false(scope)
+    def narrow_true(self, scope, codegen=False):
+        super().narrow_false(scope, codegen)
 
-    def narrow_false(self, scope):
-        return super().narrow_true(scope)
+    def narrow_false(self, scope, codegen=False):
+        super().narrow_true(scope, codegen)
 
 @dataclass
 class TupleToBuffer(Expression):
@@ -4789,51 +4828,10 @@ class Branch(Statement):
             exit.insert_ops([cast, assign])
 
     def narrow_true(self, scope):
-        self.narrow(scope, self.condition, True)
+        self.condition.narrow_true(scope, codegen=True)
 
     def narrow_false(self, scope):
-        self.narrow(scope, self.condition, False)
-
-    def narrow(self, scope, condition, true):
-        narrow_method = self.narrow_types_true if true else self.narrow_types_false
-        narrowed = narrow_method(scope, condition)
-        for key, (old_typ, new_typ) in narrowed.items():
-            #print(f"narrowed {key} from {old_typ} to {new_typ} in {true} branch")
-            cast = CastOp.make(scope.parent.symbol_table[key], old_typ, new_typ)
-            scope.region.first_block.add_op(cast)
-            scope.symbol_table[key] = cast.results[0]
-
-    def narrow_types_true(self, scope, condition):
-        if isinstance(condition, TypeCheck):
-            if not isinstance(condition.left, Identifier): return {}
-            if "@" in condition.left.name: return {}
-            old_typ = condition.left.exprtype(scope)
-            new_typ = condition.narrow_true(scope)
-            return {condition.left.name:(old_typ, new_typ)}
-        if isinstance(condition, Logical) and condition.operator == "and":
-            narrowed_left = self.narrow_types_true(scope, condition.left)
-            narrowed_right = self.narrow_types_true(scope, condition.right)
-            return narrowed_left | narrowed_right
-        if isinstance(condition, Not):
-            narrowed = self.narrow_types_false(scope, condition.operand)
-            return narrowed
-        return {}
-
-    def narrow_types_false(self, scope, condition):
-        if isinstance(condition, TypeCheck):
-            if not isinstance(condition.left, Identifier): return {}
-            if "@" in condition.left.name: return {}
-            old_typ = condition.left.exprtype(scope)
-            new_typ = condition.narrow_false(scope)
-            return {condition.left.name:(old_typ, new_typ)}
-        if isinstance(condition, Logical) and condition.operator == "or":
-            narrowed_left = self.narrow_types_false(scope, condition.left)
-            narrowed_right = self.narrow_types_false(scope, condition.right)
-            return narrowed_left | narrowed_right
-        if isinstance(condition, Not):
-            narrowed = self.narrow_types_true(scope, condition.operand)
-            return narrowed
-        return {}
+        self.condition.narrow_false(scope, codegen=True)
 
     def merge_scope_types(self, main_scope, branch_scopes):
         for key, value in main_scope.type_table.items():
@@ -4895,8 +4893,8 @@ class IfStatement(Branch):
         alternate_scope = branch_scopes[1] if self.else_block else Scope(scope)
         route_scopes = [branch_scopes[0], alternate_scope, scope]
 
-        self.narrow_types_true(branch_scopes[0], self.condition)
-        self.narrow_types_false(alternate_scope, self.condition)
+        self.condition.narrow_true(branch_scopes[0])
+        self.condition.narrow_false(alternate_scope)
 
         for (b_block, b_scope) in zip(branch_blocks, branch_scopes): b_block.typeflow(b_scope)
 
@@ -4934,8 +4932,8 @@ class IfStatement(Branch):
         branch_scopes = [Scope(scope) for block in branch_blocks]
         alternate_scope = branch_scopes[1] if self.else_block else Scope(scope)
 
-        self.narrow_types_true(branch_scopes[0], self.condition)
-        self.narrow_types_false(alternate_scope, self.condition)
+        self.condition.narrow_true(branch_scopes[0])
+        self.condition.narrow_false(alternate_scope)
 
         if Nothing() in branch_scopes[0].type_table.values():
             offender = next((k,v) for k,v in branch_scopes[0].type_table.items() if v == Nothing())
@@ -4947,8 +4945,6 @@ class IfStatement(Branch):
         for (b_block, b_scope) in zip(branch_blocks, branch_scopes): b_block.typeflow(b_scope)
 
         route_scopes = [branch_scopes[0], alternate_scope]
-
-        #if isinstance(self.condition, TypeCheck): self.condition.narrow_false(branch_scopes[1])
 
         self.merge_scope_types(scope, route_scopes)
 
@@ -5001,8 +4997,8 @@ class WhileStatement(Branch):
         self.condition.typeflow(condition_scope)
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
         skip_scope = Scope(condition_scope)
-        self.narrow_types_true(body_scope, self.condition)
-        self.narrow_types_false(skip_scope, self.condition)
+        self.condition.narrow_true(body_scope)
+        self.condition.narrow_false(skip_scope)
         if Nothing() in body_scope.type_table.values(): 
             raise Exception(f"{self.info}: this should not happen!")
         self.body.typeflow(body_scope)
@@ -5019,7 +5015,7 @@ class WhileStatement(Branch):
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
         skip_scope = Scope(condition_scope)
         self.narrow_true(body_scope)
-        self.narrow_types_false(skip_scope, self.condition)
+        self.condition.narrow_false(skip_scope)
         self.body.codegen(body_scope)
         exit_scopes = [self.exit_scope(scope, exit) for exit in body_scope.exits]
         route_scopes = [*exit_scopes, body_scope, skip_scope]
@@ -5042,8 +5038,8 @@ class WhileStatement(Branch):
             raise Exception(f"{self.info}: condition of while-statement must be a Bool, not {condition_type}")
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
         skip_scope = Scope(condition_scope)
-        self.narrow_types_true(body_scope, self.condition)
-        self.narrow_types_false(skip_scope, self.condition)
+        self.condition.narrow_true(body_scope)
+        self.condition.narrow_false(skip_scope)
         self.body.typeflow(body_scope)
 
         exit_scopes = [self.exit_scope(scope, exit) for exit in body_scope.exits]
@@ -5055,8 +5051,8 @@ class WhileStatement(Branch):
         self.condition.typeflow(condition_scope)
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
         skip_scope = Scope(condition_scope)
-        self.narrow_types_true(body_scope, self.condition)
-        self.narrow_types_false(skip_scope, self.condition)
+        self.condition.narrow_true(body_scope)
+        self.condition.narrow_false(skip_scope)
         self.body.typeflow(body_scope)
 
         exit_scopes = [self.exit_scope(scope, exit) for exit in body_scope.exits]

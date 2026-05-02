@@ -1306,6 +1306,21 @@ class CompilerPositiveTestsMixin:
         expected_output = "2\nnil"
         self.run_mini_code(mini_code, expected_output, "iterable_find")
 
+    def test_expr_narrowing(self):
+        mini_code = """
+            import range;
+            import io;
+
+            numbers = 1...10;
+            first = numbers.find((x : i32) => { x == 4; });
+
+            if first is i32 and (first % 2) == 0 { IO.print(first); }
+            if first is Nil or (first % 2) == 0 { IO.print("even"); }
+            if first is not Nil and (first % 2) == 0 { IO.print("not nil"); }
+        """
+        expected_output = "4\neven\nnot nil"
+        self.run_mini_code(mini_code, expected_output, "expr_narrowing")
+
     def test_iterable_first(self):
         mini_code = """
             import range;

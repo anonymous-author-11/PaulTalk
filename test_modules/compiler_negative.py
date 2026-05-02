@@ -839,6 +839,14 @@ class CompilerNegativeTestsMixin:
             }"""
             self.compile_fails(mini_code, "Cannot type-check i32 | f64 yet.", "if_statement_union_type_check_not_allowed")
 
+    def test_expr_or_narrowing(self):
+            mini_code = """
+            def test() {
+                x : i32 | Nil = 2;
+                if x is i32 or (x % 2) == 0 {}
+            }"""
+            self.compile_fails(mini_code, "Operator MOD not available between types", "expr_or_narrowing")
+
     def test_init_field_not_initialized(self):
             mini_code = """
             class Test {
