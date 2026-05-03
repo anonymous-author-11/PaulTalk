@@ -49,6 +49,10 @@ class Array[T] extends
         }
     } ~> no_alias
 
+    def copy() -> Array[T] {
+        return Array[T]{@capacity}.extend(self);
+    }
+
     // List[T] overrides
 
     def append(x : T) -> Self {
