@@ -27,6 +27,7 @@ class Array[T] extends
 		@capacity = 1;
 	}
     def init(@capacity : i32) {
+        if @capacity < 1 { @capacity = 1; }
         @buffer = Buffer[T].new(@capacity);
         @length = 0;
     }
