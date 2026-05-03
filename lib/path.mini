@@ -1,98 +1,46 @@
 import core;
+import array;
+
+no_export PathParts, PathJoiner, AbsolutePathParts, RelativePathParts, BaseName;
 
 class Path extends Representable {
-    @text : String
+    @parts : PathParts
 
-    // Path keeps normalized internal text so queries stay simple.
-    def init(text : String) {
-        @text = Self.normalize_text(text);
+    def init(value : String) {
+        @parts = PathParts.from_string(value);
+    } ~> all_alias
+
+    def init(value : PathParts) {
+        @parts = value;
     }
-
-    def Self.from_string(text : String) -> Self {
-        return Self{text};
-    }
-
-    def Self.append_part(text : String, part : String) -> String {
-        if text.is_empty() { return part.copy(); }
-        if text == "/" { return "/${part}"; }
-        return "${text}/${part}";
-    }
-
-    def Self.trim_last_part(text : String) -> String {
-        pair = text.rsplit_once("/");
-        if pair is Nil { return ""; }
-        return pair.[0].to_string();
-    }
-
-    def Self.basename_of(text : String) -> String {
-        sep = "/";
-        if text == sep { return sep; }
-        if text == "." { return "."; }
-        pair = text.rsplit_once(sep);
-        if pair is Nil { return text.copy(); }
-        return pair.[1].to_string();
-    }
-
-    def Self.stem_of(base : String) -> String {
-        if base == ".." { return base.copy(); }
-        pair = base.rsplit_once(".");
-        if pair is Nil { return base.copy(); }
-        (stem, after) = pair;
-        if stem.is_empty() { return base.copy(); }
-        return stem.to_string();
-    }
-
-    def Self.add_part(text : String, part : String, absolute : Bool) -> String {
-        if part.is_empty() or part == "." { return text; }
-        if part != ".." { return Self.append_part(text, part); }
-        if text.is_empty() and absolute { return text; }
-        if text.is_empty() { return ".."; }
-        if text == "/" { return text; }
-
-        if Self.basename_of(text) != ".." { return Self.trim_last_part(text); }
-        return Self.append_part(text, "..");
-    }
-
-    def Self.normalize_text(input : String) -> String {
-        unified = input.replace("\\", "/");
-        absolute = unified.starts_with("/");
-        text = "";
-        if absolute { text = "/"; }
-
-        for part in unified.split("/") {
-            text = Self.add_part(text, part.to_string(), absolute);
-        }
-        if text.is_empty() { return "."; }
-        return text;
-    } ~> no_alias
 
     def to_string() -> String {
-        return @text.copy();
+        return @parts.to_string();
     }
 
-    def components() -> Iterable[StringView] {
-        return @text.split("/")
-            .filter((part : StringView) => { part.byte_length() > 0; });
+    def components() -> Array[StringView] {
+        return @parts.components();
     }
 
-    def basename() -> String {
-        return Self.basename_of(@text);
+    def basename() -> StringView {
+        return @parts.basename();
     }
 
     def dirname() -> Path {
-        if @text == "/" or @text == "." { return self; }
-
-        parent = Self.trim_last_part(@text);
-        if parent.is_empty() { return Path{"."}; }
-        return Path{parent};
+        if @parts.is_empty() { return self; }
+        return Path{@parts.parent()};
     }
 
-    def repr() -> String {
-        return self.to_string();
+    def stem() -> StringView {
+        return @parts.basename().stem();
+    }
+
+    def extension() -> StringView? {
+        return @parts.basename().extension();
     }
 
     def is_absolute() -> Bool {
-        return @text.starts_with("/");
+        return @parts is AbsolutePathParts;
     }
 
     def parent() -> Path {
@@ -101,50 +49,306 @@ class Path extends Representable {
 
     def join(child : Path) -> Path {
         if child.is_absolute() { return child; }
-
-        child_text = child.to_string();
-        if child_text == "." { return self; }
-
-        text = @text;
-        absolute = text.starts_with("/");
-        if text == "." { text = ""; }
-
-        for part in child_text.split("/") {
-            text = Self.add_part(text, part.to_string(), absolute);
-        }
-        if text.is_empty() { return Path{"."}; }
-        return Path{text};
+        return Path{PathJoiner.join(@parts, child.components())};
     }
 
     def join(child : String) -> Path {
         return self.join(Path{child});
     }
 
-    def stem() -> String {
-        return Self.stem_of(self.basename());
-    }
-
-    def extension() -> String? {
-        base = self.basename();
-        pair = base.rsplit_once(".");
-        if pair is Nil { return nil; }
-        (before, extension) = pair;
-        if before.is_empty() or extension.is_empty() { return nil; }
-        return extension.to_string();
-    }
-
     def with_extension(ext : String) -> Path {
-        base = Self.basename_of(@text);
-        if base == "." or base == ".." or base == "/" { return self; }
+        if @parts.is_empty() { return self; }
 
-        suffix = ext;
-        if suffix.byte_length() > 0 and not suffix.starts_with(".") {
-            suffix = ".${suffix}";
+        base = @parts.basename();
+        if base == ".." { return self; }
+
+        if not ext.is_empty() and not ext.starts_with(".") { ext = ".${ext}"; }
+        stem = base.stem().to_string();
+        new_name = "${stem}${ext}";
+        return Path{@parts.with_last(new_name)};
+    }
+
+    def repr() -> String {
+        return self.to_string();
+    }
+}
+
+class BaseName extends StringView {
+
+    def init(@str : String, view : StringView) {
+        @start = view.start();
+        @end_exclusive = view.end_exclusive();
+        @char_length = view.char_length();
+    }
+
+    def stem() -> StringView {
+        if self == ".." { return self; }
+        pair = self.bytes().rsplit_once(".");
+        if pair is Nil { return self; }
+        (before, after) = pair;
+        if before.is_empty() { return self; }
+        return before.to_string_view();
+    }
+
+    def extension() -> StringView? {
+        if self == ".." { return nil; }
+        pair = self.bytes().rsplit_once(".");
+        if pair is Nil { return nil; }
+        (before, after) = pair;
+        if before.is_empty() or after.is_empty() { return nil; }
+        return after.to_string_view();
+    }
+
+}
+
+class PathParts {
+    @text : String
+    @segments : Array[StringView]
+
+    def Self.from_string(text : String) -> PathParts {
+        if text.contains("\\") { text = text.replace("\\", "/"); }
+        if text.starts_with("/") { return AbsolutePathParts{text}.normalize(); }
+        return RelativePathParts{text}.normalize();
+    }
+
+    def init(@text : String) {
+        @segments = [] of StringView;
+    }
+
+    def init(@text : String, @segments : Array[StringView]) {
+    }
+
+    abstract def same_kind(text : String, segments : Array[StringView]) -> PathParts {}
+
+    abstract def empty_text() -> String {}
+
+    abstract def prefix() -> String {}
+
+    abstract def add_double_dot(double_dot : StringView) {}
+
+    def basename() -> BaseName {
+        base = @segments.last();
+        if base is StringView { return BaseName{@text, base}; }
+        return BaseName{@text, @text.to_view()};
+    }
+
+    def to_string() -> String {
+        return @text.copy();
+    }
+
+    def components() -> Array[StringView] {
+        return @segments;
+    }
+
+    def is_empty() -> Bool {
+        return @segments.is_empty();
+    }
+
+    def text_prefix(end_exclusive : i32) -> String {
+        return @text.bytes().slice(0, end_exclusive).to_string();
+    }
+
+    def copy_segments(source : Array[StringView], count : i32) {
+        for i in 0..count {
+            part = source.unchecked_index(i);
+            view = StringView{@text, part.start(), part.end_exclusive(), part.char_length()};
+            @segments.push(view);
+        }
+    }
+
+    def write_parts(parts : Array[StringView], start : i32) {
+        if start >= parts.size() { return; }
+        self.write_part(parts.unchecked_index(start));
+        for i in (start + 1)..parts.size() {
+            self.append_separator();
+            self.write_part(parts.unchecked_index(i));
+        }
+    }
+
+    def write_part(part : StringView) {
+        self.write_part(part.to_string());
+    }
+
+    def write_part(part : String) {
+        start = @text.byte_length();
+        @text.extend(part);
+        end = @text.byte_length();
+        @segments.push(StringView{@text, start, end, part.char_length()});
+    }
+
+    def append_separator() {
+        @text.extend("/");
+    }
+
+    def result_for_prefix(prefix_size : i32, capacity : i32) -> PathParts {
+        text = self.prefix();
+        if prefix_size > 0 {
+            last = @segments.unchecked_index(prefix_size - 1);
+            text = self.text_prefix(last.end_exclusive());
         }
 
-        name = Self.stem_of(base).extend(suffix);
-        parent = Self.trim_last_part(@text);
-        if parent.is_empty() { return Path{name}; }
-        return Path{Self.append_part(parent, name)};
+        result = self.same_kind(text, Array[StringView]{capacity});
+        result.copy_segments(@segments, prefix_size);
+        return result;
     }
+
+    def normalize() -> PathParts {
+        @segments.clear();
+        for part in @text.split("/") { self.add_part(part); }
+        return self.install();
+    }
+
+    def install() -> PathParts {
+        source = @segments;
+        @text = self.prefix();
+        @segments = Array[StringView]{source.size()};
+        if source.is_empty() {
+            @text = self.empty_text();
+            return self;
+        }
+
+        self.write_parts(source, 0);
+        return self;
+    }
+
+    def parent() -> PathParts {
+        count = @segments.size();
+        if count == 0 { return self; }
+
+        prefix_size = count - 1;
+        if prefix_size == 0 { return self.same_kind(self.empty_text(), [] of StringView); }
+        return self.result_for_prefix(prefix_size, prefix_size);
+    }
+
+    def with_last(name : String) -> PathParts {
+        count = @segments.size();
+        if count == 0 { return self; }
+
+        prefix_size = count - 1;
+        result = self.result_for_prefix(prefix_size, count);
+        if prefix_size > 0 { result.append_separator(); }
+        result.write_part(name);
+        return result;
+    }
+
+    def add_part(part : StringView) {
+        if part.is_empty() or part == "." { return; }
+        if part != ".." {
+            @segments.push(part);
+            return;
+        }
+        self.add_double_dot(part);
+    }
+}
+
+class PathJoiner {
+    @source : PathParts
+    @children : Array[StringView]
+    @parents : Array[StringView]
+    @prefix_size : i32
+    @index : i32
+
+    def Self.join(source : PathParts, children : Array[StringView]) -> PathParts {
+        first = children.first();
+        if first is Nil { return source; }
+        if first == ".." { return PathJoiner{source, children}.join_slow(); }
+        prefix_size = source.components().size();
+        result = source.result_for_prefix(prefix_size, prefix_size + children.size());
+        if prefix_size > 0 { result.append_separator(); }
+        result.write_parts(children, 0);
+        return result;
+    }
+
+    def init(@source : PathParts, @children : Array[StringView]) {
+        @parents = Array[StringView]{@children.size()};
+        @prefix_size = @source.components().size();
+        @index = 0;
+    } ~> all_alias
+
+    def join_slow() -> PathParts {
+        while @index < @children.size() {
+            part = @children.unchecked_index(@index);
+            if part != ".." { break; }
+            self.apply_part(part);
+            @index = @index + 1;
+        }
+        tail_size = @children.size() - @index;
+        capacity = @prefix_size + @parents.size() + tail_size;
+        if capacity == 0 { return @source.same_kind(@source.empty_text(), [] of StringView); }
+
+        result = @source.result_for_prefix(@prefix_size, capacity);
+        has_tail = @index < @children.size();
+        has_suffix = not @parents.is_empty() or has_tail;
+        if @prefix_size > 0 and has_suffix { result.append_separator(); }
+
+        result.write_parts(@parents, 0);
+        if not @parents.is_empty() and has_tail { result.append_separator(); }
+        result.write_parts(@children, @index);
+        return result;
+    }
+
+    def apply_part(part : StringView) {
+        absolute = @source is AbsolutePathParts;
+        has_prefix = @prefix_size > 0;
+        if absolute and has_prefix {
+            @prefix_size = @prefix_size - 1;
+            return;
+        }
+        if absolute { return; }
+        if has_prefix and self.last_prefix() != ".." {
+            @prefix_size = @prefix_size - 1;
+            return;
+        }
+        @parents.push(part);
+    }
+
+    def last_prefix() -> StringView {
+        return @source.components().unchecked_index(@prefix_size - 1);
+    }
+
+}
+
+class AbsolutePathParts extends PathParts {
+
+    def same_kind(text : String, segments : Array[StringView]) -> PathParts {
+        return AbsolutePathParts{text, segments};
+    }
+
+    def empty_text() -> String {
+        return "/";
+    }
+
+    def prefix() -> String {
+        return "/";
+    }
+
+    def add_double_dot(double_dot : StringView) {
+        if not @segments.is_empty() { @segments.pop(); }
+    }
+
+}
+
+class RelativePathParts extends PathParts {
+
+    def same_kind(text : String, segments : Array[StringView]) -> PathParts {
+        return RelativePathParts{text, segments};
+    }
+
+    def empty_text() -> String {
+        return ".";
+    }
+
+    def prefix() -> String {
+        return "";
+    }
+
+    def add_double_dot(double_dot : StringView) {
+        last_segment = @segments.peek();
+        if last_segment is Nil or last_segment == ".." {
+            @segments.push(double_dot);
+            return;
+        }
+        @segments.pop();
+    }
+
 }
