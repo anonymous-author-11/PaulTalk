@@ -1,4 +1,5 @@
 import subprocess
+import shutil
 import sys
 import tempfile
 import unittest
@@ -14,6 +15,20 @@ class ParserContractTests(unittest.TestCase):
         with tempfile.NamedTemporaryFile("w", suffix=suffix, delete=False, encoding="utf-8") as tmp:
             tmp.write(source)
             return Path(tmp.name)
+
+    @staticmethod
+    def _write_named_source(name: str, source: str) -> tuple[Path, Path]:
+        root = Path(tempfile.mkdtemp())
+        source_path = root / name
+        source_path.write_text(source, encoding="utf-8")
+        return root, source_path
+
+    def _parse_error_text(self, source_path: Path) -> str:
+        try:
+            parse(source_path)
+        except Exception as exc:
+            return str(exc)
+        self.fail("Expected parsing to fail.")
 
     def test_parser_error_shape(self):
         source_path = self._write_temp_source("def broken( {")
@@ -38,6 +53,27 @@ class ParserContractTests(unittest.TestCase):
             self.assertRegex(error_text, r"Line 2, Column \d+:")
         finally:
             source_path.unlink(missing_ok=True)
+
+    def test_bootstrap_parser_error_uses_source_line(self):
+        root, source_path = self._write_named_source("collection.mini", "x = 5;\nif {\n")
+        try:
+            error_text = self._parse_error_text(source_path)
+            self.assertRegex(error_text, r"Line 2, Column \d+:")
+        finally:
+            shutil.rmtree(root, ignore_errors=True)
+
+    def test_bootstrap_node_info_uses_source_line(self):
+        source = "\ndef alpha() -> i32 {\n    return 1;\n}\n"
+        root, source_path = self._write_named_source("writer.mini", source)
+        try:
+            program = parse(source_path)
+            function = program.statements[0]
+            error_text = f"{function.info}"
+            self.assertEqual(function.info.line, 2)
+            self.assertIn("def alpha() -> i32 {", error_text)
+            self.assertIn("File writer.mini, line 2", error_text)
+        finally:
+            shutil.rmtree(root, ignore_errors=True)
 
 class CompilerCliContractTests(CompilerTestCase):
 

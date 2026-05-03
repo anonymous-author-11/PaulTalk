@@ -136,13 +136,7 @@ class NodeInfo:
 
     @property
     def line(self):
-        special_files = (
-            "builtins.mini", "iteration.mini", "collection.mini",
-            "list.mini", "range.mini", "indexable.mini",
-            "core.mini"
-        )
-        if self.filepath.name not in special_files: return self.line_number
-        return self.line_number + 2
+        return self.line_number
 
     @property
     def source_line(self):
