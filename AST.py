@@ -4631,16 +4631,20 @@ class Assignment(Statement):
             return Reference(self.info, self.target, self.value)
         return SimpleAssignment(self.info, self.target, self.value)
 
+    def ensure_value_type(self, value_type):
+        if value_type and value_type != llvm.LLVMVoidType(): return
+        raise Exception(f"{self.info}: Assignment impossible: right hand side expression has no value.")
+
     def codegen(self, scope):
         if self.desugared: return self.desugared.codegen(scope)
         value_type = self.value.exprtype(scope)
+        self.ensure_value_type(value_type)
         self.desugared = self.desugar(scope, value_type)
         return self.desugared.codegen(scope)
 
     def basic_typeflow(self, scope):
         value_type = self.value.exprtype(scope)
-        if not value_type or value_type == llvm.LLVMVoidType():
-            raise Exception(f"{self.info}: Assignment impossible: right hand side expression returns {value_type}.")
+        self.ensure_value_type(value_type)
         if not is_value_type(value_type):
             scope.points_to_facts.add((self.target.info.id, "==", self.value.info.id))
         if(not isinstance(self.target, Identifier)):
@@ -4654,6 +4658,7 @@ class Assignment(Statement):
     def typeflow(self, scope):
         if self.desugared: return self.desugared.typeflow(scope)
         value_type = self.value.exprtype(scope)
+        self.ensure_value_type(value_type)
         self.desugared = self.desugar(scope, value_type)
         return self.desugared.typeflow(scope)
 

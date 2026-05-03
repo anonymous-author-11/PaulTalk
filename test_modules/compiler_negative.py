@@ -33,7 +33,25 @@ class CompilerNegativeTestsMixin:
                 x = void_return(); // void_return() returns void
             }
             """
-            self.compile_fails(mini_code, "Assignment impossible: right hand side expression returns None.", "assign_void_expression")
+            self.compile_fails(mini_code, "Assignment impossible: right hand side expression has no value.", "assign_void_expression")
+
+    def test_assign_void_field(self):
+            mini_code = """
+            class Box {
+                @text : String
+
+                def init() {
+                    @text = "";
+                }
+
+                def clear() {}
+
+                def set() {
+                    @text = self.clear();
+                }
+            }
+            """
+            self.compile_fails(mini_code, "Assignment impossible: right hand side expression has no value.", "assign_void_field")
 
     def test_binary_op_different_types(self):
             mini_code = """
