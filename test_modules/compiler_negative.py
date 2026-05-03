@@ -727,6 +727,31 @@ class CompilerNegativeTestsMixin:
             """
             self.compile_fails(mini_code, "Overriding method Dog.speak: parameter volume with type i32 is not a subtype", "override_invalid_param_type")
 
+    def test_array_context_bad_elem(self):
+            mini_code = """
+            import array;
+
+            class Operation { def init() {} }
+            class Addition extends Operation { def init() {} }
+            class Multiplication extends Operation { def init() {} }
+
+            bad = [Addition{}] as Array[Multiplication];
+            """
+            expected = "Inferred element type of array literal (Addition) is not a subtype of specified type (Multiplication)"
+            self.compile_fails(mini_code, expected, "array_context_bad")
+
+    def test_array_cast_nonliteral(self):
+            mini_code = """
+            import array;
+
+            class Operation { def init() {} }
+            class Addition extends Operation { def init() {} }
+
+            additions = [Addition{}];
+            bad = additions as Array[Operation];
+            """
+            self.compile_fails(mini_code, "Can't cast Array[Addition] to Array[Operation]", "array_cast_nonliteral")
+
     def test_coroutine_call_too_many_args(self):
             mini_code = """
             def counter() yields i32 { yield(5); }

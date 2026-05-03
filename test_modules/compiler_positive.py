@@ -1207,6 +1207,36 @@ class CompilerPositiveTestsMixin:
         expected_output = "d\nlook at this!"
         self.run_mini_code(mini_code, expected_output, "array_literals")
 
+    def test_array_literal_context_type(self):
+        mini_code = """
+            import array;
+            import io;
+
+            class Operation { def init() {} }
+            class Addition extends Operation { def init() {} }
+            class Multiplication extends Operation { def init() {} }
+            class Division extends Operation { def init() {} }
+
+            declared : Array[Operation] = [Addition{}, Multiplication{}];
+            declared.append(Division{});
+
+            casted = [Addition{}, Multiplication{}] as Array[Operation];
+            casted.append(Division{});
+
+            empty_declared : Array[Operation] = [];
+            empty_declared.append(Addition{});
+
+            empty_casted = [] as Array[Operation];
+            empty_casted.append(Multiplication{});
+
+            IO.print(declared.size());
+            IO.print(casted.size());
+            IO.print(empty_declared.size());
+            IO.print(empty_casted.size());
+        """
+        expected_output = "3\n3\n1\n1"
+        self.run_mini_code(mini_code, expected_output, "array_context_type")
+
     def test_array_mutation_helpers(self):
         mini_code = """
             import array;

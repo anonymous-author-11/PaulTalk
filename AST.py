@@ -1549,6 +1549,13 @@ class As(Expression):
         except:
             return False
 
+    def bind_array_literal_type(self, to_typ):
+        if not isinstance(self.operand, ArrayLiteral): return
+        if self.operand.specified_elem_type: return
+        if not is_named_fatptr(to_typ, "Array"): return
+        if to_typ.type_params == NoneAttr(): return
+        self.operand.specified_elem_type = to_typ.type_params.data[0]
+
     def codegen(self, scope):
 
         to_typ = self.exprtype(scope)
@@ -1576,11 +1583,12 @@ class As(Expression):
         return cast.results[0]
 
     def exprtype(self, scope):
-        operand_type = self.operand.exprtype(scope)
         to_typ = scope.simplify(self.typ)
+        to_typ = scope.type_env.validated_type(self.info, to_typ)
+        self.bind_array_literal_type(to_typ)
+        operand_type = self.operand.exprtype(scope)
         if not operand_type or operand_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Cannot cast Nothing to {to_typ}.")
-        to_typ = scope.type_env.validated_type(self.info, to_typ)
         stringable = isinstance(operand_type, Integer) or operand_type == Float() or operand_type == Nil()
         if stringable and is_named_fatptr(to_typ, "String") and self.string_unambiguous(scope):
             return Format(self.info, self.operand).exprtype(scope)
