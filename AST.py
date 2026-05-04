@@ -1734,15 +1734,15 @@ class Into(Expression):
     def find_constructor(self, scope, operand_type, to_type):
         if not isinstance(to_type, FatPtr): return None
         to_class = scope.get_class(self.info, to_type)
-        candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name == "init" and behavior.arity == 1]
+        candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name in ("_Self_new", "init") and behavior.arity == 1]
         if self.generic_target_class(scope, to_type):
             if len(candidate_behaviors) == 0: return None
             call = ObjectCreation(self.info, self.info.id + "_into_constructor", to_type, [self.operand])
             self.typ = call.exprtype(scope)
             return call
         to_type = scope.type_env.validated_type(self.info, to_type)
-        candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, "init", [operand_type])]
-        if len(candidate_behaviors) == 0: return None
+        applicable = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, behavior.name, [operand_type])]
+        if len(applicable) == 0: return None
         call = ObjectCreation(self.info, self.info.id + "_into_constructor", to_type, [self.operand])
         call.exprtype(scope)
         return call
@@ -2809,6 +2809,7 @@ class ObjectCreation(Expression):
     anon_name: str
     type: TypeAttribute
     arguments: List[Expression]
+    method: "ClassMethodCall" = None
 
     @property
     def subexpressions(self):
@@ -2817,6 +2818,7 @@ class ObjectCreation(Expression):
     def codegen(self, scope):
 
         self_type = self.exprtype(scope)
+        if self.method: return self.method.codegen(scope)
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         inputs = [arg.codegen(scope) for arg in self.arguments]
         
@@ -2861,38 +2863,41 @@ class ObjectCreation(Expression):
     def typeflow(self, scope):
         self.exprtype(scope)
 
+    def deduced_type_for_method(self, method, arg_types, cls_type, scope):
+        param_types = method.param_types()
+        arg_ancestors = []
+        for arg_type, param_type in zip(arg_types, param_types):
+            ancestors = scope.ancestors(arg_type)
+            matching_ancestor = next((anc for anc in ancestors if scope.matches(anc, param_type)), None)
+            if not matching_ancestor: return None
+            arg_ancestors.append(matching_ancestor)
+        return scope.specialize(param_types, arg_ancestors, cls_type)
+
     # try to deduce the reciever type from the argument types, e.g. Pair{5, 6} => Pair[i32, i32].new(5, 6)
     def deduce_type_parameters(self, simplified_type, arg_types, scope):
-        arg_types = [arg.exprtype(scope) for arg in self.arguments]
         cls = scope.get_class(self.info, simplified_type)
         cls_type =  cls.type()
-        behavior_candidates = [behavior for behavior in cls.behaviors if behavior.name == "init" and behavior.arity == len(self.arguments)]
-        if len(behavior_candidates) == 0:
-            raise Exception(f"{self.info}: No init method in class {simplified_type} matches the argument types {arg_types}")
-        deduced_candidates = []
-        for b in behavior_candidates:
-            for m in b.methods:
-                param_types = m.param_types()
-                arg_ancestors = []
-                ok = True
-                for a,b in zip(arg_types, param_types):
-                    ancestors = scope.ancestors(a)
-                    matching_ancestor = next((anc for anc in ancestors if scope.matches(anc, b)), None)
-                    if not matching_ancestor:
-                        ok = False
-                        break
-                    arg_ancestors.append(matching_ancestor)
-                if not ok: continue
-                deduced_candidates.append(scope.specialize(param_types, arg_ancestors, cls_type))
-        if len(deduced_candidates) == 0 or len(deduced_candidates) > 1:
-            print(len(behavior_candidates))
-            print(deduced_candidates)
-            print(behavior_candidates)
-            raise Exception(f"{self.info}: Could not deduce type parameters from {simplified_type}.new with argument types {arg_types}")
+        for name in ("_Self_new", "init"):
+            behavior_candidates = [behavior for behavior in cls.behaviors if behavior.name == name and behavior.arity == len(self.arguments)]
+            methods = chain.from_iterable(behavior.methods for behavior in behavior_candidates)
+            deduced_candidates = [t for t in (self.deduced_type_for_method(method, arg_types, cls_type, scope) for method in methods) if t]
+            if len(deduced_candidates) == 1: return deduced_candidates[0]
+            if len(deduced_candidates) > 1: raise Exception(f"{self.info}: Could not deduce type parameters from {simplified_type}.new with argument types {arg_types}")
         #print(f"deduced type {deduced_candidates[0]} for {simplified_type}.new with argument types {arg_types}")
-        return deduced_candidates[0]
+        raise Exception(f"{self.info}: Could not deduce type parameters from {simplified_type}.new with argument types {arg_types}")
+
+    def factory_is_current_method(self, scope, behavior):
+        if not scope.method: return False
+        current = scope.method.definition
+        if not isinstance(current, ClassMethodDef): return False
+        if current.name != "_Self_new": return False
+        definitions = {method.definition for method in behavior.methods}
+        if current not in definitions: return False
+        if definitions == {current}: return True
+        raise Exception(f"{self.info}: construction may recursively dispatch to the current Self.new")
 
     def exprtype(self, scope):
+        if self.method: return self.method.exprtype(scope)
         simplified_type = scope.type_env.qualify(self.type, self.info)
         if isinstance(simplified_type, FatPtr) and simplified_type.cls.data == "Buffer":
             raise Exception(f"{self.info}: Buffer type must be parameterized, like Buffer[i8] or Buffer[f64]")
@@ -2902,12 +2907,19 @@ class ObjectCreation(Expression):
             simplified_type = self.deduce_type_parameters(simplified_type, input_types, scope)
         simplified_type = scope.type_env.validated_type(self.info, simplified_type)
 
+        factory_behaviors = [behavior for behavior in cls.behaviors if behavior.applicable(simplified_type, scope, "_Self_new", input_types)]
+        if len(factory_behaviors) > 1:
+            raise Exception(f"{self.info}: invocation of {simplified_type}.new with argument types {input_types} is ambiguous.")
+        if len(factory_behaviors) == 1 and not self.factory_is_current_method(scope, factory_behaviors[0]):
+            self.method = ClassMethodCall(self.info, simplified_type, "new", self.arguments)
+            return self.method.exprtype(scope)
+
         behaviors = [behavior for behavior in cls.behaviors if behavior.applicable(simplified_type, scope, "init", input_types)]
         if len(behaviors) == 0:
             debug_print(cls.behaviors)
             raise Exception(f"{self.info}: No init method in class {simplified_type} matches the argument types {input_types}")
         if len(behaviors) > 1:
-            raise Exception(f"{self.info}: invocation of {simplified_type}.{self.method} with argument types {arg_types} is ambiguous.")
+            raise Exception(f"{self.info}: invocation of {simplified_type}.init with argument types {input_types} is ambiguous.")
         behavior = behaviors[0]
         if any(isinstance(elem.definition, AbstractMethodDef) for elem in cls.vtable() if isinstance(elem, Method)):
             offender = next(elem for elem in cls.vtable() if isinstance(elem, Method) and isinstance(elem.definition, AbstractMethodDef))

@@ -83,6 +83,99 @@ class CompilerPositiveTestsMixin:
         expected_output = "7"
         self.compile_and_run(mini_code, expected_output, "generic_self_return")
 
+    def test_construction_routes_to_self_new(self):
+        mini_code = """
+            import std;
+
+            class Box {
+                @value : i32
+
+                def Self.new(value : i32) -> Self {
+                    return Self{value + 10};
+                }
+
+                def init(@value : i32) {}
+                def value() -> i32 { return @value; }
+            }
+
+            IO.print(Box.new(5).value());
+            IO.print(Box{7}.value());
+        """
+        expected_output = "15\n17"
+        self.compile_and_run(mini_code, expected_output, "construction_self_new")
+
+    def test_self_new_can_return_subtype(self):
+        mini_code = """
+            import std;
+
+            class Animal {
+                def Self.new(value : i32) -> Self {
+                    return Dog{value};
+                }
+
+                def init(value : i32) {}
+                def value() -> i32 { return 0; }
+            }
+
+            class Dog extends Animal {
+                @value : i32
+
+                def init(@value : i32) {}
+                def value() -> i32 { return @value; }
+            }
+
+            animal = Animal.new(23);
+            IO.print(animal.value());
+        """
+        expected_output = "23"
+        self.compile_and_run(mini_code, expected_output, "self_new_subtype")
+
+    def test_into_routes_to_self_new(self):
+        mini_code = """
+            import std;
+
+            class Wrapped {
+                @value : i32
+
+                def Self.new(value : i32) -> Self {
+                    return Self{value + 3};
+                }
+
+                def init(@value : i32) {}
+                def value() -> i32 { return @value; }
+            }
+
+            wrapped = 4 into Wrapped;
+            IO.print(wrapped.value());
+        """
+        expected_output = "7"
+        self.compile_and_run(mini_code, expected_output, "into_self_new")
+
+    def test_inherited_self_new_can_construct_subclass(self):
+        mini_code = """
+            import std;
+
+            class Bar {
+                def Self.new(value : i32) -> Self {
+                    return Foo.new(value);
+                }
+
+                def value() -> i32 { return 0; }
+            }
+
+            class Foo extends Bar {
+                @value : i32
+
+                def init(@value : i32) {}
+                def value() -> i32 { return @value; }
+            }
+
+            foo = Foo.new(31);
+            IO.print(foo.value());
+        """
+        expected_output = "31"
+        self.compile_and_run(mini_code, expected_output, "inherited_self_new")
+
     def test_coro_steps(self):
         mini_code = """
             import std;
