@@ -52,7 +52,6 @@ Principles of PaulTalk Design
 		- Requires special function prologues to check for morestack
 		- What if you hit the end of the stack within a native call?
 		- Can't just relocate pointers that might be dereferenced from C
-		- Coroutine stacks are instead virtual-memory based
 
 6. Separate compilation is non-negotiable
 	- No monomorphization
