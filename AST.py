@@ -416,7 +416,7 @@ class Expression(Node):
     def used_ids(self):
         base_case = {self.info.id} if isinstance(self, Identifier) else set()
         used = set.union(base_case, *(subexpr.used_ids for subexpr in self.subexpressions))
-        return {id.replace("@", "self.") for id in used}
+        return {normalize_constraint_name(id) for id in used}
 
     def __hash__(self):
         return hash(id(self))
@@ -3484,7 +3484,7 @@ class MethodDef(Statement):
 
     def pointsto_param_names(self):
         fields = [field.declaration.name for field in self.defining_class.fields() if not isinstance(field.declaration, TypeFieldDecl)]
-        virtual_regions = [reg.replace("@","self.") for reg in self.defining_class.all_regions()]
+        virtual_regions = [normalize_constraint_name(reg) for reg in self.defining_class.all_regions()]
         param_names = [*(param.name for param in self.params), *fields, *virtual_regions, "self"]
         if self.hasreturn: param_names.append("ret")
         return param_names
@@ -4027,23 +4027,28 @@ class Behavior(Statement):
 
     def constraints(self):
         constraints = Constraints()
-        for m in self.methods:
-            mapping = {param.name:str(i) for i,param in enumerate(m.definition.params)} | {"ret":"ret", "self":"self"}
-            m_constraints = m.constraints()
-            constraints.all_alias = constraints.all_alias or m_constraints.all_alias
-            for lhs, op, rhs in m_constraints._set:
-                lhs_split = lhs.replace("self.","@").split(".")
-                lhs_additional = "@" in lhs_split[0]
-                lhs_split[0] = mapping[lhs_split[0]] if lhs_split[0] in mapping else lhs_split[0]
-                rhs_split = rhs.replace("self.","@").split(".")
-                rhs_additional = "@" in rhs_split[0]
-                rhs_split[0] = mapping[rhs_split[0]] if rhs_split[0] in mapping else rhs_split[0]
-                new_lhs = ".".join(lhs_split)
-                new_rhs = ".".join(rhs_split)
-                constraints.add((new_lhs, op, new_rhs))
-                if lhs_additional: constraints.add((lhs, "==", new_lhs))
-                if rhs_additional: constraints.add((rhs, "==", new_rhs))
+        for method in self.methods: self.add_method_constraints(constraints, method)
         return constraints
+
+    def add_method_constraints(self, constraints, method):
+        mapping = {param.name:str(i) for i,param in enumerate(method.definition.params)} | {"ret":"ret", "self":"self"}
+        method_constraints = method.constraints()
+        constraints.all_alias = constraints.all_alias or method_constraints.all_alias
+        for lhs, op, rhs in method_constraints._set:
+            self.add_behavior_constraint(constraints, mapping, lhs, op, rhs)
+
+    def add_behavior_constraint(self, constraints, mapping, lhs, op, rhs):
+        new_lhs, lhs_additional = self.map_constraint_name(lhs, mapping)
+        new_rhs, rhs_additional = self.map_constraint_name(rhs, mapping)
+        constraints.add((new_lhs, op, new_rhs))
+        if lhs_additional: constraints.add((lhs, "==", new_lhs))
+        if rhs_additional: constraints.add((rhs, "==", new_rhs))
+
+    def map_constraint_name(self, name, mapping):
+        parts = name.replace("self.","@").split(".")
+        additional = parts[0].startswith("@")
+        parts[0] = mapping.get(parts[0], parts[0])
+        return normalize_constraint_name(".".join(parts)), additional
 
     def __repr__(self):
         return f"Behavior({self.name}, {self.broad_param_types()}, {self.offset})"

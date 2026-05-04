@@ -95,7 +95,7 @@ class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
 class HashMap[K, V] extends Map[K, V] {
     @store : HashStore[K, V, Pair[K, V]]
 
-    regions { @elems_reg == @store.elems_reg }
+    regions { $elems == @store$elems }
 
     abstract def init(hasher : (K) -> i32, eq : (K, K) -> Bool) {}
 

@@ -26,6 +26,7 @@ contexts:
     - include: booleans
     - include: function-calls
     - include: field-access
+    - include: region-access
     - include: class-names
 
   comments:
@@ -107,6 +108,10 @@ contexts:
     - match: '@{{identifier}}|self'
       scope: variable.other.member.mini
 
+  region-access:
+    - match: '\${{identifier}}'
+      scope: variable.other.member.mini
+
   class-names:
     - match: '\b{{class_name}}\b'
       scope: entity.name.type.mini
@@ -157,6 +162,7 @@ contexts:
     - include: booleans
     - include: function-calls
     - include: field-access
+    - include: region-access
     - include: class-names
 
   char:

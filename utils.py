@@ -78,6 +78,11 @@ repl_pattern = re.compile('|'.join(f'(?:{re.escape(k)})' for k in replacements))
 def clean_name(name):
     return repl_pattern.sub(lambda m: replacements[m.group()], name)
 
+def normalize_constraint_name(name: str) -> str:
+    if name.startswith("@"): name = "self." + name[1:]
+    if name.startswith("$"): name = "self." + name
+    return name.replace(".@", ".")
+
 def random_letters(n):
     return "".join(random.choices('abcdefghijklmnopqrstuvwxyz', k=n))
 

@@ -27,7 +27,7 @@ qualified_ident: ident ("." ident)*
 expression_statement: expression ";"
 
 class_def: CLASS (basic_type | parameterized_type) ["extends" type_list] ["where" type_bound_list] "{" field_decls [class_region_constraints] method_defs "}"
-field_decls: field_decl*
+field_decls: (field_decl | region_decl)*
 method_defs: (method_def | operator_def | getter | getters | setter | setters | class_method_def)*
 type_bound_list: type_bound ("," type_bound)*
 type_bound: ident "<:" typ
@@ -70,7 +70,7 @@ region_variable_list: region_variable ("," region_variable)*
 
 equality_chain: region_variable (EQ region_variable)+
 
-region_variable: (ident | FIELD) ("." (ident | FIELD))*
+region_variable: (ident | FIELD | REGION) ("." (ident | FIELD) | REGION)*
 
 method_param: param | field_param
 param: ident ":" typ
@@ -78,6 +78,7 @@ field_param: FIELD ":" typ -> param
 
 var_decl: ident ":" typ ["=" expression]
 field_decl: FIELD ":" typ
+region_decl: REGION ":" typ
 assignment: postfix_target "=" expression
 postfix_target: primary_atom postfix_part*
 
@@ -249,6 +250,7 @@ ALIAS: "alias"
 SELF_TYPE.3: "Self"
 SETTER: /[a-zA-Z][a-zA-Z0-9_]*=/
 FIELD: /@[a-zA-Z][a-zA-Z0-9_]*/
+REGION: /\$[a-zA-Z][a-zA-Z0-9_]*/
 CAPITAL_IDENT.2: /[A-Z][a-zA-Z0-9_]*/
 QUALIFIED_TYPE.2: /[a-z_][a-zA-Z0-9_]*(?:\.[a-z_][a-zA-Z0-9_]*)*\.[A-Z][a-zA-Z0-9_]*/
 LOWERCASE_IDENT: /[a-z_][a-zA-Z0-9_]*/

@@ -79,6 +79,16 @@ class CompilerNegativeTestsMixin:
             """
             self.compile_fails(mini_code, "Class names should be capitalized.", "lowercase_class_name")
 
+    def test_region_decl_requires_region_type(self):
+            mini_code = """
+            class Bad {
+                $x : i32
+
+                def init() {}
+            }
+            """
+            self.compile_fails(mini_code, "Region variable $x must have type Region", "region_decl_type")
+
     def test_class_def_inconsistent_hierarchy(self):
             mini_code = """
             class A {}

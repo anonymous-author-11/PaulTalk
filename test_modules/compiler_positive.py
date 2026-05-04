@@ -83,6 +83,41 @@ class CompilerPositiveTestsMixin:
         expected_output = "7"
         self.compile_and_run(mini_code, expected_output, "generic_self_return")
 
+    def test_region_dollar_syntax(self):
+        mini_code = """
+            import std;
+
+            class Holder {
+                $value : Region
+                @value : String
+
+                regions { $value == @value }
+
+                def init(@value : String) {}
+
+                def get() -> String {
+                    return @value;
+                } ~> { ret == $value }
+            }
+
+            class View {
+                $value : Region
+                @holder : Holder
+
+                regions { $value == @holder$value }
+
+                def init(@holder : Holder) {}
+
+                def get() -> String {
+                    return @holder.get();
+                } ~> { ret == $value }
+            }
+
+            IO.print(View{Holder{"ok"}}.get());
+        """
+        expected_output = "ok"
+        self.compile_and_run(mini_code, expected_output, "region_dollar_syntax")
+
     def test_construction_routes_to_self_new(self):
         mini_code = """
             import std;

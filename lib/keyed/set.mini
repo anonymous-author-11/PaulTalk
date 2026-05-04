@@ -12,7 +12,7 @@ class Set[T] extends Collection[T] {
 class HashSet[T] extends Set[T] {
     @store : HashStore[T, T, T]
 
-    regions { @elems_reg == @store.elems_reg }
+    regions { $elems == @store$elems }
 
     abstract def init(hasher : (T) -> i32, eq : (T, T) -> Bool) {}
 

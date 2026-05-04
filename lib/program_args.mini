@@ -50,8 +50,8 @@ class ProgramArgsIterator extends Iterator[String] {
 	@cursor : i32
 
 	regions {
-		@elems_reg == @argv,
-		@nxt.elems_reg holds @elems_reg
+		$elems == @argv,
+		$nxt$elems holds $elems
 	}
 
 	def init(@argv : Buffer[Buffer[i8]], @argc : i32) {

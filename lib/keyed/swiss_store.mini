@@ -46,23 +46,23 @@ class SwissStore[K, V, T] extends HashStore[K, V, T] {
 
     // We abstract from the actual storage of the records
     abstract def value_at(index : i32) -> V {
-    } ~> { ret holds @elems_reg }
+    } ~> { ret holds $elems }
 
     abstract def key_at(index : i32) -> K {
-    } ~> { ret holds @elems_reg }
+    } ~> { ret holds $elems }
 
     abstract def set_value_at(index : i32, value : V) {
-    } ~> { @elems_reg holds value }
+    } ~> { $elems holds value }
 
     abstract def set_key_at(index : i32, key : K) {
-    } ~> { @elems_reg holds key }
+    } ~> { $elems holds key }
 
     abstract def reset_records(capacity : i32) {}
 
     abstract def resize(new_capacity : i32) {}
 
     abstract def scan_next(start_cursor : i32) -> Pair[i32, T]? {
-    } ~> { ret.second holds @elems_reg }
+    } ~> { ret.second holds $elems }
 
     def hash(key : K) -> i32 {
         return @hasher.call(key);
@@ -224,7 +224,7 @@ class SwissStoreIterator[K, V, T] extends Iterator[T] {
     @store : SwissStore[K, V, T]
     @cursor : i32
 
-    regions { @elems_reg == @store.elems_reg }
+    regions { $elems == @store$elems }
 
     def init(@store : SwissStore[K, V, T]) {
         @cursor = 0;

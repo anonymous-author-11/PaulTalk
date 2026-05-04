@@ -10,7 +10,7 @@ class SwissSet[T] extends HashSet[T] {
 class SwissSetStore[T] extends SwissStore[T, T, T] {
     @keys : Buffer[T]
 
-    regions { @elems_reg == @keys }
+    regions { $elems == @keys }
 
     def init(@hasher : (T) -> i32, @eq : (T, T) -> Bool) {
         entries_len = min_capacity();

@@ -5,20 +5,19 @@ import writer;
 class List[T] extends Collection[T] {
 
     // must be able to create an empty List with no arguments
-    abstract def Self.empty() -> Self {
-    } ~> no_alias
+    abstract def Self.empty() -> Self ~> no_alias
 
     // Create a List from any iterable, even of unknown size
     // 'my_iterable into List' can desugar to this method
     abstract def Self.from_iterable(iterable : Iterable[T]) -> Self {
-    } ~> { ret.elems_reg holds iterable.elems_reg }
+    } ~> { ret$elems holds iterable$elems }
 
     // append always increases .size() by 1
     abstract def append(x : T) -> Self {
-    } ~> { @elems_reg holds x, ret == self }
+    } ~> { $elems holds x, ret == self }
 
-    // iterator.next() should be O(1)
-    abstract def iterator() -> Iterator[T] {}
+    // iterator.next() should be O(1) wrt size of list
+    abstract def iterator() -> Iterator[T]
 
     // we do not provide List.set(index, value)
     // mutating the middle of the list maybe be impossible for some subtypes
@@ -59,14 +58,14 @@ class List[T] extends Collection[T] {
 
     def writer() -> Writer[T] {
         return ListWriter{self};
-    } ~> { ret holds self, ret.dest_reg == @elems_reg }
+    } ~> { ret holds self, ret$dest == $elems }
 
 }
 
 class ListWriter[T] extends Writer[T] {
     @list : List[T]
 
-    regions { @dest_reg == @list.elems_reg }
+    regions { $dest == @list$elems }
 
     def init(@list : List[T]) {
     }

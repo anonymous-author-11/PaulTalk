@@ -5,18 +5,14 @@ class FileSystemError extends Exception {}
 
 class File extends IndexableCollection[i32, i8, i8] {
 
-	abstract def read_at(offset : i64) -> i8? {
-	} ~> no_alias
 	abstract def write(offset : i64, source : Buffer[i8], n_bytes : i32) -> i32 {
 	} ~> no_alias
-	abstract def byte_length() -> i64 {
-	} ~> no_alias
-	abstract def mode=(mode : String) {
-	}
-	abstract def reopen() {
-	} ~> no_alias
-	abstract def close() {
-	} ~> no_alias
+	
+	abstract def read_at(offset : i64) -> i8? ~> no_alias
+	abstract def byte_length() -> i64 ~> no_alias
+	abstract def mode=(mode : String)
+	abstract def reopen() ~> no_alias
+	abstract def close() ~> no_alias
 
 	def size() -> i32 {
 		length = self.byte_length();
@@ -101,7 +97,7 @@ class FileIterator extends Iterator[i8] {
 	@size : i32
 	@cursor : i32
 
-	regions { @elems_reg == @file.elems_reg }
+	regions { $elems == @file$elems }
 
 	def init(@file : File) {
 		@cursor = 0;
@@ -122,7 +118,7 @@ class FileWriter extends Writer[i8] {
 	@scratch : Buffer[i8]
 	@scratch_capacity : i32
 
-	regions { @dest_reg == @file.elems_reg }
+	regions { $dest == @file$elems }
 
 	def Self.default_scratch_capacity() -> i32 {
 		return 8192;

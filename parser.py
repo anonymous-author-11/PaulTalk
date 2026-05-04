@@ -310,8 +310,13 @@ class CSTTransformer(Transformer):
     def class_region_constraints(self, constraint_list):
         return constraint_list
 
-    def region_variable(self, *idents):
-        return ".".join(ident.value for ident in idents).replace("@", "self.")
+    def region_part(self, token, is_root=False):
+        if is_token_type(token, "FIELD"): return ("self." if is_root else "") + token.value[1:]
+        if is_token_type(token, "REGION"): return ("self." if is_root else ".") + token.value
+        return ("" if is_root else ".") + token.value
+
+    def region_variable(self, first, *parts):
+        return self.region_part(first, True) + "".join(self.region_part(part) for part in parts)
 
     def new_scope(self, *statements):
         node_info = NodeInfo(None, self.file_path, statements[0].info.line_number if len(statements) > 0 else 0)
@@ -400,6 +405,12 @@ class CSTTransformer(Transformer):
         return Assignment(assignment_info, Identifier(ident_info, name.value), As(cast_info, NilLiteral(nil_info), typ))
 
     def field_decl(self, name, typ):
+        node_info = NodeInfo(None, self.file_path, self.line_number(name))
+        return FieldDecl(node_info, name.value, typ, None)
+
+    def region_decl(self, name, typ):
+        if not is_named_fatptr(typ, "Region"):
+            raise Exception(f"Line {self.line_number(name)}: Region variable {name.value} must have type Region.")
         node_info = NodeInfo(None, self.file_path, self.line_number(name))
         return FieldDecl(node_info, name.value, typ, None)
 

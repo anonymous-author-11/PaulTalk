@@ -35,7 +35,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
     @hasher: (K) -> i32
     @eq: (K, K) -> Bool
 
-    regions { @elems_reg == @entries }
+    regions { $elems == @entries }
     getters @size, @entries_len
 
     // Extracts 6 bits for H2 and packs them into a control byte with LSB=1.
@@ -212,7 +212,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
             return Pair{cursor + 1, entry.to_pair()};
         }
         return nil;
-    } ~> { ret holds @elems_reg }
+    } ~> { ret holds $elems }
 
     def iterator() -> SwissTableIterator[K,V] {
         return SwissTableIterator{self};
@@ -223,7 +223,7 @@ class SwissTableIterator[K,V] extends Iterator[Pair[K,V]] {
     @map : SwissTable[K,V]
     @cursor: i32
 
-    regions { @elems_reg == @map.elems_reg }
+    regions { $elems == @map$elems }
 
     def init(@map : SwissTable[K,V]) {
         @cursor = 0;

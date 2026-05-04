@@ -11,7 +11,7 @@ class SwissMapStore[K, V] extends SwissStore[K, V, Pair[K, V]] {
     @keys : Buffer[K]
     @values : Buffer[V]
 
-    regions { @elems_reg == @keys == @values }
+    regions { $elems == @keys == @values }
 
     def init(@hasher : (K) -> i32, @eq : (K, K) -> Bool) {
         entries_len = min_capacity();

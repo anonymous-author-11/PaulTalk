@@ -24,7 +24,7 @@ class CuckooMap[K,V] extends HashMap[K, V] {
     @hasher : (K) -> i32 // Primary user-provided hash function
     @eq : (K, K) -> Bool
 
-    regions { @elems_reg == @table1 == @table2 }
+    regions { $elems == @table1 == @table2 }
 
     def Self.max_displacements() -> i32 {
         return 100;
@@ -302,7 +302,7 @@ class CuckooMapIterator[K,V] extends Iterator[Pair[K,V]] {
     @on_second : Bool // whether on second table
 
     regions {
-        @elems_reg holds (@map_table1, @map_table2),
+        $elems holds (@map_table1, @map_table2),
         @map_table1 == @map_table2
     }
 
@@ -318,7 +318,7 @@ class CuckooMapIterator[K,V] extends Iterator[Pair[K,V]] {
             if entry is Entry[K, V] { return entry.to_pair(); }
         }
         return nil;
-    } ~> { ret holds @elems_reg }
+    } ~> { ret holds $elems }
 
     def next() -> Pair[K, V]? {
         if not @on_second {

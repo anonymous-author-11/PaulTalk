@@ -9,7 +9,7 @@ class Array[T] extends
 	@length : i32
 	@capacity : i32
 
-    regions { @elems_reg == @buffer }
+    regions { $elems == @buffer }
 
     def Self.empty() -> Self { return Self{}; }
 
@@ -149,11 +149,11 @@ class Array[T] extends
     
     def unchecked_index(index : i32) -> T {
     	return @buffer.[index];
-    } ~> { ret holds @elems_reg }
+    } ~> { ret holds $elems }
     
     def unchecked_insert(index : i32, value : T) {
         @buffer.[index] = value;
-    } ~> { @elems_reg holds value }
+    } ~> { $elems holds value }
     
     def iterator() -> ConstantTimeIterator[T] {
     	return ArrayIterator{self};
@@ -167,7 +167,7 @@ class ArrayIterator[T] extends ConstantTimeIterator[T] {
 	@array : Array[T]
 	@index : i32
 
-    regions { @elems_reg == @array.elems_reg }
+    regions { $elems == @array$elems }
 
 	def init(@array : Array[T]) { @index = 0; }
 	def next() -> T? {

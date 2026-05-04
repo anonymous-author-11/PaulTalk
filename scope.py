@@ -550,7 +550,7 @@ class Constraints:
         self.no_alias = no_alias
 
     def add(self, triple):
-        triple = (triple[0].replace("@", "self."), triple[1], triple[2].replace("@", "self."))
+        triple = (normalize_constraint_name(triple[0]), triple[1], normalize_constraint_name(triple[2]))
         self._set.add(triple)
         
         # add implicit constraints ensuring that foo < foo.bar for lhs and rhs
@@ -569,8 +569,8 @@ class Constraints:
             rhs_split = rhs.split(".")
             lhs_split[0] = mapping[lhs_split[0]]
             rhs_split[0] = mapping[rhs_split[0]]
-            new_lhs = ".".join(lhs_split).replace("@", "self.")
-            new_rhs = ".".join(rhs_split).replace("@", "self.")
+            new_lhs = normalize_constraint_name(".".join(lhs_split))
+            new_rhs = normalize_constraint_name(".".join(rhs_split))
             new_set.add((new_lhs, op, new_rhs))
         return Constraints(new_set, self.all_alias, self.no_alias)
 

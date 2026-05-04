@@ -3,7 +3,7 @@ import math;
 
 class Collection[T] extends Iterable[T] {
 
-    abstract def size() -> i32 {}
+    abstract def size() -> i32
 
     def is_empty() -> Bool {
         return self.size() == 0;
@@ -81,7 +81,7 @@ class CollectionAdapter[Arg, T] extends Collection[T] {
     @iterable : Iterable[T]
     @size_fn : (Arg) -> i32
 
-    regions { @elems_reg == @iterable.elems_reg }
+    regions { $elems == @iterable$elems }
 
     def init(@arg : Arg, @iterable : Iterable[T], @size_fn : (Arg) -> i32) {}
 

@@ -3,6 +3,7 @@ from collections import defaultdict
 
 # Import the rustworkx wrapper and text generator from your utility file
 from graph_utils import DiGraph, generate_network_text
+from utils import normalize_constraint_name
 
 class UnionFind:
     """A standard, integer-based Union-Find data structure."""
@@ -57,8 +58,8 @@ def create_constraint_graph(constraints):
     inequalities = []
     
     for a, op, b in constraints:
-        a = a.replace("@", "self.")
-        b = b.replace("@", "self.")
+        a = normalize_constraint_name(a)
+        b = normalize_constraint_name(b)
         nodes.add(a)
         nodes.add(b)
         

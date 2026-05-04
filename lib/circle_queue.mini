@@ -6,7 +6,7 @@ class CircleQueue[T] extends Queue[T], IndexableCollection[i32, T, T] {
     @count : i32
     @capacity : i32
 
-    regions { @elems_reg == @buffer }
+    regions { $elems == @buffer }
 
     def Self.empty() -> Self { return Self{}; }
 
@@ -89,12 +89,12 @@ class CircleQueue[T] extends Queue[T], IndexableCollection[i32, T, T] {
     def unchecked_index(index : i32) -> T {
         physical = (@head + index) bit_and (@capacity - 1);
         return @buffer.[physical];
-    } ~> { ret holds @elems_reg }
+    } ~> { ret holds $elems }
 
     def unchecked_insert(index : i32, value : T) {
         physical = (@head + index) bit_and (@capacity - 1);
         @buffer.[physical] = value;
-    } ~> { @elems_reg holds value }
+    } ~> { $elems holds value }
 
     def grow() {
         new_capacity = @capacity * 2;
@@ -114,7 +114,7 @@ class CircleQueueIterator[T] extends ConstantTimeIterator[T] {
     @queue : CircleQueue[T]
     @index : i32
 
-    regions { @elems_reg == @queue.elems_reg }
+    regions { $elems == @queue$elems }
 
     def init(@queue : CircleQueue[T]) {
         @index = 0;
