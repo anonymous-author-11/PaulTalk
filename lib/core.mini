@@ -110,6 +110,15 @@ class String extends List[Character], Representable {
         @char_length = @char_length + other.size();
         return self;
     }
+    def copy_into(dest : Buffer[i8], offset : i32) {
+        for i in 0..@byte_length {
+            dest.[offset + i] = @bytes.[i];
+        }
+    }
+    def replace(old : String, new : String) -> String {
+        if old.is_empty() { return self.copy(); }
+        return new.join(self.split(old).map((v : StringView) => { v.to_string(); }));
+    }
     def reserve(new_capacity : i32) {
         if new_capacity <= @capacity { return; }
         @capacity = new_capacity;
@@ -126,6 +135,20 @@ class String extends List[Character], Representable {
     }
     def !=(other : String) -> Bool {
         return not (self == other);
+    }
+    def find_view(needle : String) -> StringView? {
+        source_len = @byte_length;
+        needle_len = needle.byte_length();
+        if needle_len == 0 { return StringView{self, 0, 0, 0}; }
+        if needle_len > source_len { return nil; }
+        last_start = source_len - needle_len;
+        bytes = self.bytes();
+        for start in 0...last_start {
+            if not bytes.match_at(needle, start) { continue; }
+            end = start + needle_len;
+            return StringView{self, start, end, needle.char_length()};
+        }
+        return nil;
     }
     def starts_with(prefix : String) -> Bool {
         return self.bytes().starts_with(prefix);
@@ -187,13 +210,13 @@ class String extends List[Character], Representable {
     def join(parts : Iterable[String]) -> String {
         iterator = parts.iterator();
         first_part = iterator.next();
-        if first_part is not String { return ""; }
-        return self.join(first_part.copy(), iterator);
+        if first_part is Nil { return ""; }
+        return self.join(first_part, iterator);
     }
     def join(parts : Collection[String]) -> String {
         scan = parts.iterator();
         first_part = scan.next();
-        if first_part is not String { return ""; }
+        if first_part is Nil { return ""; }
 
         // count total bytes for preallocation
         own_bytes = self.byte_length();
@@ -206,20 +229,28 @@ class String extends List[Character], Representable {
 
         iterator = parts.iterator();
         iterator.next();
-        start = String{capacity}.extend(first_part);
-        return self.join(start, iterator);
+        accumulator = String{capacity}.extend(first_part);
+        return self.join(accumulator, iterator);
     }
-    def join(first : String, rest : Iterator[String]) -> String {
-        part = rest.next();
+    def join(accumulator : String, iterator : Iterator[String]) -> String {
+        part = iterator.next();
         while part is String {
-            first.extend(self);
-            first.extend(part);
-            part = rest.next();
+            accumulator.extend(self);
+            accumulator.extend(part);
+            part = iterator.next();
         }
-        return first;
+        return accumulator;
     }
     def split(delimiter : String) -> Iterable[StringView] {
         return SplitString{self, delimiter};
+    }
+    // Because both segments are produced eagerly, we defer counting bytes
+    // Elements of pair will actually always be ValidStringBytes at runtime
+    def split_once(sep : String) -> Pair[StringBytes, StringBytes]? {
+        return self.bytes().split_once(sep);
+    }
+    def rsplit_once(sep : String) -> Pair[StringBytes, StringBytes]? {
+        return self.bytes().rsplit_once(sep);
     }
     def lines() -> Iterable[StringView] {
         return self.split("\n");
@@ -251,14 +282,17 @@ class String extends List[Character], Representable {
     def repr() -> String {
         return self;
     } ~> { ret == self }
+    def to_view() -> StringView {
+        return StringView{self, 0, @byte_length, @char_length};
+    } ~> { ret.str == self }
     def codepoints() -> StringCodePoints {
         return StringCodePoints{self};
     } ~> { ret.str == self }
     def bytes() -> StringBytesList {
         return StringBytesList{self};
     } ~> { ret.str == self }
-    def iterator() -> ConstantTimeIterator[Character] {
-        return StringIterator{self};
+    def iterator() -> Iterator[Character] {
+        return self.codepoints().map((cp : i32) => { Character{cp}; }).iterator();
     } ~> { ret.str == self }
     def writer() -> StringWriter {
         return StringWriter{self};
@@ -283,7 +317,7 @@ class SplitStringIterator extends Iterator[StringView] {
     @cursor : i32
     @done : Bool
 
-    regions { @nxt.str == @source }
+    regions { $nxt.str == @source }
 
     def init(@source : String, @delimiter : String) {
         @cursor = 0;
@@ -291,16 +325,8 @@ class SplitStringIterator extends Iterator[StringView] {
     }
 
     def build_segment(start : i32, end_exclusive : i32) -> StringView {
-        n_chars = 0;
-
-        for i in start..end_exclusive {
-            byte = @source.unchecked_index(i);
-            if UTF8.is_continuation(byte) { continue; }
-            n_chars = n_chars + 1;
-        }
-
-        return StringView{@source, start, end_exclusive, n_chars};
-    } ~> { ret == @nxt }
+        return ValidStringBytesView{@source, start, end_exclusive}.to_string_view();
+    } ~> { ret == $nxt }
 
     def find_delimiter(last_start : i32) -> i32? {
         source = @source.bytes();
@@ -341,10 +367,10 @@ class SplitStringIterator extends Iterator[StringView] {
 class StringCodePoints extends List[i32] {
     @str : String
 
-    regions { @elems_reg == @str.elems_reg }
+    regions { $elems == @str$elems }
 
     def Self.empty() -> Self {
-        return Self{String.empty()};
+        return Self{""};
     }
     def Self.from_iterable(iterable : Iterable[i32]) -> Self {
         return Self.empty().extend(iterable);
@@ -354,9 +380,6 @@ class StringCodePoints extends List[i32] {
     def size() -> i32 {
         return @str.char_length();
     }
-    def iterator() -> StringCodepointIterator {
-        return StringCodepointIterator{@str};
-    } ~> { ret.str == @str }
     def append(x : i32) -> Self {
         self.writer().write(x);
         return self;
@@ -367,16 +390,24 @@ class StringCodePoints extends List[i32] {
     }
     def writer() -> Writer[i32] {
         return StringCodepointWriter{@str};
-    } ~> { ret.string == @str, ret.dest_reg == @elems_reg }
+    } ~> { ret.string == @str, ret$dest == $elems }
+    def iterator() -> StringCodepointIterator {
+        return StringCodepointIterator{@str};
+    } ~> { ret.str == @str }
 }
 
 class StringBytes extends Collection[i8] {
-    abstract def source() -> String {}
-    abstract def start() -> i32 {}
-    abstract def end() -> i32 {}
+    $source : Region
+
+    regions { $elems == $source$elems }
+
+    abstract def source() -> String ~> { ret == $source }
+    abstract def start() -> i32 ~> no_alias
+    abstract def end() -> i32 ~> no_alias
 
     // StringBytes may have an invalid start or end due to slicing
-    abstract def validate() -> ValidStringBytes {}
+    abstract def validate() -> ValidStringBytes {
+    } ~> { ret == self } // conservative assumption
 
     def size() -> i32 {
         return self.end() - self.start();
@@ -415,6 +446,35 @@ class StringBytes extends Collection[i8] {
             next = iterator.next();
         }
         return self.slice(first, last + 1);
+    }
+
+    def split_once(sep : String) -> Pair[StringBytes, StringBytes]? {
+        return self.split_once(sep, true);
+    }
+
+    def rsplit_once(sep : String) -> Pair[StringBytes, StringBytes]? {
+        return self.split_once(sep, false);
+    }
+
+    def split_once(sep : String, from_left : Bool) -> Pair[StringBytes, StringBytes]? {
+        sep_len = sep.byte_length();
+        if sep_len == 0 { return nil; }
+
+        pos : i32?;
+        if from_left { pos = self.index_of(sep); }
+        else { pos = self.last_index_of(sep); }
+        if pos is not i32 { return nil; }
+
+        after_start = pos + sep_len;
+        return Pair{self.prefix(pos), self.suffix(after_start)};
+    }
+
+    def prefix(separator_index : i32) -> StringBytes {
+        return StringBytesView{self.source(), self.start(), self.start() + separator_index};
+    }
+
+    def suffix(separator_index : i32) -> StringBytes {
+        return StringBytesView{self.source(), self.start() + separator_index, self.end()};
     }
 
     def slice(start : i32, end_exclusive : i32) -> StringBytes yields OutOfBounds {
@@ -464,15 +524,28 @@ class StringBytes extends Collection[i8] {
         length = self.size();
         if needle_len > length { return nil; }
         last_start = length - needle_len;
-        for start in 0..(last_start + 1) {
+        for start in 0...last_start {
             if self.match_at(needle, start) { return start; }
+        }
+        return nil;
+    }
+
+    def last_index_of(needle : String) -> i32? {
+        needle_len = needle.byte_length();
+        if needle_len == 0 { return 0; }
+        length = self.size();
+        if needle_len > length { return nil; }
+        start = length - needle_len;
+        while start >= 0 {
+            if self.match_at(needle, start) { return start; }
+            start = start - 1;
         }
         return nil;
     }
 
     def to_string_view() -> StringView yields InvalidUTF8Error {
         return self.validate().to_string_view();
-    }
+    } ~> { ret.str == $source }
 
     def to_string() -> String yields InvalidUTF8Error {
         return self.to_string_view().to_string();
@@ -487,6 +560,14 @@ class ValidStringBytes extends StringBytes {
             if not UTF8.is_continuation(byte) { n_chars = n_chars + 1; }
         }
         return n_chars;
+    } ~> no_alias
+
+    def prefix(separator_index : i32) -> ValidStringBytes {
+        return ValidStringBytesView{self.source(), self.start(), self.start() + separator_index};
+    }
+
+    def suffix(separator_index : i32) -> ValidStringBytes {
+        return ValidStringBytesView{self.source(), self.start() + separator_index, self.end()};
     }
 
     def to_string_view() -> StringView {
@@ -502,10 +583,10 @@ class ValidStringBytes extends StringBytes {
 class StringBytesList extends ValidStringBytes, List[i8] {
     @str : String
 
-    regions { @elems_reg == @str.elems_reg }
+    regions { $source == @str }
 
     def Self.empty() -> Self {
-        return Self{String.empty()};
+        return Self{""};
     }
     def Self.from_iterable(iterable : Iterable[i8]) -> Self {
         return Self.empty().extend(iterable);
@@ -534,7 +615,7 @@ class StringBytesList extends ValidStringBytes, List[i8] {
     }
     def writer() -> Writer[i8] {
         return StringByteWriter{@str};
-    } ~> { ret.string == @str, ret.dest_reg == @elems_reg }
+    } ~> { ret.string == @str, ret$dest == $elems }
 }
 
 class StringBytesView extends StringBytes {
@@ -542,9 +623,9 @@ class StringBytesView extends StringBytes {
     @start : i32
     @end_exclusive : i32
 
-    regions { @elems_reg == @str.elems_reg }
+    regions { $source == @str }
 
-    getter @start
+    getters @start
 
     def init(@str : String, @start : i32, @end_exclusive : i32) {
     }
@@ -572,7 +653,7 @@ class StringBytesView extends StringBytes {
         }
 
         return ValidStringBytesView{source, start, end_exclusive};
-    }
+    } ~> { ret.str == @str } // more precise override annotation
 }
 
 class ValidStringBytesView extends ValidStringBytes, StringBytesView {}
@@ -583,12 +664,25 @@ class StringView {
     @end_exclusive : i32
     @char_length : i32
 
-    getter @char_length
+    getters @char_length, @start, @end_exclusive
 
     def init(@str : String, @start : i32, @end_exclusive : i32, @char_length : i32) {}
 
     def byte_length() -> i32 {
         return @end_exclusive - @start;
+    }
+
+    def is_empty() -> Bool {
+        return self.byte_length() == 0;
+    }
+
+    def ==(other : String) -> Bool {
+        if self.byte_length() != other.byte_length() { return false; }
+        return self.bytes().match_at(other, 0);
+    }
+
+    def !=(other : String) -> Bool {
+        return not (self == other);
     }
 
     def to_string() -> String {
@@ -598,28 +692,17 @@ class StringView {
         return String{bytes, n_bytes, @char_length, n_bytes};
     } ~> no_alias
 
-}
+    def bytes() -> ValidStringBytesView {
+        return ValidStringBytesView{@str, @start, @end_exclusive};
+    } ~> { ret.str == @str }
 
-// Iterator can trust that the source string is valid.
-// Constant-time *with respect to the length of the String*
-class StringIterator extends ConstantTimeIterator[Character] {
-    @cp_iterator : ConstantTimeIterator[i32]
-
-    def init(str : String) {
-        @cp_iterator = str.codepoints().iterator();
-    }
-    def next() -> Character? {
-        next_cp = @cp_iterator.next();
-        if next_cp is i32 { return Character{next_cp}; }
-        return nil;
-    }
 }
 
 class StringBytesIterator extends ConstantTimeIterator[i8] {
     @bytes : StringBytes
     @cursor : i32
 
-    regions { @elems_reg == @bytes.elems_reg }
+    regions { $elems == @bytes$elems }
 
     getter @bytes
 
@@ -645,13 +728,15 @@ class StringBytesIterator extends ConstantTimeIterator[i8] {
     }
 }
 
+// Iterator can trust that the source string is valid.
+// Constant-time *with respect to the length of the String*
 class StringCodepointIterator extends ConstantTimeIterator[i32] {
     @str : String
     @byte_iterator : StringBytesIterator
     @decoder : ValidUTF8Decoder
     @codepoint_cursor : i32
 
-    regions { @elems_reg == @str.elems_reg }
+    regions { $elems == @str$elems }
 
     def init(@str : String) {
         @byte_iterator = @str.bytes().iterator();
@@ -691,8 +776,8 @@ class StringWriter extends Writer[Character] {
     @encoder : UTF8Encoder
 
     regions {
-        @dest_reg == @encoder.dest_reg,
-        @encoder.dest_reg == @string.elems_reg
+        $dest == @encoder$dest,
+        @encoder$dest == @string$elems
     }
 
     def init(@string : String) {
@@ -723,7 +808,7 @@ class StringWriter extends Writer[Character] {
 class StringByteWriter extends Writer[i8] {
 	@string : String
 
-    regions { @dest_reg == @string.elems_reg }
+    regions { $dest == @string$elems }
 
 	def init(@string : String) {}
 
@@ -745,8 +830,8 @@ class StringCodepointWriter extends Writer[i32] {
 	@encoder : UTF8Encoder
 
     regions {
-        @dest_reg == @encoder.dest_reg,
-        @encoder.dest_reg == @string.elems_reg
+        $dest == @encoder$dest,
+        @encoder$dest == @string$elems
     }
 
 	def init(@string : String) {
@@ -788,7 +873,7 @@ class UTF8Encoder extends Writer[i32] {
 	@writer : Writer[i8]
     @replacement_fn : (Writer[i8])
 
-    regions { @dest_reg == @writer.dest_reg }
+    regions { $dest == @writer$dest }
 
     getter @replacement_fn
     setter @replacement_fn
@@ -862,7 +947,7 @@ class UTF8CodepointsValidator extends Iterator[i32] {
     @iterator : Iterator[i32]
     @replacement_fn : (i32) -> i32
 
-    regions { @elems_reg == @iterator.elems_reg }
+    regions { $elems == @iterator$elems }
 
     getters @iterator, @replacement_fn
     setter @replacement_fn
@@ -981,7 +1066,7 @@ class UTF8BytesValidator {
 class ValidUTF8Decoder extends ConstantTimeIterator[i32] {
     @peeker : Peeker[i8]
 
-    regions { @elems_reg == @peeker.elems_reg }
+    regions { $elems == @peeker$elems }
 
     getters @peeker
 
@@ -1130,12 +1215,8 @@ class OutOfBounds extends Exception {
     }
     def message() -> String {
         details = @details;
-        message = @message;
-
-        if details is OutOfBoundsDetails {
-            message.extend("\n${details.report()}");
-        }
-        return message;
+        if details is Nil { return @message; }
+        return "${@message}\n${details.report()}";
     }
 }
 
@@ -1166,7 +1247,7 @@ class Slice[T] extends IndexableCollection[i32, T, T] {
     @length : i32
     @start : i32
 
-    regions { @elems_reg == @buffer }
+    regions { $elems == @buffer }
 
     def Self.from_collection(collection : Collection[T]) -> Self {
         collection_size = collection.size();
@@ -1177,7 +1258,7 @@ class Slice[T] extends IndexableCollection[i32, T, T] {
             i = i + 1;
         }
         return Slice{buf, collection_size, 0};
-    } ~> { ret.elems_reg holds collection.elems_reg }
+    } ~> { ret$elems holds collection$elems }
 
     def init(@buffer : Buffer[T], @length : i32, @start : i32) {
     }
@@ -1195,10 +1276,10 @@ class Slice[T] extends IndexableCollection[i32, T, T] {
     }
     def unchecked_index(index : i32) -> T {
         return @buffer.[@start + index];
-    } ~> { ret holds @elems_reg }
+    } ~> { ret holds $elems }
     def unchecked_insert(index : i32, value : T) {
         @buffer.[@start + index] = value;
-    } ~> { @elems_reg holds value }
+    } ~> { $elems holds value }
     def [](index : i32) -> T yields OutOfBounds {
         self.bounds_check(index);
         if index < 0 { index = @length + index; }
@@ -1226,7 +1307,7 @@ class SliceIterator[T] extends ConstantTimeIterator[T] {
     @length : i32   
     @index : i32
 
-    regions { @elems_reg == @slice.elems_reg }
+    regions { $elems == @slice$elems }
 
     def init(@slice : Slice[T]) {
         @length = @slice.size(); // Because a Slice is constant-length, we can cache it
