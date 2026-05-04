@@ -425,16 +425,12 @@ module @patterns {
   pdl.pattern @LowerSnprintf : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %i32_type = pdl.type : i32
+    %buf = pdl.operand : %ptr_type
+    %size = pdl.operand : %i32_type
     %format_ptr = pdl.operand : %ptr_type
-    %buf_ptr = pdl.operand : %ptr_type
     %msg = pdl.operands
-    %root = pdl.operation "mid.snprintf"(%buf_ptr, %format_ptr, %msg : !pdl.value, !pdl.value, !pdl.range<value>) -> (%i32_type : !pdl.type)
+    %root = pdl.operation "mid.snprintf"(%buf, %size, %format_ptr, %msg : !pdl.value, !pdl.value, !pdl.value, !pdl.range<value>) -> (%i32_type : !pdl.type)
     pdl.rewrite %root {
-      %thirty_two = pdl.attribute = 32
-      %const = pdl.operation "llvm.mlir.constant" { "value" = %thirty_two } -> (%i32_type :!pdl.type)
-      %size = pdl.result 0 of %const
-      %load = pdl.operation "llvm.load"(%buf_ptr : !pdl.value) -> (%ptr_type : !pdl.type)
-      %buf = pdl.result 0 of %load
       %callee = pdl.attribute = @snprintf
       %opsegsize = pdl.attribute = array<i32: 4, 0>
       %opbundlesize = pdl.attribute = array<i32>
