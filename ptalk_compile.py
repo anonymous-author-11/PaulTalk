@@ -45,6 +45,7 @@ STDLIB_PATH = DIST_FOLDER / "lib"
 PDL_PATTERNS_PATH = DIST_FOLDER / "data_files/patterns.mlir"
 LAYOUT_PATH = DIST_FOLDER / "data_files/datalayout.ll"
 UTILS_PATH = DIST_FOLDER / "data_files/utils.ll"
+CORO_RUNTIME_PATH = DIST_FOLDER / "data_files/coro_runtime.ll"
 WIN_UTILS_PATH = DIST_FOLDER / "data_files/win_utils.ll"
 POSIX_UTILS_PATH = DIST_FOLDER / "data_files/posix_utils.ll"
 
@@ -354,13 +355,13 @@ class CompilationJob:
         process.stdin.close()
         return process
 
-    # link utils and layout into the main module
+    # link runtime support and layout into the main module
     def llvm_link(self) -> str:
 
         self.record_time("before_llvm_link")
 
         input_optimized = self.build.dir / "bitcodes" / f"{self.input.bc_file.stem}.bc.4.opt.bc"
-        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, input_optimized, LAYOUT_PATH, "-S")
+        link_utils = (LLVM_LINK_PATH, UTILS_PATH, CORO_RUNTIME_PATH, OS_UTILS_PATH, input_optimized, LAYOUT_PATH, "-S")
         utils_ir = run_checked(link_utils)
 
         # use the correct main function
@@ -691,7 +692,7 @@ class BuildDirectory:
     def utils_bc(self):
         bc_path = self.dir / "utils.bc"
         if bc_path.exists(): return bc_path
-        link = f"{LLVM_LINK_PATH} {UTILS_PATH} {OS_UTILS_PATH} {LAYOUT_PATH} -o -"
+        link = f"{LLVM_LINK_PATH} {UTILS_PATH} {CORO_RUNTIME_PATH} {OS_UTILS_PATH} {LAYOUT_PATH} -o -"
         opt = f"{OPT_PATH} - --thinlto-bc --unified-lto -o {bc_path}"
         subprocess.run(f"{link} | {opt}", shell=True)
         return bc_path
