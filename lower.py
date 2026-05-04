@@ -156,7 +156,8 @@ class LowerMid(ModulePass):
                 LowerBoxUnionDef(),
                 LowerNew(),
                 LowerUnboxDef(),
-                LowerFormat()
+                LowerFormat(),
+                LowerSnprintf()
                 #LowerDataSize(),
                 #LowerSize(),
                 #LowerCreateBuffer(),
@@ -1784,13 +1785,36 @@ class LowerFormat(RewritePattern):
             op_typ = IntegerType(32)
 
         format_str = AddrOfOp.from_string(format_strings[op_typ])
-        snprintf_call = SnprintFOp.create(operands=[op.buf, format_str.result, input_val], result_types=[IntegerType(32)])
+        size = llvm.ConstantOp(IntegerAttr.from_int_and_width(32, 32), IntegerType(32))
+        buf = llvm.LoadOp(op.buf, llvm.LLVMPointerType.opaque())
+        operands = [buf.results[0], size.results[0], format_str.result, input_val]
+        snprintf_call = SnprintFOp.create(operands=operands, result_types=[IntegerType(32)])
         wrap = WrapOp.make(snprintf_call.results[0])
         
         rewriter.insert_op_before_matched_op(format_str)
+        rewriter.insert_op_before_matched_op(size)
+        rewriter.insert_op_before_matched_op(buf)
         rewriter.insert_op_before_matched_op(snprintf_call)
         rewriter.replace_matched_op(wrap)
         debug_code(op)
+
+class LowerSnprintf(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: SnprintFOp, rewriter: PatternRewriter):
+        operands = [op.buf, op.size, op.fmt_ptr, *op.args]
+        variadic_args = max(0, len(operands) - 3)
+        call = llvm.CallOp("snprintf", *operands, return_type=IntegerType(32), variadic_args=variadic_args)
+        operand_segment_sizes = DenseArrayBase.from_list(IntegerType(32), [len(operands), 0])
+        call.properties["operandSegmentSizes"] = operand_segment_sizes
+        call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        call_type = llvm.LLVMFunctionType(
+            [llvm.LLVMPointerType.opaque(), IntegerType(32), llvm.LLVMPointerType.opaque()],
+            output=llvm.IntegerType(32),
+            is_variadic=True
+        )
+        call.properties["callee_type"] = call_type
+        call.properties["var_callee_type"] = call_type
+        rewriter.replace_matched_op(call)
 
 class LowerMain(RewritePattern):
     @op_type_rewrite_pattern
