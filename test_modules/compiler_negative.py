@@ -681,6 +681,14 @@ class CompilerNegativeTestsMixin:
             """
             self.compile_fails(mini_code, "Method names should not be capitalized.", "capitalized_method_name")
 
+    def test_method_def_missing_body(self):
+            mini_code = """
+            class Test {
+                def value() -> i32
+            }
+            """
+            self.compile_fails(mini_code, "Non-abstract method must have a body.", "method_missing_body")
+
     def test_method_def_init_returns_value(self):
             mini_code = """
             class Test {

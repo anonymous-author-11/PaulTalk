@@ -723,6 +723,32 @@ class CompilerPositiveTestsMixin:
         """
         self.run_mini_code(mini_code, "7", "abstract_base_factory")
 
+    def test_bodyless_abstract(self):
+        mini_code = """
+            class Factory {
+                abstract def Self.make() -> Factory
+            }
+
+            class Base {
+                abstract def value() -> i32
+                abstract def +(other : Base) -> i32
+            }
+
+            class Child extends Base {
+                def init() {}
+                def value() -> i32 {
+                    return 7;
+                }
+                def +(other : Base) -> i32 {
+                    return 8;
+                }
+            }
+
+            print(Child{}.value());
+            print(Child{} + Child{});
+        """
+        self.compile_and_run(mini_code, "7\n8", "bodyless_abstract")
+
     def test_filesystem_read_write_append(self):
         mini_code = """
             import core;

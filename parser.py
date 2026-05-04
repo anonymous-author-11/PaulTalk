@@ -180,9 +180,16 @@ class CSTTransformer(Transformer):
         if "=" in name.value: return "_set_" + name.value.replace("=","")
         return name.value
 
+    def method_body(self, abstract, deff, body):
+        if body: return body
+        node_info = NodeInfo(None, self.file_path, self.line_number(deff))
+        if abstract: return BlockNode(node_info, [])
+        raise Exception(f"{node_info}: Non-abstract method must have a body.")
+
     def method_def(self, abstract, deff, name, type_params, params, return_type, yield_type, body, constraints):
         ty = AbstractMethodDef if abstract else MethodDef
         node_info = NodeInfo(None, self.file_path, self.line_number(deff))
+        body = self.method_body(abstract, deff, body)
         return ty(node_info, name, body, params, constraints, type_params, return_type, yield_type)
 
     def getters(self, field, *fields):
@@ -221,11 +228,13 @@ class CSTTransformer(Transformer):
     def operator_def(self, abstract, deff, translated_op, type_params, params, return_type, yield_type, body, constraints):
         ty = AbstractMethodDef if abstract else MethodDef
         node_info = NodeInfo(None, self.file_path, self.line_number(deff))
+        body = self.method_body(abstract, deff, body)
         return ty(node_info, translated_op, body, params, constraints, type_params, return_type, yield_type)
 
     def class_method_def(self, abstract, deff, self_tok, name, type_params, params, return_type, yield_type, body, constraints):
         ty = AbstractClassMethodDef if abstract else ClassMethodDef
         node_info = NodeInfo(None, self.file_path, self.line_number(name))
+        body = self.method_body(abstract, deff, body)
         return ty(node_info, "_Self_" + name.value, body, params, constraints, type_params, return_type, yield_type)
 
     def class_def(self, cls, name, supertype_list, bound_list, fields, region_constraints, methods):

@@ -1106,9 +1106,21 @@ class PaulTalkParser {
 
         self.parse_optional_generic_parameters(node);
         self.parse_parameters(node, true);
-        node.add(self.parse_block());
+        self.add_method_block(node, is_abstract, name);
         self.parse_optional_constraints(node);
         return node;
+    }
+
+    def add_method_block(node : ParseNode, is_abstract : Bool, name : Token) {
+        if self.match_lexeme("{") {
+            node.add(self.parse_block_after_open(self.previous()));
+            return;
+        }
+        if is_abstract {
+            node.add(Block{name.line(), name.column()});
+            return;
+        }
+        self.fail("Expected '{' to begin method body.");
     }
 
     def add_abstract_modifier(node : ParseNode, name : Token) {
