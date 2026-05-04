@@ -719,18 +719,91 @@ TODO:
 - Update lib/paultalk_parser.mini with interpolation [check!]
 - Minimize binary size by extracting main() and linking in only needed symbols [check!]
 	- Hello world now 36kb instead of 923kb [check!]
+- Add type inference for 'into' expressions [check!]
+	- "int_array into Iterable" [check!]
+	- Iterable[i32] inferred [check!]
+- Type narrowing within expressions [check!]
+	- if x is i32 and (x % 2) == 0 { ... } [check!]
+	- if x is Nil or (x % 2) == 0 { ... } [check!]
+- Add tests for codegen quality [check!]
+	- Also works as documentation of expected codegen quality
+	- Binary size
+	- # Lines of IR in out_optimized.ll
+	- # Lines of IR in optimized @main
+	- Specific things being constant-folded
+	- Specific calls not appearing (e.g. malloc, memcpy)
+	- Use generic infrastructure
+- Allow more ways to specify element type of array [check!]
+	- my_array : Array[Operation] = [Addition{}, Multiplication{}] [check!]
+	- my_array = [Addition{}, Multiplication{}] as Array[Operation] [check!]
 
+- Allow parameter names to differ in same-arity overloads?
+- Allow same syntax for tuple literals
+- We should probably move some uses of llvm.invariant.start to use invariant loads instead
+- Function calls don't pass parameterizations
+
+- Better instrinsics
+	- Intrinsics can have an arbitrary number of dots in them
+		- E.g. llvm.intr.masked.gather
+	- Could require backticks when calling, e.g. `llvm.intr.masked.gather`(args)
+	- Declare with 'intrinsic foo.bar.baz(a : i32, b : i32) -> i32'
+	- In theory you could also supply your own PDL lowering patterns
+
+- Memcpy to an alloca could be faster than scalarized load+stores for unknown size types
+	- E.g. instance of T in generic code
+	- How to do a vector load of Tuple[4 x T] from Buffer[T] ?
+
+- Here's my idea for how regions can work with exceptions / coroutines
+	- RegionCreate scans a collection of existing regions and checks if each is free
+	- A region is free if it has been marked free OR if its associated stack ptr is below the current
+	- Associated stack ptr is max(stack ptr at creation, stack ptr of current coroutine's region at creation)
+	- That way regions automatically become free if we longjmp up the stack
+	- But regions in resumable coroutines remain live if their caller is could still be live
+	- When handing out old implicitly-free region, return all but the first page to the OS; memset first page
+	- For explicitly freed regions, return memory exactly when freed?
+	- Want to return pages from free regions to OS so other regions can use them
+	- We want to minimize time spent scanning for free regions
+	- How to organize region handles for scan? 
+	- Prioritize handing out marked-free regions or implicitly-free regions?
+	- Problem: stack depth is a noisy indicator
+	- Why not just check if the "current coroutine's region at creation" is dead?
+
+- "function-inline-cost-multiplier"="0" can make it cheap to inline
+
+- Idea for with-statements
+	- inductee of with-statement must have .acquire(), .release() and .reacquire() methods
+	- upon entry to block, resource is acquired
+	- Closures invoking the .release() and .reacquire() methods are pushed onto stacks held by the current coroutine
+	- Upon yield, release stacks are popped and executed
+	- Upon resume, reacquire stacks are popped and executed
+	- If resource cannot be reacquired, .reacquire should raise Exception
+	- upon exit of block, resource is released
+
+- Debug metadata
+- Wire in new coroutine lowering
+	- Figure out how to make heap-allocated (coroutines need to be reference-typed)
+	- Figure out how to pass call/yield arguments
+	- Figure out return type of trampoline
+- Disallow main + toplevel code
+- Add function import to cgscc pipeline instead of looping lld
+	- unknown cgscc pass 'function-import'
+	- Somehow iterate module-level pass?
+	- Not obviously faster than outer loop
+- Make sure main() can be written explicitly
+	- Unclear what the rules should be here actually
+	- What if we have both top-level statements and main() ?
+	- We could just raise an error saying pick one
 - Better error message for use of self within init
-
-- Have codex investigate some longstanding quandaries
-	- Why does it crash at O0?
-	- Why the aarch64 layout? (160:64 default instead of i160:128)
+	- We should probably be able to use self after all fields are initialized
+	- Consider super.init(args) in init
+	- Or just work on .new customization?
 
 - Delete run_opt
 - Delete llvm_link
 - Inject debug metadata 
-- Turn get_offset et al into IR operations
+- Turn get_offset et al into MLIR ops
 - Don't do any final LTO in debug mode
+	- Or only with utils.ll
 
 - Big todos
 	- Namespaces and qualification
@@ -738,11 +811,7 @@ TODO:
 	- Exceptions / effect system
 	- Closures
 	- Records
-
-- Deduplicate behaviors
-	- If all methods in the behavior are inherited from the same class, reuse that behavior
-	- I believe behaviors encode absolute vtable offsets so this would not work out of the box
-	- Would have to add the fatptr offset within the behavior before loading the method fptr
+	- Generic bounds
 
 - Records
 	- Idea: casting between these works seamlessly, unlike tuples
@@ -771,47 +840,22 @@ TODO:
 	- Then in debug mode we should skip entirely the later lto step
 	- We should pass --strip-debug to lto
 
-- Consider using preoptimized versions for non-recompile dependencies
-	- This seems to produce worse codegen, so it is doable but not advisable
-
-- If method has no arguments, use a different behavior wrapper
-	- Avoids passing poison argument which seems to limit inlining
 - Might want to actually fix Self type
 	- Constructing an instance of Self
 	- Casting to Self
 	- Class method dispatch on Self
+	- Does Self need to be passed into class methods?
 - Add "in" infix operator to desugar to .contains
-- Allow more ways to specify element type of array
-	- Currently supported:
-		- my_array = [Addition{}, Multiplication{}] of Operation
-	- Should be supported
-		- my_array : Array[Operation] = [Addition{}, Multiplication{}]
-		- my_array = [Addition{}, Multiplication{}] as Array[Operation]
-	- Allow same syntax for tuple literals
 
 - Should self even point to virtual regions if they aren't identified with a field?
-- See how timings would suffer if we used malloc for bump_alloc
-	- Then possibly also realloc
 - Region runtime has the potential to make programs faster
 	- Realloc for contiguous collections
 	- Cache locality: used-together objects allocated together
 	- Even just reusing garbage memory will improve locality
-- Line numbers for errors are wrong among 'special' (pre-core) files
-- Add type inference for 'into' expressions
-	- "int_array into Iterable"
-	- Iterable[i32] inferred
+
 - Consider To[T] as a builtin type
 	- Auto-casts passed arguments using 'into'
 	- in AST: Into.concrete_method -> MethodDef | None
-
-- Might want to work on intrinsics
-	- intrinsic("llvm.sin").call()
-	- How to know result type?
-	- Declare as extern def? Or special "intrinsic" def?
-		- Can intrinsics be passed around as fptrs? Not generally.
-	- Let me have periods in extern def names
-	- Extern def llvm.sqrt.i64(x : i64) -> i64
-	- Might go in hand with namespacing dot syntax update
 
 - Allow indexing tuples with tuples
 
@@ -835,11 +879,7 @@ TODO:
 - Need to be able to reference tuple fields (tup.1, tup.2, etc) in region annotations (disallowed by grammar)
 
 - Be able to cast Bool to integers, and i1 to Bool
-- Field access utilities etc should be preserve_allcc
-
-- Why not work on namespacing now?
-	- Adding dots to grammar
-		- Whether something is a type depends on its rightmost element (parsed last)
+- Field access utilities etc should be fastcc
 
 - Release 0.9.0
 	- Implement i32.max() et. al. [check!]
@@ -889,6 +929,7 @@ TODO:
 		- Store region_from_box in vtable
 		- Use region_from_box for getting field regions
 		- Winner!
+		- Would need access to the instance fatptr to borrow its region
 
 - Add my_buffer.realloc(size); does not return anything
 
@@ -960,21 +1001,6 @@ TODO:
 		- Example: Map
 	- Have a .remaining() -> i32 method
 
-- It would not be safe for Array or String to hand out buffer views
-	- If the views hold a reference to the underlying buffer
-	- Because upon resizing, that buffer would no longer be the backing buffer
-	- A Slice could, because it is fixed-length
-	- View could rely on Indexable facilities
-	- Possibly an argument for making String immutable
-
-- String could expose a writer that can only write to its end
-	- Is that a Writer[i32] or a Writer[i8]?
-	- It's an abstract Writer[i32]
-	- This means that byte indices are *stable*
-	- Byte indices will forever remain on codepoint boundaries
-	- Any other kind of mutation must return a new string
-		- E.g: .replace() -> String
-
 - Constructor should check for T.new first before T.init
 	- So that new can return some subtype
 
@@ -998,7 +1024,7 @@ TODO:
 		- Use absolute path [check!]
 	- scope.get_class should use the path info in the FatPtr [check!]
 	- Step 3: Add namespacing to grammar
-		- Dot-qualification
+		- Dot-qualification [check!]
 		- Import syntax
 			- import std.fmt.{foo as localfoo, bar as localbar};
 		- Export syntax
@@ -1017,6 +1043,7 @@ TODO:
 	- Compiles down to LLVM opaque named type
 	- Will this run into ABI issues?
 	- Wait but how to construct extern types?
+		- Extern functions that return them
 
 - Could the compiler be aware of DefaultString for literals without it being exposed?
 
@@ -1058,6 +1085,7 @@ TODO:
 	- I could use the llvm.trampoline tools
 		- vs making fn into a fat ptr
 		- Preserves C interop
+		- could be behind a .to_trampoline() method
 
 - Blocked on namespacing:
 	- Selective imports
@@ -1158,14 +1186,16 @@ TODO:
 		- Are strings Unicode or bytes? (very important for 1.0.0!) [check!]
 			- Should be Unicode (UTF-8) [check!]
 		- Make sure method dispatch is sound and complete for normal types
+		- Vtable layout, fatptr layout
 	- A less meager stdlib
-		- Set, LinkedList
+		- Set [check!], LinkedList
 		- JSON?
 
 - Tighten up return type inference for function literals
 	- You can't have a bare return and a return value in the same literal
 	- Should we disallow all return statements in literals?
 	- That's actually smart-- only one implicit return allowed
+	- How to write fn literal that has no return type?
 - Overloading *functions*
 	- Reuse the Behavior code as much as possible
 	- Only functions in the same file should count as overloads?
@@ -1177,7 +1207,10 @@ TODO:
 	- Could actually technically be more efficient
 	- I.e. expose the raw underlying getter
 	- Not needing to cast self twice
+	- What if getter is overriden?
+	- Needs to be uniform interface
 - Add multi-line strings
+	- Deal with indentation questions
 - Split MLIR dialect into hi, mid, and lo dialects
 	- hi will use PaulTalk types [check!]
 	- types will be lowered in hi -> mid [check!]
@@ -1291,6 +1324,7 @@ TODO:
 - .all() is clearly not correct [fixed!]
 - Declaring a variable without assigning to it is buggy [fixed!]
 - Must distinguish union and tuple types in lowering [fixed!]
+- Line numbers for errors are wrong among 'special' (pre-core) files [fixed!]
 - Union sizing may not be technically correct for tuples because of padding
 - Blocked matmul always fails
 - If I compile with -O0 it hangs
@@ -1393,18 +1427,6 @@ def foo(a : Foo, b : Bar) -> Baz {
 	- This makes overriding easier but regions less precise
 	- Probably a good default
 
-- Putting into a collection and taking out should be asymmetric
-	- Putting in: { collection.elems_reg holds value }
-	- Taking out: { ret == collection.elems_reg }
-	- Imagine if the collection had two abstract regions
-		- Then putting generates up-down
-		- Getting generates up-up
-		- Their combination generates a cycle
-		- That cycle gets resolved to equality
-	- collection.put_region / collection.get_region
-		- append(value) ~> { collection.put_region holds value }
-		- take() ~> { collection.get_region holds value, value holds collection.put_region}
-
 - Can you think of an example where you wouldn't want .chain et al to merge regions?
 	- Chain a and b
 	- Call function (foo) with chained as argument
@@ -1416,8 +1438,6 @@ def foo(a : Foo, b : Bar) -> Baz {
 	- From the outer perspective, it's like elements were never read
 	- Inferred: chained.elems_reg holds a, chained.elems_reg holds b
 	- a and b can still be separate regions
-
-- The current design is a sweet spot, no need for change
 
 - Be nice to be able to define reusable region constraints
 	- Save the typing on the same constraint over and over
@@ -1467,22 +1487,6 @@ def foo(a : Foo, b : Bar) -> Baz {
 		- You don't want to be doing endianness shuffling in the class
 		- That's really just an argument for making String abstract
 
-- Unicode evolution steps
-	- Step 1: encode(cp, buffer, index, len) and decode(buffer, index, len) -> i32
-	- Then we say maybe we should operator on iterators at least
-	- Unicode decoding needs lookahead without consuming
-	- PeekingIterator[T] wraps any Iterator[T]
-	- Need a way to signal decoding failure
-	- Should append(cp) be implemented in terms of self.codepoint_writer().write(cp)?
-		- Currently implemented in terms of .extend(encode_one(cp))
-			- Which is allocating a new string on every call
-			- And will currently append a replacement char
-		- Would mean that append could be implemented in String and not in DefaultString
-		- E.g. relying on the abstract writer
-		- And anyone overriding just the writer would get a new append for free
-		- E.g. if you write a better encoder / decoder
-	- Char should be prevalidated
-
 - There are several ways to achieve encapsulation
 	- Upcasting
 		- Any methods not on the supertype are now hidden
@@ -1517,6 +1521,7 @@ def foo(a : Foo, b : Bar) -> Baz {
 		- Could have multiple catch blocks
 	- With statement
 		- with file = File{"foo.txt"} { txt = f.read(); }
+		- with File{"foo.txt"} as file { txt = f.read(); }
 		- inductee must have a .close() method or similar
 		- Is that syntactically ambiguous?
 		- Desugars to try { ... } finally { inductee.close(); }
@@ -1558,19 +1563,44 @@ def foo(a : Foo, b : Bar) -> Baz {
 	- Should probably use llvm.stacksave and llvm.stackrestore
 	- Would have to pass and return as pointers
 
-- You could inline context switches by breaking functions into sections upon yields and calls
-	- Would require significant ingenuity
-	- Would significantly improve optimizations across context switches
-	- Would need to maintain live variables across yields and calls
-	- Probably best to leverage existing facilities for tracking live variables
-	- Idea: use MLIR OpenMP outlining pass to outline coroutine continuations and pass live variables
-	- Then just textually replace call @____kmpc_fork_call(ptr @outlined, args) with call @outlined(args)
+- Coroutine ideas
+	- Defer creation of separate stack until first actual yield [check!]
+		- If function only yields conditionally, can avoid allocation altogether [check!]
+		- If function yields only one frame deep, we could even stack allocate
+	- Make context switches inlinable [check!]
+	- Switch to a stack of jump buffers [or linked list]
+	- Just allocate a coroutine's heap stack section in the same region as itself
+
+- Coroutine next steps
+	- Flag for finished coroutine [check!]
+	- Allow multiple coroutines [check!]
+	- Passing arguments at call/yield
+		- Put 'em on the stack
+		- put a ptr to them in the coroutine
+	- Handling stack jump > 4096 bytes
+	- Put the fptr in the coroutine, mark invariant
+	- Try setjmp version [check!]
+	- I think the non-setjmp version is for if we want to guarantee only spill live variables
+	- I think here's the best idea
+		- Branch on every .call() -- we don't statically know whether it's the first time
+		- Make sure that the optimizer can tell which way the branch is going
+		- Keep the started flag on the stack so its value is unambiguous
+		- Have a separate call_args and resume_args field
+		- Use call_args in one branch, resume_args in the other
+
+- Coroutine learnings
+	- If you use longjmp, you can use -frame-pointer=all to reserve rbp
+	- Then you can use -stackrealign to prevent rbp-relative addressing
+	- Taking blockaddress makes fn noinline, stackrestore doesn't
+	- Reserving registers
+		- -mframe-chain=aapcs not available for my target triple
+		- -reserve-regs-for-regalloc=rbp not implemented in my llvm version
+		- Same for -frame-pointer=reserve, unimplemented
+	- @llvm.localaddress() returns rbp if using rbp-relative addressing
+		- rsp if using rsp-relative addressing
+
 - Lower loops without break/continue to scf.for or omp.loop constructs
 	- Would interfere with mlir-opt mem2reg (but not sroa?)
-- Freelist of coroutine stacks?
-	- Ring buffer LIFO stack
-	- Fixed capacity
-	- Much faster than VirtualAlloc
 - Memory regions
 	- Abstract memory regions
 		- Abstract associated regions

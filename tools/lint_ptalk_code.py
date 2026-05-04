@@ -4,7 +4,7 @@ Rules:
 1. At most 3 indentation levels (<= 12 leading spaces).
 2. No more than one statement per line (<= 1 semicolon outside strings/comments/fn literals).
 3. Max 100 characters per line.
-4. Method signature must be on one line (for `def` and `abstract def`, line must contain `{`).
+4. Method signatures must be on one line.
 5. Conditional headers must be on one line (for `if`, `while`, must contain `{`).
 """
 
@@ -29,9 +29,11 @@ RULE_SIGNATURE = "R4-def-header-one-line"
 RULE_CONDITION = "R5-cond-header-one-line"
 
 
-DEF_RE = re.compile(r"^\s*(?:abstract\s+)?def\b")
+DEF_RE = re.compile(r"^\s*def\b")
+ABSTRACT_DEF_RE = re.compile(r"^\s*abstract\s+def\b")
 IF_RE = re.compile(r"^\s*(?:else\s+)?if\b")
 WHILE_RE = re.compile(r"^\s*while\b")
+SIGNATURE_CONTINUATION_RE = re.compile(r"^\s*(?:->|yields\b|~>|\{)")
 
 
 @dataclass
@@ -189,10 +191,18 @@ def count_semicolons_outside_strings(
     return count
 
 
+def abstract_signature_incomplete(stripped: str) -> bool:
+    if stripped.endswith(("->", "~>", ",")): return True
+    if re.search(r"\byields\s*$", stripped): return True
+    if stripped.count("(") != stripped.count(")"): return True
+    return stripped.count("[") != stripped.count("]")
+
+
 def check_file(path: Path) -> list[Violation]:
     violations: list[Violation] = []
     in_block_comment = False
     semicolon_state = SemicolonScanState()
+    pending_abstract: tuple[int, str] | None = None
 
     for line_number, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
         if len(raw) > MAX_LINE_WIDTH:
@@ -221,6 +231,14 @@ def check_file(path: Path) -> list[Violation]:
         if not stripped:
             continue
 
+        if pending_abstract and SIGNATURE_CONTINUATION_RE.match(stripped):
+            pending_line, pending_raw = pending_abstract
+            message = "Method signature must be on one line."
+            violations.append(Violation(RULE_SIGNATURE, pending_line, message, pending_raw))
+            pending_abstract = None
+        if pending_abstract:
+            pending_abstract = None
+
         semicolons = count_semicolons_outside_strings(code, semicolon_state)
         if semicolons > 1:
             violations.append(
@@ -232,12 +250,22 @@ def check_file(path: Path) -> list[Violation]:
                 )
             )
 
+        abstract_def = ABSTRACT_DEF_RE.match(stripped)
+        bodyless_abstract = abstract_def and "{" not in stripped
+        if abstract_def and not bodyless_abstract: continue
+        if bodyless_abstract and not abstract_signature_incomplete(stripped):
+            pending_abstract = (line_number, raw)
+            continue
+        if bodyless_abstract:
+            violations.append(Violation(RULE_SIGNATURE, line_number, "Method signature must be on one line.", raw))
+            continue
+
         if DEF_RE.match(stripped) and "{" not in stripped:
             violations.append(
                 Violation(
                     RULE_SIGNATURE,
                     line_number,
-                    "Method signature line must include '{'.",
+                    "Method signature must be on one line and include '{' for a concrete body.",
                     raw,
                 )
             )
