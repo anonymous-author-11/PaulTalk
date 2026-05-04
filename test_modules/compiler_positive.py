@@ -320,6 +320,41 @@ class CompilerPositiveTestsMixin:
         expected_output = "foo ${bar} baz\nname: ${name}, value: Paul"
         self.compile_and_run(mini_code, expected_output, "string_interpolation_marker_can_be_escaped")
 
+    def test_interp_into(self):
+        mini_code = """
+            import std;
+
+            class Label {
+                @value : String
+
+                def init(@value : String) {}
+                def to_string() -> String { return "label:${@value}"; }
+            }
+
+            text = "name";
+            view = text.to_view();
+            label = Label{"box"};
+            converted = 5 into String;
+            IO.print("view=${view}");
+            IO.print("label=${label}");
+            IO.print("text=${text}, number=${converted}, nil=${nil}");
+        """
+        expected_output = "view=name\nlabel=label:box\ntext=name, number=5, nil=nil"
+        self.compile_and_run(mini_code, expected_output, "interp_into")
+
+    def test_interp_unicode_lengths(self):
+        mini_code = """
+            import std;
+
+            name = "\\u00e9";
+            s = "\\u03b1 100% ${name} ${5 + 1} \\u03b2";
+            IO.print(s);
+            IO.print(s.size());
+            IO.print(s.byte_length());
+        """
+        expected_output = "\u03b1 100% \u00e9 6 \u03b2\n12\n15"
+        self.compile_and_run(mini_code, expected_output, "interp_unicode_lengths")
+
     def test_paultalk_parser_class_method_setter(self):
         mini_code = """
             import std;

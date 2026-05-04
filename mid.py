@@ -980,7 +980,7 @@ class GlobalStrOp(IRDLOperation):
     name = "mid.globalstr"
     sym_name: StringAttr = attr_def(StringAttr)
     str_type: TypeAttribute = attr_def(TypeAttribute)
-    value : StringAttr = attr_def(StringAttr)
+    value: Attribute = attr_def(Attribute)
 
 @irdl_op_definition
 class PrintOp(IRDLOperation):
@@ -1000,8 +1000,9 @@ class PrintFOp(IRDLOperation):
 class SnprintFOp(IRDLOperation):
     name = "mid.snprintf"
     buf: Operand = operand_def()
+    size: Operand = operand_def()
     fmt_ptr: Operand = operand_def()
-    msg: Operand = operand_def()
+    args: VarOperand = var_operand_def()
     result: OpResult = result_def(IntegerType)
 
 @irdl_op_definition

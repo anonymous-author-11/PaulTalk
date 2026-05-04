@@ -774,7 +774,7 @@ class CSTTransformer(Transformer):
         if isinstance(expr, StringLiteral):
             return expr
         node_info = NodeInfo(None, self.file_path, self.line_number(interp_open))
-        return As(node_info, expr, FatPtr.basic("String"))
+        return Into(node_info, expr, FatPtr.basic("String"))
 
     def string_literal(self, open_quote, *parts_and_close):
         close_quote = parts_and_close[-1]

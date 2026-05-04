@@ -7,6 +7,10 @@ class Path extends Representable {
     @source : String
     @segments : Array[StringView]
 
+    abstract def dirname() -> Path
+    abstract def slow_join(child : Path) -> Path
+    abstract def fast_join(all_parts : Array[StringView]) -> Path
+
     def Self.new(text : String) -> Path {
         string = text.replace("\\", "/");
         if string.starts_with("/") { return AbsolutePath{string}; }
@@ -21,10 +25,6 @@ class Path extends Representable {
         if before.is_empty() { return base; }
         return before.to_string_view();
     }
-
-    abstract def dirname() -> Path {}
-    abstract def slow_join(child : Path) -> Path {}
-    abstract def fast_join(all_parts : Array[StringView]) -> Path {}
     
     def is_absolute() -> Bool {
         return self is AbsolutePath;
@@ -76,7 +76,7 @@ class Path extends Representable {
         if base == ".." { return self; }
         stem = Path.stem_of(base);
         if not ext.is_empty() and not ext.starts_with(".") { ext = ".${ext}"; }
-        new_base = "${stem.to_string()}${ext}";
+        new_base = "${stem}${ext}";
         return self.dirname().join(new_base);
     }
 
@@ -131,7 +131,7 @@ class AbsolutePath extends Path {
     }
 
     def slow_join(child : Path) -> Path {
-        return AbsolutePath{"${@source}/${child.to_string()}"};
+        return AbsolutePath{"${@source}/${child}"};
     }
 
 }
@@ -173,7 +173,7 @@ class RelativePath extends Path {
     }
 
     def slow_join(child : Path) -> Path {
-        return RelativePath{"${@source}/${child.to_string()}"};
+        return RelativePath{"${@source}/${child}"};
     }
 
 }
@@ -184,9 +184,9 @@ class PathBuilder {
 
     getters @str, @parts
 
-    abstract def add_double_dot(part : StringView) {}
-    abstract def empty_str() -> String {}
-    abstract def joined_str(joined : String) -> String {}
+    abstract def add_double_dot(part : StringView)
+    abstract def empty_str() -> String
+    abstract def joined_str(joined : String) -> String
 
     def init(@str : String) {
         @parts = [] of StringView;

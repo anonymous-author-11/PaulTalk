@@ -987,50 +987,235 @@ class StringLiteral(Expression):
         pass
 
 @dataclass
+class InterpolationPrimitive:
+    expr: Expression
+    typ: TypeAttribute
+    spec: Optional[str]
+
+@dataclass
+class InterpolationStringCopy:
+    value: "Identifier"
+    offset: Expression
+
+@dataclass
 class InterpolatedStringLiteral(Expression):
     parts: tuple[Expression]
 
     def codegen(self, scope):
-        part_ids = []
-        total_bytes = IntegerLiteral(NodeInfo.from_info(self.info, "interp_capacity"), 0, 32)
+        fmt_parts = []
+        final_args = []
+        copies = []
+        total_bytes = self.integer("interp_total_bytes_start", 0)
+        total_chars = self.integer("interp_total_chars_start", 0)
+        offset = self.integer("interp_offset_start", 0)
 
         for i, part in enumerate(self.parts):
-            part_name = f"{self.info.id}_interp_part_{i}"
-            part_id = Identifier(NodeInfo.from_info(self.info, f"interp_part_{i}"), part_name)
-            part_assign = Assignment(NodeInfo.from_info(self.info, f"interp_assign_part_{i}"), part_id, part)
-            part_assign.codegen(scope)
-            part_ids.append(part_id)
+            total_bytes, total_chars, offset = self.append_part(
+                scope, part, fmt_parts, final_args, copies, total_bytes, total_chars, offset, i
+            )
 
-            if isinstance(part, StringLiteral):
-                n_bytes = len(part.value.encode("utf-8"))
-                part_bytes = IntegerLiteral(NodeInfo.from_info(self.info, f"interp_part_bytes_{i}"), n_bytes, 32)
-            else:
-                bytes_info = NodeInfo.from_info(self.info, f"interp_part_bytes_{i}")
-                part_bytes = MethodCall(bytes_info, part_id, "byte_length", [])
+        total_id = self.assign(scope, "interp_total_bytes", total_bytes)
+        chars_id = self.assign(scope, "interp_total_chars", total_chars)
+        one = self.integer("interp_null_byte", 1)
+        capacity = self.add(total_id, one, "interp_capacity")
+        capacity_id = self.assign(scope, "interp_capacity", capacity)
 
-            total_info = NodeInfo.from_info(self.info, f"interp_total_bytes_{i}")
-            total_bytes = Arithmetic(total_info, total_bytes, "ADD", part_bytes)
+        buf_type = Buffer([Integer(8)])
+        create_buffer = CreateBuffer(NodeInfo.from_info(self.info, "interp_create_buffer"), buf_type, capacity_id)
+        buf_id = self.assign(scope, "interp_buffer", create_buffer)
 
-        total_name = f"{self.info.id}_interp_total_bytes"
-        total_id = Identifier(NodeInfo.from_info(self.info, "interp_total_id"), total_name)
-        total_assign = Assignment(NodeInfo.from_info(self.info, "interp_total_assign"), total_id, total_bytes)
-        total_assign.codegen(scope)
+        fmt_text = "".join(fmt_parts) + "\0"
+        fmt_ptr = self.global_c_string(scope, "format", fmt_text)
+        raw_buf = llvm.LoadOp(buf_id.codegen(scope), llvm.LLVMPointerType.opaque())
+        raw_capacity = self.unwrap(scope, capacity_id, Integer(32))
+        snprintf = SnprintFOp.create(
+            operands=[raw_buf.results[0], raw_capacity, fmt_ptr, *final_args],
+            result_types=[IntegerType(32)]
+        )
+        scope.region.last_block.add_ops([raw_buf, snprintf])
+
+        for copy in copies:
+            copy_call = MethodCall(
+                NodeInfo.from_info(self.info, "interp_copy"),
+                copy.value,
+                "copy_into",
+                [buf_id, copy.offset]
+            )
+            copy_call.codegen(scope)
 
         string_name = f"{self.info.id}_interp_string"
-        string_id = Identifier(NodeInfo.from_info(self.info, "interp_string_id"), string_name)
-        string = ObjectCreation(NodeInfo.from_info(self.info, "interp_string"), string_name, self.exprtype(scope), [total_id])
-        string_assign = Assignment(NodeInfo.from_info(self.info, "interp_string_assign"), string_id, string)
-        string_assign.codegen(scope)
+        string = ObjectCreation(
+            self.info,
+            string_name,
+            self.exprtype(scope),
+            [buf_id, total_id, chars_id, capacity_id]
+        )
+        return string.codegen(scope)
 
-        for i, part_id in enumerate(part_ids):
-            extend_info = NodeInfo.from_info(self.info, f"interp_extend_{i}")
-            extend = MethodCall(extend_info, string_id, "extend", [part_id])
-            extend.codegen(scope)
+    def append_part(self, scope, part, fmt_parts, final_args, copies, total_bytes, total_chars, offset, index):
+        if isinstance(part, StringLiteral) and "\0" not in part.value:
+            return self.append_literal(part.value, fmt_parts, total_bytes, total_chars, offset, index)
 
-        return string_id.codegen(scope)
+        primitive = self.primitive_part(part, scope)
+        if primitive:
+            return self.append_primitive(scope, primitive, fmt_parts, final_args, total_bytes, total_chars, offset, index)
+
+        return self.append_string(scope, part, fmt_parts, final_args, copies, total_bytes, total_chars, offset, index)
+
+    def append_literal(self, text, fmt_parts, total_bytes, total_chars, offset, index):
+        if text == "":
+            return total_bytes, total_chars, offset
+        fmt_parts.append(text.replace("%", "%%"))
+        bytes_expr = self.integer(f"interp_literal_bytes_{index}", len(text.encode("utf-8")))
+        chars_expr = self.integer(f"interp_literal_chars_{index}", len(text))
+        total_bytes = self.add(total_bytes, bytes_expr, f"interp_total_bytes_{index}")
+        total_chars = self.add(total_chars, chars_expr, f"interp_total_chars_{index}")
+        offset = self.add(offset, bytes_expr, f"interp_offset_{index}")
+        return total_bytes, total_chars, offset
+
+    def append_primitive(self, scope, primitive, fmt_parts, final_args, total_bytes, total_chars, offset, index):
+        if primitive.typ == Nil():
+            primitive.expr.codegen(scope)
+            return self.append_literal("nil", fmt_parts, total_bytes, total_chars, offset, index)
+
+        value_id = self.assign(scope, f"interp_primitive_{index}", primitive.expr)
+        raw_value = self.printf_arg(scope, value_id, primitive.typ)
+        byte_id = self.formatted_size(scope, primitive.spec, raw_value, index)
+        fmt_parts.append(primitive.spec)
+        final_args.append(raw_value)
+        total_bytes = self.add(total_bytes, byte_id, f"interp_total_bytes_{index}")
+        total_chars = self.add(total_chars, byte_id, f"interp_total_chars_{index}")
+        offset = self.add(offset, byte_id, f"interp_offset_{index}")
+        return total_bytes, total_chars, offset
+
+    def append_string(self, scope, part, fmt_parts, final_args, copies, total_bytes, total_chars, offset, index):
+        part_id = self.assign(scope, f"interp_string_part_{index}", part)
+        byte_id = self.assign(
+            scope,
+            f"interp_string_bytes_{index}",
+            MethodCall(NodeInfo.from_info(self.info, f"interp_byte_length_{index}"), part_id, "byte_length", [])
+        )
+        char_id = self.assign(
+            scope,
+            f"interp_string_chars_{index}",
+            MethodCall(NodeInfo.from_info(self.info, f"interp_char_length_{index}"), part_id, "char_length", [])
+        )
+        fmt_parts.append("%*s")
+        final_args.append(self.unwrap(scope, byte_id, Integer(32)))
+        final_args.append(self.global_c_string(scope, "empty", "\0"))
+        copies.append(InterpolationStringCopy(part_id, offset))
+        total_bytes = self.add(total_bytes, byte_id, f"interp_total_bytes_{index}")
+        total_chars = self.add(total_chars, char_id, f"interp_total_chars_{index}")
+        offset = self.add(offset, byte_id, f"interp_offset_{index}")
+        return total_bytes, total_chars, offset
+
+    def primitive_part(self, part, scope):
+        expr = part
+        if isinstance(part, Into):
+            part.exprtype(scope)
+            if not isinstance(part.method, Format): return None
+            expr = part.operand
+
+        typ = expr.exprtype(scope)
+        if typ == Nil():
+            return InterpolationPrimitive(expr, typ, None)
+
+        spec = self.printf_spec(typ)
+        if not spec: return None
+        return InterpolationPrimitive(expr, typ, spec)
+
+    def printf_spec(self, typ):
+        if typ == Float():
+            return "%f"
+        if not isinstance(typ, Integer):
+            return None
+        unsigned = typ.signedness.data == Signedness.UNSIGNED
+        if typ.bitwidth <= 32:
+            return "%u" if unsigned else "%d"
+        if typ.bitwidth == 64:
+            return "%llu" if unsigned else "%lld"
+        return None
+
+    def printf_arg(self, scope, expr, typ):
+        value = expr.codegen(scope)
+        unwrap = UnwrapOp.create(operands=[value], result_types=[typ.base_typ()])
+        scope.region.last_block.add_op(unwrap)
+        result = unwrap.results[0]
+        if not isinstance(typ, Integer): return result
+        if typ.bitwidth >= 32: return result
+        if typ.signedness.data == Signedness.UNSIGNED:
+            ext = arith.ExtUIOp(result, IntegerType(32))
+        else:
+            ext = arith.ExtSIOp(result, IntegerType(32))
+        scope.region.last_block.add_op(ext)
+        return ext.results[0]
+
+    def formatted_size(self, scope, spec, raw_value, index):
+        fmt_ptr = self.global_c_string(scope, f"spec_{index}", spec + "\0")
+        null = llvm.ZeroOp.create(result_types=[llvm.LLVMPointerType.opaque()])
+        zero = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 32), IntegerType(32))
+        size = SnprintFOp.create(
+            operands=[null.results[0], zero.results[0], fmt_ptr, raw_value],
+            result_types=[IntegerType(32)]
+        )
+        scope.region.last_block.add_ops([null, zero, size])
+        return self.bind_raw_i32(scope, f"interp_primitive_bytes_{index}", size.results[0])
+
+    def bind_raw_i32(self, scope, suffix, raw_value):
+        name = f"{self.info.id}_{suffix}"
+        wrap = WrapOp.make(raw_value)
+        scope.region.last_block.add_op(wrap)
+        scope.symbol_table[name] = wrap.results[0]
+        scope.type_table[name] = Integer(32)
+        return Identifier(NodeInfo.from_info(self.info, suffix), name)
+
+    def unwrap(self, scope, expr, typ):
+        value = expr.codegen(scope)
+        unwrap = UnwrapOp.create(operands=[value], result_types=[typ.base_typ()])
+        scope.region.last_block.add_op(unwrap)
+        return unwrap.results[0]
+
+    def add(self, left, right, suffix):
+        if self.is_zero(left): return right
+        if self.is_zero(right): return left
+        return Arithmetic(NodeInfo.from_info(self.info, suffix), left, "ADD", right)
+
+    def assign(self, scope, suffix, expr):
+        name = f"{self.info.id}_{suffix}"
+        ident = Identifier(NodeInfo.from_info(self.info, suffix), name)
+        assign = Assignment(NodeInfo.from_info(self.info, f"assign_{suffix}"), ident, expr)
+        assign.codegen(scope)
+        return ident
+
+    def integer(self, suffix, value):
+        return IntegerLiteral(NodeInfo.from_info(self.info, suffix), value, 32)
+
+    def global_c_string(self, scope, suffix, value):
+        symbol = self.global_symbol(suffix)
+        if symbol not in scope.comp_unit.codegenned:
+            raw_value = value.encode("utf-8")
+            typ = llvm.LLVMArrayType.from_size_and_type(len(raw_value), IntegerType(8))
+            glob = GlobalStrOp.create(
+                attributes={"value": BytesAttr(raw_value), "sym_name": StringAttr(symbol), "str_type": typ}
+            )
+            scope.region.last_block.add_op(glob)
+            scope.comp_unit.toplevel_ops.append(glob)
+            scope.comp_unit.codegenned.add(symbol)
+        addr = AddrOfOp.from_string(symbol)
+        scope.region.last_block.add_op(addr)
+        return addr.result
+
+    def global_symbol(self, suffix):
+        file_part = path_hash(self.info.filepath)
+        id_part = safe_name_part(self.info.id)
+        suffix_part = safe_name_part(suffix)
+        return f"_interp_{file_part}_{id_part}_{suffix_part}"
+
+    def is_zero(self, expr):
+        return isinstance(expr, IntegerLiteral) and expr.value == 0
 
     def exprtype(self, scope):
-        # parser will have inserted implicit casts to String
+        # parser will have inserted implicit conversions to String
         for part in self.parts: part.exprtype(scope)
         return scope.visible_fatptr(self.info, "String")
 
@@ -1513,6 +1698,19 @@ class TupleToArray(Expression):
         elem_type = self.elem_type(tuple_type, scope)
         return scope.visible_fatptr(self.info, "Array", [elem_type])
 
+
+def formats_as_string(typ):
+    return isinstance(typ, Integer) or typ == Float() or typ == Nil()
+
+
+def string_type_visible(scope, info):
+    try:
+        scope.visible_fatptr(info, "String")
+        return True
+    except Exception:
+        return False
+
+
 @dataclass
 class As(Expression):
     operand: Expression
@@ -1537,11 +1735,7 @@ class As(Expression):
         return True
 
     def string_unambiguous(self, scope):
-        try:
-            scope.visible_fatptr(self.info, "String")
-            return True
-        except:
-            return False
+        return string_type_visible(scope, self.info)
 
     def bind_array_literal_type(self, to_typ):
         if not isinstance(self.operand, ArrayLiteral): return
@@ -1555,7 +1749,7 @@ class As(Expression):
         to_typ = self.exprtype(scope)
         operand_type = self.operand.exprtype(scope)
 
-        stringable = isinstance(operand_type, Integer) or operand_type == Float() or operand_type == Nil()
+        stringable = formats_as_string(operand_type)
 
         if stringable and is_named_fatptr(to_typ, "String") and self.string_unambiguous(scope):
             return Format(self.info, self.operand).codegen(scope)
@@ -1583,7 +1777,7 @@ class As(Expression):
         operand_type = self.operand.exprtype(scope)
         if not operand_type or operand_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Cannot cast Nothing to {to_typ}.")
-        stringable = isinstance(operand_type, Integer) or operand_type == Float() or operand_type == Nil()
+        stringable = formats_as_string(operand_type)
         if stringable and is_named_fatptr(to_typ, "String") and self.string_unambiguous(scope):
             return Format(self.info, self.operand).exprtype(scope)
         if self.conform_integer_literal(to_typ):
@@ -1613,19 +1807,24 @@ class As(Expression):
 class Into(Expression):
     operand: Expression
     typ: TypeAttribute
-    method: "MethodCall" = None
+    method: "Expression" = None
 
     @property
     def subexpressions(self):
         return [self.operand]
 
     def codegen(self, scope):
-        to_type = scope.simplify(self.typ)
+        to_type = self.exprtype(scope)
+        operand_type = self.operand.exprtype(scope)
+        if not self.method:
+            if operand_type == to_type: return self.operand.codegen(scope)
+            raise Exception(f"{self.info}: Internal error: conversion to {to_type} was not resolved")
         method_return_type = self.method.exprtype(scope)
-        if method_return_type == to_type: return self.method.codegen(scope)
+        converted = self.method.codegen(scope)
+        if method_return_type == to_type: return converted
 
         # If the conversion method returned a subtype, we must upcast to the desired type
-        cast = CastOp.make(self.method.codegen(scope), method_return_type, to_type)
+        cast = CastOp.make(converted, method_return_type, to_type)
         scope.region.last_block.add_op(cast)
         return cast.results[0]
 
@@ -1633,6 +1832,12 @@ class Into(Expression):
         if self.method: return scope.simplify(self.typ)
         operand_type = self.operand.exprtype(scope)
         to_type = scope.type_env.qualify(self.typ, self.info)
+        direct_type = self.exact_target_type(scope, to_type)
+
+        if operand_type == direct_type: return direct_type
+        if self.can_format_to_string(scope, operand_type, to_type):
+            self.method = Format(self.info, self.operand)
+            return self.method.exprtype(scope)
 
         # Precedence order: 1) .to_ method 2) .from_ method 3) constructor
 
@@ -1652,6 +1857,15 @@ class Into(Expression):
             return scope.simplify(self.typ)
 
         raise Exception(f"{self.info}: There are no {operand_type}.to_ methods or {to_type}.from_ methods that are applicable")
+
+    def exact_target_type(self, scope, to_type):
+        if self.generic_target_class(scope, to_type): return None
+        return scope.type_env.validated_type(self.info, to_type)
+
+    def can_format_to_string(self, scope, operand_type, to_type):
+        if not formats_as_string(operand_type): return False
+        if not is_named_fatptr(to_type, "String"): return False
+        return string_type_visible(scope, self.info)
 
     def deduce_from_type(self, scope, target_class, candidate_behaviors, operand_type):
         target_type = target_class.type()
