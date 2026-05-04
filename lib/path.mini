@@ -118,10 +118,6 @@ class AbsolutePath extends Path {
         @segments = built.parts();
     } ~> all_alias
 
-    def is_absolute() -> Bool {
-        return true;
-    }
-
     def dirname() -> Path {
         if @segments.is_empty() { return self; }
         if @segments.size() == 1 { return AbsolutePath{"/", [] of StringView}; }
