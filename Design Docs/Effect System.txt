@@ -13,7 +13,7 @@ Effect System
 - Within the method there's no type ambiguity
 	- We know that Sink[i32].put() can only take an i32
 - The problem with .call for a coroutine is that it cannot syntactically distinguish yield and a return
-	- If we instead have one syntactic block for the yield branch and one for the return branch, the types cna be disambiguated
+	- If we instead have one syntactic block for the yield branch and one for the return branch, the types can be disambiguated
 	- do { return_val = my_coro.call(); } handle Sink.put(yielded : i32) { ... }
 	- You could instead have .call return two values: yielded and returned
 		- This breaks the polymorphism aspect
@@ -323,4 +323,47 @@ float = my_coro.call(3);
 
 def forEach[T, Handlers](iterable : Iterable[T], fn : (T) uses Handlers) uses Handlers {
 	for x in iterable { fn.call(x); }
+}
+
+- Use cases that we hope to be made easier by the handler system
+	- Exceptions
+	- Generators
+	- Schedulers
+
+- What about these actually suggests a handler system?
+- Exceptions can clearly be implemented on their own
+	- Can you think of any other NonResumable's?
+- The scheduler example may be the important one
+	- The idea is that we want to be able to yield back to a number of different points
+	- We want to have different 'channels' to yield through
+	- We don't want these channels getting mixed into one caller/callee channel
+	- What about just symmetric coroutines?
+		- You'd have to thread the target coroutine through the program
+		- We want to be able to be agnostic about who we are switching to
+- What we really want is a system where
+	- There can be multiple call/yield channels with different types
+	- We can distinguish between yield and return
+	- We can dynamically change what invoking an effect does
+
+- I don't know if we really need special syntax for 'effect' methods
+	- I wonder if we could make it more familiar by just dropping the keyword
+	- We still need to ensure it can't be invoked from just anywhere
+	- "Method with resume statement can only be invoked as a do-block handler"
+	- What about one effect calling another effect?
+	- I don't see a strong reason to care about that situation
+
+- Why do we care about function / coroutine syntax being the same?
+- Why not split .call() / resume() ?
+- We want coroutine types to be uncomplicated
+	- Including both call and resume params complicates
+
+class CoroIterator[T] extends Iterator[T] {
+    @coro : Coroutine[() yields T?]
+
+    def init(@coro : Coroutine[() yields T?]) {}
+
+    def next() -> T? {
+        handle coro.call() with Coro.yield(elem : T?) { return elem; }
+        return nil;
+    }
 }
