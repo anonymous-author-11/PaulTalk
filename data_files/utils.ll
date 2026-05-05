@@ -7,9 +7,9 @@ source_filename = "UtilsModule"
 ; External function declarations
 declare i32 @printf(ptr, ...)
 declare void @exit()
-declare ptr @malloc(i64)
-declare ptr @GC_malloc(i64)
-declare ptr @calloc(i64, i64)
+declare noalias ptr @malloc(i64)
+declare noalias ptr @GC_malloc(i64)
+declare noalias ptr @calloc(i64, i64)
 declare void @free(ptr allocptr nocapture noundef)
 declare ptr @llvm.stacksave() mustprogress nocallback nofree nosync nounwind willreturn
 declare ptr @llvm.frameaddress(i32)
@@ -29,16 +29,6 @@ declare void @report_exception( {ptr} )
 
 @__global_argc = global i32 0
 @__global_argv = global ptr null
-
-define i32 @argc() {
-  %argc = load i32, ptr @__global_argc
-  ret i32 %argc
-}
-
-define ptr @argv() {
-  %argv = load ptr, ptr @__global_argv
-  ret ptr %argv
-}
 
 ; do any OS-specific preliminary setup
 declare void @os_specific_setup()
@@ -63,52 +53,13 @@ declare i64 @capture_backtrace(i64, ptr)
 declare void @print_backtrace(ptr, i64)
 
 ; Thread-local storage for our bump allocator state
-@current_ptr = thread_local global ptr null
-
-define ptr @typegetter_wrapper(ptr %f, ptr nocapture nofree noundef nonnull readonly %0) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
-  %result = call ptr %f(ptr nocapture nofree noundef nonnull readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none)
-  ret ptr %result
-}
-
-define { i64, i64 } @size_wrapper(ptr %f, ptr nocapture nofree readonly %0) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
-  %result = call { i64, i64 } %f(ptr nocapture nofree readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none)
-  ret { i64, i64 } %result
-}
-
-define { ptr, i160 } @box_wrapper(ptr %f, ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
-  %result = call { ptr, i160 } %f(ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none)
-  ret { ptr, i160 } %result
-}
-
-define void @unbox_wrapper(ptr %f, { ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none) {
-  call void %f({ ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-  ret void
-}
-
-define ptr @behavior_wrapper(ptr %f, { ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull %1) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none) {
-  %result = call ptr %f({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull %1) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none)
-  ret ptr %result
-}
-  
-define ptr @class_behavior_wrapper(ptr %f, ptr nocapture nofree noundef nonnull %1) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none) {
-  %result = call ptr %f(ptr nocapture nofree noundef nonnull %1) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none)
-  ret ptr %result
-}
-
-define ptr @adjust_trampoline(ptr %tramp) alwaysinline {
-  %ret = call ptr @llvm.adjust.trampoline(ptr %tramp) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: read)
-  ret ptr %ret
-}
-
-define noalias ptr @bump_malloc(i64 noundef %size) alwaysinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
-  %result = call noalias ptr @bump_malloc_wrapper(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
-  ret ptr %result
-}
+@current_ptr = dso_local thread_local(localexec) global ptr null
+@committed_ptr = dso_local thread_local(localexec) global ptr null
 
 define noalias ptr @bump_malloc_wrapper(i64 noundef %size) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
-  ;%result = call noalias ptr @calloc(i64 noundef %size, i64 1)
-  ;%result = call noalias ptr @GC_malloc(i64 noundef %size)
-  %result = call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+  ;%result = tail call noalias ptr @calloc(i64 noundef %size, i64 1)
+  ;%result = tail call noalias ptr @GC_malloc(i64 noundef %size)
+  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   ret ptr %result
 }
 
@@ -128,9 +79,28 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
   ; Update the current pointer
   store ptr %new_ptr, ptr %current_ptr
 
-  ; if we are allocating more than one page, commit the full size of the allocation
-  call void @commit_additional_pages(ptr %current, i64 %aligned_size)
+  call void @commit_bump_pages(ptr %new_ptr)
   ret ptr %current 
+}
+
+define void @commit_bump_pages(ptr %needed_end) {
+  %committed = load ptr, ptr @committed_ptr
+  %need = icmp ugt ptr %needed_end, %committed
+  br i1 %need, label %commit, label %return
+
+commit:
+  %needed_i = ptrtoint ptr %needed_end to i64
+  %end_tmp = add i64 %needed_i, 65535
+  %end_i = and i64 %end_tmp, -65536
+  %committed_i = ptrtoint ptr %committed to i64
+  %n = sub i64 %end_i, %committed_i
+  call void @virtual_commit(ptr %committed, i64 %n)
+  %end_ptr = inttoptr i64 %end_i to ptr
+  store ptr %end_ptr, ptr @committed_ptr
+  br label %return
+
+return:
+  ret void
 }
 
 define void @commit_additional_pages(ptr %base, i64 %size) {
@@ -145,8 +115,10 @@ define void @commit_additional_pages(ptr %base, i64 %size) {
 
 commit:
   %n = sub i64 %end_a, %start_i
+  %is_small_commit = icmp ult i64 %n, 65536
+  %commit_size = select i1 %is_small_commit, i64 65536, i64 %n
   %p = inttoptr i64 %start_i to ptr
-  call void @virtual_commit(ptr %p, i64 %n)
+  call void @virtual_commit(ptr %p, i64 %commit_size)
   br label %return
 
 return:
@@ -259,11 +231,11 @@ define void @_unbox_union_typ({ ptr, i160 } %0, ptr %1, ptr %dest) {
   ret void
 }
 
-define { i64, i64 } @_size_Default(ptr %parameterization) {
+define { i64, i64 } @_size_Default(ptr %parameterization) alwaysinline {
   ret {i64, i64} { i64 32, i64 8 }
 }
 
-define { ptr, i160 } @_box_Default(ptr %fat_ptr, ptr %parameterization) {
+define { ptr, i160 } @_box_Default(ptr %fat_ptr, ptr %parameterization) alwaysinline {
   %vptr = load ptr, ptr %fat_ptr, align 8
   %3 = insertvalue { ptr, i160 } undef, ptr %vptr, 0
   %4 = getelementptr i8, ptr %fat_ptr, i64 8
@@ -272,7 +244,7 @@ define { ptr, i160 } @_box_Default(ptr %fat_ptr, ptr %parameterization) {
   ret { ptr, i160 } %6
 }
 
-define void @_unbox_Default({ ptr, i160 } %fat_ptr, ptr %parameterization, ptr %destination) {
+define void @_unbox_Default({ ptr, i160 } %fat_ptr, ptr %parameterization, ptr %destination) alwaysinline {
   %vptr = extractvalue { ptr, i160 } %fat_ptr, 0
   %data = extractvalue { ptr, i160 } %fat_ptr, 1
   %dest_data = getelementptr i8, ptr %destination, i64 8
@@ -287,6 +259,7 @@ define void @setup_landing_pad(i32 %argc, ptr %argv) {
   store ptr %argv, ptr @__global_argv
   %region = call noalias ptr @virtual_reserve(i64 5368709120) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   store ptr %region, ptr @current_ptr
+  store ptr %region, ptr @committed_ptr
   %buf_first_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 0
   %buf_second_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 1
   %buf_third_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 2
@@ -310,36 +283,7 @@ exit:
   ret void
 }
 
-define i32 @get_offset(ptr %vptr, ptr %id_ptr) {
-  %id = load i64, ptr %id_ptr
-  %id_of_casted = load i64, ptr %vptr
-  %hash_coef_ptr = getelementptr i64, ptr %vptr, i32 1
-  %tbl_size_ptr = getelementptr i64, ptr %vptr, i32 2
-  %offset_tbl_ptr = getelementptr ptr, ptr %vptr, i32 5
-  %hash_coef = load i64, ptr %hash_coef_ptr
-  %tbl_size = load i64, ptr %tbl_size_ptr
-  %offset_tbl = load ptr, ptr %offset_tbl_ptr
-  %index = call i64 @hash_to_index(i64 %tbl_size, i64 %hash_coef, i64 %id)
-  %offset_ptr = getelementptr i32, ptr %offset_tbl, i64 %index
-  %offset = load i32, ptr %offset_ptr
-  ret i32 %offset
-}
-
-define void @assume_offset(ptr %fat_ptr, ptr %id_ptr) {
-  %vptr = load ptr, ptr %fat_ptr
-  %id_of_casted = load i64, ptr %vptr
-  %offset = call i32 @get_offset(ptr %vptr, ptr %id_ptr)
-  %destination = getelementptr { ptr, ptr, ptr, i32 }, ptr %fat_ptr, i32 0, i32 3
-  %dest_value = load i32, ptr %destination
-  %slot = alloca i32
-  store i32 %dest_value, ptr %slot
-  %slotval = load i32, ptr %slot
-  %eq = icmp eq i32 %slotval, %offset
-  call void @llvm.assume(i1 %eq) mustprogress nocallback nofree nosync nounwind willreturn memory(inaccessiblemem: write)
-  ret void
-}
-
-define i64 @hash_to_index(i64 %tbl_size, i64 %hash_coef, i64 %cand_id) {
+define i64 @hash_to_index(i64 %tbl_size, i64 %hash_coef, i64 %cand_id) alwaysinline {
   %product = mul i64 %cand_id, %hash_coef
   %shifted = lshr i64 %product, 32
   %xored = xor i64 %product, %shifted
@@ -353,11 +297,6 @@ define i1 @subtype_test(i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candid
   %stored_val = load i64, ptr %gep
   %eq = icmp eq i64 %stored_val, %candidate
   ret i1 %eq
-}
-
-define i1 @subtype_test_wrapper(ptr %f, i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) alwaysinline mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read) {
-  %result = call i1 %f(i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-  ret i1 %result
 }
 
 define i1 @returns_one() noinline {
