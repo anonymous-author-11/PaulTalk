@@ -3,10 +3,10 @@ import collection;
 import store;
 
 class Set[T] extends Collection[T] {
-    abstract def contains(value : T) -> Bool {}
-    abstract def insert(value : T) -> Bool {}
-    abstract def remove(value : T) -> Bool {}
-    abstract def clear() {}
+    abstract def contains(value : T) -> Bool
+    abstract def insert(value : T) -> Bool
+    abstract def remove(value : T) -> Bool
+    abstract def clear()
 }
 
 class HashSet[T] extends Set[T] {
@@ -14,7 +14,7 @@ class HashSet[T] extends Set[T] {
 
     regions { $elems == @store$elems }
 
-    abstract def init(hasher : (T) -> i32, eq : (T, T) -> Bool) {}
+    abstract def init(hasher : (T) -> i32, eq : (T, T) -> Bool)
 
     def size() -> i32 {
         return @store.size();

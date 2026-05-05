@@ -30,7 +30,7 @@ def padded_capacity(entries_len : i32) -> i32 {
 }
 
 def h2_to_control(hash : i32) -> i8 {
-    h2_6bit = ((hash >> 26) bit_and 0x3F) as i8;
+    h2_6bit = ((hash >> 25) bit_and 0x7F) as i8;
     return (h2_6bit << 1) bit_or occupied_mask();
 }
 
@@ -73,7 +73,6 @@ class SwissStore[K, V, T] extends HashStore[K, V, T] {
     }
 
     def matches_slot(index : i32, key : K, hash : i32) -> Bool {
-        if @hashes.[index] != hash { return false; }
         entry_key = self.key_at(index);
         return self.same_key(entry_key, key);
     }
@@ -194,7 +193,6 @@ class SwissStore[K, V, T] extends HashStore[K, V, T] {
         if (@metadata.[index] bit_and occupied_mask()) == 0 { return nil; }
         value = self.value_at(index);
         @metadata.[index] = deleted();
-        @hashes.[index] = 0;
         @size = @size - 1;
         return value;
     }

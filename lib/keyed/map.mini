@@ -4,9 +4,9 @@ import store;
 class KeyNotFound extends Exception {}
 
 class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
-    abstract def get(key : K) -> V? {}
-    abstract def insert(key : K, value : V) {}
-    abstract def remove(key : K) -> V? {}
+    abstract def get(key : K) -> V?
+    abstract def insert(key : K, value : V)
+    abstract def remove(key : K) -> V?
 
     def indices() -> Collection[K] {
         return self.keys();
@@ -97,7 +97,7 @@ class HashMap[K, V] extends Map[K, V] {
 
     regions { $elems == @store$elems }
 
-    abstract def init(hasher : (K) -> i32, eq : (K, K) -> Bool) {}
+    abstract def init(hasher : (K) -> i32, eq : (K, K) -> Bool)
 
     def size() -> i32 {
         return @store.size();
