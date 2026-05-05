@@ -30,7 +30,7 @@ def padded_capacity(entries_len : i32) -> i32 {
 }
 
 def h2_to_control(hash : i32) -> i8 {
-    h2_6bit = (hash >> 26) as i8;
+    h2_6bit = ((hash >> 26) bit_and 0x3F) as i8;
     return (h2_6bit << 1) bit_or occupied_mask();
 }
 
