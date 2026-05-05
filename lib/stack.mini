@@ -2,7 +2,7 @@ import list;
 
 class Stack[T] extends List[T] {
 
-    abstract def pop() -> T? {}
+    abstract def pop() -> T?
 
     def push(item : T) -> Self {
         return self.append(item);

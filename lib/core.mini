@@ -775,10 +775,7 @@ class StringWriter extends Writer[Character] {
     @string : String
     @encoder : UTF8Encoder
 
-    regions {
-        $dest == @encoder$dest,
-        @encoder$dest == @string$elems
-    }
+    regions { $dest == @encoder$dest == @string$elems }
 
     def init(@string : String) {
         @encoder = UTF8Encoder{@string.bytes().writer()};
@@ -829,10 +826,7 @@ class StringCodepointWriter extends Writer[i32] {
 	@string : String
 	@encoder : UTF8Encoder
 
-    regions {
-        $dest == @encoder$dest,
-        @encoder$dest == @string$elems
-    }
+    regions { $dest == @encoder$dest == @string$elems }
 
 	def init(@string : String) {
 		@encoder = UTF8Encoder{@string.bytes().writer()};

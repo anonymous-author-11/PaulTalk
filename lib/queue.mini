@@ -2,7 +2,7 @@ import list;
 
 class Queue[T] extends List[T] {
 
-    abstract def dequeue() -> T? {}
+    abstract def dequeue() -> T?
 
     def enqueue(item : T) -> Self {
         return self.append(item);

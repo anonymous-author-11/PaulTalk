@@ -4,19 +4,19 @@ import collection;
 class Indexable[I, V] {
 
 	// Should be O(1) access
-	abstract def [](index : I) -> V {}
+	abstract def [](index : I) -> V
 
 	// Should be O(1) access
-	abstract def []=(index : I, value : V) {}
+	abstract def []=(index : I, value : V)
 
 }
 
 class IndexableCollection[I, V, T] extends Indexable[I, V], Collection[T] {
 
 	// .indices().size() == self.size()
-	abstract def indices() -> Collection[I] {}
+	abstract def indices() -> Collection[I]
 
 	// .values().size() == self.size()
-	abstract def values() -> Collection[V] {}
+	abstract def values() -> Collection[V]
 
 }

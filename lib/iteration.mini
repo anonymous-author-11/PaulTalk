@@ -22,8 +22,7 @@ class Iterator[T] {
 
     regions { $nxt holds $elems }
 
-	abstract def next() -> T? {
-    } ~> { ret == $nxt }
+	abstract def next() -> T? ~> { ret == $nxt }
 
 }
 
