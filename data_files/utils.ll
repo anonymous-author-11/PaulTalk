@@ -30,6 +30,10 @@ declare void @report_exception( {ptr} )
 @__global_argc = global i32 0
 @__global_argv = global ptr null
 
+; Thread-local storage for our bump allocator state
+@current_ptr = dso_local thread_local(localexec) global ptr null
+@committed_ptr = dso_local thread_local(localexec) global ptr null
+
 ; do any OS-specific preliminary setup
 declare void @os_specific_setup()
 
@@ -52,19 +56,15 @@ declare i64 @capture_backtrace(i64, ptr)
 
 declare void @print_backtrace(ptr, i64)
 
-; Thread-local storage for our bump allocator state
-@current_ptr = dso_local thread_local(localexec) global ptr null
-@committed_ptr = dso_local thread_local(localexec) global ptr null
-
-define noalias ptr @bump_malloc_wrapper(i64 noundef %size) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
+define noalias ptr @bump_malloc_wrapper(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) memory(none, argmem: readwrite) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
   ;%result = tail call noalias ptr @calloc(i64 noundef %size, i64 1)
   ;%result = tail call noalias ptr @GC_malloc(i64 noundef %size)
-  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   ret ptr %result
 }
 
 ; Our malloc replacement 
-define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
+define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
   
   ; Calculate aligned size (align to 16 bytes)
   %size_plus_15 = add i64 %size, 15
@@ -79,12 +79,12 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
   ; Update the current pointer
   store ptr %new_ptr, ptr %current_ptr
 
-  call void @commit_bump_pages(ptr %new_ptr)
+  call void @commit_bump_pages(ptr %new_ptr, ptr %committed_ptr)
   ret ptr %current 
 }
 
-define void @commit_bump_pages(ptr %needed_end) {
-  %committed = load ptr, ptr @committed_ptr
+define void @commit_bump_pages(ptr %needed_end, ptr %committed_ptr) {
+  %committed = load ptr, ptr %committed_ptr
   %need = icmp ugt ptr %needed_end, %committed
   br i1 %need, label %commit, label %return
 
@@ -96,7 +96,7 @@ commit:
   %n = sub i64 %end_i, %committed_i
   call void @virtual_commit(ptr %committed, i64 %n)
   %end_ptr = inttoptr i64 %end_i to ptr
-  store ptr %end_ptr, ptr @committed_ptr
+  store ptr %end_ptr, ptr %committed_ptr
   br label %return
 
 return:
