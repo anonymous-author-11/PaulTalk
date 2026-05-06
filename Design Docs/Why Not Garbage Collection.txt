@@ -1,0 +1,37 @@
+Why Not Garbage Collection?
+
+1. Interoperability
+
+- External code storing references in its own data structures
+- External code doing writes without write barriers
+- External code launches threads that mutate concurrently
+
+- Relocation / moving collectors: references not stable
+- Incremental / generational collectors: need write barriers
+- Precise collectors: foreign frames lack stack maps
+
+- Runtime must initialize GC at program start
+- Shared memory: can I call dgemm? Both ways?
+
+- Can you inline foreign code?
+- Can your code be inlined into foreign code?
+
+2. Dynamic libraries
+
+- Load two dylibs each with their own collector?
+- If bundled separately: have to start up the GC before calling dylib fn's
+
+3. Performance
+
+- Runtime overhead is global and scales with the size of the heap / program
+- Non-gc overhead is local and unrelated to program size
+- Runtime overhead is unpredictable and variable; less deterministic
+
+Best case GC would be:
+
+1. A conservative non-moving collector
+2. Allocation strategy minimizes fragmentation
+3. No write barrier instrumentation
+4. Strict contracts for foreign code to adhere to
+5. Collector lives in its own dylib bundled with compiler
+6. Collector optimizes for latency over throughput
