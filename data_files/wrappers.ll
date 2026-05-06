@@ -11,7 +11,7 @@ declare ptr @llvm.threadlocal.address(ptr) speculatable memory(none) willreturn 
 @current_ptr = external dso_local thread_local(localexec) global ptr
 @committed_ptr = external dso_local thread_local(localexec) global ptr
 
-declare noalias ptr @bump_malloc_wrapper(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) memory(none, argmem: readwrite) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+declare noalias ptr @bump_malloc_wrapper(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) memory(none, argmem: readwrite, inaccessiblemem: readwrite) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
 
 define available_externally i32 @argc() alwaysinline {
   %argc = load i32, ptr @__global_argc
@@ -31,7 +31,7 @@ define available_externally ptr @adjust_trampoline(ptr %tramp) alwaysinline {
 define available_externally noalias ptr @bump_malloc(i64 noundef %size) alwaysinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
   %current_ptr = call ptr @llvm.threadlocal.address(ptr @current_ptr) memory(none) willreturn nounwind
   %committed_ptr = call ptr @llvm.threadlocal.address(ptr @committed_ptr) memory(none) willreturn nounwind
-  %result = call noalias ptr @bump_malloc_wrapper(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) memory(none, argmem: readwrite) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+  %result = call noalias ptr @bump_malloc_wrapper(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) memory(none, argmem: readwrite, inaccessiblemem: readwrite) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   ret ptr %result
 }
 

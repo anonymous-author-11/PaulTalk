@@ -13,6 +13,8 @@ declare noalias ptr @calloc(i64, i64)
 declare void @free(ptr allocptr nocapture noundef)
 declare ptr @llvm.stacksave() mustprogress nocallback nofree nosync nounwind willreturn
 declare ptr @llvm.frameaddress(i32)
+declare i64 @llvm.umax.i64(i64, i64) speculatable memory(none) willreturn nounwind
+declare void @llvm.memcpy.inline.p0.p0.i64(ptr, ptr, i64, i1) memory(none, argmem: readwrite) willreturn nounwind
 
 declare void @report_exception( {ptr} )
 
@@ -56,10 +58,14 @@ declare i64 @capture_backtrace(i64, ptr)
 
 declare void @print_backtrace(ptr, i64)
 
-define noalias ptr @bump_malloc_wrapper(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) memory(none, argmem: readwrite) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
+declare i64 @clock()
+
+declare void @GC_enable_incremental()
+
+define noalias ptr @bump_malloc_wrapper(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) memory(none, argmem: readwrite, inaccessiblemem: readwrite) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
   ;%result = tail call noalias ptr @calloc(i64 noundef %size, i64 1)
-  ;%result = tail call noalias ptr @GC_malloc(i64 noundef %size)
-  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+  %result = tail call noalias ptr @GC_malloc(i64 noundef %size)
+  ;%result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   ret ptr %result
 }
 
@@ -257,6 +263,7 @@ define void @setup_landing_pad(i32 %argc, ptr %argv) {
   call void @os_specific_setup()
   store i32 %argc, ptr @__global_argc
   store ptr %argv, ptr @__global_argv
+  call void @GC_enable_incremental()
   %region = call noalias ptr @virtual_reserve(i64 5368709120) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   store ptr %region, ptr @current_ptr
   store ptr %region, ptr @committed_ptr
