@@ -685,6 +685,7 @@ class PointsToGraph:
 
 class CompilationUnit:
     dependency_graph: nx.DiGraph
+    export_dependency_graph: nx.DiGraph
     codegenned: set
     toplevel_ops: list
     main: Path
@@ -693,6 +694,7 @@ class CompilationUnit:
 
     def __init__(self):
         self.dependency_graph = nx.DiGraph()
+        self.export_dependency_graph = nx.DiGraph()
         self.codegenned = set()
         self.toplevel_ops = []
         self.main = None
@@ -706,18 +708,20 @@ class CompilationUnit:
             return
         raise Exception(f"{import_info}: A file should never import itself")
 
-    def record_import_dependencies(self, import_info, target_paths, target):
+    def record_import_dependencies(self, import_info, target_paths, target, export_dependency=True):
         if not import_info:
             return
         for path in target_paths:
             self.dependency_graph.add_edge(import_info.filepath, path)
+            if export_dependency: self.export_dependency_graph.add_edge(import_info.filepath, path)
+        if not export_dependency: return
         self.ensure_acyclic_imports(import_info, target)
 
     def ensure_acyclic_imports(self, import_info, target):
-        dependency_cycle = next(self.dependency_graph.simple_cycles(), None)
+        dependency_cycle = next(self.export_dependency_graph.simple_cycles(), None)
         if dependency_cycle:
             print("Dependency graph:")
-            self.dependency_graph.print()
+            self.export_dependency_graph.print()
             raise Exception(f"{import_info}: Import of {target} from {import_info.filepath} creates a cycle in the dependency graph.")
 
 @dataclass

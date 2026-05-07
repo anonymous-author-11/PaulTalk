@@ -155,6 +155,7 @@ class CompilationJob:
     def run_typeflow(self, ast):
         ast.typeflow()
         self.dependencies.graph = ast.global_scope.comp_unit.dependency_graph
+        self.dependencies.input_path = self.input.path
         self.dependencies.print()
         self.record_time("after_typeflow")
 
@@ -312,7 +313,7 @@ class CompilationJob:
         # Don't inline anything here as it may be compiled in debug mode later
         # Since we are not inlining, I don't mind using --attributor-enable=all here
         # The LTO pre-link pipeline is generally a good fit for this stage
-        passes = "--passes=\"lto-pre-link<O1>,vector-combine\""
+        passes = "--passes=\"lto-pre-link<O3>,vector-combine\""
         link_layout = f"{LLVM_LINK_PATH} - {WRAPPERS_PATH} {LAYOUT_PATH}"
         opt = f"{OPT_PATH} {passes} {self.settings.vec} {self.settings.attributor('all')} --inline-threshold=-10000"
         hoist_allocas = f"{OPT_PATH} --bugpoint-enable-legacy-pm --alloca-hoisting"
@@ -388,6 +389,7 @@ class CompilationJob:
 
         thin_paths = [str(SourceFile(path, self.build).bc_file) for path in self.dependencies.list]
         out_thin_path = self.build.dir / "out_thin.bc"
+        # attributor is a module-level pass, so this pipeline runs it twice
         passes = f"--lto-newpm-passes=lto-pre-link<O3>,default<O3>"
         lto_file = self.build.dir / "out_lto.bc"
         full_lto = (
@@ -398,6 +400,7 @@ class CompilationJob:
         )
         subprocess.run(full_lto, cwd=self.build.dir, check=True)
 
+        # Need to hoist allocas created with heap2stack
         optimized_ir = run_checked((OPT_PATH, lto_file, "--bugpoint-enable-legacy-pm", "--alloca-hoisting", "-S", "--strip-debug"))
         optimized_ir = remove_invariant_on_globals(optimized_ir)
         optimized_ir = clean_lto_metadata(optimized_ir)
@@ -551,17 +554,17 @@ class OptimizationSettings:
         if self.debug_mode: heap2stack = "--max-heap-to-stack-size=0"
 
         open_world = "--attributor-assume-closed-world=false"
-        use_internal_attributes = "--attributor-manifest-internal"
+        internal_attrs = "--attributor-manifest-internal"
         annotate_callsites = "--attributor-annotate-decl-cs"
+        callsite_deduction = "--attributor-enable-call-site-specific-deduction=true"
         simplify_loads = "--attributor-simplify-all-loads"
 
         # Might add these ones in the future, not sure if they're useful
-        callsite_deduction = "--attributor-enable-call-site-specific-deduction=true"
         max_iter = "--attributor-max-iterations=100000"
         max_specializations = "--attributor-max-specializations-per-call-base=100000"
         
         # Using attributor-enable=cgscc or attributor-enable=all takes way too long, though it does generate faster code
-        return f"--attributor-enable={mode} {simplify_loads} {annotate_callsites} {heap2stack} {use_internal_attributes} {open_world} {no_tail}"
+        return f"--attributor-enable={mode} {simplify_loads} {annotate_callsites} {callsite_deduction} {heap2stack} {internal_attrs} {open_world} {no_tail}"
 
 class BuildDirectory:
     dir: Path
@@ -636,12 +639,14 @@ class Dependencies:
     print_graph: bool
     _list: list
     _recompile_list: list
+    input_path: Path
 
     def __init__(self, build, print_graph: bool):
         self.print_graph = print_graph
         self.build = build
         self._list = None
         self._recompile_list = None
+        self.input_path = None
 
         # Will be added by CompilationJob.run_typeflow()
         self.graph = None
@@ -650,8 +655,7 @@ class Dependencies:
     def list(self):
         if self._list: return self._list
         dependency_list = list(reversed(list(self.graph.topological_sort())))
-        # input file is excluded from the list
-        self._list = dependency_list[:-1]
+        self._list = [path for path in dependency_list if path != self.input_path]
         return self._list
 
     @property
