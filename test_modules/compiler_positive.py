@@ -635,10 +635,19 @@ class CompilerPositiveTestsMixin:
                 {
                     "helper.mini": "def helper() -> i32 { return 40; }\n",
                     "inner.mini": "def answer() -> i32 { return 2; }\n",
-                    "wrapper.mini": "import inner;\nimport helper;\nno_export helper;\ndef wrapper_value() -> i32 { return helper(); }\n",
+                    "wrapper.mini": "import inner;\nimport helper;\nno_export helper.helper;\ndef wrapper_value() -> i32 { return helper(); }\n",
                     "main.mini": "import wrapper;\nprint(answer());\nprint(wrapper_value());\n",
                 },
                 "2\n40",
+            ),
+            (
+                "private_cycle",
+                {
+                    "foo.mini": "import bar;\nno_export bar;\nclass Foo { def init() {} }\ndef call_bar() -> i32 { return bar.answer(); }\n",
+                    "bar.mini": "import foo;\nno_export foo;\ndef answer() -> i32 { return 7; }\ndef make_foo() -> foo.Foo { return foo.Foo{}; }\n",
+                    "main.mini": "import foo;\nimport bar;\nvalue : foo.Foo = bar.make_foo();\nprint(foo.call_bar());\n",
+                },
+                "7",
             ),
             (
                 "dotted_local",

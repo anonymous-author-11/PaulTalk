@@ -277,6 +277,14 @@ class CompilerNegativeTestsMixin:
                 {"main.mini": "no_export missing;\ndef answer() -> i32 { return 1; }\n"},
                 "missing is not visible here and cannot be exported.",
             ),
+            (
+                "no_export_import_entity_ambiguous",
+                {
+                    "helper.mini": "def helper() -> i32 { return 1; }\n",
+                    "main.mini": "import helper;\nno_export helper;\n",
+                },
+                "helper is ambiguous and cannot be exported without qualification.",
+            ),
         ]
         self.assert_project_fail_cases(cases)
 
@@ -353,6 +361,15 @@ class CompilerNegativeTestsMixin:
                     "main.mini": "import foo;\n",
                 },
                 "both a file and folder exist",
+            ),
+            (
+                "public_import_cycle",
+                {
+                    "foo.mini": "import bar;\ndef foo() -> i32 { return 1; }\n",
+                    "bar.mini": "import foo;\ndef bar() -> i32 { return 2; }\n",
+                    "main.mini": "import foo;\n",
+                },
+                "creates a cycle in the dependency graph.",
             ),
         ]
         self.assert_project_fail_cases(cases)

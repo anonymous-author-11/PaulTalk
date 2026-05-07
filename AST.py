@@ -166,7 +166,7 @@ class ImportTarget:
     def opens_namespace(self):
         return True
 
-    def compute_surface(self, import_stmt: "Import", scope):
+    def compute_surface(self, import_stmt: "Import", scope, export_dependency=True):
         raise NotImplementedError
 
     def resolve_namespace(self, comp_unit, node_info, parts):
@@ -175,8 +175,8 @@ class ImportTarget:
 @dataclass(frozen=True)
 class FileImportTarget(ImportTarget):
 
-    def compute_surface(self, import_stmt: "Import", scope):
-        return scope.comp_unit.repository.file_export_surface(scope.comp_unit, self.path, import_stmt.info)
+    def compute_surface(self, import_stmt: "Import", scope, export_dependency=True):
+        return scope.comp_unit.repository.file_export_surface(scope.comp_unit, self.path, import_stmt.info, export_dependency)
 
     def resolve_namespace(self, comp_unit, node_info, parts):
         return comp_unit.repository.resolve_in_file_namespace(comp_unit, node_info, self.path, parts)
@@ -184,8 +184,8 @@ class FileImportTarget(ImportTarget):
 @dataclass(frozen=True)
 class FolderImportTarget(ImportTarget):
 
-    def compute_surface(self, import_stmt: "Import", scope):
-        return scope.comp_unit.repository.folder_export_surface(scope.comp_unit, self.path, import_stmt.info)
+    def compute_surface(self, import_stmt: "Import", scope, export_dependency=True):
+        return scope.comp_unit.repository.folder_export_surface(scope.comp_unit, self.path, import_stmt.info, export_dependency)
 
     def resolve_namespace(self, comp_unit, node_info, parts):
         return comp_unit.repository.resolve_in_folder_namespace(comp_unit, node_info, self.path, parts)
@@ -197,8 +197,8 @@ class EntityImportTarget(ImportTarget):
     def opens_namespace(self):
         return False
 
-    def compute_surface(self, import_stmt: "Import", scope):
-        file_surface = scope.comp_unit.repository.file_export_surface(scope.comp_unit, self.path, import_stmt.info)
+    def compute_surface(self, import_stmt: "Import", scope, export_dependency=True):
+        file_surface = scope.comp_unit.repository.file_export_surface(scope.comp_unit, self.path, import_stmt.info, export_dependency)
         return file_surface.select(import_stmt.info, self.entity_name)
 
     def resolve_namespace(self, comp_unit, node_info, parts):
@@ -277,6 +277,15 @@ class ProgramNamespace:
     def imports(self):
         return self.statements_of(Import)
 
+    def private_import_names(self):
+        imports = {imp.qualified_name.parts for imp in self.imports() if imp.target.opens_namespace()}
+        return {
+            name.parts
+            for stmt in self.statements_of(NoExportList)
+            for name in stmt.names
+            if name.parts in imports
+        }
+
     def validate_declarations(self):
         if self.validated: return
         phase = "imports"
@@ -313,7 +322,9 @@ class ProgramNamespace:
 
     def raw_visible_surface(self, scope):
         surface = ExportSurface()
+        private_imports = self.private_import_names()
         for imp in self.imports():
+            if imp.qualified_name.parts in private_imports: continue
             surface.merge(imp.target.compute_surface(imp, scope))
         for name in self.local_names():
             surface.remove_name(name)
@@ -329,10 +340,10 @@ class ProgramNamespace:
     def apply_visibility_controls(self, surface, scope):
         lookup = ExportSurface()
         lookup.merge(surface)
+        private_imports = self.private_import_names()
         hidden_exports = ((stmt.info, name) for stmt in self.statements_of(NoExportList) for name in stmt.names)
         for info, name in hidden_exports:
-            resolved = self.resolved_export(scope, info, name, lookup)
-            surface.remove(resolved)
+            self.apply_hidden_export(surface, scope, lookup, private_imports, info, name)
         explicit_exports = ((stmt.info, name) for stmt in self.statements_of(ExportList) for name in stmt.names)
         for info, name in explicit_exports:
             resolved = self.resolved_export(scope, info, name, lookup)
@@ -340,6 +351,26 @@ class ProgramNamespace:
 
     def local_names(self):
         return {stmt.name for stmt in self.statements_of(ClassDef, FunctionDef, ExternDef, Alias)}
+
+    def apply_hidden_export(self, surface, scope, lookup, private_imports, info, name):
+        if name.parts in private_imports:
+            self.check_private_no_export(scope, info, name)
+            return
+        resolved = self.resolved_export(scope, info, name, lookup)
+        surface.remove(resolved)
+
+    def check_private_no_export(self, scope, info, name):
+        if self.exportable_name_count(scope, name) == 0: return
+        raise Exception(f"{info}: {name.text()} is ambiguous and cannot be exported without qualification.")
+
+    def exportable_name_count(self, scope, name):
+        if len(name.parts) != 1: return 0
+        text = name.parts[0]
+        return (
+            len(scope.classes.get(text, ()))
+            + len(scope.functions.get(text, ()))
+            + len(scope.type_env.declared_aliases.get(text, ()))
+        )
 
     def resolved_export(self, scope, info, name, surface=None):
         if len(name.parts) != 1: return scope.comp_unit.repository.resolve_qualified_exportable_symbol(scope.comp_unit, scope, info, name.parts)
@@ -5643,14 +5674,15 @@ class Import(Statement):
     target: ImportTarget
 
     def name_resolution(self, scope):
-        surface = self.target.compute_surface(self, scope)
         program = scope.comp_unit.repository.current_program_context(scope.comp_unit, self.info)[0]
+        export_dependency = self.qualified_name.parts not in program.namespace.private_import_names()
+        surface = self.target.compute_surface(self, scope, export_dependency)
         scope.add_surface(surface, program.namespace.local_names())
 
     def codegen(self, scope):
         if self.target in scope.comp_unit.processed_imports:
             return
-        surface = self.target.compute_surface(self, scope)
+        surface = self.target.compute_surface(self, scope, False)
         scope.comp_unit.processed_imports.add(self.target)
         for path in scope.comp_unit.repository.interface_paths(surface):
             program, sandbox_scope = scope.comp_unit.repository.load_program_context(scope.comp_unit, path)

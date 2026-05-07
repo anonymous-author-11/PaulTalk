@@ -127,10 +127,10 @@ class ProgramRepository:
             return self.type_paths(typ.bound)
         return set()
 
-    def file_export_surface(self, comp_unit, filepath: Path, import_info=None):
+    def file_export_surface(self, comp_unit, filepath: Path, import_info=None, export_dependency=True):
         resolved_path = filepath.resolve()
         comp_unit.ensure_not_self_import(import_info, resolved_path)
-        comp_unit.record_import_dependencies(import_info, [resolved_path], resolved_path)
+        comp_unit.record_import_dependencies(import_info, [resolved_path], resolved_path, export_dependency)
         cache_key = ("file", resolved_path)
         if cache_key in self.import_surfaces:
             return self.import_surfaces[cache_key]
@@ -139,12 +139,12 @@ class ProgramRepository:
         self.import_surfaces[cache_key] = surface
         return surface
 
-    def folder_export_surface(self, comp_unit, folder_path: Path, import_info=None):
+    def folder_export_surface(self, comp_unit, folder_path: Path, import_info=None, export_dependency=True):
         resolved_folder = folder_path.resolve()
         child_files = [path.resolve() for path in sorted(resolved_folder.glob("*.mini")) if path.name != "index.mini"]
         index_path = resolved_folder / "index.mini"
         replay_paths = child_files + ([index_path.resolve()] if index_path.exists() else [])
-        comp_unit.record_import_dependencies(import_info, replay_paths, resolved_folder)
+        comp_unit.record_import_dependencies(import_info, replay_paths, resolved_folder, export_dependency)
         cache_key = ("folder", resolved_folder)
         if cache_key in self.import_surfaces:
             return self.import_surfaces[cache_key]

@@ -36,8 +36,27 @@ class DiGraph:
         Replaces nx.topological_sort(g).
         Returns a list of nodes in topological order.
         """
-        indices = rx.topological_sort(self._graph)
+        try:
+            indices = rx.topological_sort(self._graph)
+        except rx.DAGHasCycle:
+            indices = self.condensed_topological_sort()
         return [self._graph[i] for i in indices]
+
+    def condensed_topological_sort(self):
+        components = [
+            sorted(component, key=lambda i: str(self._graph[i]))
+            for component in rx.strongly_connected_components(self._graph)
+        ]
+        components.sort(key=lambda component: str(self._graph[component[0]]))
+        component_index = {node: i for i, component in enumerate(components) for node in component}
+        condensed = rx.PyDiGraph()
+        for component in components: condensed.add_node(component)
+        for u, v in self._graph.edge_list():
+            left = component_index[u]
+            right = component_index[v]
+            if left == right: continue
+            condensed.add_edge(left, right, None)
+        return [node for i in rx.topological_sort(condensed) for node in condensed[i]]
 
     def ancestors(self, node):
         """
