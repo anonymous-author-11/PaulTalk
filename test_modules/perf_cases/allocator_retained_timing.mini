@@ -1,0 +1,30 @@
+import std;
+import allocator_retained_benchmark;
+
+extern def clock() -> i64
+
+def status(checksum : i64) -> String {
+    if checksum == allocator_retained_benchmark.expected_checksum() { return "ok"; }
+    return "bad";
+}
+
+def timed_run(run : i32, keepers : Array[Array[allocator_retained_benchmark.RetainedItem]]) -> i64 {
+    start = clock();
+    items = allocator_retained_benchmark.build();
+    keepers.append(items);
+    checksum = allocator_retained_benchmark.score(items);
+    elapsed = clock() - start;
+    status_text = status(checksum);
+    line = "allocator_retained run=${run} ms=${elapsed}";
+    line = line.extend(" checksum=${checksum} status=${status_text}");
+    IO.print(line);
+    return elapsed;
+}
+
+runs = 3;
+keepers = Array[Array[allocator_retained_benchmark.RetainedItem]].new(runs);
+total_ms : i64 = 0;
+for run in 1...runs {
+    total_ms = total_ms + timed_run(run, keepers);
+}
+IO.print("allocator_retained average_ms=${total_ms / (runs as i64)} runs=${runs}");

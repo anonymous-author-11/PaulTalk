@@ -1,0 +1,103 @@
+import std;
+
+class Payload {
+    @value : i32
+    @factor : i32
+    @length : i32
+    @bytes : Buffer[i8]
+
+    def init(@value : i32, @factor : i32, @length : i32) {
+        @bytes = Buffer[i8].new(@length);
+        for i in 0..@length {
+            @bytes.[i] = ((@value + i * @factor) % 113) as i8;
+        }
+    }
+
+    def score(offset : i32) -> i64 {
+        first = @bytes.[0] as i64;
+        index = (@value + offset) % @length;
+        mid = @bytes.[index] as i64;
+        last = @bytes.[@length - 1] as i64;
+        return first + mid + last + (@value as i64) + (@factor as i64);
+    }
+}
+
+class BatchItem {
+    @payload : Payload
+    @salt : i32
+
+    def init(@payload : Payload, @salt : i32) {}
+
+    def score(offset : i32) -> i64 {
+        return @payload.score(offset + @salt) + (@salt as i64);
+    }
+}
+
+def benchmark_cycles() -> i32 {
+    return 200;
+}
+
+def benchmark_count() -> i32 {
+    return 25000;
+}
+
+def benchmark_payload_len() -> i32 {
+    return 16;
+}
+
+def expected_checksum() -> i64 {
+    return (620351154 as i64) * (1000 as i64) + (652 as i64);
+}
+
+def make_payload(i : i32, cycle : i32, payload_len : i32) -> Payload {
+    value = (i * 37 + cycle * 101) % 100000;
+    factor = (i % 17) + 3;
+    return Payload.new(value, factor, payload_len);
+}
+
+def consume_items(items : Array[BatchItem], cycle : i32) -> i64 {
+    total : i64 = 0;
+    for i in 0..items.size() {
+        total = total + items.unchecked_index(i).score(cycle + i);
+    }
+    return total;
+}
+
+def consume_reverse(items : Array[BatchItem], cycle : i32) -> i64 {
+    total : i64 = 0;
+    count = items.size();
+    for i in 0..count {
+        index = count - i - 1;
+        total = total + items.unchecked_index(index).score(cycle + i + 1);
+    }
+    return total;
+}
+
+def run_batch(count : i32, payload_len : i32, cycle : i32) -> i64 {
+    items = Array[BatchItem].new(count);
+    for i in 0..count {
+        payload = make_payload(i, cycle, payload_len);
+        items.append(BatchItem.new(payload, cycle + i));
+    }
+    return consume_items(items, cycle) + consume_reverse(items, cycle);
+}
+
+def churn(cycles : i32, count : i32, payload_len : i32) -> i64 {
+    total : i64 = 0;
+    for cycle in 0..cycles {
+        total = total + run_batch(count, payload_len, cycle);
+    }
+    return total;
+}
+
+def run() -> i64 {
+    return churn(benchmark_cycles(), benchmark_count(), benchmark_payload_len());
+}
+
+checksum = run();
+
+if checksum == expected_checksum() {
+    IO.print("ok");
+} else {
+    IO.print("bad");
+}

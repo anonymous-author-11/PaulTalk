@@ -1,0 +1,27 @@
+import std;
+import allocator_churn_benchmark;
+
+extern def clock() -> i64
+
+def status(checksum : i64) -> String {
+    if checksum == allocator_churn_benchmark.expected_checksum() { return "ok"; }
+    return "bad";
+}
+
+def timed_run(run : i32) -> i64 {
+    start = clock();
+    checksum = allocator_churn_benchmark.run();
+    elapsed = clock() - start;
+    status_text = status(checksum);
+    line = "allocator_churn run=${run} ms=${elapsed}";
+    line = line.extend(" checksum=${checksum} status=${status_text}");
+    IO.print(line);
+    return elapsed;
+}
+
+runs = 5;
+total_ms : i64 = 0;
+for run in 1...runs {
+    total_ms = total_ms + timed_run(run);
+}
+IO.print("allocator_churn average_ms=${total_ms / (runs as i64)} runs=${runs}");

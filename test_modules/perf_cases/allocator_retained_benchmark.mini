@@ -1,0 +1,113 @@
+import std;
+
+class RetainedPayload {
+    @value : i32
+    @factor : i32
+    @length : i32
+    @bytes : Buffer[i8]
+
+    def init(@value : i32, @factor : i32, @length : i32) {
+        @bytes = Buffer[i8].new(@length);
+        for i in 0..@length {
+            @bytes.[i] = ((@value + i * @factor) % 113) as i8;
+        }
+    }
+
+    def score(offset : i32) -> i64 {
+        first = @bytes.[0] as i64;
+        index = (@value + offset) % @length;
+        mid = @bytes.[index] as i64;
+        last = @bytes.[@length - 1] as i64;
+        return first + mid + last + (@value as i64) + (@factor as i64);
+    }
+}
+
+class RetainedItem {
+    @payload : RetainedPayload
+    @salt : i32
+
+    def init(@payload : RetainedPayload, @salt : i32) {}
+
+    def score(offset : i32) -> i64 {
+        return @payload.score(offset + @salt) + (@salt as i64);
+    }
+}
+
+def benchmark_cycles() -> i32 {
+    return 100;
+}
+
+def benchmark_count() -> i32 {
+    return 10000;
+}
+
+def benchmark_payload_len() -> i32 {
+    return 24;
+}
+
+def expected_checksum() -> i64 {
+    return (1096565214 as i64) * (1000 as i64) + (137 as i64);
+}
+
+def make_payload(i : i32, cycle : i32, payload_len : i32) -> RetainedPayload {
+    value = (i * 37 + cycle * 101) % 100000;
+    factor = ((i + cycle) % 17) + 3;
+    return RetainedPayload.new(value, factor, payload_len);
+}
+
+def make_item(i : i32, cycle : i32, count : i32, payload_len : i32) -> RetainedItem {
+    payload = make_payload(i, cycle, payload_len);
+    salt = cycle * count + i;
+    return RetainedItem.new(payload, salt);
+}
+
+def append_cycle(items : Array[RetainedItem], count : i32, payload_len : i32, cycle : i32) {
+    for i in 0..count {
+        items.append(make_item(i, cycle, count, payload_len));
+    }
+}
+
+def build() -> Array[RetainedItem] {
+    cycles = benchmark_cycles();
+    count = benchmark_count();
+    payload_len = benchmark_payload_len();
+    items = Array[RetainedItem].new(cycles * count);
+    for cycle in 0..cycles {
+        append_cycle(items, count, payload_len, cycle);
+    }
+    return items;
+}
+
+def consume_items(items : Array[RetainedItem]) -> i64 {
+    total : i64 = 0;
+    for i in 0..items.size() {
+        total = total + items.unchecked_index(i).score(i);
+    }
+    return total;
+}
+
+def consume_reverse(items : Array[RetainedItem]) -> i64 {
+    total : i64 = 0;
+    count = items.size();
+    for i in 0..count {
+        index = count - i - 1;
+        total = total + items.unchecked_index(index).score(i + 1);
+    }
+    return total;
+}
+
+def score(items : Array[RetainedItem]) -> i64 {
+    return consume_items(items) + consume_reverse(items);
+}
+
+def run() -> i64 {
+    return score(build());
+}
+
+checksum = run();
+
+if checksum == expected_checksum() {
+    IO.print("ok");
+} else {
+    IO.print("bad");
+}

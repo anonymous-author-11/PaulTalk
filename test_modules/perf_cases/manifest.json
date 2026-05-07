@@ -46,6 +46,16 @@
       "expected_output": "ok"
     },
     {
+      "name": "allocator_churn",
+      "file": "allocator_churn_benchmark.mini",
+      "expected_output": "ok"
+    },
+    {
+      "name": "allocator_retained",
+      "file": "allocator_retained_benchmark.mini",
+      "expected_output": "ok"
+    },
+    {
       "name": "mandelbrot",
       "file": "mandelbrot_benchmark.mini",
       "expected_output": "ok"
