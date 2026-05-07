@@ -1,0 +1,21 @@
+import builtins;
+import unicode;
+
+no_export unicode;
+
+class Character {
+    @codepoint : i32
+
+    getter @codepoint
+
+    def init(@codepoint : i32) {}
+
+    def ==(other : Character) -> Bool {
+        return @codepoint == other.codepoint();
+    }
+    def n_bytes() -> i32 {
+        width = UTF8.encoded_width(@codepoint);
+        if width == 0 { return 3; } // Use replacement width for invalid codepoints
+        return width;
+    }
+}

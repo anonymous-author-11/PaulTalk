@@ -41,7 +41,8 @@ CORE_IMPORT_LINE_OFFSET = len(CORE_IMPORT_PREFIX.splitlines())
 CORE_BOOTSTRAP_FILES = (
     "builtins.mini", "iteration.mini", "collection.mini", "writer.mini",
     "list.mini", "stack.mini", "range.mini", "indexable.mini", "math.mini",
-    "ascii.mini", "unicode.mini", "peek.mini", "stacktrace.mini", "core.mini"
+    "ascii.mini", "unicode.mini", "peek.mini", "stacktrace.mini",
+    "char.mini","string.mini","exception.mini","slice.mini","core.mini"
 )
 
 def import_roots(from_path) -> list[Path]:
