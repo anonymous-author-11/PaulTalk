@@ -33,6 +33,7 @@ DEBUGIR_PATH = DIST_FOLDER / "executables/debugir.exe"
 STANDALONE_OPT_PATH = DIST_FOLDER / "executables/standalone-opt.exe"
 MLIR_OPT_PATH = DIST_FOLDER / "executables/mlir-opt.exe"
 MLIR_TRANSLATE_PATH = DIST_FOLDER / "executables/mlir-translate.exe"
+LLVM_AR_PATH = DIST_FOLDER / "executables/llvm-ar.exe"
 LLVM_EXTRACT_PATH = DIST_FOLDER / "executables/llvm-extract.exe"
 LLVM_LINK_PATH = DIST_FOLDER / "executables/llvm-link.exe"
 OPT_PATH = DIST_FOLDER / "executables/opt.exe"
@@ -202,6 +203,7 @@ class CompilationJob:
         module_str = self.lower_mlir(modules)
         llvm_string = self.lower_to_llvm(module_str)
         self.make_bitcodes(jobs, llvm_string)
+        self.lto_pre(jobs)
 
     def parse_dependencies(self, jobs):
         # by construction, all of these asts should already be in the parsed cache
@@ -304,6 +306,31 @@ class CompilationJob:
         self.record_time("lower_to_llvm")
         self.time_printer.print(f'Time to generate bitcodes: {self.time_between("after_mlir_translate", "lower_to_llvm")} seconds')
 
+    def lto_pre(self, jobs):
+
+        self.record_time("before_lto_pre")
+
+        # Run the regular O3 pipeline, which is strictly better than the lto<O3> pipeline
+        passes = f"--lto-newpm-passes=default<O3>"
+        to_optimize = [f"{job.input.bc_file}" for job in jobs]
+        all_dependencies = [str(SourceFile(path, self.build).bc_file) for path in self.dependencies.list]
+        already_optimized = [bc_file for bc_file in all_dependencies if bc_file not in to_optimize]
+
+        singles = [f"--thinlto-single-module={path}" for path in to_optimize]
+
+        # optimize all the files in parallel and save the optimized versions
+        lto_all_files = (
+            LLD_PATH, "-flavor", "gnu", self.build.utils_bc,
+            *to_optimize, *singles, *already_optimized,
+            "--lto=thin", passes, "--save-temps=opt", "--lto-emit-llvm",
+            "-o", self.build.dir / "dumb_lto.bc", *self.settings.lto_options
+        )
+
+        subprocess.run(lto_all_files, cwd=self.build.dir, check=True)
+
+        self.record_time("after_lto_pre")
+        self.time_printer.print(f'Time to LTO bitcodes: {self.time_between("before_lto_pre", "after_lto_pre")} seconds')
+
     def pre_link_opt(self, job, section):
 
         # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
@@ -335,7 +362,8 @@ class CompilationJob:
 
         self.record_time("before_llvm_link")
 
-        link_utils = (LLVM_LINK_PATH, UTILS_PATH, CORO_RUNTIME_PATH, OS_UTILS_PATH, self.input.bc_file, LAYOUT_PATH, "-S")
+        input_optimized = self.build.dir / "bitcodes" / f"{self.input.bc_file.stem}.bc.4.opt.bc"
+        link_utils = (LLVM_LINK_PATH, UTILS_PATH, CORO_RUNTIME_PATH, OS_UTILS_PATH, input_optimized, LAYOUT_PATH, "-S")
         utils_ir = run_checked(link_utils)
 
         # use the correct main function
@@ -389,26 +417,68 @@ class CompilationJob:
 
         thin_paths = [str(SourceFile(path, self.build).bc_file) for path in self.dependencies.list]
         out_thin_path = self.build.dir / "out_thin.bc"
-        # attributor is a module-level pass, so this pipeline runs it twice
-        passes = f"--lto-newpm-passes=lto-pre-link<O3>,default<O3>"
-        lto_file = self.build.dir / "out_lto.bc"
-        full_lto = (
-            LLD_PATH, "-flavor", "gnu", out_thin_path,
-            "--start-lib", *thin_paths, "--end-lib",
-            "--lto=full", passes, "--lto-emit-llvm",
-            "-o", lto_file, *self.settings.lto_options
-        )
-        subprocess.run(full_lto, cwd=self.build.dir, check=True)
+        self.build_parameterizations_bitcode(thin_paths)
 
-        # Need to hoist allocas created with heap2stack
-        optimized_ir = run_checked((OPT_PATH, lto_file, "--bugpoint-enable-legacy-pm", "--alloca-hoisting", "-S", "--strip-debug"))
-        optimized_ir = remove_invariant_on_globals(optimized_ir)
-        optimized_ir = clean_lto_metadata(optimized_ir)
+        # Run the regular O3 pipeline
+        passes = f"--lto-newpm-passes=default<O3>"
+        opt_paths = [f"{path}.4.opt.bc" for path in thin_paths]
+        opt_paths = [path for path in opt_paths if Path(path).exists()]
+
+        out2_path = self.build.dir / "out2.lib"
+        if out2_path.exists(): os.remove(out2_path)
+        make_archive = (LLVM_AR_PATH, "cr", out2_path, *opt_paths)
+        run_checked(make_archive)
+        
+        # single-module makes this fast(er)
+        lto_single_module = (
+            LLD_PATH, "-flavor", "gnu", out_thin_path,
+            f"--thinlto-single-module={out_thin_path}",
+            "--start-lib", *thin_paths, "--end-lib",
+            "--lto=thin", passes, "--lto-emit-llvm",
+            "-o", "out_lto.bc", *self.settings.lto_options
+        )
+        subprocess.run(lto_single_module, cwd=self.build.dir, check=True)
+        lto_file = self.build.dir / "out_lto.bc"
+
+        # ThinLTO is basically stupid and doesn't care to import non-static calls
+        # I.e. anything devirtualized is not imported and can't be inlined
+        # So we just run thinLTO again and again until it stops changing
+        # This effectively gets around the bottleneck, though it is hacky
+        ir_len = 0
+        iterations = 0
+        while True:
+            optimized_ir = run_checked((OPT_PATH, lto_file, "-S", "--strip-debug"))
+            optimized_ir = remove_invariant_on_globals(optimized_ir)
+            optimized_ir = clean_lto_metadata(optimized_ir)
+            new_len = len(optimized_ir)
+            if new_len == ir_len: break
+            ir_len = len(optimized_ir)
+            hoist_allocas = f"{OPT_PATH} --bugpoint-enable-legacy-pm --alloca-hoisting"
+            inject_lto_metadata = f"{OPT_PATH} --thinlto-bc --unified-lto -o {out_thin_path}"
+            run_checked(f"{hoist_allocas} | {inject_lto_metadata}", input_text=optimized_ir, shell=True)
+            subprocess.run(lto_single_module, cwd=self.build.dir, check=True)
+            if self.settings.debug_mode: break
+            if iterations == 100: raise Exception("too many iterations")
+            iterations = iterations + 1
+
+        self.status_printer.print(f"did {iterations} iterations of lto")
+
         self.write_side_ir(self.build.dir / "after_lto.ll", optimized_ir)
+
+        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", out2_path, "--only-needed"), input_text=optimized_ir)
+        optimized_ir = run_checked((LLVM_LINK_PATH, "-S", "-", self.build.params_bc, "--only-needed"), input_text=optimized_ir)
+        self.write_side_ir(self.build.dir / "after_link.ll", optimized_ir)
 
         # Remove a hell of a lot of binary size
         if self.output_path and self.output_path.suffix == ".exe":
-            optimized_ir = remove_fluff(optimized_ir, [self.build.dir / "after_lto.ll"])
+            optimized_ir = remove_fluff(optimized_ir, [self.build.dir / "after_link.ll"])
+
+        # Finishing opt pass
+        if not self.settings.debug_mode:
+            optimized_ir = run_checked(self.settings.opt_pipeline, input_text=optimized_ir, shell=True)
+            optimized_ir = remove_invariant_on_globals(optimized_ir)
+            self.write_side_ir(self.build.out_optimized, optimized_ir)
+            optimized_ir = remove_fluff(optimized_ir, [self.build.out_optimized])
 
         self.write_side_ir(self.build.out_optimized, optimized_ir)
 
@@ -416,6 +486,13 @@ class CompilationJob:
         self.time_printer.print(f'Time to lto: {self.time_between("after_llvm_link", "after_lto")} seconds')
 
         return optimized_ir
+
+    # Extract all the global constant parameterizations into one file to link back in
+    def build_parameterizations_bitcode(self, bitcode_paths):
+        big_link = shell_join((LLVM_LINK_PATH, *bitcode_paths, "-o", "-"))
+        extract = f"{LLVM_EXTRACT_PATH} -S -rglob=_parameterization_.* -o {self.build.params_bc}"
+        subprocess.run(f"{big_link} | {extract}", shell=True)
+        refresh_bc_metadata(self.build.params_bc)
 
     def record_all_passes(self):
         #clang = "clang -x ir out_linked.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
@@ -513,17 +590,14 @@ class OptimizationSettings:
         passes = f"--passes=hotcoldsplit,default<O3>"
 
         opt = (OPT_PATH, "-", passes, *settings)
-        hoist_allocas_bitcode = (OPT_PATH, "-", "--bugpoint-enable-legacy-pm", "--alloca-hoisting")
-        hoist_allocas_textual = (OPT_PATH, "-S", "-", "--bugpoint-enable-legacy-pm", "--alloca-hoisting")
+        hoist_allocas = (OPT_PATH, "-S", "-", "--bugpoint-enable-legacy-pm", "--alloca-hoisting")
 
         # We want to hoist allocas after heap2stack, as h2s will create allocas in non-entry blocks
         # We can't express this as a single -passes= pipeline because --alloca-hoisting
         # is legacy-PM-only, while --passes= uses the new PM. Run as one shell pipeline.
         pipeline = " | ".join((
             shell_join(opt),
-            shell_join(hoist_allocas_bitcode),
-            shell_join(opt),
-            shell_join(hoist_allocas_textual),
+            shell_join(hoist_allocas),
         ))
 
         return pipeline
@@ -632,6 +706,10 @@ class BuildDirectory:
     @property
     def opt_passes(self):
         return self.dir / "opt_passes.txt"
+
+    @property
+    def params_bc(self):
+        return self.dir / "parameterizations.bc"
 
 class Dependencies:
     graph: nx.DiGraph
@@ -944,6 +1022,10 @@ def clean_lto_metadata(llvm_string):
         print("\n".join(llvm_string.splitlines()[-40:]))
         raise Exception()
     return llvm_string
+
+def refresh_bc_metadata(bc_file):
+    ir_string = run_checked((OPT_PATH, bc_file, "-S", "--bugpoint-enable-legacy-pm", "--alloca-hoisting", "-o", "-"))
+    run_checked((OPT_PATH, "-", "-o", bc_file, "--thinlto-bc", "--unified-lto"), input_text=clean_lto_metadata(ir_string))
 
 def _make_gen(reader):
     b = reader(1024 * 1024)
