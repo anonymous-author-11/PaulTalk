@@ -1,5 +1,4 @@
 import builtins;
-import iteration;
 import collection;
 import writer;
 import list;
@@ -11,9 +10,8 @@ import slice;
 import exception;
 import char;
 
-no_export slice;
-no_export exception;
-no_export unicode;
+no_export slice, exception, unicode, ascii;
+no_export SplitString, SplitStringIterator, StringByteWriter, StringCodepointWriter;
 
 class Representable {
     def repr() -> String { return "Object"; }
@@ -702,7 +700,7 @@ class StringView {
 
 }
 
-class StringBytesIterator extends ConstantTimeIterator[i8] {
+class StringBytesIterator extends Iterator[i8] {
     @bytes : StringBytes
     @cursor : i32
 
@@ -734,7 +732,7 @@ class StringBytesIterator extends ConstantTimeIterator[i8] {
 
 // Iterator can trust that the source string is valid.
 // Constant-time *with respect to the length of the String*
-class StringCodepointIterator extends ConstantTimeIterator[i32] {
+class StringCodepointIterator extends Iterator[i32] {
     @str : String
     @byte_iterator : StringBytesIterator
     @decoder : ValidUTF8Decoder

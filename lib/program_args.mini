@@ -1,6 +1,8 @@
 import core;
 import io;
 
+no_export argv, argc;
+
 extern def argv() -> Buffer[Buffer[i8]]
 extern def argc() -> i32
 

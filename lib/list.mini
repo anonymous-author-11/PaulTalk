@@ -1,5 +1,5 @@
-import iteration;
 import collection;
+import iteration;
 import writer;
 
 class List[T] extends Collection[T] {

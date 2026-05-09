@@ -5,6 +5,7 @@ import string;
 
 no_export string;
 no_export exception;
+no_export SliceIterator;
 
 // A slice is a constant-length indexable collection
 // It is the lowest-level abstraction over a raw Buffer
@@ -65,12 +66,12 @@ class Slice[T] extends IndexableCollection[i32, T, T] {
             yield(OutOfBounds.new(@length, index));
         }
     } ~> no_alias
-    def iterator() -> ConstantTimeIterator[T] {
+    def iterator() -> Iterator[T] {
         return SliceIterator{self};
     } ~> { ret.slice == self }
 }
 
-class SliceIterator[T] extends ConstantTimeIterator[T] {
+class SliceIterator[T] extends Iterator[T] {
     @slice : Slice[T]
     @length : i32   
     @index : i32

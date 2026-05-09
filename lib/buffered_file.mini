@@ -1,5 +1,7 @@
 import file;
 
+no_export fprintf, fgetc, fgets, ferror, fseek, ftell, fread, fwrite, perror;
+
 extern def fopen(name : Buffer[i8], mode : Buffer[i8]) -> Buffer[i32]
 extern def fprintf(file : Buffer[i32], text : Buffer[i8]) -> i32
 extern def fclose(file : Buffer[i32]) -> i32

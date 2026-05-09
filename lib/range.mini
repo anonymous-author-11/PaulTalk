@@ -1,5 +1,6 @@
-
 import collection;
+
+no_export RangeIterator;
 
 // An *inclusive* range
 // a...b is sugar for Range{a, b}
@@ -27,7 +28,7 @@ class Range extends Collection[i32] {
         return self;
     }
 
-    def iterator() -> RangeIterator {
+    def iterator() -> Iterator[i32] {
         return RangeIterator{@start, @end, @step};
     }
 }

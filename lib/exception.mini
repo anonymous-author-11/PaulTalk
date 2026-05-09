@@ -1,6 +1,8 @@
 import stacktrace;
 import string;
+
 no_export string;
+no_export stacktrace;
 
 class Exception {
     @line_number : i32
@@ -38,9 +40,18 @@ class Exception {
     }
 }
 
+class InvalidUnicodeError extends Exception {
+    def init() {
+        @message = "Invalid unicode sequence encountered.";
+        @line_number = 0;
+        @file_name = "";
+        @stacktrace = Stacktrace{};
+    }
+}
+
 class InvalidUTF8Error extends Exception {
     def init() {
-        @message = "Invalid UTF-8 sequence encountered during string conversion.";
+        @message = "Invalid UTF-8 sequence encountered.";
         @line_number = 0;
         @file_name = "";
         @stacktrace = Stacktrace{};

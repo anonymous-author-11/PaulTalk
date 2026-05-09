@@ -1,5 +1,10 @@
 import string;
 import exception;
 import slice;
-import unicode;
 import stack;
+import iteration;
+import peek;
+import pair;
+
+no_export Enumerator, Enumerated, Mapper, Mapped, Filterer, Filtered, Chainer, Chained;
+no_export Interleaver, Interleaved, Zipper, Zipped, Products, Productizer;

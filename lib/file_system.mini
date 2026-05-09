@@ -2,6 +2,8 @@ import buffered_file;
 import file;
 import path;
 
+no_export fopen, fclose, remove;
+
 class FileSystem {
 
 	def Self.exists(name : Path) -> Bool {

@@ -206,7 +206,7 @@ class SwissStore[K, V, T] extends HashStore[K, V, T] {
         for i in entries_len..capacity { @metadata.[i] = padding(); }
     }
 
-    def iterator() -> SwissStoreIterator[K, V, T] {
+    def iterator() -> Iterator[T] {
         return SwissStoreIterator{self};
     } ~> { ret.store == self }
 
