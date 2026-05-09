@@ -1,0 +1,102 @@
+import builtins;
+import writer;
+import peek;
+import exception;
+import string;
+
+no_export exception;
+no_export string;
+
+class Unicode {
+
+	def Self.is_valid_codepoint(codepoint : i32) -> Bool {
+		if codepoint < 0 or codepoint > 0x10FFFF { return false; }
+		return codepoint < 0xD800 or codepoint > 0xDFFF;
+	}
+
+	def Self.replacement_codepoint() -> i32 {
+        return 0xFFFD as i32;
+    }
+}
+
+class CodepointValidator extends Iterator[i32] {
+    @iterator : Iterator[i32]
+    @replacement_fn : (i32) -> i32
+
+    regions { $elems == @iterator$elems }
+
+    getters @iterator, @replacement_fn
+    setter @replacement_fn
+
+    def Self.lossy(iterator : Iterator[i32]) -> CodepointValidator {
+        replacement_fn = (codepoint : i32) => { Unicode.replacement_codepoint(); };
+        return CodepointValidator{iterator, replacement_fn};
+    } ~> { ret.iterator == iterator }
+
+    def init(@iterator : Iterator[i32]) {
+        @replacement_fn = (codepoint : i32) => {
+            yield(InvalidUnicodeError{});
+            return -1;
+        };
+    }
+
+    def init(@iterator : Iterator[i32], @replacement_fn : (i32) -> i32) {
+    }
+
+    def next() -> i32? {
+        codepoint = @iterator.next();
+        if codepoint is Nil { return nil; }
+        if Unicode.is_valid_codepoint(codepoint) { return codepoint; }
+        return @replacement_fn.call(codepoint);
+    }
+}
+
+class UnicodeEncoder extends Writer[i32] {
+    @writer : Writer[i8]
+    @replacement_fn : (Writer[i8])
+
+    regions { $dest == @writer$dest }
+
+    getter @replacement_fn
+    setter @replacement_fn
+
+    abstract def Self.lossy(writer : Writer[i8]) -> UnicodeEncoder {
+    } ~> { ret.writer == writer }
+
+    // Default is lossless, yield Exception on invalid codepoint
+    def init(@writer : Writer[i8]) {
+        @replacement_fn = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
+    }
+
+    def init(@writer : Writer[i8], @replacement_fn : (Writer[i8])) {
+    }
+
+    // optimization: validator + encoder = encoder
+    def write_from(source : CodepointValidator, max_elems : i32) -> i32 {
+        iterator = source.iterator();
+        n_written = 0;
+        codepoint = iterator.next();
+        while codepoint is i32 and n_written < max_elems {
+            if not Unicode.is_valid_codepoint(codepoint) {
+            	codepoint = source.replacement_fn().call(codepoint);
+            }
+            self.write(codepoint);
+            n_written = n_written + 1;
+            codepoint = iterator.next();
+        }
+        return n_written;
+    } ~> no_alias
+
+}
+
+class UnicodeDecoder extends Iterator[i32] {
+    @peeker : Peeker[i8]
+
+    regions { $elems == @peeker$elems }
+
+    getters @peeker
+
+    def init(iterator : Iterator[i8]) {
+        @peeker = iterator into Peeker;
+    }
+}
