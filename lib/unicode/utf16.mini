@@ -1,0 +1,138 @@
+import builtins;
+import writer;
+import peek;
+import exception;
+import range;
+import string;
+import unicode;
+
+no_export exception;
+no_export string;
+
+class UTF16Encoder extends UnicodeEncoder {
+    @is_little_endian : Bool
+
+    // Default is lossless, yield Exception on invalid codepoint
+    def init(@writer : Writer[i8]) {
+        @replacement_fn = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
+    }
+
+    def init(@writer : Writer[i8], @replacement_fn : (Writer[i8])) {
+    }
+
+    def init(@writer : Writer[i8], @is_little_endian : Bool) {
+    	@replacement_fn = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
+    }
+
+    // Helper to write a 16-bit unit as 2 bytes
+    def write_unit(unit : i16) {
+        if @is_little_endian {
+            @writer.write((unit bit_and 0xFF) as i8);
+            @writer.write(((unit >> 8) bit_and 0xFF) as i8);
+            return;
+        }
+        @writer.write(((unit >> 8) bit_and 0xFF) as i8);
+        @writer.write((unit bit_and 0xFF) as i8);
+    }
+
+    def write(value : i32) {
+    	// BMP character
+        if value < 0x10000 {
+            self.write_unit(value as i16);
+            return;
+        }
+        // Supplementary character -> Surrogate Pair
+        // Formula: cp' = cp - 0x10000
+        // High = 0xD800 + (cp' >> 10)
+        // Low  = 0xDC00 + (cp' bit_and 0x3FF)
+        cp_prime = value - 0x10000;
+        high = (0xD800 + (cp_prime >> 10)) as i16;
+        low = (0xDC00 + (cp_prime bit_and 0x3FF)) as i16;
+        self.write_unit(high);
+        self.write_unit(low);
+    }
+}
+
+// Base class assumes the stream is valid UTF-16. 
+// It implements the decoding algorithm but skips validation checks.
+class ValidUTF16Decoder extends UnicodeDecoder {
+    @is_little_endian : Bool
+    @pending_unit : i16?
+
+    def init(iterator : Iterator[i8], @is_little_endian : Bool) {
+        @peeker = iterator into Peeker; // Required by base class, but we only use .next()
+        @pending_unit = nil;
+    }
+
+    def read_unit() -> i16? {
+        b1 = @peeker.next();
+        if b1 is Nil { return nil; }
+        b2 = @peeker.next();
+        if b2 is Nil { return nil; } // Odd byte stream ends
+        if @is_little_endian { return ((b2 as i16) << 8) bit_or (b1 as i16); }
+        return ((b1 as i16) << 8) bit_or (b2 as i16);
+    }
+
+    def next() -> i32? {
+        unit = nil;
+        if @pending_unit is i16 {
+            unit = @pending_unit;
+            @pending_unit = nil;
+        } else {
+            unit = self.read_unit();
+        }
+
+        if unit is Nil { return nil; }
+
+        // Hook: Check for standalone low surrogate or non-character
+        if self.invalid_standalone_unit(unit) { return self.bad_result(unit); }
+
+        // Low Surrogate
+        if unit < 0xD800 or unit > 0xDBFF { return unit as i32; }
+
+        // High Surrogate (U+D800..U+DBFF)
+        next_unit = self.read_unit();
+        if next_unit is Nil { return self.bad_result(unit); } // Truncated stream
+
+        // Hook: Check if followed by valid low surrogate
+        if self.invalid_low_surrogate(next_unit) {
+            @pending_unit = next_unit; // Buffer the read unit
+            return self.bad_result(unit);
+        }
+
+        // Decode pair
+        high = (unit - 0xD800) as i32;
+        low = (next_unit - 0xDC00) as i32;
+        return 0x10000 + (high << 10) + low;
+    }
+
+    // --- Template Hooks ---
+    // Valid data assumption: these always return false (no errors)
+    def invalid_standalone_unit(unit : i16) -> Bool { return false; }
+    def invalid_low_surrogate(next_unit : i16) -> Bool { return false; }
+    def bad_result(unit : i16) -> i32? { return nil; }
+}
+
+// Subclass performs strict validation and error handling
+class UTF16Decoder extends ValidUTF16Decoder {
+    @replacement_fn : (i16) -> i32
+
+    def init(iterator : Iterator[i8], @is_little_endian : Bool) {
+        @replacement_fn = (unit : i16) => { yield(InvalidUTF16Error{}); return 0xFFFD; };
+    }
+
+    // Override hooks to add validation logic
+    def invalid_standalone_unit(unit : i16) -> Bool {
+        // Standalone Low Surrogate is invalid
+        return unit >= 0xDC00 and unit <= 0xDFFF;
+    }
+
+    def invalid_low_surrogate(next_unit : i16) -> Bool {
+        // High surrogate must be followed by low surrogate
+        return next_unit < 0xDC00 or next_unit > 0xDFFF;
+    }
+
+    def bad_result(unit : i16) -> i32? {
+        return @replacement_fn.call(unit);
+    }
+}
