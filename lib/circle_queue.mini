@@ -1,5 +1,7 @@
 import queue;
 
+no_export CircleQueueIterator;
+
 class CircleQueue[T] extends Queue[T], IndexableCollection[i32, T, T] {
     @buffer : Buffer[T]
     @head : i32
@@ -105,12 +107,12 @@ class CircleQueue[T] extends Queue[T], IndexableCollection[i32, T, T] {
         @capacity = new_capacity;
     } ~> no_alias
 
-    def iterator() -> ConstantTimeIterator[T] {
+    def iterator() -> Iterator[T] {
         return CircleQueueIterator{self};
     }
 }
 
-class CircleQueueIterator[T] extends ConstantTimeIterator[T] {
+class CircleQueueIterator[T] extends Iterator[T] {
     @queue : CircleQueue[T]
     @index : i32
 

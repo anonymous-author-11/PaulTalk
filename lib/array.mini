@@ -155,7 +155,7 @@ class Array[T] extends
         @buffer.[index] = value;
     } ~> { $elems holds value }
     
-    def iterator() -> ConstantTimeIterator[T] {
+    def iterator() -> Iterator[T] {
     	return ArrayIterator{self};
     }
     def repr() -> String {
@@ -163,7 +163,7 @@ class Array[T] extends
     }
 }
 
-class ArrayIterator[T] extends ConstantTimeIterator[T] {
+class ArrayIterator[T] extends Iterator[T] {
 	@array : Array[T]
 	@index : i32
 

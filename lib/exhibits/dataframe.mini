@@ -57,7 +57,7 @@ class Col[T] extends Column, IndexableCollection[i32, T, T] {
 		return @array.size();
 	}
 
-	def iterator() -> ConstantTimeIterator[T] {
+	def iterator() -> Iterator[T] {
 		return @array.iterator();
 	}
 
