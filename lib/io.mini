@@ -7,6 +7,7 @@ class IO {
     def Self.print(x : i8) {
         print(x);
     }
+    def Self.print(x : i16) { print(x as i32); }
     def Self.print(x : i32) {
         print(x);
     }
@@ -16,6 +17,7 @@ class IO {
     def Self.print(x : u32) {
         print(x as i64);
     }
+    def Self.print(x : u16) { print(x as i32); }
     def Self.print(x : f64) {
         print(x);
     }

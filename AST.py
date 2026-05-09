@@ -31,7 +31,7 @@ from qualified_names import (
 )
 
 silent = [False]
-INTEGER_RECEIVERS = {"i8": 8, "i16": 16, "i32": 32, "i64": 64, "i128": 128}
+INTEGER_RECEIVERS = {"i8":Integer(8), "i16":Integer(16), "i32":Integer(32), "i64":Integer(64), "i128":Integer(128), "u16":Integer.unsigned(16)}
 
 def debug_print(message):
     if silent[0]: return
@@ -2164,9 +2164,9 @@ class DeferredNameAccessCall(Expression):
         if len(parts) != 1:
             return self.qualified_receiver_type(scope, parts)
         name = parts[0]
-        width = INTEGER_RECEIVERS.get(name)
-        if width:
-            return Integer(width)
+        int_type = INTEGER_RECEIVERS.get(name)
+        if int_type:
+            return int_type
         if name == "f64":
             return Float()
         if name == "Coroutine":
@@ -2190,10 +2190,11 @@ class DeferredNameAccessCall(Expression):
         return None
 
     def integer_receiver(self, int_type, method):
+        signed = int_type.signedness.data == Signedness.SIGNED
         if method == "max":
-            return IntegerLiteral(self.info, int_type.value_range()[1] - 1, int_type.bitwidth)
+            return IntegerLiteral(self.info, int_type.value_range()[1] - 1, int_type.bitwidth, signed)
         if method == "min":
-            return IntegerLiteral(self.info, int_type.value_range()[0], int_type.bitwidth)
+            return IntegerLiteral(self.info, int_type.value_range()[0], int_type.bitwidth, signed)
         raise Exception(f"{self.info}: {int_type}.{method} is not a valid builtin class method.")
 
     def float_receiver(self, method):

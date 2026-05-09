@@ -476,6 +476,8 @@ class CSTTransformer(Transformer):
             "i1":Integer(1),
             "u8":Integer(8, Signedness.UNSIGNED),
             "i8":Integer(8),
+            "u16":Integer(16, Signedness.UNSIGNED),
+            "i16":Integer(16),
             "u32":Integer(32, Signedness.UNSIGNED),
             "i32":Integer(32),
             "u64":Integer(64, Signedness.UNSIGNED),
