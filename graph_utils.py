@@ -90,8 +90,8 @@ class DiGraph:
         for cycle_indices in rx.simple_cycles(self._graph):
             yield [self._graph[i] for i in cycle_indices]
 
-    def print(self):
-        for line in generate_network_text(self._graph): print(line)
+    def repr(self):
+        return "\n".join(line for line in generate_network_text(self._graph))
 
 # The glyph classes are framework-agnostic and can be used directly.
 class BaseGlyphs:

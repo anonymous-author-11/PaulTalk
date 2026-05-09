@@ -720,9 +720,8 @@ class CompilationUnit:
     def ensure_acyclic_imports(self, import_info, target):
         dependency_cycle = next(self.export_dependency_graph.simple_cycles(), None)
         if dependency_cycle:
-            print("Dependency graph:")
-            self.export_dependency_graph.print()
-            raise Exception(f"{import_info}: Import of {target} from {import_info.filepath} creates a cycle in the dependency graph.")
+            graph = f"Dependency graph:\n{self.export_dependency_graph.repr()}"
+            raise Exception(f"{import_info}: Import of {target} from {import_info.filepath} creates a cycle in the dependency graph.\n\n{graph}")
 
 @dataclass
 class ScopeExit:
