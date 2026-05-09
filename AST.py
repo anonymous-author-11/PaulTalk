@@ -389,6 +389,7 @@ class Program(BlockNode):
         self.namespace = ProgramNamespace(self)
 
     def codegen(self, scope):
+        scope.comp_unit.repository.codegen_core_prelude_interfaces(scope, self)
         for stmt in self.statements: stmt.codegen(scope)
 
     def interface_codegen(self, scope):
@@ -405,6 +406,7 @@ class Program(BlockNode):
         aliases = (stmt for stmt in self.statements if isinstance(stmt, Alias))
         imports = (stmt for stmt in self.statements if isinstance(stmt, Import))
 
+        scope.comp_unit.repository.add_core_prelude(scope, self)
         for cls in classes: scope.add_class(cls)
         for fn in functions: scope.add_function(fn)
         for imp in imports:
@@ -416,6 +418,7 @@ class Program(BlockNode):
             if not cls._type_env: cls.register_type_env(scope.type_env)
 
     def typeflow(self, scope):
+        scope.comp_unit.dependency_graph.add_node(self.info.filepath.resolve())
         self.name_resolution(scope)
         self.namespace.export_surface(scope)
         for stmt in self.statements:
@@ -5685,14 +5688,7 @@ class Import(Statement):
             return
         surface = self.target.compute_surface(self, scope, False)
         scope.comp_unit.processed_imports.add(self.target)
-        for path in scope.comp_unit.repository.interface_paths(surface):
-            program, sandbox_scope = scope.comp_unit.repository.load_program_context(scope.comp_unit, path)
-            sandbox = Scope()
-            sandbox.adopt_compilation_unit(scope.comp_unit)
-            sandbox.type_env = sandbox_scope.type_env
-            sandbox.type_env.comp_unit = scope.comp_unit
-            program.interface_codegen(sandbox)
-            scope.merge_ops(sandbox)
+        scope.comp_unit.repository.codegen_surface_interfaces(scope, surface)
 
     def interface_codegen(self, scope):
         self.codegen(scope)
