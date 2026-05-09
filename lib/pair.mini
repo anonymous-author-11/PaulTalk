@@ -1,0 +1,17 @@
+import builtins;
+
+class Pair[T, U] {
+	@first : T
+	@second : U
+
+    getters @first, @second
+    setters @first, @second
+
+	def init(@first : T, @second : U) {
+    }
+
+    def swapped() -> Pair[U,T] {
+        return Pair{@second, @first};
+    }
+
+}
