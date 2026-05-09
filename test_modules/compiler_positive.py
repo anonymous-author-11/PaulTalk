@@ -1840,6 +1840,24 @@ class CompilerPositiveTestsMixin:
         expected_output = f"2147483647\n-2147483648\n{float_max_str}\n-{float_max_str}"
         self.run_mini_code(mini_code, expected_output, "number_max_min")
 
+    def test_i16_u16(self):
+        mini_code = """
+            import io;
+
+            signed : i16 = -1234;
+            unsigned : u16 = 65535;
+
+            IO.print(signed);
+            IO.print(unsigned);
+            IO.print(i16.max());
+            IO.print(i16.min());
+            IO.print(u16.max());
+            IO.print(u16.min());
+            IO.print("${signed}:${unsigned}");
+        """
+        expected_output = "-1234\n65535\n32767\n-32768\n65535\n0\n-1234:65535"
+        self.run_mini_code(mini_code, expected_output, "i16_u16")
+
     def test_splat(self):
         mini_code = """
             import io;
