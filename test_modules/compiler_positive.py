@@ -526,8 +526,9 @@ class CompilerPositiveTestsMixin:
                 "folder_index",
                 {
                     "pkg/visible.mini": "def visible() -> i32 { return 1; }\n",
+                    "pkg/hidden.mini": "def hidden() -> i32 { return 2; }\n",
                     "pkg/sub/deep.mini": "def deep() -> i32 { return 2; }\n",
-                    "pkg/index.mini": "import sub.deep;\nexport deep;\n",
+                    "pkg/index.mini": "import visible;\nimport sub.deep;\nexport deep;\n",
                     "main.mini": "import pkg;\nvisible();\ndeep();\n",
                 },
             ),
@@ -535,7 +536,7 @@ class CompilerPositiveTestsMixin:
                 "index_show",
                 {
                     "pkg/visible.mini": "def visible() -> i32 { return 1; }\n",
-                    "pkg/index.mini": "no_export visible;\nexport visible;\n",
+                    "pkg/index.mini": "import visible;\nno_export visible.visible;\nexport visible.visible;\n",
                     "main.mini": "import pkg;\nvisible();\n",
                 },
             ),

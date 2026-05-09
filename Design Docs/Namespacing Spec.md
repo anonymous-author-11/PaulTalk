@@ -139,7 +139,7 @@ To qualify through `inner`, the user must import `inner` directly.
 A folder namespace is not a recursive gateway into the filesystem.
 Its surface is a flat exported surface, just like a file's exported surface.
 
-By default, a folder surface contains:
+When a folder has no `index.mini`, its surface contains:
 
 1. The union of the exported surfaces of its immediate child `.mini` files except `index.mini`
 2. Nothing from recursive descendants
@@ -161,17 +161,16 @@ A folder may contain `index.mini`.
 The visible behavior is that `import foo;` exposes the folder surface, not a
 special child named `index`.
 
-If `index.mini` exists, the folder surface is built in this order:
-
-1. Start with the default folder surface from the immediate child files other than `index.mini`.
-2. Merge in the raw visible surface of `index.mini`.
-3. Apply the `export` / `no_export` declarations written in `index.mini` to that merged folder surface.
+If `index.mini` exists, the folder surface is the exported surface of
+`index.mini`.
+Immediate child files contribute to the folder surface only when `index.mini`
+imports them and leaves their exported entities public.
 
 Consequences:
 
 1. `index.mini` may declare its own top-level classes, functions, and aliases for the enclosing folder surface.
 2. `index.mini` may import recursive descendants and re-export their entities onto the enclosing folder surface.
-3. `index.mini` may hide names that would otherwise be exported by default from immediate child files.
+3. `index.mini` may hide its own visible names with `no_export`.
 4. `foo.index` is not a namespace path unless some separate import explicitly made it one.
 
 Example:
@@ -187,19 +186,20 @@ pkg/
 
 ```mini
 // pkg/index.mini
+import visible;
 import sub.deep;
-no_export hidden;
 export deep;
 ```
 
 Then `import pkg;` exposes `visible` and `deep`, but not `hidden`.
+`hidden.mini` is omitted because `index.mini` does not import it.
 It still does not make `pkg.index.deep` or `pkg.sub.deep` valid namespace paths.
 
 **Export Rules**
 
 Files export their full visible surface by default.
-`index.mini` exports by controlling the enclosing folder surface as described
-above.
+When `index.mini` exists, that file's exported surface is the enclosing folder
+surface.
 
 A file may restrict or extend this with top-of-file declarations:
 
@@ -219,8 +219,8 @@ declarations, then everything else.
 In an ordinary file, the elements of `export` and `no_export` may name only
 top-level entities visible in that file.
 
-In `index.mini`, the elements of `export` and `no_export` may name only
-top-level entities visible on the merged folder boundary surface.
+In `index.mini`, the elements of `export` and `no_export` follow the same rule:
+they may name only top-level entities visible in that file.
 
 Valid targets currently are:
 
@@ -361,5 +361,6 @@ This spec implies these internal shifts:
 3. The parser should produce neutral dotted AST nodes instead of forcing `x.y()` into method-call form immediately.
 4. Name resolution must resolve both unqualified and qualified references in value and type contexts.
 5. File export surfaces are transitive by default.
-6. Folder surfaces are flat and non-recursive by default.
-7. `index.mini` contributes directly to the enclosing folder surface rather than exposing a child namespace named `index`.
+6. Folder surfaces without `index.mini` are flat and non-recursive by default.
+7. `index.mini` replaces the default direct-child folder surface with its own exported surface.
+8. `index.mini` contributes directly to the enclosing folder surface rather than exposing a child namespace named `index`.

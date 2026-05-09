@@ -377,11 +377,11 @@ class CompilerNegativeTestsMixin:
     def test_namespace_folders(self):
         cases = [
             (
-                "index_hide",
+                "index_omit",
                 {
                     "pkg/visible.mini": "def visible() -> i32 { return 1; }\n",
                     "pkg/hidden.mini": "def hidden() -> i32 { return 2; }\n",
-                    "pkg/index.mini": "no_export hidden;\n",
+                    "pkg/index.mini": "import visible;\n",
                     "main.mini": "import pkg;\nvisible();\nhidden();\n",
                 },
                 "Function hidden has not been declared.",
@@ -390,17 +390,18 @@ class CompilerNegativeTestsMixin:
                 "index_ambiguous",
                 {
                     "pkg/a.mini": "def dup() -> i32 { return 1; }\n",
-                    "pkg/index.mini": "no_export dup;\ndef dup() -> i32 { return 2; }\n",
-                    "main.mini": "import pkg;\n",
+                    "pkg/b.mini": "def dup() -> i32 { return 2; }\n",
+                    "pkg/index.mini": "import a;\nimport b;\n",
+                    "main.mini": "import pkg;\nvalue = pkg.dup();\n",
                 },
-                "dup is ambiguous and cannot be exported without qualification.",
+                "ambiguous in Folder namespace pkg.",
             ),
             (
                 "folder_hide",
                 {
                     "pkg/visible.mini": "def visible() -> i32 { return 1; }\n",
                     "pkg/hidden.mini": "def hidden() -> i32 { return 2; }\n",
-                    "pkg/index.mini": "no_export hidden;\n",
+                    "pkg/index.mini": "import visible;\n",
                     "main.mini": "import pkg;\nvalue = pkg.hidden();\n",
                 },
                 "has no exported entity named hidden",

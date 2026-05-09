@@ -12,6 +12,7 @@ from pathlib import Path
 import ast
 from scope import Constraints
 import sys
+from import_resolution import resolve_import_target, source_directories
 
 DIR_PATH = Path(__file__).parent.resolve()
 GRAMMAR_PATH = DIR_PATH / "data_files/grammar.lark"
@@ -33,69 +34,7 @@ def get_parser():
     return get_fresh_parser()
 
 parser = get_parser()
-source_directories = {}
 parsed = {}
-
-CORE_IMPORT_PREFIX = "import core;\n\n"
-CORE_IMPORT_LINE_OFFSET = len(CORE_IMPORT_PREFIX.splitlines())
-CORE_BOOTSTRAP_FILES = (
-    "builtins.mini", "iteration.mini", "collection.mini", "writer.mini",
-    "list.mini", "stack.mini", "range.mini", "indexable.mini", "math.mini",
-    "ascii.mini", "unicode.mini", "peek.mini", "stacktrace.mini",
-    "char.mini","string.mini","exception.mini","slice.mini","core.mini"
-)
-
-def import_roots(from_path) -> list[Path]:
-    local_path = from_path.parent.resolve()
-    extended_sources = {local_path:local_path} | source_directories
-    return [root.resolve() for root in extended_sources.keys()]
-
-def resolve_file_import(file_path: Path, parts: tuple[str, ...], index: int, node_info) -> ImportTarget:
-    if index == len(parts) - 1:
-        return FileImportTarget(file_path.resolve())
-    remaining = parts[index + 1:]
-    if len(remaining) == 1:
-        return EntityImportTarget(file_path.resolve(), remaining[0])
-    raise Exception(f"{node_info}: Imports through file namespaces support only one trailing entity segment for now.")
-
-def resolve_import_in_root(root: Path, parts: tuple[str, ...], node_info) -> ImportTarget | None:
-    current = root
-    index = 0
-    while index < len(parts):
-        name = parts[index]
-        file_path = current / f"{name}.mini"
-        folder_path = current / name
-        has_file = file_path.is_file()
-        has_folder = folder_path.is_dir()
-
-        if has_file and has_folder:
-            raise Exception(f"{node_info}: Import path component {name} is ambiguous because both a file and folder exist.")
-
-        if has_folder:
-            current = folder_path
-            index = index + 1
-            continue
-
-        if has_file:
-            return resolve_file_import(file_path, parts, index, node_info)
-
-        return None
-
-    return FolderImportTarget(current.resolve())
-
-def resolve_import_target(parts: tuple[str, ...], from_path: Path, node_info) -> ImportTarget:
-    matches = []
-    for root in import_roots(from_path):
-        target = resolve_import_in_root(root, parts, node_info)
-        if not target:
-            continue
-        matches.append(target)
-    if len(matches) == 0:
-        raise Exception(f"{node_info}: Could not find import {'.'.join(parts)} in available source directories")
-    unique_matches = set(matches)
-    if len(unique_matches) > 1:
-        raise Exception(f"{node_info}: Import {'.'.join(parts)} is ambiguous across available source directories")
-    return next(iter(unique_matches))
 
 def make_qualified_type(name: QualifiedName, file_path: Path, types=None):
     return QualifiedType.make(file_path, name.parts, types)
@@ -108,24 +47,21 @@ def is_token_type(value, token_type: str) -> bool:
 
 def parse(file_path) -> AST:
     file_path = Path(file_path).resolve()
-    line_offset = 0 if file_path.name in CORE_BOOTSTRAP_FILES else CORE_IMPORT_LINE_OFFSET
     try:
         if file_path in parsed: return (parsed[file_path])
         with open(file_path, encoding='utf-8') as f: import_text = f.read()
 
-        if line_offset: import_text = CORE_IMPORT_PREFIX + import_text
-
         program = parser.parse(import_text)
-        program = CSTTransformer(file_path, line_offset).transform(program)
+        program = CSTTransformer(file_path).transform(program)
         parsed[file_path] = program
         return (program)
     except UnexpectedToken as e:
-        error_message = format_parser_error(e, file_path, line_offset)
+        error_message = format_parser_error(e, file_path)
         raise Exception(f"Parsing Error:\n\n{error_message}") from None
 
-def format_parser_error(exc: UnexpectedToken, file_path: Path, line_offset: int) -> str:
+def format_parser_error(exc: UnexpectedToken, file_path: Path) -> str:
     """Formats a Lark UnexpectedToken exception into a user-friendly error message."""
-    line = source_line_number(exc, line_offset)
+    line = source_line_number(exc)
     column = exc.column
     unexpected_token = exc.token.value
     expected_tokens = ", ".join(exc.expected) # Join expected tokens for readability
@@ -136,8 +72,8 @@ def format_parser_error(exc: UnexpectedToken, file_path: Path, line_offset: int)
 
     return error_message
 
-def source_line_number(token, line_offset: int):
-    return token.line - line_offset
+def source_line_number(token):
+    return token.line
 
 @dataclass(frozen=True)
 class PostfixChain:
@@ -147,13 +83,12 @@ class PostfixChain:
 @v_args(inline=True)
 class CSTTransformer(Transformer):
 
-    def __init__(self, file_path, line_offset: int):
+    def __init__(self, file_path):
         super().__init__()
         self.file_path = file_path
-        self.line_offset = line_offset
 
     def line_number(self, token):
-        return source_line_number(token, self.line_offset)
+        return source_line_number(token)
     
     def start(self, *statements):
         node_info = NodeInfo(None, self.file_path, 0)

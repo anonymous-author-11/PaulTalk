@@ -1,8 +1,16 @@
+from dataclasses import dataclass
 from pathlib import Path
 
 from export_surface import ExportSurface, ResolvedAliasExport, ResolvedClassExport, ResolvedFunctionExport
 from hi import Buffer, Coroutine, FatPtr, Function, Intersection, NoneAttr, Tuple, TypeParameter, Union
+from import_resolution import resolve_import_target
 from scope import Scope
+
+CORE_PRELUDE = ("core",)
+
+@dataclass
+class ImplicitImport:
+    info: object
 
 
 class ProgramRepository:
@@ -11,6 +19,77 @@ class ProgramRepository:
         self.parse_file = parse_file
         self.import_programs = {}
         self.import_surfaces = {}
+        self.core_closures = {}
+
+    def core_prelude_target(self, node_info):
+        return resolve_import_target(CORE_PRELUDE, node_info.filepath, node_info)
+
+    def folder_child_paths(self, folder_path: Path):
+        return [path.resolve() for path in sorted(folder_path.glob("*.mini")) if path.name != "index.mini"]
+
+    def folder_index_path(self, folder_path: Path):
+        index_path = folder_path / "index.mini"
+        if index_path.exists(): return index_path.resolve()
+        return None
+
+    def folder_source_paths(self, folder_path: Path):
+        index_path = self.folder_index_path(folder_path)
+        if index_path: return [index_path]
+        return self.folder_child_paths(folder_path)
+
+    def target_source_paths(self, target):
+        path = target.path.resolve()
+        if not path.is_dir(): return [path]
+        return self.folder_source_paths(path)
+
+    def import_closure(self, target):
+        seen = set()
+        pending = self.target_source_paths(target)
+        while pending:
+            path = pending.pop()
+            if path in seen: continue
+            seen.add(path)
+            program = self.parse_file(path)
+            for imp in program.namespace.imports():
+                pending.extend(self.target_source_paths(imp.target))
+        return seen
+
+    def core_closure(self, target):
+        if target not in self.core_closures:
+            self.core_closures[target] = self.import_closure(target)
+        return self.core_closures[target]
+
+    def applies_core_prelude(self, program):
+        target = self.core_prelude_target(program.info)
+        return program.info.filepath.resolve() not in self.core_closure(target)
+
+    def core_prelude_surface(self, comp_unit, node_info):
+        target = self.core_prelude_target(node_info)
+        scope = Scope()
+        scope.adopt_compilation_unit(comp_unit)
+        return target.compute_surface(ImplicitImport(node_info), scope, False)
+
+    def add_core_prelude(self, scope, program):
+        if not self.applies_core_prelude(program): return
+        surface = self.core_prelude_surface(scope.comp_unit, program.info)
+        scope.add_surface(surface, program.namespace.local_names())
+
+    def codegen_core_prelude_interfaces(self, scope, program):
+        if not self.applies_core_prelude(program): return
+        surface = self.core_prelude_surface(scope.comp_unit, program.info)
+        self.codegen_surface_interfaces(scope, surface)
+
+    def codegen_surface_interfaces(self, scope, surface, excluded_paths=None):
+        excluded = set() if excluded_paths is None else excluded_paths
+        for path in self.interface_paths(surface):
+            if path in excluded: continue
+            program, sandbox_scope = self.load_program_context(scope.comp_unit, path)
+            sandbox = Scope()
+            sandbox.adopt_compilation_unit(scope.comp_unit)
+            sandbox.type_env = sandbox_scope.type_env
+            sandbox.type_env.comp_unit = scope.comp_unit
+            program.interface_codegen(sandbox)
+            scope.merge_ops(sandbox)
 
     def remember_program(self, program, scope):
         self.import_programs[program.info.filepath.resolve()] = (program, scope)
@@ -141,25 +220,22 @@ class ProgramRepository:
 
     def folder_export_surface(self, comp_unit, folder_path: Path, import_info=None, export_dependency=True):
         resolved_folder = folder_path.resolve()
-        child_files = [path.resolve() for path in sorted(resolved_folder.glob("*.mini")) if path.name != "index.mini"]
-        index_path = resolved_folder / "index.mini"
-        replay_paths = child_files + ([index_path.resolve()] if index_path.exists() else [])
-        comp_unit.record_import_dependencies(import_info, replay_paths, resolved_folder, export_dependency)
+        index_path = self.folder_index_path(resolved_folder)
+        source_paths = self.folder_source_paths(resolved_folder)
+        comp_unit.record_import_dependencies(import_info, source_paths, resolved_folder, export_dependency)
         cache_key = ("folder", resolved_folder)
         if cache_key in self.import_surfaces:
             return self.import_surfaces[cache_key]
 
-        surface = ExportSurface()
-        for filepath in child_files:
-            surface.merge(self.file_export_surface(comp_unit, filepath))
-        if not index_path.exists():
-            surface.validate_kinds(import_info or resolved_folder.name, f"Folder namespace {resolved_folder.name}")
+        if index_path:
+            index_program, index_scope = self.load_program_context(comp_unit, index_path)
+            surface = self.program_surface(comp_unit, index_program, index_scope.type_env)
             self.import_surfaces[cache_key] = surface
             return surface
 
-        index_program, index_scope = self.load_program_context(comp_unit, index_path.resolve())
-        surface.merge(self.program_surface(comp_unit, index_program, index_scope.type_env, raw=True))
-        index_program.namespace.apply_visibility_controls(surface, index_scope)
+        surface = ExportSurface()
+        for filepath in source_paths:
+            surface.merge(self.file_export_surface(comp_unit, filepath))
         surface.validate_kinds(import_info or resolved_folder.name, f"Folder namespace {resolved_folder.name}")
         self.import_surfaces[cache_key] = surface
         return surface
