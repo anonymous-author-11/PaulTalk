@@ -22,6 +22,9 @@ class DiGraph:
             self._node_to_idx[node] = idx
         return self._node_to_idx[node]
 
+    def add_node(self, node):
+        self._get_or_add_node(node)
+
     def add_edge(self, u, v):
         """
         Mirrors networkx.DiGraph.add_edge(u, v).
@@ -47,7 +50,8 @@ class DiGraph:
             sorted(component, key=lambda i: str(self._graph[i]))
             for component in rx.strongly_connected_components(self._graph)
         ]
-        components.sort(key=lambda component: str(self._graph[component[0]]))
+        component_key = lambda component: "\0".join(str(self._graph[i]) for i in component)
+        components.sort(key=component_key)
         component_index = {node: i for i, component in enumerate(components) for node in component}
         condensed = rx.PyDiGraph()
         for component in components: condensed.add_node(component)
@@ -56,7 +60,8 @@ class DiGraph:
             right = component_index[v]
             if left == right: continue
             condensed.add_edge(left, right, None)
-        return [node for i in rx.topological_sort(condensed) for node in condensed[i]]
+        sorted_components = rx.lexicographical_topological_sort(condensed, key=component_key)
+        return [node for component in sorted_components for node in component]
 
     def ancestors(self, node):
         """
