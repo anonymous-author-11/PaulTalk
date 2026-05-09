@@ -737,9 +737,16 @@ TODO:
 	- my_array : Array[Operation] = [Addition{}, Multiplication{}] [check!]
 	- my_array = [Addition{}, Multiplication{}] as Array[Operation] [check!]
 
+- Make sure optimizer can remove trampoline setup calls
+- Add super() initialization as a feature
+	- Use default MRO
+- Add no_export to the syntax highlighter
+- A fmt module with formatters extending Writer
+- Skip snprintf in interpolations with only string-typed arguments
+- Write a subprocessing module
 - Allow parameter names to differ in same-arity overloads?
 - Allow same syntax for tuple literals
-- We should probably move some uses of llvm.invariant.start to use invariant loads instead
+- Move uses of llvm.invariant.start on vptrs to use invariant loads instead
 - Function calls don't pass parameterizations
 
 - Better instrinsics
@@ -844,14 +851,17 @@ TODO:
 	- Constructing an instance of Self
 	- Casting to Self
 	- Class method dispatch on Self
-	- Does Self need to be passed into class methods?
+	- Does Self need to be passed into classmethods?
 - Add "in" infix operator to desugar to .contains
 
 - Should self even point to virtual regions if they aren't identified with a field?
+	- This is what is preventing me from refactoring Iterable to have an $iterator region
+
 - Region runtime has the potential to make programs faster
 	- Realloc for contiguous collections
 	- Cache locality: used-together objects allocated together
 	- Even just reusing garbage memory will improve locality
+	- We need a memory-focused benchmark
 
 - Consider To[T] as a builtin type
 	- Auto-casts passed arguments using 'into'

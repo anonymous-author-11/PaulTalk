@@ -3,6 +3,7 @@ source_filename = "UtilsModule"
 
 !llvm.module.flags = !{!0}
 !0 = !{i32 2, !"Debug Info Version", i32 3}
+!1 = !{}
 
 ; External function declarations
 declare i32 @printf(ptr, ...)
@@ -52,7 +53,7 @@ declare ptr @coroutine_create(ptr, ptr)
 declare void @arg_passer(ptr)
 
 ; An OS-agnostic API to make trampoline code executable
-declare void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind willreturn memory(none, inaccessiblemem: readwrite)
 
 declare i64 @capture_backtrace(i64, ptr)
 
@@ -61,6 +62,11 @@ declare void @print_backtrace(ptr, i64)
 declare i64 @clock()
 
 declare void @GC_enable_incremental()
+
+define ptr @invariant_load(ptr %ptr) alwaysinline {
+  %result = load ptr, ptr %ptr, !invariant.load !1
+  ret ptr %result
+}
 
 define noalias ptr @bump_malloc_wrapper(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) memory(none, argmem: readwrite, inaccessiblemem: readwrite) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
   ;%result = tail call noalias ptr @calloc(i64 noundef %size, i64 1)
@@ -263,7 +269,7 @@ define void @setup_landing_pad(i32 %argc, ptr %argv) {
   call void @os_specific_setup()
   store i32 %argc, ptr @__global_argc
   store ptr %argv, ptr @__global_argv
-  call void @GC_enable_incremental()
+  ;call void @GC_enable_incremental()
   %region = call noalias ptr @virtual_reserve(i64 5368709120) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   store ptr %region, ptr @current_ptr
   store ptr %region, ptr @committed_ptr

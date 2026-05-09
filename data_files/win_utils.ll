@@ -2,8 +2,8 @@
 ; Windows-specific utility functions
 
 declare ptr @VirtualAlloc(ptr, i64, i32, i32) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
-declare i32 @VirtualFree(ptr allocptr nocapture noundef, i64, i32) mustprogress nounwind willreturn allockind("free") memory(argmem: readwrite, inaccessiblemem: readwrite)
-declare i32 @VirtualProtect(ptr, i64, i32, ptr) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare i32 @VirtualFree(ptr allocptr nocapture noundef, i64, i32) mustprogress nounwind willreturn allockind("free") memory(none, inaccessiblemem: readwrite, inaccessiblemem: readwrite)
+declare i32 @VirtualProtect(ptr, i64, i32, ptr) mustprogress nocallback nofree nosync nounwind willreturn memory(none, inaccessiblemem: readwrite)
 
 ; Define an OS-agnostic wrapper around VirtualAlloc(MEM_RESERVE)
 ; MEM_RESERVE: 8192, MEM_COMMIT: 4096, (MEM_RESERVE | MEM_COMMIT): 12288
@@ -21,9 +21,9 @@ define void @virtual_commit(ptr %allocation, i64 %size) optnone noinline {
 }
 
 ; Define an OS-agnostic wrapper around VirtualProtect
-define void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite) {
+define void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind willreturn memory(none, inaccessiblemem: readwrite) {
   %oldProtect = alloca i32
-  %result = call i32 @VirtualProtect(ptr %tramp, i64 24, i32 64, ptr %oldProtect)
+  %result = call i32 @VirtualProtect(ptr %tramp, i64 24, i32 64, ptr %oldProtect) memory(none, inaccessiblemem: readwrite)
   ret void
 }
 

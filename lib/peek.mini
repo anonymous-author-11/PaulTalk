@@ -6,7 +6,7 @@ class Peeker[T] extends Iterator[T] {
 
     regions {
         $elems == @iterator$elems,
-        @peeker holds $elems,
+        @peeked holds $elems,
         @iterator holds @peeked
     }
 
