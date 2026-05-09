@@ -4,8 +4,10 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
-from parser import parse
-from ptalk_compile import compiler_driver_main
+from AST import AST, FileImportTarget, silent
+from parser import parse, resolve_import_target, source_directories
+from ptalk_compile import add_source_directories, compiler_driver_main
+from program_repository import ProgramRepository
 from .base_case import CompilerTestCase
 
 class ParserContractTests(unittest.TestCase):
@@ -75,6 +77,30 @@ class ParserContractTests(unittest.TestCase):
         finally:
             shutil.rmtree(root, ignore_errors=True)
 
+    def _assert_local_file_precedence(self, root: Path):
+        source_root = root / "lib"
+        folder = source_root / "iteration"
+        folder.mkdir(parents=True)
+        import_file = folder / "iteration.mini"
+        from_file = folder / "collection.mini"
+        import_file.write_text("", encoding="utf-8")
+        from_file.write_text("", encoding="utf-8")
+        source_directories[source_root.resolve()] = source_root.resolve()
+        target = resolve_import_target(("iteration",), from_file, "debug")
+        self.assertIsInstance(target, FileImportTarget)
+        self.assertEqual(target.path, import_file.resolve())
+
+    def test_local_file_precedes_parent_folder(self):
+        root = Path(tempfile.mkdtemp())
+        old_sources = source_directories.copy()
+        source_directories.clear()
+        try:
+            self._assert_local_file_precedence(root)
+        finally:
+            shutil.rmtree(root, ignore_errors=True)
+            source_directories.clear()
+            source_directories.update(old_sources)
+
 class CompilerCliContractTests(CompilerTestCase):
 
     def test_cli_rejects_non_mini_input(self):
@@ -130,6 +156,69 @@ class DependencyCacheTests(CompilerTestCase):
             "--no-timings",
         ]
         subprocess.run(cmd, check=True, capture_output=True, text=True, encoding="utf-8")
+
+    def project_deps(self, files, source_name):
+        root = Path(tempfile.mkdtemp())
+        try:
+            self.write_project(root, files)
+            source_path = (root / source_name).resolve()
+            add_source_directories(source_path)
+            silent[0] = True
+            ast = AST(parse(source_path), ProgramRepository(parse))
+            ast.typeflow()
+            graph = ast.global_scope.comp_unit.dependency_graph
+            return graph.descendants(source_path), root
+        finally:
+            shutil.rmtree(root, ignore_errors=True)
+
+    def test_core_closure_skips_implicit_core(self):
+        files = {
+            "object.mini": "class Object {}\n",
+            "core.mini": "import object;\nimport string;\n",
+            "string.mini": "import object;\nimport writer;\nclass String {}\n",
+            "writer.mini": "import object;\nclass Writer { def init() {} }\n",
+        }
+        with self.parser_state():
+            deps, root = self.project_deps(files, "writer.mini")
+        self.assertIn((root / "object.mini").resolve(), deps)
+        self.assertNotIn((root / "core.mini").resolve(), deps)
+        self.assertNotIn((root / "string.mini").resolve(), deps)
+
+    def test_above_core_closure_gets_implicit_core(self):
+        files = {
+            "object.mini": "class Object {}\n",
+            "core.mini": "import object;\nimport exception;\n",
+            "exception.mini": "import object;\nclass OutOfBounds { def init() {} }\n",
+            "circle_queue.mini": "value : OutOfBounds = OutOfBounds{};\n",
+        }
+        with self.parser_state():
+            deps, root = self.project_deps(files, "circle_queue.mini")
+        self.assertIn((root / "core.mini").resolve(), deps)
+        self.assertIn((root / "exception.mini").resolve(), deps)
+
+    def test_core_folder_index_skips_implicit_core(self):
+        files = {
+            "core.mini": "import iteration;\n",
+            "iteration/iteration.mini": "def marker() -> i32 { return 1; }\n",
+            "iteration/index.mini": "import iteration;\n",
+        }
+        with self.parser_state():
+            deps, root = self.project_deps(files, "iteration/index.mini")
+        self.assertIn((root / "iteration/iteration.mini").resolve(), deps)
+        self.assertNotIn((root / "core.mini").resolve(), deps)
+
+    def test_folder_index_manifest_limits_dependencies(self):
+        files = {
+            "pkg/used.mini": "def used() -> i32 { return 1; }\n",
+            "pkg/unused.mini": "def unused() -> i32 { return 2; }\n",
+            "pkg/index.mini": "import used;\n",
+            "main.mini": "import pkg;\nvalue = used();\n",
+        }
+        with self.parser_state():
+            deps, root = self.project_deps(files, "main.mini")
+        self.assertIn((root / "pkg/index.mini").resolve(), deps)
+        self.assertIn((root / "pkg/used.mini").resolve(), deps)
+        self.assertNotIn((root / "pkg/unused.mini").resolve(), deps)
 
 class LintContractTests(unittest.TestCase):
 
