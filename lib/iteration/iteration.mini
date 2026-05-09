@@ -1,20 +1,5 @@
 import builtins;
-
-class Pair[T, U] {
-	@first : T
-	@second : U
-
-    getters @first, @second
-    setters @first, @second
-
-	def init(@first : T, @second : U) {
-    }
-
-    def swapped() -> Pair[U,T] {
-        return Pair{@second, @first};
-    }
-
-}
+import pair;
 
 class Iterator[T] {
     $elems : Region
@@ -122,10 +107,6 @@ class Iterable[T] {
         ret$elems holds ($elems, other$elems)
     }
 }
-
-// Must be O(1) to get next element
-// ( O(1) with respect to what? )
-class ConstantTimeIterator[T] extends Iterator[T] {}
 
 class Enumerated[T] extends Iterable[Pair[i32, T]] {
     @iterable : Iterable[T]

@@ -1,0 +1,97 @@
+import builtins;
+import iteration;
+import math;
+
+no_export math, CollectionAdapter;
+
+class Collection[T] extends Iterable[T] {
+
+    abstract def size() -> i32
+
+    def is_empty() -> Bool {
+        return self.size() == 0;
+    }
+
+    def contains(target : T, eq : (T, T) -> Bool) -> Bool {
+        if self.is_empty() { return false; }
+        for item in self {
+            if eq.call(item, target) { return true; }
+        }
+        return false;
+    }
+
+    def at(index : i32) -> T? {
+        if index < 0 or index >= self.size() { return nil; }
+        for (first, second) in self.enumerate() {
+            if first == index { return second; }
+        }
+    }
+
+    def index_of(target : T, eq : (T, T) -> Bool) -> i32? {
+        if self.is_empty() { return nil; }
+        for (first, second) in self.enumerate() {
+            if eq.call(second, target) { return first; }
+        }
+        return nil;
+    }
+
+    // Iterable.filter is *not* overridden because the size of a filtered collection cannot be known prior to iterating
+
+    def enumerate() -> Collection[Pair[i32, T]] {
+        enumerated = Enumerated{self};
+        size_fn = (collection : Collection[T]) => { collection.size(); };
+        return CollectionAdapter{self, enumerated, size_fn};
+    }
+
+    def map[U](f : (T) -> U) -> Collection[U] {
+        mapped = Mapped{self, f};
+        size_fn = (collection : Collection[T]) => { collection.size(); };
+        return CollectionAdapter{self, mapped, size_fn};
+    }
+
+    def chain(other : Collection[T]) -> Collection[T] {
+        pair = Pair{self, other};
+        chained = Chained{self, other};
+        size_fn = (pair : Pair[Collection[T], Collection[T]]) => { pair.first().size() + pair.second().size(); };
+        return CollectionAdapter{pair, chained, size_fn};
+    }
+
+    def interleave(other : Collection[T]) -> Collection[T] {
+        pair = Pair{self, other};
+        interleaved = Interleaved{self, other};
+        size_fn = (pair : Pair[Collection[T], Collection[T]]) => { pair.first().size() + pair.second().size(); };
+        return CollectionAdapter{pair, interleaved, size_fn};
+    }
+
+    def zip[U](other : Collection[U]) -> Collection[Pair[T, U]] {
+        pair = Pair{self, other};
+        zipped = Zipped{self, other};
+        size_fn = (pair : Pair[Collection[T], Collection[U]]) => { Math.min(pair.first().size(), pair.second().size()); };
+        return CollectionAdapter{pair, zipped, size_fn};
+    }
+
+    def product[U](other : Collection[U]) -> Collection[Pair[T, U]] {
+        pair = Pair{self, other};
+        products = Products{self, other};
+        size_fn = (pair : Pair[Collection[T], Collection[U]]) => { pair.first().size() * pair.second().size(); };
+        return CollectionAdapter{pair, products, size_fn};
+    }
+
+}
+
+class CollectionAdapter[Arg, T] extends Collection[T] {
+    @arg : Arg
+    @iterable : Iterable[T]
+    @size_fn : (Arg) -> i32
+
+    regions { $elems == @iterable$elems }
+
+    def init(@arg : Arg, @iterable : Iterable[T], @size_fn : (Arg) -> i32) {}
+
+    def size() -> i32 {
+        return @size_fn.call(@arg);
+    }
+    def iterator() -> Iterator[T] {
+        return @iterable.iterator();
+    }
+}
