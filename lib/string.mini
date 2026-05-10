@@ -32,7 +32,7 @@ class String extends List[Character], Representable {
     }
 
     // Strict, failable constructor. Validates input and can yield an error.
-    def Self.from_bytes(source_bytes: Collection[i8]) -> String yields InvalidUTF8Error {
+    def Self.from_bytes(source_bytes: Collection[i8]) -> String yields InvalidUnicodeError {
         result = String{source_bytes.size()};    // Pre-allocate
         validator = UTF8BytesValidator{result.bytes().writer()};
         n_chars = validator.write_codepoints_from(source_bytes.iterator());
@@ -545,11 +545,11 @@ class StringBytes extends Collection[i8] {
         return nil;
     }
 
-    def to_string_view() -> StringView yields InvalidUTF8Error {
+    def to_string_view() -> StringView yields InvalidUnicodeError {
         return self.validate().to_string_view();
     } ~> { ret.str == $source }
 
-    def to_string() -> String yields InvalidUTF8Error {
+    def to_string() -> String yields InvalidUnicodeError {
         return self.to_string_view().to_string();
     }
 }
@@ -639,7 +639,7 @@ class StringBytesView extends StringBytes {
         return @end_exclusive;
     }
 
-    def validate() -> ValidStringBytesView yields InvalidUTF8Error {
+    def validate() -> ValidStringBytesView yields InvalidUnicodeError {
         source = self.source();
         start = self.start();
         end_exclusive = self.end();
@@ -647,11 +647,11 @@ class StringBytesView extends StringBytes {
 
         if start < source_len {
             start_byte = source.unchecked_index(start);
-            if UTF8.is_continuation(start_byte) { yield(InvalidUTF8Error{}); }
+            if UTF8.is_continuation(start_byte) { yield(InvalidUnicodeError{}); }
         }
         if end_exclusive < source_len {
             end_byte = source.unchecked_index(end_exclusive);
-            if UTF8.is_continuation(end_byte) { yield(InvalidUTF8Error{}); }
+            if UTF8.is_continuation(end_byte) { yield(InvalidUnicodeError{}); }
         }
 
         return ValidStringBytesView{source, start, end_exclusive};

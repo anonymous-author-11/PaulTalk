@@ -9,47 +9,118 @@ import unicode;
 no_export exception;
 no_export string;
 
+class UTF16 {
+
+    def Self.is_high_surrogate(unit : u16) -> Bool {
+        value = unit as i32;
+        return value >= 0xD800 and value <= 0xDBFF;
+    }
+
+    def Self.is_low_surrogate(unit : u16) -> Bool {
+        value = unit as i32;
+        return value >= 0xDC00 and value <= 0xDFFF;
+    }
+
+    def Self.is_surrogate(unit : u16) -> Bool {
+        value = unit as i32;
+        return value >= 0xD800 and value <= 0xDFFF;
+    }
+
+    def Self.encoded_width(codepoint : i32) -> i32 {
+        if not Unicode.is_valid_codepoint(codepoint) { return 0; }
+        if codepoint < 0x10000 { return 1; }
+        return 2;
+    }
+
+    // Assumes codepoint is a supplementary Unicode scalar value.
+    def Self.high_surrogate(codepoint : i32) -> u16 {
+        cp = codepoint - 0x10000;
+        return (0xD800 + (cp >> 10)) as u16;
+    }
+
+    // Assumes codepoint is a supplementary Unicode scalar value.
+    def Self.low_surrogate(codepoint : i32) -> u16 {
+        cp = codepoint - 0x10000;
+        return (0xDC00 + (cp bit_and 0x3FF)) as u16;
+    }
+
+    // Assumes high and low are a valid surrogate pair.
+    def Self.decode_pair(high : u16, low : u16) -> i32 {
+        high_bits = (high as i32) - 0xD800;
+        low_bits = (low as i32) - 0xDC00;
+        return 0x10000 + (high_bits << 10) + low_bits;
+    }
+
+    def Self.write_replacement(writer : Writer[i8], is_little_endian : Bool) {
+        if is_little_endian {
+            writer.write(0xFD as i8);
+            writer.write(0xFF as i8);
+            return;
+        }
+        writer.write(0xFF as i8);
+        writer.write(0xFD as i8);
+    }
+
+}
+
 class UTF16Encoder extends UnicodeEncoder {
     @is_little_endian : Bool
 
-    // Default is lossless, yield Exception on invalid codepoint
-    def init(@writer : Writer[i8]) {
-        @replacement_fn = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
+    def Self.LE(writer : Writer[i8]) -> UTF16Encoder {
+        replacement_fn = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
+        return UTF16Encoder{writer, replacement_fn, true};
     }
 
-    def init(@writer : Writer[i8], @replacement_fn : (Writer[i8])) {
+    def Self.LE(writer : Writer[i8], replacement_fn : (Writer[i8])) -> UTF16Encoder {
+        return UTF16Encoder{writer, replacement_fn, true};
     }
 
-    def init(@writer : Writer[i8], @is_little_endian : Bool) {
-    	@replacement_fn = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
+    def Self.LE_lossy(writer : Writer[i8]) -> UTF16Encoder {
+        replacement_fn = (writer : Writer[i8]) => { UTF16.write_replacement(writer, true); };
+        return UTF16Encoder{writer, replacement_fn, true};
+    }
+
+    def Self.BE(writer : Writer[i8]) -> UTF16Encoder {
+        replacement_fn = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
+        return UTF16Encoder{writer, replacement_fn, false};
+    }
+
+    def Self.BE(writer : Writer[i8], replacement_fn : (Writer[i8])) -> UTF16Encoder {
+        return UTF16Encoder{writer, replacement_fn, false};
+    }
+
+    def Self.BE_lossy(writer : Writer[i8]) -> UTF16Encoder {
+        replacement_fn = (writer : Writer[i8]) => { UTF16.write_replacement(writer, false); };
+        return UTF16Encoder{writer, replacement_fn, false};
+    }
+
+    def init(@writer : Writer[i8], @replacement_fn : (Writer[i8]), @is_little_endian : Bool) {
     }
 
     // Helper to write a 16-bit unit as 2 bytes
-    def write_unit(unit : i16) {
+    def write_unit(unit : u16) {
+        value = unit as i32;
         if @is_little_endian {
-            @writer.write((unit bit_and 0xFF) as i8);
-            @writer.write(((unit >> 8) bit_and 0xFF) as i8);
+            @writer.write((value bit_and 0xFF) as i8);
+            @writer.write(((value >> 8) bit_and 0xFF) as i8);
             return;
         }
-        @writer.write(((unit >> 8) bit_and 0xFF) as i8);
-        @writer.write((unit bit_and 0xFF) as i8);
-    }
+        @writer.write(((value >> 8) bit_and 0xFF) as i8);
+        @writer.write((value bit_and 0xFF) as i8);
+    } ~> no_alias
 
     def write(value : i32) {
-    	// BMP character
-        if value < 0x10000 {
-            self.write_unit(value as i16);
+        width = UTF16.encoded_width(value);
+        if width == 1 {
+            self.write_unit(value as u16);
             return;
         }
-        // Supplementary character -> Surrogate Pair
-        // Formula: cp' = cp - 0x10000
-        // High = 0xD800 + (cp' >> 10)
-        // Low  = 0xDC00 + (cp' bit_and 0x3FF)
-        cp_prime = value - 0x10000;
-        high = (0xD800 + (cp_prime >> 10)) as i16;
-        low = (0xDC00 + (cp_prime bit_and 0x3FF)) as i16;
-        self.write_unit(high);
-        self.write_unit(low);
+        if width != 2 {
+            @replacement_fn.call(@writer);
+            return;
+        }
+        self.write_unit(UTF16.high_surrogate(value));
+        self.write_unit(UTF16.low_surrogate(value));  
     }
 }
 
@@ -57,25 +128,37 @@ class UTF16Encoder extends UnicodeEncoder {
 // It implements the decoding algorithm but skips validation checks.
 class ValidUTF16Decoder extends UnicodeDecoder {
     @is_little_endian : Bool
-    @pending_unit : i16?
+    @pending_unit : u16?
+
+    def Self.LE(iterator : Iterator[i8]) -> ValidUTF16Decoder {
+        return ValidUTF16Decoder{iterator, true};
+    }
+
+    def Self.BE(iterator : Iterator[i8]) -> ValidUTF16Decoder {
+        return ValidUTF16Decoder{iterator, false};
+    }
 
     def init(iterator : Iterator[i8], @is_little_endian : Bool) {
         @peeker = iterator into Peeker; // Required by base class, but we only use .next()
         @pending_unit = nil;
     }
 
-    def read_unit() -> i16? {
+    def read_unit() -> u16? {
         b1 = @peeker.next();
         if b1 is Nil { return nil; }
         b2 = @peeker.next();
-        if b2 is Nil { return nil; } // Odd byte stream ends
-        if @is_little_endian { return ((b2 as i16) << 8) bit_or (b1 as i16); }
-        return ((b1 as i16) << 8) bit_or (b2 as i16);
+        if b2 is Nil { return 0xD800 as u16; } // invalid here
+
+        first = (b1 as i32) bit_and 0xFF;
+        second = (b2 as i32) bit_and 0xFF;
+
+        if @is_little_endian { return ((second << 8) bit_or first) as u16; }
+        return ((first << 8) bit_or second) as u16;
     }
 
     def next() -> i32? {
         unit = nil;
-        if @pending_unit is i16 {
+        if @pending_unit is u16 {
             unit = @pending_unit;
             @pending_unit = nil;
         } else {
@@ -83,14 +166,9 @@ class ValidUTF16Decoder extends UnicodeDecoder {
         }
 
         if unit is Nil { return nil; }
-
-        // Hook: Check for standalone low surrogate or non-character
         if self.invalid_standalone_unit(unit) { return self.bad_result(unit); }
-
-        // Low Surrogate
-        if unit < 0xD800 or unit > 0xDBFF { return unit as i32; }
-
-        // High Surrogate (U+D800..U+DBFF)
+        if not UTF16.is_high_surrogate(unit) { return unit as i32; }
+        
         next_unit = self.read_unit();
         if next_unit is Nil { return self.bad_result(unit); } // Truncated stream
 
@@ -100,39 +178,64 @@ class ValidUTF16Decoder extends UnicodeDecoder {
             return self.bad_result(unit);
         }
 
-        // Decode pair
-        high = (unit - 0xD800) as i32;
-        low = (next_unit - 0xDC00) as i32;
-        return 0x10000 + (high << 10) + low;
+        return UTF16.decode_pair(unit, next_unit);
     }
 
     // --- Template Hooks ---
     // Valid data assumption: these always return false (no errors)
-    def invalid_standalone_unit(unit : i16) -> Bool { return false; }
-    def invalid_low_surrogate(next_unit : i16) -> Bool { return false; }
-    def bad_result(unit : i16) -> i32? { return nil; }
+    def invalid_standalone_unit(unit : u16) -> Bool { return false; }
+    def invalid_low_surrogate(next_unit : u16) -> Bool { return false; }
+    def bad_result(unit : u16) -> i32? { return nil; }
 }
 
 // Subclass performs strict validation and error handling
 class UTF16Decoder extends ValidUTF16Decoder {
-    @replacement_fn : (i16) -> i32
+    @replacement_fn : (u16) -> i32
 
-    def init(iterator : Iterator[i8], @is_little_endian : Bool) {
-        @replacement_fn = (unit : i16) => { yield(InvalidUTF16Error{}); return 0xFFFD; };
+    def Self.LE(iterator : Iterator[i8]) -> UTF16Decoder {
+        replacement_fn = (unit : u16) => { yield(InvalidUnicodeError{}); return -1; };
+        return UTF16Decoder{iterator, replacement_fn, true};
+    }
+
+    def Self.LE(iterator : Iterator[i8], replacement_fn : (u16) -> i32) -> UTF16Decoder {
+        return UTF16Decoder{iterator, replacement_fn, true};
+    }
+
+    def Self.LE_lossy(iterator : Iterator[i8]) -> UTF16Decoder {
+        replacement_fn = (unit : u16) => { Unicode.replacement_codepoint(); };
+        return UTF16Decoder{iterator, replacement_fn, true};
+    }
+
+    def Self.BE(iterator : Iterator[i8]) -> UTF16Decoder {
+        replacement_fn = (unit : u16) => { yield(InvalidUnicodeError{}); return -1; };
+        return UTF16Decoder{iterator, replacement_fn, false};
+    }
+
+    def Self.BE(iterator : Iterator[i8], replacement_fn : (u16) -> i32) -> UTF16Decoder {
+        return UTF16Decoder{iterator, replacement_fn, false};
+    }
+
+    def Self.BE_lossy(iterator : Iterator[i8]) -> UTF16Decoder {
+        replacement_fn = (unit : u16) => { Unicode.replacement_codepoint(); };
+        return UTF16Decoder{iterator, replacement_fn, false};
+    }
+
+    def init(iterator : Iterator[i8], @replacement_fn : (u16) -> i32, @is_little_endian : Bool) {
+        @peeker = iterator into Peeker; // Required by base class, but we only use .next()
+        @pending_unit = nil;
     }
 
     // Override hooks to add validation logic
-    def invalid_standalone_unit(unit : i16) -> Bool {
-        // Standalone Low Surrogate is invalid
-        return unit >= 0xDC00 and unit <= 0xDFFF;
+    def invalid_standalone_unit(unit : u16) -> Bool {
+        return UTF16.is_surrogate(unit);
     }
 
-    def invalid_low_surrogate(next_unit : i16) -> Bool {
+    def invalid_low_surrogate(next_unit : u16) -> Bool {
         // High surrogate must be followed by low surrogate
         return next_unit < 0xDC00 or next_unit > 0xDFFF;
     }
 
-    def bad_result(unit : i16) -> i32? {
+    def bad_result(unit : u16) -> i32? {
         return @replacement_fn.call(unit);
     }
 }

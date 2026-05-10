@@ -66,6 +66,14 @@ class UTF8Encoder extends UnicodeEncoder {
         return UTF8Encoder{writer, replacement_fn};
     } ~> { ret.writer == writer }
 
+    // Default is lossless, yield Exception on invalid codepoint
+    def init(@writer : Writer[i8]) {
+        @replacement_fn = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
+    }
+
+    def init(@writer : Writer[i8], @replacement_fn : (Writer[i8])) {
+    }
+
     def write(value : i32) {
         width = UTF8.encoded_width(value);
         // LLVM will see obvious disjointness
@@ -117,7 +125,7 @@ class UTF8BytesValidator {
     } ~> { ret.writer == writer }
 
     def init(@writer : Writer[i8]) {
-        @replacement_fn = (writer : Writer[i8]) => { yield(InvalidUTF8Error{}); return; };
+        @replacement_fn = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
     }
 
     def init(@writer : Writer[i8], @replacement_fn : (Writer[i8])) {}
@@ -229,7 +237,7 @@ class UTF8Decoder extends ValidUTF8Decoder {
 
     def init(iterator : Iterator[i8]) {
         @peeker = iterator into Peeker;
-        @replacement_fn = (byte : i8) => { yield(InvalidUTF8Error{}); return -1; };
+        @replacement_fn = (byte : i8) => { yield(InvalidUnicodeError{}); return -1; };
     }
 
     def init(iterator : Iterator[i8], @replacement_fn : (i8) -> i32) {

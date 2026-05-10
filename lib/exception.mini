@@ -49,15 +49,6 @@ class InvalidUnicodeError extends Exception {
     }
 }
 
-class InvalidUTF8Error extends Exception {
-    def init() {
-        @message = "Invalid UTF-8 sequence encountered.";
-        @line_number = 0;
-        @file_name = "";
-        @stacktrace = Stacktrace{};
-    }
-}
-
 class InvalidSliceRange extends Exception {
     def init() {
         @message = "Slice range must be contiguous and increasing by 1.";

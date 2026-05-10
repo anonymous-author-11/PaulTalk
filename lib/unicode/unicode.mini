@@ -60,17 +60,6 @@ class UnicodeEncoder extends Writer[i32] {
     getter @replacement_fn
     setter @replacement_fn
 
-    abstract def Self.lossy(writer : Writer[i8]) -> UnicodeEncoder {
-    } ~> { ret.writer == writer }
-
-    // Default is lossless, yield Exception on invalid codepoint
-    def init(@writer : Writer[i8]) {
-        @replacement_fn = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
-    }
-
-    def init(@writer : Writer[i8], @replacement_fn : (Writer[i8])) {
-    }
-
     // optimization: validator + encoder = encoder
     def write_from(source : CodepointValidator, max_elems : i32) -> i32 {
         iterator = source.iterator();
