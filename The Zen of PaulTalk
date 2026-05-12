@@ -8,7 +8,7 @@ Use the type system; do not abuse the type system.
 Validate early; do not pollute the happy path.
 Slowness can preclude correctness.
 Subtyping means substitutability.
-Flat is better than nested.
+Indentation is overhead.
 All experts were once beginners,
 All masterpieces were once prototypes.
 Syntactic clutter leads to mental clutter.
