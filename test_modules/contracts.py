@@ -4,7 +4,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
-from AST import AST, FileImportTarget, silent
+from AST import AST, Assignment, FileImportTarget, IntegerLiteral, silent
 from parser import parse, resolve_import_target, source_directories
 from ptalk_compile import add_source_directories, compiler_driver_main
 from program_repository import ProgramRepository
@@ -76,6 +76,18 @@ class ParserContractTests(unittest.TestCase):
             self.assertIn("File writer.mini, line 2", error_text)
         finally:
             shutil.rmtree(root, ignore_errors=True)
+
+    def test_hex_zero(self):
+        source_path = self._write_temp_source("value = 0x00;\n")
+        try:
+            program = parse(source_path)
+            statement = program.statements[0]
+            self.assertIsInstance(statement, Assignment)
+            self.assertIsInstance(statement.value, IntegerLiteral)
+            self.assertEqual(statement.value.value, 0)
+            self.assertFalse(statement.value.signed)
+        finally:
+            source_path.unlink(missing_ok=True)
 
     def _assert_local_file_precedence(self, root: Path):
         source_root = root / "lib"

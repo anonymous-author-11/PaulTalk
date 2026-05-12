@@ -702,7 +702,7 @@ class CSTTransformer(Transformer):
 
     def hex_literal(self, token):
         node_info = NodeInfo(None, self.file_path, self.line_number(token))
-        hex_string = token.value.replace("_", "").lstrip('0x')
+        hex_string = token.value.replace("_", "")[2:]
         value = int(hex_string, 16)
         return IntegerLiteral(node_info, value, 32, signed=False)
 
