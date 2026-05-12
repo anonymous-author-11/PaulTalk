@@ -62,51 +62,42 @@ class UTF8 {
 class UTF8Encoder extends UnicodeEncoder {
 
     def Self.lossy(writer : Writer[i8]) -> UTF8Encoder {
-        replacement_fn = (writer : Writer[i8]) => { UTF8.write_replacement(writer); };
-        return UTF8Encoder{writer, replacement_fn};
+        replacer = (writer : Writer[i8]) => { UTF8.write_replacement(writer); };
+        return UTF8Encoder{writer, replacer};
     } ~> { ret.writer == writer }
 
     // Default is lossless, yield Exception on invalid codepoint
     def init(@writer : Writer[i8]) {
-        @replacement_fn = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
+        @replacer = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
     }
 
-    def init(@writer : Writer[i8], @replacement_fn : (Writer[i8])) {
+    def init(@writer : Writer[i8], @replacer : (Writer[i8])) {}
+
+    def encoded_width(codepoint : i32) -> i32 {
+        return UTF8.encoded_width(codepoint);
     }
 
     def write(value : i32) {
-        width = UTF8.encoded_width(value);
+        width = self.encoded_width(value);
         // LLVM will see obvious disjointness
-        if width == 1 { self.write_one(value); }
-        if width == 2 { self.write_two(value); }
-        if width == 3 { self.write_three(value); }
-        if width == 4 { self.write_four(value); }
-        if width > 0 and width < 5 { return; }
-        @replacement_fn.call(@writer);
+        valid_width = width > 0 and width < 5;
+        if width == 1 { @writer.write(value as i8); }
+        if width > 1 and valid_width { self.write_multiple(value, width); }
+        if not valid_width { @replacer.call(@writer); }
     }
 
-    def write_one(cp : i32) {
-        @writer.write(cp as i8);
-    } ~> no_alias
-    def write_two(cp : i32) {
-        @writer.write((0xC0 bit_or (cp >> 6)) as i8);
-        @writer.write((0x80 bit_or (cp bit_and 0x3F)) as i8);
-    } ~> no_alias
-    def write_three(cp : i32) {
-        @writer.write((0xE0 bit_or (cp >> 12)) as i8);
-        @writer.write((0x80 bit_or ((cp >> 6) bit_and 0x3F)) as i8);
-        @writer.write((0x80 bit_or (cp bit_and 0x3F)) as i8);
-    } ~> no_alias
-    def write_four(cp : i32) {
-        @writer.write((0xF0 bit_or (cp >> 18)) as i8);
-        @writer.write((0x80 bit_or ((cp >> 12) bit_and 0x3F)) as i8);
-        @writer.write((0x80 bit_or ((cp >> 6) bit_and 0x3F)) as i8);
-        @writer.write((0x80 bit_or (cp bit_and 0x3F)) as i8);
+    def write_multiple(cp : i32, width : i32) {
+        lead_prefix = (0xFF << (8 - width)) bit_and 0xFF;
+        @writer.write((lead_prefix bit_or (cp >> ((width - 1) * 6))) as i8);
+        for i in 1..width {
+            shift = (width - 1 - i) * 6;
+            @writer.write((0x80 bit_or ((cp >> shift) bit_and 0x3F)) as i8);
+        }
     } ~> no_alias
 
     // optimization: decoder + encoder = byte validator
     def write_from(source : UTF8Decoder, max_elems : i32) -> i32 {
-        validator = UTF8BytesValidator{@writer, @replacement_fn};
+        validator = UTF8BytesValidator{@writer, @replacer};
         return validator.write_codepoints_from(source.peeker(), max_elems);
     } ~> no_alias
 }
@@ -114,21 +105,21 @@ class UTF8Encoder extends UnicodeEncoder {
 // seems like a BulkWriter[i8], except the i32 returned is the # of *codepoints* written
 class UTF8BytesValidator {
     @writer : Writer[i8]
-    @replacement_fn : (Writer[i8])
+    @replacer : (Writer[i8])
 
-    getter @replacement_fn
-    setter @replacement_fn
+    getter @replacer
+    setter @replacer
 
     def Self.lossy(writer : Writer[i8]) -> UTF8BytesValidator {
-        replacement_fn = (writer : Writer[i8]) => { UTF8.write_replacement(writer); };
-        return UTF8BytesValidator{writer, replacement_fn};
+        replacer = (writer : Writer[i8]) => { UTF8.write_replacement(writer); };
+        return UTF8BytesValidator{writer, replacer};
     } ~> { ret.writer == writer }
 
     def init(@writer : Writer[i8]) {
-        @replacement_fn = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
+        @replacer = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
     }
 
-    def init(@writer : Writer[i8], @replacement_fn : (Writer[i8])) {}
+    def init(@writer : Writer[i8], @replacer : (Writer[i8])) {}
 
     // Re-encode bytes for one codepoint from the byte source into @writer
     def write_codepoints_from(source : Iterator[i8], max_elems : i32) -> i32 {
@@ -144,7 +135,7 @@ class UTF8BytesValidator {
     def handle_byte(byte : i8, peeker : Peeker[i8]) {
         (cp, bytes_needed) = UTF8.classify_lead(byte);
         if bytes_needed == 0 {
-            @replacement_fn.call(@writer);
+            @replacer.call(@writer);
             return;
         }
         if bytes_needed == 1 {
@@ -152,7 +143,7 @@ class UTF8BytesValidator {
             return;
         }
         if self.try_write_multibyte(peeker, byte, cp, bytes_needed) { return; }
-        @replacement_fn.call(@writer);
+        @replacer.call(@writer);
     } ~> no_alias
 
     // Returns true if the sequence was valid and written, false otherwise.
@@ -196,7 +187,14 @@ class UTF8BytesValidator {
 }
 
 // Decodes bytes that are valid UTF8 into codepoints
-class ValidUTF8Decoder extends UnicodeDecoder {
+class ValidUTF8Decoder extends Iterator[i32] {
+    @peeker : Peeker[i8]
+
+    regions { $elems == @peeker$elems }
+
+    getters @peeker
+
+    def init(iterator : Iterator[i8]) { @peeker = iterator into Peeker; }
 
     def next() -> i32? {
         b1 = @peeker.next();
@@ -225,27 +223,27 @@ class ValidUTF8Decoder extends UnicodeDecoder {
 
 // Decodes UTF8 bytes that may or may not be valid
 class UTF8Decoder extends ValidUTF8Decoder {
-    @replacement_fn : (i8) -> i32
+    @replacer : (i8) -> i32
 
-    getter @replacement_fn
-    setter @replacement_fn
+    getter @replacer
+    setter @replacer
 
     def Self.lossy(iterator : Iterator[i8]) -> UTF8Decoder {
-        replacement_fn = (byte : i8) => { Unicode.replacement_codepoint(); };
-        return UTF8Decoder{iterator, replacement_fn};
+        replacer = (byte : i8) => { Unicode.replacement_codepoint(); };
+        return UTF8Decoder{iterator, replacer};
     } ~> { ret.iterator == iterator }
 
     def init(iterator : Iterator[i8]) {
         @peeker = iterator into Peeker;
-        @replacement_fn = (byte : i8) => { yield(InvalidUnicodeError{}); return -1; };
+        @replacer = (byte : i8) => { yield(InvalidUnicodeError{}); return -1; };
     }
 
-    def init(iterator : Iterator[i8], @replacement_fn : (i8) -> i32) {
+    def init(iterator : Iterator[i8], @replacer : (i8) -> i32) {
         @peeker = iterator into Peeker;
     }
 
     def bad_result(b1 : i8) -> i32? {
-        return @replacement_fn.call(b1); 
+        return @replacer.call(b1); 
     }
 
     def invalid_continuation(b_next : i8) -> Bool {

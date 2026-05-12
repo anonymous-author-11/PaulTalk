@@ -1,0 +1,207 @@
+import builtins;
+import writer;
+import exception;
+import string;
+import unicode;
+
+no_export exception;
+no_export string;
+
+// This module provides logic shared by UTF16 and WTF16
+
+class Unicode16 {
+
+    def Self.is_high_surrogate(unit : u16) -> Bool {
+        value = unit as i32;
+        return value >= 0xD800 and value <= 0xDBFF;
+    }
+
+    def Self.is_low_surrogate(unit : u16) -> Bool {
+        value = unit as i32;
+        return value >= 0xDC00 and value <= 0xDFFF;
+    }
+
+    // Assumes codepoint is a supplementary Unicode scalar value.
+    def Self.high_surrogate(codepoint : i32) -> u16 {
+        cp = codepoint - 0x10000;
+        return (0xD800 + (cp >> 10)) as u16;
+    }
+
+    // Assumes codepoint is a supplementary Unicode scalar value.
+    def Self.low_surrogate(codepoint : i32) -> u16 {
+        cp = codepoint - 0x10000;
+        return (0xDC00 + (cp bit_and 0x3FF)) as u16;
+    }
+
+}
+
+// There is no requirement that the written i32s are valid scalars
+// Nor that the written bytes are valid surrogate pairs
+// Meaning both UTF16 and WTF16 can be valid subtypes
+class Unicode16Encoder extends UnicodeEncoder {
+
+    def Self.strict_replacer() -> (Writer[i8]) {
+        replacer = (writer : Writer[i8]) => { yield(InvalidUnicodeError{}); return; };
+        return replacer;
+    }
+
+    def init(@writer : Writer[i8]) {
+        @replacer = Self.strict_replacer();
+    }
+
+    def init(@writer : Writer[i8], @replacer : (Writer[i8])) {}
+
+    // Helper to write a 16-bit unit as 2 bytes
+    abstract def write_unit(unit : u16) ~> no_alias
+
+    def write(value : i32) {
+        width = self.encoded_width(value);
+        if width == 1 {
+            self.write_unit(value as u16);
+            return;
+        }
+        if width != 2 {
+            @replacer.call(@writer);
+            return;
+        }
+        self.write_unit(Unicode16.high_surrogate(value));
+        self.write_unit(Unicode16.low_surrogate(value));  
+    }
+}
+
+class Unicode16EncoderLE extends Unicode16Encoder {
+
+    def Self.lossy_replacer() -> (Writer[i8]) {
+        replacer = (writer : Writer[i8]) => {
+            writer.write(0xFD as i8);
+            writer.write(0xFF as i8);
+            return;
+        };
+        return replacer;
+    }
+
+    def write_unit(unit : u16) {
+        value = unit as i32;
+        @writer.write((value bit_and 0xFF) as i8);
+        @writer.write(((value >> 8) bit_and 0xFF) as i8);
+    } ~> no_alias
+
+}
+
+class Unicode16EncoderBE extends Unicode16Encoder {
+
+    def Self.lossy_replacer() -> (Writer[i8]) {
+        replacer = (writer : Writer[i8]) => {
+            writer.write(0xFF as i8);
+            writer.write(0xFD as i8);
+            return;
+        };
+        return replacer;
+    }
+
+    def write_unit(unit : u16) {
+        value = unit as i32;
+        @writer.write(((value >> 8) bit_and 0xFF) as i8);
+        @writer.write((value bit_and 0xFF) as i8);
+    } ~> no_alias
+
+}
+
+class Unicode16Decoder extends Iterator[i32] {
+    @iterator : Iterator[i8]
+    @replacer : (u16) -> i32
+    @pending_unit : u16?
+    @truncated : Bool
+
+    regions { $elems == @iterator$elems }
+
+    def Self.lossy_replacer() -> (u16) -> i32 {
+        replacer = (unit : u16) => { Unicode.replacement_codepoint(); };
+        return replacer;
+    }
+
+    def Self.strict_replacer() -> (u16) -> i32 {
+        replacer = (unit : u16) => { yield(InvalidUnicodeError{}); return -1; };
+        return replacer;
+    }
+
+    def init(@iterator : Iterator[i8]) {
+        @replacer = Self.strict_replacer();
+        @pending_unit = nil;
+        @truncated = false;
+    }
+
+    def init(@iterator : Iterator[i8], @replacer : (u16) -> i32) {
+        @pending_unit = nil;
+        @truncated = false;
+    }
+
+    abstract def make_unit(first : i32, second : i32) -> u16 ~> no_alias
+    abstract def invalid_standalone(unit : u16) -> Bool ~> no_alias
+    abstract def unpaired_result(unit : u16) -> i32? ~> no_alias
+
+    def next() -> i32? {
+        unit = self.first_unit();
+
+        if unit is Nil { return nil; }
+        if @truncated { return self.truncated_result(unit); }
+        if self.invalid_standalone(unit) { return self.unpaired_result(unit); }
+        if not Unicode16.is_high_surrogate(unit) { return unit as i32; }
+
+        next_unit = self.read_unit();
+        if next_unit is Nil { return self.unpaired_result(unit); }
+
+        // Check if followed by valid low surrogate
+        if not Unicode16.is_low_surrogate(next_unit) {
+            @pending_unit = next_unit; // Buffer the read unit
+            return self.unpaired_result(unit);
+        }
+
+        high_bits = (unit as i32) - 0xD800;
+        low_bits = (next_unit as i32) - 0xDC00;
+        return 0x10000 + (high_bits << 10) + low_bits;
+    }
+
+    def first_unit() -> u16? {
+        if @pending_unit is Nil { return self.read_unit(); }
+        unit = @pending_unit;
+        @pending_unit = nil;
+        return unit;
+    }
+
+    def read_unit() -> u16? {
+        @truncated = false;
+        b1 = @iterator.next();
+        if b1 is Nil { return nil; }
+        b2 = @iterator.next();
+
+        if b2 is Nil {
+            @truncated = true;
+            first = (b1 as i32) bit_and 0xFF;
+            return self.make_unit(first, 0);
+        }
+
+        first = (b1 as i32) bit_and 0xFF;
+        second = (b2 as i32) bit_and 0xFF;
+        
+        return self.make_unit(first, second);
+    }
+
+    def truncated_result(unit : u16) -> i32? {
+        return @replacer.call(unit);
+    }
+}
+
+class Unicode16DecoderLE extends Unicode16Decoder {
+
+    def make_unit(first : i32, second : i32) -> u16 {
+        return ((second << 8) bit_or first) as u16;
+    }
+}
+
+class Unicode16DecoderBE extends Unicode16Decoder {
+
+    def make_unit(first : i32, second : i32) -> u16 {
+        return ((first << 8) bit_or second) as u16;
+    }
+}

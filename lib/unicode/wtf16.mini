@@ -1,0 +1,55 @@
+import unicode16;
+
+// Encoders
+
+class WTF16Encoder extends Unicode16Encoder {
+
+    def encoded_width(codepoint : i32) -> i32 {
+        if not Unicode.is_valid_codepoint(codepoint) { return 0; }
+        if codepoint < 0x10000 { return 1; }
+        return 2;
+    }
+}
+
+class WTF16EncoderLE extends WTF16Encoder, Unicode16EncoderLE {
+
+    def Self.lossy(writer : Writer[i8]) -> WTF16EncoderLE {
+        return WTF16EncoderLE{writer, Unicode16EncoderLE.lossy_replacer()};
+    }
+}
+
+class WTF16EncoderBE extends WTF16Encoder, Unicode16EncoderBE {
+
+    def Self.lossy(writer : Writer[i8]) -> WTF16EncoderBE {
+        return WTF16EncoderBE{writer, Unicode16EncoderBE.lossy_replacer()};
+    }
+}
+
+// Decoders
+
+class WTF16Decoder extends Unicode16Decoder {
+
+    // Lone low surrogates are valid in WTF-16
+    def invalid_standalone(unit : u16) -> Bool {
+        return false;
+    }
+
+    // Unpaired surrogates are valid in WTF-16, emit them as codepoints
+    def unpaired_result(unit : u16) -> i32? {
+        return unit as i32;
+    }
+}
+
+class WTF16DecoderLE extends WTF16Decoder, Unicode16DecoderLE {
+
+    def Self.lossy(iterator : Iterator[i8]) -> WTF16DecoderLE {
+        return WTF16DecoderLE{iterator, Unicode16Decoder.lossy_replacer()};
+    }
+}
+
+class WTF16DecoderBE extends WTF16Decoder, Unicode16DecoderBE {
+
+    def Self.lossy(iterator : Iterator[i8]) -> WTF16DecoderBE {
+        return WTF16DecoderBE{iterator, Unicode16Decoder.lossy_replacer()};
+    }
+}
