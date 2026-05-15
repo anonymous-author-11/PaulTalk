@@ -3433,6 +3433,7 @@ class MethodDef(Statement):
         # not robust to differently named parameters
         annotated_facts = Constraints(all_alias=self._constraints.all_alias, no_alias=self._constraints.no_alias)
         annotated_facts = annotated_facts.union(*(m._constraints for m in self.widely_overridden_methods()))
+        annotated_facts.all_alias = self._constraints.all_alias
 
         # annotation constraints
         for lhs, op, rhs in self._constraints._set:
@@ -3502,6 +3503,8 @@ class MethodDef(Statement):
         if len(all_overridden_methods) < 1: return
         
         overridden_facts = self.overridden_facts(body_scope, param_names)
+        if overridden_facts.all_alias: return
+
         overridden_graph = PointsToGraph(overridden_facts, param_names)
         overridden_graph.transform_until_stable()
         annotated_graph.transform_until_stable()
@@ -3888,6 +3891,7 @@ class Method:
 
     def constraints(self):
         constraints = self.definition.constraints.union(*(defn.constraints for defn in self.overridden_methods()))
+        constraints.all_alias = self.definition.constraints.all_alias
         if isinstance(self.definition, ClassMethodDef): return constraints
         for param in self.definition.params:
             if "@" not in param.name: continue
