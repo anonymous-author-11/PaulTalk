@@ -51,24 +51,20 @@ python ptalk_build.py
 - Reuse a build directory (temp_build) so that compilation can use cached artifacts
 	- Don't recompile the entire stdlib every time you want to compile a single file
 	- Don't compile executables into the build dir. Compile them into an output dir.
-- When asked to analyze or evaluate, "genuine" and "real" are banned as adjectives
-- If I ask you to analyze code, I am not just asking for a bug report
-	- If you don't report boilerplate, bad abstractions, dead code, that is a failure
 - The fast test suite will take more than 120s to run, so don't set a 120s timeout
-- Do not ever give time estimates (minutes, hours, days). You have no understanding of time.
 
 ## Code Style Guidelines
 
 ### General
 - Always run the linter tools on code you write
 - Indentation: always try to minimize indendation
-	- Early return/break/continue
-	- Method / function outlining
-	- Single-line conditionals: a single statement on the same line
-	- Avoid defensively adding try/catch to everything
+	- FIRST RESORT: Avoid defensively adding try/catch to everything
+	- SECOND RESORT: Use early return/break/continue
+	- THIRD RESORT: Single-line conditionals: a single statement on the same line
+	- LAST RESORT: Method / function outlining
 - Naming: prefer short names that are full words
 	- You may still use single letters ('i') for loop induction variables and the like
-	- The constraints in check_ptalk_code.py may tempt you to shorten names more than you should
+	- Do not propose or implement verbose names
 - DRY: abstract common functionality to minimize repetition
 	- If repetition is obvious, clean it up
 	- Don't leave several near-identical helpers in place once the shared structure is clear
@@ -80,7 +76,7 @@ python ptalk_build.py
 - Avoid stringly dispatch
 	- Don't introduce `kind` fields, string tags, or tuple-shaped pseudo-variants when classes or methods can model the cases directly
 - Don't invent parallel identity mechanisms without need
-	- If frozen dataclass equality already captures the identity you need, don't add extra `unique_key()`-style plumbing
+	- If frozen dataclass equality already works
 
 ### Python Code
 - Imports: Use absolute imports, organize by standard library, third-party, local
