@@ -3971,7 +3971,6 @@ class Method:
         matched = []
         for candidate in candidates:
             if candidate.defining_class == self.definition.defining_class: continue
-            if not self.cls.type_env.subtype(self.definition.defining_class.type(), candidate.defining_class.type()): continue
             type_env = TypeEnvironment(self.cls.type_env)
             for t in candidate.type_params: type_env.add_alias(FatPtr.basic(t.label.data), t)
             candidate_param_types = [type_env.simplify(candidate.defining_class.type_env.simplify(param._type)) for param in candidate.params]
