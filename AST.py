@@ -234,10 +234,9 @@ class BlockNode(Node):
             stmt.typeflow(scope)
 
     def liveness(self, live_tbl, points_to_graph, insertion_points):
-        before_tbl = live_tbl
         for stmt in reversed(self.statements):
-            before_tbl = stmt.liveness(live_tbl, points_to_graph, insertion_points)
-        return before_tbl
+            live_tbl = stmt.liveness(live_tbl, points_to_graph, insertion_points)
+        return live_tbl
 
 @dataclass
 class NewScope(BlockNode, Statement):
