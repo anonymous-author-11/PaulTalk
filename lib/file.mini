@@ -3,14 +3,14 @@ import writer;
 
 class FileSystemError extends Exception {}
 
-class File extends IndexableCollection[i32, i8, i8] {
+class File extends IndexedStore[i8] {
 
 	abstract def write(offset : i64, source : Buffer[i8], n_bytes : i32) -> i32 {
 	} ~> no_alias
 	
+	abstract def mode=(mode : String)
 	abstract def read_at(offset : i64) -> i8? ~> no_alias
 	abstract def byte_length() -> i64 ~> no_alias
-	abstract def mode=(mode : String)
 	abstract def reopen() ~> no_alias
 	abstract def close() ~> no_alias
 
@@ -21,40 +21,17 @@ class File extends IndexableCollection[i32, i8, i8] {
 		return length as i32;
 	}
 
-	def bounds_check(index : i32) {
-		length = self.size();
-		if index < 0 or index >= length { yield(OutOfBounds{length, index}); }
-	}
-
-	def indices() -> Range {
-		return 0..self.size();
-	}
-
-	def values() -> Self {
-		return self;
-	}
-
-	def unchecked_index(index : i32) -> i8 {
-		value = self.read_at(index as i64);
+	def get_unchecked(canonical_index : i32) -> i8 {
+		value = self.read_at(canonical_index as i64);
 		if value is i8 { return value; }
 		yield(FileSystemError{});
 	}
 
-	def [](index : i32) -> i8 {
-		self.bounds_check(index);
-		return self.unchecked_index(index);
-	}
-
-	def unchecked_insert(index : i32, value : i8) {
+	def put_unchecked(canonical_index : i32, value : i8) {
 		single_byte = Buffer[i8].new(1);
 		single_byte.[0] = value;
-		written = self.write(index as i64, single_byte, 1);
+		written = self.write(canonical_index as i64, single_byte, 1);
 		if written < 1 { yield(FileSystemError{}); }
-	}
-
-	def []=(index : i32, value : i8) {
-		self.bounds_check(index);
-		self.unchecked_insert(index, value);
 	}
 
 	def append_byte(value : i8) {
@@ -79,36 +56,12 @@ class File extends IndexableCollection[i32, i8, i8] {
 		return written as i64;
 	}
 
-	def iterator() -> FileIterator {
-		return FileIterator{self};
-	} ~> { ret.file == self }
-
 	def writer() -> FileWriter {
 		return FileWriter{self};
 	}
 
 	def writer(cursor : i64) -> FileWriter {
 		return FileWriter{self, cursor};
-	}
-}
-
-class FileIterator extends Iterator[i8] {
-	@file : File
-	@size : i32
-	@cursor : i32
-
-	regions { $elems == @file$elems }
-
-	def init(@file : File) {
-		@cursor = 0;
-		@size = @file.size();
-	}
-
-	def next() -> i8? {
-		if @cursor >= @size { return nil; }
-		index = @cursor;
-		@cursor = @cursor + 1;
-		return @file.unchecked_index(index);
 	}
 }
 

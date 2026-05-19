@@ -43,7 +43,7 @@ class Column {
 	abstract def size() -> i32 {}
 }
 
-class Col[T] extends Column, IndexableCollection[i32, T, T] {
+class Col[T] extends Column, IndexedStore[T] {
 	@array : Array[T]
 
 	def Self.from_column(col : Column) -> Self yields TypeError {
@@ -53,20 +53,14 @@ class Col[T] extends Column, IndexableCollection[i32, T, T] {
 
 	def init(@name : String, @array : Array[T]) {}
 
-	def size() -> i32 {
-		return @array.size();
+	def size() -> i32 { return @array.size(); }
+
+	def get_unchecked(canonical_index : i32) -> T {
+		return @array.[canonical_index];
 	}
 
-	def iterator() -> Iterator[T] {
-		return @array.iterator();
-	}
-
-	def [](index : i32) -> T {
-		return @array.[index];
-	}
-
-	def []=(index : i32, value : T) {
-		return @array.[index] = value;
+	def put_unchecked(canonical_index : i32, value : T) {
+		@array.[canonical_index] = value;
 	}
 
 }
@@ -85,7 +79,7 @@ class ColumnView extends Column {
 	}
 }
 
-class ColView[T] extends ColumnView, IndexableCollection[i32, T, T] {
+class ColView[T] extends ColumnView, Indexed[T] {
 	@col : Col[T]
 
 	def Self.from_col_view(col_view : ColumnView) -> Self yields TypeError {
@@ -95,6 +89,10 @@ class ColView[T] extends ColumnView, IndexableCollection[i32, T, T] {
 	}
 
 	def init(@col : Col[T], @start_row : i32, @end_row : i32) {}
+
+	def get_unchecked(canonical_index : i32) -> T {
+		return @col.get_unchecked(@start_row + canonical_index);
+	}
 
 	def col() -> Col[T] {
 		return @col;

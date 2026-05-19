@@ -1282,8 +1282,8 @@ class CompilerPositiveTestsMixin:
             import std;
 
             map = {"a":11, "b":22};
-            IO.print(map.contains_key("a"));
-            IO.print(map.contains_key("z"));
+            IO.print(map.has_key("a"));
+            IO.print(map.has_key("z"));
             IO.print(map.get_or("b", 99));
             IO.print(map.get_or("missing", 99));
         """

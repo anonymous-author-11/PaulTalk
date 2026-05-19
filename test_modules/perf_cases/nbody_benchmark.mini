@@ -101,12 +101,12 @@ def offset_momentum(bodies : Array[Planet], solar_mass : f64) {
     py = 0.0;
     pz = 0.0;
     for i in 0..bodies.size() {
-        body = bodies.unchecked_index(i);
+        body = bodies.get_unchecked(i);
         px = px + body.momentum_x();
         py = py + body.momentum_y();
         pz = pz + body.momentum_z();
     }
-    sun = bodies.unchecked_index(0);
+    sun = bodies.get_unchecked(0);
     sun.offset_velocity(-px / solar_mass, -py / solar_mass, -pz / solar_mass);
 }
 
@@ -135,16 +135,16 @@ def advance(bodies : Array[Planet], dt : f64, steps : i32) {
     n = bodies.size();
     for step in 0..steps {
         for i in 0..n {
-            left = bodies.unchecked_index(i);
+            left = bodies.get_unchecked(i);
             start = i + 1;
             for j in start..n {
-                right = bodies.unchecked_index(j);
+                right = bodies.get_unchecked(j);
                 apply_gravity_pair(left, right, dt);
             }
         }
 
         for i in 0..n {
-            body = bodies.unchecked_index(i);
+            body = bodies.get_unchecked(i);
             body.advance(dt);
         }
     }
@@ -154,12 +154,12 @@ def energy(bodies : Array[Planet]) -> f64 {
     total = 0.0;
     n = bodies.size();
     for i in 0..n {
-        left = bodies.unchecked_index(i);
+        left = bodies.get_unchecked(i);
         total = total + left.kinetic_energy();
 
         start = i + 1;
         for j in start..n {
-            right = bodies.unchecked_index(j);
+            right = bodies.get_unchecked(j);
             total = total - left.potential_energy(right);
         }
     }

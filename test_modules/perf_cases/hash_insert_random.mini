@@ -6,12 +6,12 @@ table = SwissMap[i32, i32].new(i32_hasher, i32_eq);
 keys = Array[i32].new(n);
 
 for i in 0..n {
-    keys.unchecked_insert(i, i);
+    keys.put_unchecked(i, i);
 }
 shuffle_i32(keys, n, PRNG.new(777));
 
 for i in 0..n {
-    key = keys.unchecked_index(i);
+    key = keys.get_unchecked(i);
     table.insert(key, key * 3 + 1);
 }
 

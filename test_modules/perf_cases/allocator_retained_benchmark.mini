@@ -81,7 +81,7 @@ def build() -> Array[RetainedItem] {
 def consume_items(items : Array[RetainedItem]) -> i64 {
     total : i64 = 0;
     for i in 0..items.size() {
-        total = total + items.unchecked_index(i).score(i);
+        total = total + items.get_unchecked(i).score(i);
     }
     return total;
 }
@@ -91,7 +91,7 @@ def consume_reverse(items : Array[RetainedItem]) -> i64 {
     count = items.size();
     for i in 0..count {
         index = count - i - 1;
-        total = total + items.unchecked_index(index).score(i + 1);
+        total = total + items.get_unchecked(index).score(i + 1);
     }
     return total;
 }

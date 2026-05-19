@@ -1,0 +1,177 @@
+import collection;
+import exception;
+import string;
+import keyed.keyed;
+import range;
+
+no_export exception;
+no_export string;
+
+// A Collection[T] keyed by a contiguous range of integers
+class Indexed[T] extends Keyed[i32, T, T] {
+
+	abstract def get_unchecked(canonical_index : i32) -> T ~> { ret holds $elems }
+
+	def slice(start : i32, end_exclusive : i32) -> Slice[T] {
+	    return Slice{self, start, end_exclusive};
+	} ~> { ret.source == self }
+
+	// Default: just return index unchanged
+	// Should always be idempotent
+	// Should produce a value between 0 and self.size()
+	def canonicalize(index : i32) -> i32 { return index; } ~> no_alias
+
+	def indices() -> Range { return 0..self.size(); } ~> no_alias
+
+	// Keyed[i32, T, T] overrides
+
+	def keys() -> Range { return self.indices(); } ~> no_alias
+
+	def values() -> Self { return self; } ~> { ret == self }
+
+	def get(key : i32) -> T? {
+		canonical = self.canonicalize(key);
+		if not self.is_inbounds(canonical) { return nil; }
+		return self.get_unchecked(canonical);
+	}
+
+	def fail_index(key : i32) {
+		yield(OutOfBounds{self.size(), key});
+	}
+
+	// def [](key : OneStepRange) -> Collection[T] {
+	// 	return self.slice(key.start(), key.end() + 1);
+	// }
+
+	def is_inbounds(canonical_index : i32) -> Bool {
+		return canonical_index >= 0 and canonical_index < self.size();
+	} ~> no_alias
+
+	def bounds_check(canonical_index : i32) {
+		if self.is_inbounds(canonical_index) { return; }
+		self.fail_index(canonical_index);
+	} ~> no_alias
+
+	// We only need to bounds-check the start + end indices
+	def bounds_check_slice(canonical_start : i32, canonical_end : i32) {
+		self.bounds_check(canonical_start);
+		if canonical_start == canonical_end { return; }
+		self.bounds_check(canonical_end - 1);
+		diff = canonical_end - canonical_start;
+		if diff < 0 { self.fail_index(diff); }
+	} ~> no_alias
+
+	// Iterable[T] overrides
+
+	def at(index : i32) -> T? { return self.get(index); }
+
+	def first() -> T? {
+		if self.is_empty() { return nil; }
+		return self.get_unchecked(0);
+	}
+
+	def last() -> T? {
+		if self.is_empty() { return nil; }
+		return self.get_unchecked(self.size() - 1);
+	}
+
+	// Anything that can be indexed by integers can be iterated!
+	def iterator() -> Iterator[T] { return IndexedIterator{self}; }
+
+}
+
+class IndexedStore[T] extends Indexed[T], KeyedStore[i32, T, T] {
+
+	abstract def put_unchecked(canonical_index : i32, value : T) ~> { $elems holds value }
+	
+	def put_slice(start : i32, end_exclusive : i32, values : Collection[T]) {
+		start = self.canonicalize(start);
+		end_exclusive = self.canonicalize(end_exclusive);
+		self.bounds_check_slice(start, end_exclusive);
+		zipped = (start..end_exclusive).zip(values);
+		for (i, value) in zipped { self.put_unchecked(i, value); }
+	} ~> { $elems holds values$elems }
+
+	// def []=(key : OneStepRange, value : Collection[T]) {
+	// 	  self.put_slice(key.start(), key.end() + 1, value);
+	// }
+
+	def put(key : i32, value : T) -> Bool {
+		canonical = self.canonicalize(key);
+		if not self.is_inbounds(canonical) { return false; }
+		self.put_unchecked(canonical, value);
+		return true;
+	}
+
+	// A very generic in-place reversal
+    def reverse() -> Self {
+        left_idx = 0;
+        right_idx = self.size() - 1;
+        while left_idx < right_idx {
+            left_value = self.get_unchecked(left_idx);
+            right_value = self.get_unchecked(right_idx);
+            self.put_unchecked(left_idx, right_value);
+            self.put_unchecked(right_idx, left_value);
+            left_idx = left_idx + 1;
+            right_idx = right_idx - 1;
+        }
+        return self;
+    } ~> { ret == self }
+}
+
+class IndexedIterator[T] extends Iterator[T] {
+	@indexed : Indexed[T]
+	@cursor : i32
+
+	regions { $elems == @indexed$elems }
+
+	def init(@indexed : Indexed[T]) { @cursor = 0; }
+
+	def next() -> T? {
+		// re-check the .size() on every call
+		if @cursor >= @indexed.size() { return nil; }
+		result = @indexed.get_unchecked(@cursor);
+		@cursor = @cursor + 1;
+		return result;
+	}
+}
+
+class View[T] extends Indexed[T] {
+	$source : Region
+
+	regions { $elems == $source$elems }
+
+	abstract def source() -> Indexed[T] ~> { ret == $source }
+	abstract def start() -> i32 ~> no_alias
+	abstract def end_exclusive() -> i32 ~> no_alias
+
+	def size() -> i32 {
+		return self.end_exclusive() - self.start();
+	}
+
+	def canonicalize(index : i32) -> i32 {
+		start = self.start();
+		return self.source().canonicalize(index + start) - start;
+	}
+
+	def get_unchecked(index : i32) -> T {
+		return self.source().get_unchecked(index + self.start());
+	}
+}
+
+class Slice[T] extends View[T] {
+	@source : Indexed[T]
+	@start : i32
+	@end_exclusive : i32
+
+	regions { $source == @source }
+
+	getters @source, @start, @end_exclusive
+
+	// Do bounds-checking in the constructor
+	def init(@source : Indexed[T], start : i32, end_exclusive : i32) {
+		@start = @source.canonicalize(start);
+		@end_exclusive = @source.canonicalize(end_exclusive);
+		@source.bounds_check_slice(@start, @end_exclusive);
+	}
+}

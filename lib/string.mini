@@ -2,15 +2,14 @@ import builtins;
 import collection;
 import writer;
 import list;
-import indexable;
 import range;
 import ascii;
 import unicode;
-import slice;
+import span;
 import exception;
 import char;
 
-no_export slice, exception, unicode, ascii;
+no_export span, exception, unicode, ascii;
 no_export SplitString, SplitStringIterator, StringByteWriter, StringCodepointWriter;
 
 class Representable {
@@ -54,7 +53,7 @@ class String extends List[Character], Representable {
     def Self.from_c_string(c_string : Buffer[i8]) -> String {
         size = 0;
         while c_string.[size] != (0 as i8) { size = size + 1; } // count bytes
-        return String.from_bytes_lossy(Slice{c_string, size}); // default to lossy conversion
+        return String.from_bytes_lossy(Span{c_string, size}); // default to lossy conversion
     } ~> no_alias
 
     def Self.from_char(char : Character) -> String {
@@ -106,7 +105,7 @@ class String extends List[Character], Representable {
         new_b_len = old_b_len + other_b_len;
         self.reserve(new_b_len);
         for i in 0..other_b_len {
-            @bytes.[i + old_b_len] = other.unchecked_index(i);
+            @bytes.[i + old_b_len] = other.get_unchecked(i);
         }
         @byte_length = new_b_len;
         @char_length = @char_length + other.size();
@@ -131,7 +130,7 @@ class String extends List[Character], Representable {
     def ==(other : String) -> Bool {
         if @byte_length != other.byte_length() { return false; }
         for i in 0..@byte_length {
-            if @bytes.[i] != other.unchecked_index(i) { return false; }
+            if @bytes.[i] != other.get_unchecked(i) { return false; }
         }
         return true;
     }
@@ -257,7 +256,7 @@ class String extends List[Character], Representable {
     def lines() -> Iterable[StringView] {
         return self.split("\n");
     }
-    def unchecked_index(x : i32) -> i8 {
+    def get_unchecked(x : i32) -> i8 {
         return @bytes.[x];
     }
     def copy() -> Self {
@@ -426,13 +425,13 @@ class StringBytes extends Collection[i8] {
         }
     }
 
-    def unchecked_index(index : i32) -> i8 {
-        return self.source().unchecked_index(self.start() + index);
+    def get_unchecked(index : i32) -> i8 {
+        return self.source().get_unchecked(self.start() + index);
     }
 
     def [](indices : i32) -> i8 yields OutOfBounds {
         self.bounds_check(indices);
-        return self.unchecked_index(indices);
+        return self.get_unchecked(indices);
     }
 
     def [](indices : Range) -> StringBytes {
@@ -510,8 +509,8 @@ class StringBytes extends Collection[i8] {
         needle_len = needle.byte_length();
         if start + needle_len > self.size() { return false; }
         for i in 0..needle_len {
-            left = self.unchecked_index(start + i);
-            if left != needle.unchecked_index(i) { return false; }
+            left = self.get_unchecked(start + i);
+            if left != needle.get_unchecked(i) { return false; }
         }
         return true;
     } ~> no_alias
@@ -646,11 +645,11 @@ class StringBytesView extends StringBytes {
         source_len = source.byte_length();
 
         if start < source_len {
-            start_byte = source.unchecked_index(start);
+            start_byte = source.get_unchecked(start);
             if UTF8.is_continuation(start_byte) { yield(InvalidUnicodeError{}); }
         }
         if end_exclusive < source_len {
-            end_byte = source.unchecked_index(end_exclusive);
+            end_byte = source.get_unchecked(end_exclusive);
             if UTF8.is_continuation(end_byte) { yield(InvalidUnicodeError{}); }
         }
 
@@ -690,7 +689,7 @@ class StringView {
     def to_string() -> String {
         n_bytes = self.byte_length();
         bytes = Buffer[i8].new(n_bytes);
-        for i in 0..n_bytes { bytes.[i] = @str.unchecked_index(@start + i); }
+        for i in 0..n_bytes { bytes.[i] = @str.get_unchecked(@start + i); }
         return String{bytes, n_bytes, @char_length, n_bytes};
     } ~> no_alias
 
@@ -724,7 +723,7 @@ class StringBytesIterator extends Iterator[i8] {
 
     def next() -> i8? {
         if @cursor >= @bytes.size() { return nil; }
-        next = @bytes.unchecked_index(@cursor);
+        next = @bytes.get_unchecked(@cursor);
         @cursor = @cursor + 1;
         return next;
     }

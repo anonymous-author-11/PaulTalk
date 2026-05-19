@@ -25,17 +25,11 @@ class BufferedFile extends File {
 	@cache_capacity : i32
 	@open : Bool
 
-	def Self.seek_set() -> i32 {
-		return 0;
-	}
+	def Self.seek_set() -> i32 { return 0; }
 
-	def Self.default_cache_capacity() -> i32 {
-		return 8192;
-	}
+	def Self.default_cache_capacity() -> i32 { return 8192; }
 
-	def Self.seek_end() -> i32 {
-		return 2;
-	}
+	def Self.seek_end() -> i32 { return 2; }
 
 	def init(@name : String, @mode : String) {
 		@cache_capacity = Self.default_cache_capacity();
@@ -95,7 +89,7 @@ class BufferedFile extends File {
 		if not self.cache_contains(offset) { return nil; }
 		local_index = (offset - @cache_start) as i32;
 		return @cache.[local_index];
-	}
+	} ~> no_alias
 
 	def write_at_offset(offset : i64, value : i8) {
 		self.ensure_open();
@@ -105,7 +99,7 @@ class BufferedFile extends File {
 		written = fwrite(single_byte, 1 as i64, 1 as i64, @handle);
 		if written < 1 as i64 { yield(FileSystemError{}); }
 		if ferror(@handle) != 0 { yield(FileSystemError{}); }
-	}
+	} ~> no_alias
 
 	def write(offset : i64, source : Buffer[i8], n_bytes : i32) -> i32 {
 		self.ensure_open();
@@ -124,19 +118,17 @@ class BufferedFile extends File {
 		length = ftell(@handle);
 		if length < 0 as i64 { yield(FileSystemError{}); }
 		return length;
-	}
+	} ~> no_alias
 
-	def unchecked_insert(index : i32, value : i8) {
+	def put_unchecked(index : i32, value : i8) {
 		self.write_at_offset(index as i64, value);
-		if self.cache_contains(index as i64) {
-			local_index = ((index as i64) - @cache_start) as i32;
-			@cache.[local_index] = value;
-		}
-	}
+		if not self.cache_contains(index as i64) { return; }
+		local_index = ((index as i64) - @cache_start) as i32;
+		@cache.[local_index] = value;
+	} ~> no_alias
 
 	def mode=(@mode : String) {
-		if not @open { return; }
-		self.reopen();
+		if @open { self.reopen(); }
 	}
 
 	def reopen() {

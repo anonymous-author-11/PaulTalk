@@ -7,21 +7,21 @@ insert_keys = Array[i32].new(n);
 lookup_keys = Array[i32].new(n);
 
 for i in 0..n {
-    insert_keys.unchecked_insert(i, i);
-    lookup_keys.unchecked_insert(i, i);
+    insert_keys.put_unchecked(i, i);
+    lookup_keys.put_unchecked(i, i);
 }
 
 shuffle_i32(insert_keys, n, PRNG.new(111));
 shuffle_i32(lookup_keys, n, PRNG.new(222));
 
 for i in 0..n {
-    key = insert_keys.unchecked_index(i);
+    key = insert_keys.get_unchecked(i);
     table.insert(key, key * 3 + 1);
 }
 
 checksum : i64 = 0;
 for i in 0..n {
-    key = lookup_keys.unchecked_index(i);
+    key = lookup_keys.get_unchecked(i);
     value = table.get(key);
     if value is i32 {
         checksum = checksum + (value as i64);

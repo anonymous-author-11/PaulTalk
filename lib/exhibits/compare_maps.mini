@@ -1,9 +1,9 @@
 import std;
 import old_hashmaps.hash_perf_utils;
 import old_hashmaps.swiss_table_v5;
-import keyed.swiss_map;
+import swiss.swiss_map;
 
-alias TableOne = keyed.swiss_map.SwissMap;
+alias TableOne = swiss.swiss_map.SwissMap;
 alias TableTwo = old_hashmaps.swiss_table_v5.SwissTable;
 
 def table_one() -> String { return "SwissMap"; }
@@ -22,18 +22,12 @@ def print_result(case_name : String, order : String, name : String, n : i32, ms 
 }
 
 def make_keys(n : i32) -> Array[i32] {
-    keys = Array[i32].new(n);
-    for i in 0..n {
-        keys.unchecked_insert(i, i);
-    }
-    return keys;
+    return 0..n into Array;
 }
 
 def make_shifted_keys(n : i32, shift : i32) -> Array[i32] {
     keys = Array[i32].new(n);
-    for i in 0..n {
-        keys.unchecked_insert(i, i + shift);
-    }
+    for i in 0..n { keys.put_unchecked(i, i + shift); }
     return keys;
 }
 
@@ -45,18 +39,14 @@ def shuffled_keys(n : i32, seed : i32) -> Array[i32] {
 
 def inserted_sum(n : i32) -> i64 {
     sum : i64 = 0;
-    for i in 0..n {
-        sum = sum + (i + 1);
-    }
+    for i in 0..n { sum = sum + (i + 1); }
     return sum;
 }
 
 def bench_insert_sequential_v4(n : i32, order : String) {
     map = TableTwo[i32, i32].new(i32_hasher, i32_eq);
     start_ms = clock();
-    for i in 0..n {
-        map.insert(i, i + 1);
-    }
+    for i in 0..n { map.insert(i, i + 1); }
     ms = clock() - start_ms;
     last = map.get(n - 1);
     ok = n == 0;
@@ -93,7 +83,7 @@ def bench_insert_random_v4(keys : Array[i32], n : i32, order : String) {
     map = TableTwo[i32, i32].new(i32_hasher, i32_eq);
     start_ms = clock();
     for i in 0..n {
-        key = keys.unchecked_index(i);
+        key = keys.get_unchecked(i);
         map.insert(key, key + 1);
     }
     ms = clock() - start_ms;
@@ -110,7 +100,7 @@ def bench_insert_random_keyed(keys : Array[i32], n : i32, order : String) {
     map = TableOne[i32, i32].new(i32_hasher, i32_eq);
     start_ms = clock();
     for i in 0..n {
-        key = keys.unchecked_index(i);
+        key = keys.get_unchecked(i);
         map.insert(key, key + 1);
     }
     ms = clock() - start_ms;
@@ -156,13 +146,13 @@ def bench_get_sequential_keyed(n : i32, expected_sum : i64, order : String) {
 def bench_get_random_v4(ins : Array[i32], look : Array[i32], n : i32, exp : i64, ord : String) {
     map = TableTwo[i32, i32].new(i32_hasher, i32_eq);
     for i in 0..n {
-        key = ins.unchecked_index(i);
+        key = ins.get_unchecked(i);
         map.insert(key, key + 1);
     }
     sum : i64 = 0;
     start_ms = clock();
     for i in 0..n {
-        key = look.unchecked_index(i);
+        key = look.get_unchecked(i);
         value = map.get(key);
         if value is i32 { sum = sum + value; }
     }
@@ -173,13 +163,13 @@ def bench_get_random_v4(ins : Array[i32], look : Array[i32], n : i32, exp : i64,
 def bench_get_random_keyed(ins : Array[i32], look : Array[i32], n : i32, exp : i64, ord : String) {
     map = TableOne[i32, i32].new(i32_hasher, i32_eq);
     for i in 0..n {
-        key = ins.unchecked_index(i);
+        key = ins.get_unchecked(i);
         map.insert(key, key + 1);
     }
     sum : i64 = 0;
     start_ms = clock();
     for i in 0..n {
-        key = look.unchecked_index(i);
+        key = look.get_unchecked(i);
         value = map.get(key);
         if value is i32 { sum = sum + value; }
     }
@@ -190,13 +180,13 @@ def bench_get_random_keyed(ins : Array[i32], look : Array[i32], n : i32, exp : i
 def bench_get_miss_v4(insert_keys : Array[i32], miss_keys : Array[i32], n : i32, order : String) {
     map = TableTwo[i32, i32].new(i32_hasher, i32_eq);
     for i in 0..n {
-        key = insert_keys.unchecked_index(i);
+        key = insert_keys.get_unchecked(i);
         map.insert(key, key + 1);
     }
     misses = 0;
     start_ms = clock();
     for i in 0..n {
-        key = miss_keys.unchecked_index(i);
+        key = miss_keys.get_unchecked(i);
         if map.get(key) is Nil { misses = misses + 1; }
     }
     ms = clock() - start_ms;
@@ -206,13 +196,13 @@ def bench_get_miss_v4(insert_keys : Array[i32], miss_keys : Array[i32], n : i32,
 def bench_get_miss_keyed(ins : Array[i32], miss : Array[i32], n : i32, order : String) {
     map = TableOne[i32, i32].new(i32_hasher, i32_eq);
     for i in 0..n {
-        key = ins.unchecked_index(i);
+        key = ins.get_unchecked(i);
         map.insert(key, key + 1);
     }
     misses = 0;
     start_ms = clock();
     for i in 0..n {
-        key = miss.unchecked_index(i);
+        key = miss.get_unchecked(i);
         if map.get(key) is Nil { misses = misses + 1; }
     }
     ms = clock() - start_ms;
@@ -222,13 +212,13 @@ def bench_get_miss_keyed(ins : Array[i32], miss : Array[i32], n : i32, order : S
 def bench_remove_random_v4(ins : Array[i32], rem : Array[i32], n : i32, order : String) {
     map = TableTwo[i32, i32].new(i32_hasher, i32_eq);
     for i in 0..n {
-        key = ins.unchecked_index(i);
+        key = ins.get_unchecked(i);
         map.insert(key, key + 1);
     }
     removed = 0;
     start_ms = clock();
     for i in 0..n {
-        key = rem.unchecked_index(i);
+        key = rem.get_unchecked(i);
         value = map.remove(key);
         if value is i32 { removed = removed + 1; }
     }
@@ -240,13 +230,13 @@ def bench_remove_random_v4(ins : Array[i32], rem : Array[i32], n : i32, order : 
 def bench_remove_random_keyed(ins : Array[i32], rem : Array[i32], n : i32, order : String) {
     map = TableOne[i32, i32].new(i32_hasher, i32_eq);
     for i in 0..n {
-        key = ins.unchecked_index(i);
+        key = ins.get_unchecked(i);
         map.insert(key, key + 1);
     }
     removed = 0;
     start_ms = clock();
     for i in 0..n {
-        key = rem.unchecked_index(i);
+        key = rem.get_unchecked(i);
         value = map.remove(key);
         if value is i32 { removed = removed + 1; }
     }

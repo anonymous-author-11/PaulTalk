@@ -1,44 +1,18 @@
-import collection;
-import store;
+import keyed;
 
-class Set[T] extends Collection[T] {
-    abstract def contains(value : T) -> Bool
-    abstract def insert(value : T) -> Bool
-    abstract def remove(value : T) -> Bool
-    abstract def clear()
-}
+class Set[T] extends KeyedStore[T, T, T] {
 
-class HashSet[T] extends Set[T] {
-    @store : HashStore[T, T, T]
+    abstract def remove(key : T) -> T? ~> { ret holds $values }
 
-    regions { $elems == @store$elems }
-
-    abstract def init(hasher : (T) -> i32, eq : (T, T) -> Bool)
-
-    def size() -> i32 {
-        return @store.size();
-    }
-
-    def contains(value : T) -> Bool {
-        return @store.contains_key(value);
-    }
+    def put(value : T) -> Bool {
+        return self.put(value, value);
+    } ~> { $values holds value }
 
     def insert(value : T) -> Bool {
-        old_value = @store.put_value(value, value);
-        return old_value is Nil;
-    }
-
-    def remove(value : T) -> Bool {
-        removed = @store.remove_value(value);
-        return removed is T;
-    }
+        return self.put(value);
+    } ~> { $values holds value }
 
     def clear() {
-        @store.clear();
-    }
-
-    def iterator() -> Iterator[T] {
-        return @store.iterator();
-    }
-
+        for elem in self { self.remove(elem); }
+    } ~> no_alias
 }

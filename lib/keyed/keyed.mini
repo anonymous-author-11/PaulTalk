@@ -1,0 +1,61 @@
+import collection;
+import exception;
+import string;
+
+no_export exception;
+no_export string;
+
+class KeyNotFound extends Exception {}
+
+class Keyed[K, V, T] extends Collection[T] {
+    $keys : Region
+    $values : Region
+
+    // Intentionally over-conservative
+    // Subtypes may use a more precise relation
+    regions { $elems == $keys == $values }
+
+    // Should be O(1) access
+    abstract def get(key : K) -> V? ~> { ret holds $values }
+    abstract def keys() -> Collection[K]
+    abstract def values() -> Collection[V]
+
+    def has_key(key : K) -> Bool {
+        return self.get(key) is V;
+    } ~> no_alias
+
+    // Should be O(1) access
+    def [](key : K) -> V yields KeyNotFound {
+        val = self.get(key);
+        if val is V { return val; }
+        self.fail_index(key);
+    } ~> { ret holds $values }
+
+    def fail_index(key : K) { yield(KeyNotFound{}); } ~> no_alias
+
+    // if .map could take a closure this would be easy to implement
+    
+    // def [](key : Collection[K]) -> Collection[V] yields KeyNotFound {
+    //     return key.map((elem : K) => { self.[elem]; });
+    // }
+
+}
+
+// Storage is mutable but its .size() need not be
+// I.e. we do not provide .remove() or .clear()
+class KeyedStore[K, V, T] extends Keyed[K, V, T] {
+
+    // Should be O(1) access
+    abstract def put(key : K, value : V) -> Bool {
+    } ~> { $values holds value, $keys holds key }
+
+    // Should be O(1) access
+    def []=(key : K, value : V) {
+        success = self.put(key, value);
+        if not success { self.fail_index(key); }
+    } ~> { $values holds value, $keys holds key }
+
+    def []=(key : Collection[K], value : Collection[V]) yields KeyNotFound {
+        for (k, v) in key.zip(value) { self.[k] = v; }
+    } ~> { $values holds value$elems, $keys holds key$elems }
+}

@@ -58,7 +58,7 @@ def make_payload(i : i32, cycle : i32, payload_len : i32) -> Payload {
 def consume_items(items : Array[BatchItem], cycle : i32) -> i64 {
     total : i64 = 0;
     for i in 0..items.size() {
-        total = total + items.unchecked_index(i).score(cycle + i);
+        total = total + items.get_unchecked(i).score(cycle + i);
     }
     return total;
 }
@@ -68,7 +68,7 @@ def consume_reverse(items : Array[BatchItem], cycle : i32) -> i64 {
     count = items.size();
     for i in 0..count {
         index = count - i - 1;
-        total = total + items.unchecked_index(index).score(cycle + i + 1);
+        total = total + items.get_unchecked(index).score(cycle + i + 1);
     }
     return total;
 }

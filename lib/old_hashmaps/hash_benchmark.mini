@@ -26,9 +26,9 @@ def shuffle(arr: Array[i32], n: i32, rng: PRNG) {
     while i > 0 {
         j = rng.next() % (i + 1);
         if j < 0 { j = j * -1; }
-        tmp = arr.unchecked_index(i);
-        arr.unchecked_insert(i, arr.unchecked_index(j));
-        arr.unchecked_insert(j, tmp);
+        tmp = arr.get_unchecked(i);
+        arr.put_unchecked(i, arr.get_unchecked(j));
+        arr.put_unchecked(j, tmp);
         i = i - 1;
     }
 }
@@ -76,7 +76,7 @@ def benchmark_insert_random(n: i32) {
     i = 0;
     while i < n {
         key = rng.next();
-        keys_to_insert.unchecked_insert(i, key);
+        keys_to_insert.put_unchecked(i, key);
         temp_map_for_size_check.insert(key, true);
         i = i + 1;
     }
@@ -88,7 +88,7 @@ def benchmark_insert_random(n: i32) {
     start_time: i64 = clock();
     i = 0;
     while i < n {
-        key = keys_to_insert.unchecked_index(i);
+        key = keys_to_insert.get_unchecked(i);
         map.insert(key, key + 1);
         i = i + 1;
     }
@@ -148,7 +148,7 @@ def benchmark_get_random(n: i32) {
     
     i = 0;
     while i < n {
-        keys.unchecked_insert(i, i);
+        keys.put_unchecked(i, i);
         value = i + 1;
         map.insert(i, value);
         expected_sum = expected_sum + value;
@@ -162,7 +162,7 @@ def benchmark_get_random(n: i32) {
     actual_sum: i64 = 0;
     i = 0;
     while i < n {
-        key = keys.unchecked_index(i);
+        key = keys.get_unchecked(i);
         val = map.get(key);
         if val is i32 { actual_sum = actual_sum + val; }
         i = i + 1;
@@ -204,7 +204,7 @@ def benchmark_get_miss(n: i32) {
     while miss_keys_generated < n and attempts < max_attempts_miss {
         key = rng_miss.next();
         if temp_map_for_setup.get(key) is Nil {
-            keys_to_miss.unchecked_insert(miss_keys_generated, key);
+            keys_to_miss.put_unchecked(miss_keys_generated, key);
             miss_keys_generated = miss_keys_generated + 1;
         }
         attempts = attempts + 1;
@@ -223,7 +223,7 @@ def benchmark_get_miss(n: i32) {
     hit_count = 0;
     i = 0;
     while i < n {
-        key = keys_to_miss.unchecked_index(i);
+        key = keys_to_miss.get_unchecked(i);
         if map.get(key) is Nil { miss_count = miss_count + 1; }
         else { hit_count = hit_count + 1; }
         i = i + 1;
@@ -258,7 +258,7 @@ def benchmark_remove_random(n: i32) {
         key = rng.next();
         if temp_map_keys.get(key) is Nil {
             map.insert(key, key + 1);
-            keys_to_remove.unchecked_insert(keys_added_count, key);
+            keys_to_remove.put_unchecked(keys_added_count, key);
             temp_map_keys.insert(key, true);
             keys_added_count = keys_added_count + 1;
         }
@@ -277,7 +277,7 @@ def benchmark_remove_random(n: i32) {
     remove_count = 0;
     i = 0;
     while i < n {
-        key = keys_to_remove.unchecked_index(i);
+        key = keys_to_remove.get_unchecked(i);
         val = map.remove(key);
         if val is i32 {
             remove_count = remove_count + 1;

@@ -1,16 +1,10 @@
-import set;
+import keyed.set;
 import swiss_store;
 
-class SwissSet[T] extends HashSet[T] {
-    def init(hasher : (T) -> i32, eq : (T, T) -> Bool) {
-        @store = SwissSetStore{hasher, eq};
-    }
-}
-
-class SwissSetStore[T] extends SwissStore[T, T, T] {
+class SwissSet[T] extends SwissStore[T, T, T], Set[T] {
     @keys : Buffer[T]
 
-    regions { $elems == @keys }
+    regions { $keys == $values == @keys }
 
     def init(@hasher : (T) -> i32, @eq : (T, T) -> Bool) {
         entries_len = min_capacity();
@@ -24,25 +18,15 @@ class SwissSetStore[T] extends SwissStore[T, T, T] {
         for i in entries_len..capacity { @metadata.[i] = padding(); }
     }
 
-    def value_at(index : i32) -> T {
-        return @keys.[index];
-    }
+    def value_at(index : i32) -> T { return @keys.[index]; }
 
-    def key_at(index : i32) -> T {
-        return @keys.[index];
-    }
+    def key_at(index : i32) -> T { return @keys.[index]; }
 
-    def set_value_at(index : i32, value : T) {
-        @keys.[index] = value;
-    }
+    def set_value_at(index : i32, value : T) { @keys.[index] = value; }
 
-    def set_key_at(index : i32, key : T) {
-        @keys.[index] = key;
-    }
+    def set_key_at(index : i32, key : T) { @keys.[index] = key; }
 
-    def reset_records(capacity : i32) {
-        @keys = Buffer[T].new(capacity);
-    }
+    def reset_records(capacity : i32) { @keys = Buffer[T].new(capacity); }
 
     def resize(new_capacity : i32) {
         old_keys = @keys;

@@ -26,8 +26,8 @@ def shuffle_i32(keys : Array[i32], n : i32, rng : PRNG) {
         offset = rng.next() % remaining;
         if offset < 0 { offset = offset * -1; }
         j = i + offset;
-        temp = keys.unchecked_index(i);
-        keys.unchecked_insert(i, keys.unchecked_index(j));
-        keys.unchecked_insert(j, temp);
+        temp = keys.get_unchecked(i);
+        keys.put_unchecked(i, keys.get_unchecked(j));
+        keys.put_unchecked(j, temp);
     }
 }

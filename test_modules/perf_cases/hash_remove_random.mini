@@ -7,21 +7,21 @@ insert_keys = Array[i32].new(n);
 remove_keys = Array[i32].new(n);
 
 for i in 0..n {
-    insert_keys.unchecked_insert(i, i);
-    remove_keys.unchecked_insert(i, i);
+    insert_keys.put_unchecked(i, i);
+    remove_keys.put_unchecked(i, i);
 }
 
 shuffle_i32(insert_keys, n, PRNG.new(555));
 shuffle_i32(remove_keys, n, PRNG.new(666));
 
 for i in 0..n {
-    key = insert_keys.unchecked_index(i);
+    key = insert_keys.get_unchecked(i);
     table.insert(key, key * 3 + 1);
 }
 
 removed_count = 0;
 for i in 0..n {
-    key = remove_keys.unchecked_index(i);
+    key = remove_keys.get_unchecked(i);
     removed = table.remove(key);
     if removed is i32 {
         removed_count = removed_count + 1;

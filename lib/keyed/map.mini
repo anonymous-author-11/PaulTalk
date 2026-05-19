@@ -1,39 +1,34 @@
-import core;
-import store;
+import keyed;
 
-class KeyNotFound extends Exception {}
+class Map[K, V] extends KeyedStore[K, V, Pair[K, V]] {
 
-class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
-    abstract def get(key : K) -> V?
-    abstract def insert(key : K, value : V)
-    abstract def remove(key : K) -> V?
+    // Makes regions more precise
+    regions { $elems holds ($keys, $values) }
 
-    def indices() -> Collection[K] {
-        return self.keys();
-    }
+    abstract def remove(key : K) -> V? ~> { ret holds $values }
+
+    def insert(key : K, value : V) {
+        self.put(key, value);
+    } ~> { $values holds value, $keys holds key }
 
     def keys() -> Collection[K] {
         return self.map((pair : Pair[K, V]) => { pair.first(); });
-    }
+    } ~> { ret$elems == $keys, ret holds self }
 
     def values() -> Collection[V] {
         return self.map((pair : Pair[K, V]) => { pair.second(); });
-    }
+    } ~> { ret$elems == $values, ret holds self }
 
     def clear() {
         for key in self.keys() { self.remove(key); }
-    }
-
-    def contains_key(key : K) -> Bool {
-        return self.get(key) is V;
-    }
+    } ~> no_alias
 
     def contains(pair : Pair[K, V], eq : (Pair[K, V], Pair[K, V]) -> Bool) -> Bool {
         key = pair.first();
         value = self.get(key);
         if value is Nil { return false; }
         return eq.call(pair, Pair{key, value});
-    }
+    } ~> no_alias
 
     def get_or(key : K, fallback : V) -> V {
         value = self.get(key);
@@ -81,50 +76,4 @@ class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
         return fallback;
     }
 
-    def [](key : K) -> V {
-        value = self.get(key);
-        if value is V { return value; }
-        yield(KeyNotFound{});
-    }
-
-    def []=(key : K, value : V) {
-        self.insert(key, value);
-    }
 }
-
-class HashMap[K, V] extends Map[K, V] {
-    @store : HashStore[K, V, Pair[K, V]]
-
-    regions { $elems == @store$elems }
-
-    abstract def init(hasher : (K) -> i32, eq : (K, K) -> Bool)
-
-    def size() -> i32 {
-        return @store.size();
-    }
-
-    def get(key : K) -> V? {
-        value = @store.get_value(key);
-        if value is Nil { return nil; }
-        return value;
-    }
-
-    def insert(key : K, value : V) {
-        @store.put_value(key, value);
-    }
-
-    def remove(key : K) -> V? {
-        value = @store.remove_value(key);
-        if value is Nil { return nil; }
-        return value;
-    }
-
-    def clear() {
-        @store.clear();
-    }
-
-    def iterator() -> Iterator[Pair[K, V]] {
-        return @store.iterator();
-    }
-}
-

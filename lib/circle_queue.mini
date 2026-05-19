@@ -1,8 +1,6 @@
 import queue;
 
-no_export CircleQueueIterator;
-
-class CircleQueue[T] extends Queue[T], IndexableCollection[i32, T, T] {
+class CircleQueue[T] extends IndexedStore[T], Queue[T] {
     @buffer : Buffer[T]
     @head : i32
     @count : i32
@@ -23,9 +21,7 @@ class CircleQueue[T] extends Queue[T], IndexableCollection[i32, T, T] {
         @capacity = 1;
     }
 
-    def size() -> i32 {
-        return @count;
-    }
+    def size() -> i32 { return @count; }
 
     def append(x : T) -> Self {
         if @count >= @capacity { self.grow(); }
@@ -43,89 +39,28 @@ class CircleQueue[T] extends Queue[T], IndexableCollection[i32, T, T] {
         return @buffer.[head];
     }
 
-    def first() -> T? {
-        if @count == 0 { return nil; }
-        return @buffer.[@head];
-    }
-
-    def last() -> T? {
-        if @count == 0 { return nil; }
-        tail = (@head + @count - 1) bit_and (@capacity - 1);
-        return @buffer.[tail];
-    }
-
-    def clear() -> Self {
+    def clear() {
         @head = 0;
         @count = 0;
-        return self;
     }
 
-    def indices() -> Range {
-        return 0..@count;
-    }
-
-    def values() -> Self {
-        return self;
-    }
-
-    def [](index : i32) -> T yields OutOfBounds {
-        self.bounds_check(index);
-        if index < 0 { index = @count + index; }
-        return self.unchecked_index(index);
-    }
-
-    def []=(index : i32, value : T) yields OutOfBounds {
-        self.bounds_check(index);
-        if index < 0 { index = @count + index; }
-        self.unchecked_insert(index, value);
-    }
-
-    def bounds_check(index : i32) yields OutOfBounds {
-        past_end = index > (@count - 1);
-        before_start = (@count + index) < 0;
-        if past_end or before_start {
-            yield(OutOfBounds{@count, index});
-        }
-    }
-
-    def unchecked_index(index : i32) -> T {
-        physical = (@head + index) bit_and (@capacity - 1);
+    def get_unchecked(canonical_index : i32) -> T {
+        physical = (@head + canonical_index) bit_and (@capacity - 1);
         return @buffer.[physical];
-    } ~> { ret holds $elems }
+    }
 
-    def unchecked_insert(index : i32, value : T) {
-        physical = (@head + index) bit_and (@capacity - 1);
+    def put_unchecked(canonical_index : i32, value : T) {
+        physical = (@head + canonical_index) bit_and (@capacity - 1);
         @buffer.[physical] = value;
-    } ~> { $elems holds value }
+    }
 
     def grow() {
         new_capacity = @capacity * 2;
         new_buffer = Buffer[T].new(new_capacity);
-        for i in 0..@count { new_buffer.[i] = self.unchecked_index(i); }
+        for i in 0..@count { new_buffer.[i] = self.get_unchecked(i); }
         @buffer = new_buffer;
         @head = 0;
         @capacity = new_capacity;
     } ~> no_alias
 
-    def iterator() -> Iterator[T] {
-        return CircleQueueIterator{self};
-    }
-}
-
-class CircleQueueIterator[T] extends Iterator[T] {
-    @queue : CircleQueue[T]
-    @index : i32
-
-    regions { $elems == @queue$elems }
-
-    def init(@queue : CircleQueue[T]) {
-        @index = 0;
-    }
-
-    def next() -> T? {
-        if @index >= @queue.size() { return nil; }
-        index = @index;
-        @index = index + 1;
-        return @queue.unchecked_index(index);
-    }
 }

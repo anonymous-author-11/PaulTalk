@@ -18,9 +18,9 @@ def multiply_av(n : i32, input : Array[f64], output : Array[f64]) {
     for i in 0..n {
         sum = 0.0;
         for j in 0..n {
-            sum = sum + eval_a(i, j) * input.unchecked_index(j);
+            sum = sum + eval_a(i, j) * input.get_unchecked(j);
         }
-        output.unchecked_insert(i, sum);
+        output.put_unchecked(i, sum);
     }
 }
 
@@ -28,9 +28,9 @@ def multiply_atv(n : i32, input : Array[f64], output : Array[f64]) {
     for i in 0..n {
         sum = 0.0;
         for j in 0..n {
-            sum = sum + eval_a(j, i) * input.unchecked_index(j);
+            sum = sum + eval_a(j, i) * input.get_unchecked(j);
         }
-        output.unchecked_insert(i, sum);
+        output.put_unchecked(i, sum);
     }
 }
 
@@ -52,8 +52,8 @@ def spectral_norm(n : i32) -> f64 {
     v_b_v = 0.0;
     v_v = 0.0;
     for i in 0..n {
-        v_b_v = v_b_v + u.unchecked_index(i) * v.unchecked_index(i);
-        v_v = v_v + v.unchecked_index(i) * v.unchecked_index(i);
+        v_b_v = v_b_v + u.get_unchecked(i) * v.get_unchecked(i);
+        v_v = v_v + v.get_unchecked(i) * v.get_unchecked(i);
     }
 
     return Math.sqrt(v_b_v / v_v);

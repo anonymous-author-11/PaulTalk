@@ -59,7 +59,7 @@ class Symbol extends Token {}
 
 def starts_with_upper(text : String) -> Bool {
     if text.byte_length() == 0 { return false; }
-    first = text.unchecked_index(0);
+    first = text.get_unchecked(0);
     return first >= ('A' as i8) and first <= ('Z' as i8);
 }
 
@@ -558,13 +558,13 @@ class PaulTalkLexer {
 
     def peek_byte() -> i8 {
         if self.at_end() { return 0 as i8; }
-        return @source.unchecked_index(@cursor);
+        return @source.get_unchecked(@cursor);
     }
 
     def peek_byte_at(offset : i32) -> i8 {
         index = @cursor + offset;
         if index < 0 or index >= @length { return 0 as i8; }
-        return @source.unchecked_index(index);
+        return @source.get_unchecked(index);
     }
 
     def advance_byte() -> i8 {
@@ -660,7 +660,7 @@ class PaulTalkLexer {
             @tokens.append(Keyword{text, line, column});
             return;
         }
-        first = @source.unchecked_index(start) as i32;
+        first = @source.get_unchecked(start) as i32;
         if first >= 65 and first <= 90 {
             @tokens.append(TypeIdentifier{text, line, column});
             return;
@@ -1480,7 +1480,7 @@ class PaulTalkParser {
         chunk_start = 0;
         found_interp = false;
         while cursor < size {
-            is_escape = text.unchecked_index(cursor) == ('\\' as i8);
+            is_escape = text.get_unchecked(cursor) == ('\\' as i8);
             if is_escape { cursor = cursor + 2; }
             if is_escape { continue; }
             is_open = self.is_interp_open(text, cursor);
@@ -1512,7 +1512,7 @@ class PaulTalkParser {
         depth = 1;
         cursor = start;
         while cursor < size {
-            byte = text.unchecked_index(cursor);
+            byte = text.get_unchecked(cursor);
             is_escape = byte == ('\\' as i8);
             if is_escape { cursor = cursor + 2; }
             if is_escape { continue; }
@@ -1539,10 +1539,10 @@ class PaulTalkParser {
     }
 
     def is_interp_open(text : StringBytes, cursor : i32) -> Bool {
-        if text.unchecked_index(cursor) != ('$' as i8) { return false; }
+        if text.get_unchecked(cursor) != ('$' as i8) { return false; }
         size = text.size();
         if cursor + 1 >= size { return false; }
-        return text.unchecked_index(cursor + 1) == ('{' as i8);
+        return text.get_unchecked(cursor + 1) == ('{' as i8);
     }
 
     def add_chunk(n : ParseNode, s : StringBytes, a : i32, b : i32, t : Token) {
@@ -1564,8 +1564,8 @@ class PaulTalkParser {
     def comment_skip_target(text : StringBytes, cursor : i32) -> i32 {
         size = text.size();
         if cursor + 1 >= size { return -1; }
-        if text.unchecked_index(cursor) != ('/' as i8) { return -1; }
-        next = text.unchecked_index(cursor + 1);
+        if text.get_unchecked(cursor) != ('/' as i8) { return -1; }
+        next = text.get_unchecked(cursor + 1);
         if next == ('/' as i8) {
             return self.skip_line_comment(text, cursor + 2);
         }
@@ -1579,7 +1579,7 @@ class PaulTalkParser {
         size = text.size();
         cursor = start + 1;
         while cursor < size {
-            byte = text.unchecked_index(cursor);
+            byte = text.get_unchecked(cursor);
             is_escape = byte == ('\\' as i8);
             if is_escape { cursor = cursor + 2; }
             if is_escape { continue; }
@@ -1593,7 +1593,7 @@ class PaulTalkParser {
         size = text.size();
         cursor = start;
         while cursor < size {
-            if text.unchecked_index(cursor) == ('\n' as i8) { return cursor; }
+            if text.get_unchecked(cursor) == ('\n' as i8) { return cursor; }
             cursor = cursor + 1;
         }
         return size;
@@ -1603,8 +1603,8 @@ class PaulTalkParser {
         size = text.size();
         cursor = start;
         while cursor + 1 < size {
-            left = text.unchecked_index(cursor);
-            right = text.unchecked_index(cursor + 1);
+            left = text.get_unchecked(cursor);
+            right = text.get_unchecked(cursor + 1);
             is_end = left == ('*' as i8) and right == ('/' as i8);
             if is_end { return cursor + 2; }
             cursor = cursor + 1;

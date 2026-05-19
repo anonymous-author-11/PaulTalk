@@ -1,17 +1,11 @@
 import keyed.map;
-import keyed.swiss_store;
+import swiss_store;
 
-class SwissMap[K, V] extends HashMap[K, V] {
-    def init(hasher : (K) -> i32, eq : (K, K) -> Bool) {
-        @store = SwissMapStore[K, V]{hasher, eq};
-    }
-}
-
-class SwissMapStore[K, V] extends SwissStore[K, V, Pair[K, V]] {
+class SwissMap[K, V] extends SwissStore[K, V, Pair[K, V]], Map[K, V] {
     @keys : Buffer[K]
     @values : Buffer[V]
 
-    regions { $elems == @keys == @values }
+    regions { $keys == @keys, $values == @values }
 
     def init(@hasher : (K) -> i32, @eq : (K, K) -> Bool) {
         entries_len = min_capacity();
@@ -26,21 +20,13 @@ class SwissMapStore[K, V] extends SwissStore[K, V, Pair[K, V]] {
         for i in entries_len..capacity { @metadata.[i] = padding(); }
     }
 
-    def value_at(index : i32) -> V {
-        return @values.[index];
-    }
+    def value_at(index : i32) -> V { return @values.[index]; }
 
-    def key_at(index : i32) -> K {
-        return @keys.[index];
-    }
+    def key_at(index : i32) -> K { return @keys.[index]; }
 
-    def set_value_at(index : i32, value : V) {
-        @values.[index] = value;
-    }
+    def set_value_at(index : i32, value : V) { @values.[index] = value; }
 
-    def set_key_at(index : i32, key : K) {
-        @keys.[index] = key;
-    }
+    def set_key_at(index : i32, key : K) { @keys.[index] = key; }
 
     def reset_records(capacity : i32) {
         @keys = Buffer[K].new(capacity);

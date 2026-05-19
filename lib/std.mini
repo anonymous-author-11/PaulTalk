@@ -7,5 +7,10 @@ import file_system;
 import path;
 import hash;
 import keyed;
+import swiss;
 import circle_queue;
 import program_args;
+
+// Map and Set literals desugar to these aliases
+alias DefaultMap = swiss.SwissMap;
+alias DefaultSet = swiss.SwissSet;

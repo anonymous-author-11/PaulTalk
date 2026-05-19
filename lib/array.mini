@@ -1,12 +1,12 @@
 import core;
 
 class Array[T] extends
+    IndexedStore[T],
     Stack[T],
-    IndexableCollection[i32, T, T],
     Representable
 {
 	@buffer : Buffer[T]
-	@length : i32
+	@size : i32
 	@capacity : i32
 
     regions { $elems == @buffer }
@@ -19,163 +19,87 @@ class Array[T] extends
         return Self.empty().extend(iterable);
     }
 
-    getter @capacity
+    getters @size, @capacity
 
 	def init() {
 		@buffer = Buffer[T].new(1);
-		@length = 0;
+		@size = 0;
 		@capacity = 1;
 	}
     def init(@capacity : i32) {
         if @capacity < 1 { @capacity = 1; }
         @buffer = Buffer[T].new(@capacity);
-        @length = 0;
-    }
-    def init(@buffer : Buffer[T], @length : i32, @capacity : i32) {
+        @size = 0;
     }
     
-    def size() -> i32 {
-        return @length;
-    } ~> { ret == @length }
+    def init(@buffer : Buffer[T], @size : i32, @capacity : i32) {}
+
+    // Representable override
+    def repr() -> String { return "Array"; }
+
+    // Indexed[T] overrides
+
+    def get_unchecked(index : i32) -> T { return @buffer.[index]; }
+
+    def canonicalize(index : i32) -> i32 {
+        // Allow negative indices to index in reverse
+        if index < 0 { return @size + index; }
+        return index;
+    }
+    
+    // IndexedStore[T] override
+    def put_unchecked(index : i32, value : T) { @buffer.[index] = value; }
+
+    // List[T] overrides
+
+    def append(x : T) -> Self {
+        if @size >= @capacity { self.reserve(@capacity * 2); }
+        @buffer.[@size] = x;
+        @size = @size + 1;
+        return self;
+    }
+    
+    def extend(other : Collection[T]) -> Self {
+        old_len = @size;
+        new_len = old_len + other.size();
+        self.reserve(new_len);
+        for (i, elem) in other.enumerate() {
+            self.put_unchecked(i + old_len, elem);
+        }
+        @size = new_len;
+        return self;
+    }
+
+    // Stack[T] overrides
+
+    def pop() -> T? {
+        if @size == 0 { return nil; }
+        @size = @size - 1;
+        return @buffer.[@size];
+    }
+
+    def clear() { @size = 0; }
+
+    def remove_at(index : i32) -> T? {
+        index = self.canonicalize(index);
+        if not self.is_inbounds(index) { return nil; }
+        removed = @buffer.[index];
+        last_index = @size - 1;
+        for i in index..last_index { @buffer.[i] = @buffer.[i + 1]; }
+        @size = last_index;
+        return removed;
+    }
+
+    def copy() -> Array[T] {
+        return Array[T]{@capacity}.extend(self);
+    }
 
     def reserve(new_capacity : i32) {
         if new_capacity <= @capacity { return; }
         @capacity = new_capacity;
         old_buffer = @buffer;
         @buffer = Buffer[T].new(@capacity);
-        i = 0;
-        while i < @length {
-            @buffer.[i] = old_buffer.[i];
-            i = i + 1;
-        }
+        for i in 0..@size { @buffer.[i] = old_buffer.[i]; }
     } ~> no_alias
-
-    def copy() -> Array[T] {
-        return Array[T]{@capacity}.extend(self);
-    }
-
-    // List[T] overrides
-
-    def append(x : T) -> Self {
-        if @length >= @capacity { self.reserve(@capacity * 2); }
-        @buffer.[@length] = x;
-        @length = @length + 1;
-        return self;
-    }
     
-    def extend(other : Collection[T]) -> Self {
-        old_len = @length;
-        new_len = old_len + other.size();
-        self.reserve(new_len);
-        i = 0;
-        for elem in other {
-            self.unchecked_insert(i + old_len, elem);
-            i = i + 1;
-        }
-        @length = new_len;
-        return self;
-    }
-
-    def pop() -> T? {
-        if @length == 0 { return nil; }
-        @length = @length - 1;
-        return @buffer.[@length];
-    }
-
-    def peek() -> T? {
-        if @length == 0 { return nil; }
-        return @buffer.[@length - 1];
-    }
-
-    def remove_at(index : i32) -> T yields OutOfBounds {
-        self.bounds_check(index);
-        if index < 0 { index = @length + index; }
-        removed = @buffer.[index];
-        last_index = @length - 1;
-        while index < last_index {
-            @buffer.[index] = @buffer.[index + 1];
-            index = index + 1;
-        }
-        @length = last_index;
-        return removed;
-    }
-
-    def clear() -> Self {
-        @length = 0;
-        return self;
-    }
-
-    def reverse() -> Self {
-        left = 0;
-        right = @length - 1;
-        while left < right {
-            left_value = @buffer.[left];
-            @buffer.[left] = @buffer.[right];
-            @buffer.[right] = left_value;
-            left = left + 1;
-            right = right - 1;
-        }
-        return self;
-    }
-
-    // IndexableCollection[i32, T, T] overrides
-
-    def indices() -> Range {
-        return 0..@length;
-    }
-    def values() -> Self {
-        return self;
-    }
-    
-    def [](index : i32) -> T yields OutOfBounds {
-        self.bounds_check(index);
-        if index < 0 { index = @length + index; }
-        return self.unchecked_index(index);
-    }
-    
-    def []=(index : i32, value : T) yields OutOfBounds {
-        self.bounds_check(index);
-        if index < 0 { index = @length + index; }
-        self.unchecked_insert(index, value);
-    }
-
-    def bounds_check(index : i32) yields OutOfBounds {
-        past_end = index > (@length - 1);
-        before_start = (@length + index) < 0;
-        if past_end or before_start {
-            yield(OutOfBounds{@length, index});
-        }
-    }
-    
-    def unchecked_index(index : i32) -> T {
-    	return @buffer.[index];
-    } ~> { ret holds $elems }
-    
-    def unchecked_insert(index : i32, value : T) {
-        @buffer.[index] = value;
-    } ~> { $elems holds value }
-    
-    def iterator() -> Iterator[T] {
-    	return ArrayIterator{self};
-    }
-    def repr() -> String {
-        return "Array";
-    }
-}
-
-class ArrayIterator[T] extends Iterator[T] {
-	@array : Array[T]
-	@index : i32
-
-    regions { $elems == @array$elems }
-
-	def init(@array : Array[T]) { @index = 0; }
-	def next() -> T? {
-        // We check the array's current .length() on every .next() call
-        // This guarantees no out-of-bounds access if the array was modified
-		if @index >= @array.length() { return nil; }
-        old_index = @index;
-		@index = @index + 1;
-		return @array.unchecked_index(old_index);
-	}
 }

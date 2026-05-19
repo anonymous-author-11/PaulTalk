@@ -2,11 +2,16 @@ import core;
 
 class KeyNotFound extends Exception {}
 
-class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
+class Map[K, V] extends KeyedStore[K, V, Pair[K, V]] {
     
     abstract def get(key : K) -> V? {}
     abstract def insert(key : K, value : V) {}
     abstract def remove(key : K) -> V? {}
+
+    def put(key : K, value : V) -> Bool {
+        self.insert(key, value);
+        return true;
+    }
 
     def indices() -> Collection[K] {
         return self.keys();

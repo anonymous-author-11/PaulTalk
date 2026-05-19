@@ -11,4 +11,8 @@ class Stack[T] extends List[T] {
     def peek() -> T? {
         return self.last();
     }
+
+    def clear() {
+        while not self.is_empty() { self.pop(); }
+    }
 }

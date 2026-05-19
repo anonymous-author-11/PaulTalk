@@ -1,6 +1,6 @@
 import string;
 import exception;
-import slice;
+import span;
 import stack;
 import iteration;
 import peek;

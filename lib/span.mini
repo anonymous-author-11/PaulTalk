@@ -1,0 +1,34 @@
+import indexed;
+
+// A span is a constant-length mutable indexable collection
+// It is the lowest-level abstraction over a raw Buffer
+class Span[T] extends IndexedStore[T] {
+    
+    // Having a @start makes Span useful for views into pre-existing buffers
+    @buffer : Buffer[T]
+    @size : i32
+    @start : i32
+
+    regions { $elems == @buffer }
+
+    getter @size
+
+    def Self.from_collection(collection : Collection[T]) -> Self {
+        collection_size = collection.size();
+        buf = Buffer[T].new(collection_size);
+        for (i, elem) in collection.enumerate() { buf.[i] = elem; }
+        return Span{buf, collection_size, 0};
+    } ~> { ret$elems holds collection$elems }
+
+    def init(@buffer : Buffer[T], @size : i32, @start : i32) {}
+    
+    def init(@buffer : Buffer[T], @size : i32) { @start = 0; }
+
+    def get_unchecked(canonical_index : i32) -> T {
+        return @buffer.[@start + canonical_index];
+    } 
+
+    def put_unchecked(canonical_index : i32, value : T) {
+        @buffer.[@start + canonical_index] = value;
+    }
+}

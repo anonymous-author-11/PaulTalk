@@ -129,18 +129,14 @@ class Enumerator[T] extends Iterator[Pair[i32, T]] {
         $nxt.second == @iterator$nxt
     }
 
-    def init(@iterator : Iterator[T]) {
-        @index = 0;
-    }
+    def init(@iterator : Iterator[T]) { @index = 0; }
 
     def next() -> Pair[i32, T]? {
         next = @iterator.next();
-        if next is T {
-            old_index = @index;
-            @index = @index + 1;
-            return Pair{old_index, next};
-        }
-        return nil;
+        if next is Nil { return nil; }
+        old_index = @index;
+        @index = @index + 1;
+        return Pair{old_index, next};
     }
 }
 
@@ -167,8 +163,8 @@ class Mapper[T, U] extends Iterator[U] {
 
     def next() -> U? {
         next = @iterator.next();
-        if next is T { return @f.call(next); }
-        return nil;
+        if next is Nil { return nil; }
+        return @f.call(next);
     }
 }
 
@@ -322,8 +318,7 @@ class Zipper[T, U] extends Iterator[Pair[T, U]] {
         $nxt.first == @first$nxt, $nxt.second == @second$nxt
     }
 
-    def init(@first : Iterator[T], @second : Iterator[U]) {
-    }
+    def init(@first : Iterator[T], @second : Iterator[U]) {}
 
     def next() -> Pair[T, U]? {
         first_elem = @first.next();

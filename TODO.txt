@@ -726,17 +726,35 @@ TODO:
 	- if x is i32 and (x % 2) == 0 { ... } [check!]
 	- if x is Nil or (x % 2) == 0 { ... } [check!]
 - Add tests for codegen quality [check!]
-	- Also works as documentation of expected codegen quality
-	- Binary size
-	- # Lines of IR in out_optimized.ll
-	- # Lines of IR in optimized @main
-	- Specific things being constant-folded
-	- Specific calls not appearing (e.g. malloc, memcpy)
-	- Use generic infrastructure
+	- Also works as documentation of expected codegen quality [check!]
+	- Binary size [check!]
+	- # Lines of IR in optimized @main [check!]
+	- Specific things being constant-folded [check!]
+	- Specific calls not appearing (e.g. malloc, memcpy) [check!]
+	- Use generic infrastructure [check!]
 - Allow more ways to specify element type of array [check!]
 	- my_array : Array[Operation] = [Addition{}, Multiplication{}] [check!]
 	- my_array = [Addition{}, Multiplication{}] as Array[Operation] [check!]
 
+- Hash the signatures of the bitcode and not the implementations
+	- Extract the signatures with clever use of llvm tools
+- $reg == none for binding abstract region?
+- Special inference for ret == self ?
+- Just add syntax sugar for raise?
+- Add OneStepRange
+	- Useful for overload specialization
+- View and Slice and Span
+	- Maybe Slice implies contiguity and View doesn't?
+	- Maybe Slice implies ownership and view doesn't
+	- Axes: contiguous, owning, mutable, constructable
+- Allow capturing class methods as fptrs (x = Foo.bar)
+- When encountering ancestors not in the namespace, just skip them
+	- This way we can no_export parts of the ancestor chain
+- Maybe move from i8 to u8 in stdlib
+- Is CodePointValidator even a useful abstraction?
+- Make IndexableCollection based on integer indices
+	- Allow moving actual indexing stuff up in abstraction
+- Arguably exceptions should be able to wrap / collect sub-exceptions
 - Make sure optimizer can remove trampoline setup calls
 - Add super() initialization as a feature
 	- Use default MRO
