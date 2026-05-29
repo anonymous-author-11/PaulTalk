@@ -879,13 +879,11 @@ def run_pdl_lowering(module_str, side_output_path) -> str:
     module_str = pattern.sub(lambda m: replacements[m.group()], module_str)
     module_str = patterns + module_str
 
-    # this should run only one iteration, but we use 'while' anyway
-    while "\"mid." in module_str:
-        cmd_out = subprocess.run(run_bytecode, capture_output=True, shell=True, text=True, input=module_str)
-        if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
-        stringio = StringIO()
-        Printer(stringio).print(cmd_out.stdout)
-        module_str = stringio.getvalue()
+    cmd_out = subprocess.run(run_bytecode, capture_output=True, shell=True, text=True, input=module_str)
+    if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+    stringio = StringIO()
+    Printer(stringio).print(cmd_out.stdout)
+    module_str = stringio.getvalue()
 
     # trim off the residual PDL bytecode
     module_str = module_str[23:-16]
@@ -893,6 +891,8 @@ def run_pdl_lowering(module_str, side_output_path) -> str:
     module_str = module_str.replace("placeholder.extractvalue", "llvm.extractvalue")
     with open(side_output_path, "w", encoding="utf-8") as outfile:
         outfile.write(module_str)
+
+    if "\"mid." in module_str: raise Exception(f"PDL ops not fully lowered!")
     return module_str
 
 # overwrite every fn defined in bitcode_file with its optimized version in optimized_module
