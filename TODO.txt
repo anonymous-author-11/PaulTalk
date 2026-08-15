@@ -737,15 +737,15 @@ TODO:
 	- my_array = [Addition{}, Multiplication{}] as Array[Operation] [check!]
 - Make IndexableCollection based on integer indices [check!]
 	- Allow moving actual indexing stuff up in abstraction [check!]
+- Add more rules to the python linter [check!]
+	- No splitting comprehensions on multiple lines [check!]
+	- No splitting signature on multiple lines [check!]
 
 - Use ~> +{ ... } and ~> -{ ... } syntax to add/subtract from region facts
 - Consider tying virtual regions to types
 	- E.g. $elems : Region[T]
 	- now when instantiated with T as a value type, elems ceases to exist
 
-- Add more rules to the python linter [check!]
-	- No splitting comprehensions on multiple lines [check!]
-	- No splitting signature on multiple lines [check!]
 - Default assumption should be that methods do not create new aliasing between fields or self
 	- A method with no arguments and a value-type return value would be no_alias by default
 - Hash the signatures of the bitcode and not the implementations
