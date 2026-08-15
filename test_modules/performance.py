@@ -163,16 +163,10 @@ class CompilerPerformanceTests(CompilerTestCase):
         }
         cls._results_file.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
-    def _benchmark_program(self, name: str, source: str, expected_output: str):
+    def _benchmark_program(self, name: str, source_path: Path, expected_output: str):
         mode_results = {}
         for mode_name, debug_mode in type(self).MODES:
-            mode_results[mode_name] = self._run_single_mode(
-                name=name,
-                mode_name=mode_name,
-                debug_mode=debug_mode,
-                source=source,
-                expected_output=expected_output,
-            )
+            mode_results[mode_name] = self._run_single_mode(name, mode_name, debug_mode, source_path, expected_output)
 
         debug_average = mode_results["debug"]["average_seconds"]
         release_average = mode_results["release"]["average_seconds"]
@@ -185,19 +179,10 @@ class CompilerPerformanceTests(CompilerTestCase):
             ),
         )
 
-    def _run_single_mode(
-        self,
-        name: str,
-        mode_name: str,
-        debug_mode: bool,
-        source: str,
-        expected_output: str,
-    ) -> dict:
-        executable = self.compile_to_executable(
-            mini_code=source,
-            output_file_name_base=f"perf_{name}_{mode_name}",
-            debug_mode=debug_mode,
-        )
+    def _run_single_mode(self, name: str, mode_name: str, debug_mode: bool, source_path: Path, expected_output: str) -> dict:
+        self._ensure_test_dirs()
+        executable = self.bin_dir() / f"perf_{name}_{mode_name}.exe"
+        self.compile_path(source_path, executable, debug_mode)
         self._run_and_assert_output(executable, expected_output, type(self)._perf_warmups)
         run_times = self._time_runs(executable, expected_output, type(self)._perf_runs)
 
@@ -263,14 +248,14 @@ class CompilerPerformanceTests(CompilerTestCase):
 
     def _benchmark_case(self, name: str) -> None:
         case = type(self).BENCHMARK_CASES[name]
-        source = self._read_case_source(case["file"])
-        self._benchmark_program(name, source, case["expected_output"])
+        source_path = self._case_path(case["file"])
+        self._benchmark_program(name, source_path, case["expected_output"])
 
-    def _read_case_source(self, case_file_name: str) -> str:
+    def _case_path(self, case_file_name: str) -> Path:
         case_path = Path(__file__).resolve().parent / "perf_cases" / case_file_name
         if not case_path.exists():
             raise FileNotFoundError(f"Missing perf benchmark case source: {case_path}")
-        return case_path.read_text(encoding="utf-8")
+        return case_path
 
 
 def _create_perf_test(case_name: str):
