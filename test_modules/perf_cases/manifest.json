@@ -56,6 +56,21 @@
       "expected_output": "ok"
     },
     {
+      "name": "allocator_churn_scaled",
+      "file": "allocator_churn_scaled.mini",
+      "expected_output": "30840302468"
+    },
+    {
+      "name": "allocator_retained_scaled",
+      "file": "allocator_retained_scaled.mini",
+      "expected_output": "86282999289"
+    },
+    {
+      "name": "allocator_spike",
+      "file": "allocator_spike_benchmark.mini",
+      "expected_output": "113704503044"
+    },
+    {
       "name": "mandelbrot",
       "file": "mandelbrot_benchmark.mini",
       "expected_output": "ok"

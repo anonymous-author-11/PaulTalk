@@ -22,6 +22,8 @@ class String extends List[Character], Representable {
     @char_length : i32 // Number of unicode codepoints
     @capacity: i32
 
+    regions { $elems == @bytes }
+
     getters @byte_length, @char_length, @capacity
 
     def Self.empty() -> Self { return Self{}; }
@@ -150,7 +152,7 @@ class String extends List[Character], Representable {
             return StringView{self, start, end, needle.char_length()};
         }
         return nil;
-    }
+    } ~> { ret.str == self }
     def starts_with(prefix : String) -> Bool {
         return self.bytes().starts_with(prefix);
     }
@@ -258,7 +260,7 @@ class String extends List[Character], Representable {
     }
     def get_unchecked(x : i32) -> i8 {
         return @bytes.[x];
-    }
+    } ~> no_alias
     def copy() -> Self {
         new_buf = Buffer[i8].new(@byte_length);
         for i in 0..@byte_length { new_buf.[i] = @bytes.[i]; }
@@ -427,7 +429,7 @@ class StringBytes extends Collection[i8] {
 
     def get_unchecked(index : i32) -> i8 {
         return self.source().get_unchecked(self.start() + index);
-    }
+    } ~> no_alias
 
     def [](indices : i32) -> i8 yields OutOfBounds {
         self.bounds_check(indices);
@@ -671,11 +673,11 @@ class StringView {
 
     def byte_length() -> i32 {
         return @end_exclusive - @start;
-    }
+    } ~> no_alias
 
     def is_empty() -> Bool {
         return self.byte_length() == 0;
-    }
+    } ~> no_alias
 
     def ==(other : String) -> Bool {
         if self.byte_length() != other.byte_length() { return false; }
@@ -737,7 +739,11 @@ class StringCodepointIterator extends Iterator[i32] {
     @decoder : ValidUTF8Decoder
     @codepoint_cursor : i32
 
-    regions { $elems == @str$elems }
+    regions {
+        $elems == @str$elems,
+        @byte_iterator.bytes$source == @str,
+        @decoder.peeker == @byte_iterator
+    }
 
     def init(@str : String) {
         @byte_iterator = @str.bytes().iterator();
@@ -776,7 +782,10 @@ class StringWriter extends Writer[Character] {
     @string : String
     @encoder : UTF8Encoder
 
-    regions { $dest == @encoder$dest == @string$elems }
+    regions {
+        $dest == @encoder$dest == @string$elems,
+        @encoder.writer$source == @string
+    }
 
     def init(@string : String) {
         @encoder = UTF8Encoder{@string.bytes().writer()};
@@ -827,7 +836,10 @@ class StringCodepointWriter extends Writer[i32] {
 	@string : String
 	@encoder : UTF8Encoder
 
-    regions { $dest == @encoder$dest == @string$elems }
+    regions {
+        $dest == @encoder$dest == @string$elems,
+        @encoder.writer$source == @string
+    }
 
 	def init(@string : String) {
 		@encoder = UTF8Encoder{@string.bytes().writer()};

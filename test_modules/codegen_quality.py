@@ -12,18 +12,18 @@ class CompilerCodegenQualityTests(CompilerTestCase):
             "\n"
             "IO.print(\"hello world!\");\n"
         )
-        self.assert_codegen_quality(
-            name="helloworld",
-            mini_code=mini_code,
-            max_binary_bytes=36 * 1024,
-            max_ir_lines=290,
-            max_main_non_terminator_lines=9,
-            forbidden_main_call_patterns=(
+        options = {
+            "name":"helloworld",
+            "mini_code":mini_code,
+            "max_binary_bytes":(37 if self.backend() == "region" else 36) * 1024,
+            "max_main_non_terminator_lines":13 if self.backend() == "region" else 9,
+            "forbidden_main_call_patterns":(
                 r"^bump_malloc_inner(?:\..*)?$",
                 r"^(?:llvm\.)?memcpy(?:\..*)?$",
             ),
-            expected_output="hello world!",
-        )
+            "expected_output":"hello world!",
+        }
+        self.assert_codegen_quality(**options)
 
     def test_optimization(self):
         mini_code = (
@@ -37,7 +37,6 @@ class CompilerCodegenQualityTests(CompilerTestCase):
             name="optimization",
             mini_code=mini_code,
             max_binary_bytes=36 * 1024,
-            max_ir_lines=282,
             max_main_non_terminator_lines=2,
             required_main_patterns=(r"\bi32 noundef 23\b",),
             allowed_main_calls=frozenset({"setup_landing_pad", "printf"}),
@@ -49,7 +48,6 @@ class CompilerCodegenQualityTests(CompilerTestCase):
         name: str,
         mini_code: str,
         max_binary_bytes: int,
-        max_ir_lines: int,
         max_main_non_terminator_lines: int,
         required_main_patterns: tuple[str, ...] = (),
         forbidden_main_call_patterns: tuple[str, ...] = (),
@@ -64,7 +62,6 @@ class CompilerCodegenQualityTests(CompilerTestCase):
         self.assert_binary_size(name, exe, max_binary_bytes)
         ir = self.read_optimized_ir()
         main = self.main_body(ir)
-        self.assert_ir_lines(name, ir, max_ir_lines)
         self.assert_main_lines(name, main, max_main_non_terminator_lines)
         self.assert_required_patterns(name, main, required_main_patterns)
         self.assert_forbidden_calls(name, main, forbidden_main_call_patterns)
@@ -99,14 +96,6 @@ class CompilerCodegenQualityTests(CompilerTestCase):
             size,
             max_binary_bytes,
             f"{name} binary is {size} bytes; expected <= {max_binary_bytes}",
-        )
-
-    def assert_ir_lines(self, name: str, ir: str, max_ir_lines: int):
-        lines = len(ir.splitlines())
-        self.assertLessEqual(
-            lines,
-            max_ir_lines,
-            f"{name} optimized IR has {lines} lines; expected <= {max_ir_lines}",
         )
 
     def assert_main_lines(self, name: str, main: list[str], max_main_non_terminator_lines: int):

@@ -1,0 +1,6 @@
+import std;
+import allocator_churn_benchmark;
+
+large = allocator_churn_benchmark.churn(1, 250000, 64);
+small = allocator_churn_benchmark.churn(100, 2500, 16);
+IO.print(large + small);

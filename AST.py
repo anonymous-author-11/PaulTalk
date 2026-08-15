@@ -13,7 +13,12 @@ import hi
 import mid
 from utils import *
 from scope import (
-    Scope, Constraints, TypeEnvironment, ScopeExit, PointsToGraph, build_hashtable, build_offset_table
+    Scope, Constraints, TypeEnvironment, ScopeExit, PointsToGraph, InsertionPoint, insertion_key,
+    add_expression_region_points, add_downcast_region_facts, add_insertion_points,
+    CallableRegions, check_callable_lifetime_constraints, coalesce_output_regions, expand_alias_roots, expand_call_constraints,
+    check_function_lifetime_constraints, function_entry_region_names, type_region_param_names,
+    init_output_region_layout, record_lifetime_results, type_region_layout,
+    build_hashtable, build_offset_table
 )
 from method_dispatch import *
 from xdsl.dialects import llvm, arith, builtin, memref, cf, func
@@ -22,7 +27,7 @@ from xdsl.dialects.builtin import (
     ModuleOp, IntegerType, IntegerAttr, StringAttr, BytesAttr, VectorType, Signedness,
     SymbolRefAttr, SymbolNameAttr, DenseArrayBase, FunctionType, DenseIntOrFPElementsAttr, FloatAttr
 )
-from itertools import product, chain, combinations
+from itertools import product, chain
 from functools import cmp_to_key
 from pathlib import Path
 import sys
@@ -383,12 +388,17 @@ class ProgramNamespace:
 class Program(BlockNode):
     statements: List[Statement]
     namespace: ProgramNamespace = field(init=False, repr=False, compare=False)
+    insertion_points: dict = field(default_factory=dict)
+    region_mapping: dict = field(default_factory=dict)
+    liveness_at_start: dict = field(default_factory=dict)
 
     def __post_init__(self):
         self.namespace = ProgramNamespace(self)
 
     def codegen(self, scope):
         scope.comp_unit.repository.codegen_core_prelude_interfaces(scope, self)
+        scope.set_region_plan(self)
+        scope.set_live_regions(self.liveness_at_start)
         for stmt in self.statements: stmt.codegen(scope)
 
     def interface_codegen(self, scope):
@@ -423,11 +433,14 @@ class Program(BlockNode):
         for stmt in self.statements:
             if isinstance(stmt, Import) or isinstance(stmt, ExportList) or isinstance(stmt, NoExportList): continue
             stmt.typeflow(scope)
-        #G0, var_mapping0 = create_constraint_graph(scope.points_to_facts._set)
-        #G0, var_mapping0 = transform_until_stable(G0, var_mapping0, set())
-        #debug_print(f"Transformed points-to graph for main:")
-        #debug_print(pretty_debug_print_graph(G0, var_mapping0, set()))
-        #scope.mem_regions.assign_regions(var_mapping0, set())
+        self.check_lifetime_constraints(scope)
+
+    def check_lifetime_constraints(self, scope):
+        found_facts = scope.points_to_facts.copy()
+        for required_name in scope.required_region_names:
+            found_facts.add((required_name, "==", required_name))
+        discovered_graph = PointsToGraph(found_facts, [])
+        record_lifetime_results(self, self, discovered_graph, {})
 
 @dataclass
 class Expression(Node):
@@ -443,13 +456,40 @@ class Expression(Node):
 
     @property
     def subexpressions(self):
-        return set()
+        return []
+
+    @property
+    def present_subexpressions(self):
+        return [subexpr for subexpr in self.subexpressions if subexpr]
+
+    @property
+    def evaluation_subexpressions(self):
+        return self.present_subexpressions
 
     @property
     def used_ids(self):
         base_case = {self.info.id} if isinstance(self, Identifier) else set()
-        used = set.union(base_case, *(subexpr.used_ids for subexpr in self.subexpressions))
+        used = set.union(base_case, *(subexpr.used_ids for subexpr in self.present_subexpressions))
         return {normalize_constraint_name(id) for id in used}
+
+    @property
+    def created_ids(self):
+        return set().union(*(subexpr.created_ids for subexpr in self.evaluation_subexpressions))
+
+    @property
+    def deferred_region_ids(self):
+        return set().union(*(subexpr.deferred_region_ids for subexpr in self.evaluation_subexpressions))
+
+    @property
+    def temporary_ids(self):
+        return set().union(*(subexpr.temporary_ids for subexpr in self.present_subexpressions))
+
+    def typeflow_temp(self, scope, type_table, facts, nodes):
+        old_type_table = scope.type_table.copy()
+        scope.type_table.update(type_table)
+        for fact in facts: scope.points_to_facts.add(fact)
+        for node in nodes: node.typeflow(scope)
+        scope.type_table = old_type_table
 
     def __hash__(self):
         return hash(id(self))
@@ -459,10 +499,12 @@ class ExpressionStatement(Statement):
     expr : Expression
 
     def liveness(self, live_tbl, points_to_graph, insertion_points):
-        before_tbl = live_tbl | {id:True for id in self.expr.used_ids}
-        stmt_insertion_points = points_to_graph.region_insertion_points(self, before_tbl, live_tbl)
-        if len(stmt_insertion_points) > 0: insertion_points[self.info.id] = stmt_insertion_points
-        return before_tbl
+        temporary_ids = self.expr.temporary_ids
+        active_tbl = live_tbl | {id:True for id in self.expr.used_ids | temporary_ids}
+        stmt_insertion_points = points_to_graph.region_insertion_points(self, active_tbl, live_tbl)
+        add_insertion_points(insertion_points, self, stmt_insertion_points)
+        add_expression_region_points(points_to_graph, insertion_points, self, self.expr, active_tbl, live_tbl)
+        return active_tbl | {id:False for id in temporary_ids}
 
     def codegen(self, scope):
         scope.insert_region_creations(self)
@@ -716,6 +758,8 @@ class Logical(BinaryOp):
         if self.operator == "and": self.left.narrow_true(right_scope)
         if self.operator == "or": self.left.narrow_false(right_scope)
         right_type = self.right.exprtype(right_scope)
+        scope.points_to_facts = scope.points_to_facts.union(right_scope.points_to_facts)
+        scope.required_region_names = scope.required_region_names.union(right_scope.required_region_names)
         if left_type != Bool() or right_type != Bool():
             raise Exception(f"{self.info} Logical operator {self.operator} must take two booleans, not {left_type} and {right_type}")
         return Bool()
@@ -892,67 +936,97 @@ class ArrayLiteral(Expression):
     def subexpressions(self):
         return [*self.elements]
 
+    @property
+    def created_ids(self):
+        return {self.info.id, NodeInfo.from_info(self.info, "buffer").id} | super().created_ids
+
     def codegen(self, scope):
         self_type = self.exprtype(scope)
+        temp_info, temp_var, buf, indexations, ary = self.construction_nodes(self_type)
+        assign = Assignment(NodeInfo.from_info(self.info, "assign"), temp_var, buf)
+        assign.codegen(scope)
+        for indexation in indexations: indexation.codegen(scope)
+        return ary.codegen(scope)
+
+    def construction_nodes(self, self_type):
         elem_type = self_type.type_params.data[0]
         sizelit = IntegerLiteral(NodeInfo.from_info(self.info, "size"), len(self.elements), 32)
         capacitylit = IntegerLiteral(NodeInfo.from_info(self.info, "capacity"), len(self.elements) + 1, 32)
         buf = CreateBuffer(NodeInfo.from_info(self.info, "buffer"), Buffer([elem_type]), capacitylit)
         temp_info = NodeInfo.from_info(self.info, "temp_buf")
         temp_var = Identifier(temp_info, temp_info.id)
-        assign = Assignment(NodeInfo.from_info(self.info, "assign"), temp_var, buf)
-        assign.codegen(scope)
+        indexations = []
         for i, elem in enumerate(self.elements):
             iliteral = IntegerLiteral(NodeInfo.from_info(self.info, f"integer_{i}"), i, 32)
-            indexation = MethodCall(NodeInfo.from_info(self.info, f"index_{i}"), temp_var, "_set_index", [iliteral, elem])
-            indexation.codegen(scope)
+            indexations.append(MethodCall(NodeInfo.from_info(self.info, f"index_{i}"), temp_var, "_set_index", [iliteral, elem]))
         ary = ObjectCreation(self.info, self.info.id + "_array_literal", self_type, [temp_var, sizelit, capacitylit])
-        return ary.codegen(scope)
+        return temp_info, temp_var, buf, indexations, ary
 
     def exprtype(self, scope):
         if len(self.elements) == 0 and not self.specified_elem_type:
             raise Exception(f"{self.info}: An empty array literal must specify its element type, like '[] of i32'")
         if len(self.elements) == 0:
             elem_type = scope.simplify(self.specified_elem_type)
-            return scope.visible_fatptr(self.info, "Array", [elem_type])
+            self_type = scope.visible_fatptr(self.info, "Array", [elem_type])
+            self.apply_constraints(scope, self_type)
+            return self_type
         elem_types = [elem.exprtype(scope) for elem in self.elements]
-        inferred_elem_type = scope.simplify(Union.from_list(elem_types)) if len(elem_types) > 0 else Integer(32)
-        if not self.specified_elem_type:
-            return scope.visible_fatptr(self.info, "Array", [inferred_elem_type])
-        specified_elem_type = scope.simplify(self.specified_elem_type)
-        if not scope.subtype(inferred_elem_type, specified_elem_type):
-            raise Exception(f"{self.info}: Inferred element type of array literal ({inferred_elem_type}) is not a subtype of specified type ({specified_elem_type})")
-        return scope.visible_fatptr(self.info, "Array", [specified_elem_type])
+        inferred_elem_type = scope.simplify(Union.from_list(elem_types))
+        elem_type = inferred_elem_type if not self.specified_elem_type else scope.simplify(self.specified_elem_type)
+        if self.specified_elem_type and not scope.subtype(inferred_elem_type, elem_type):
+            message = f"{self.info}: Inferred element type of array literal ({inferred_elem_type})"
+            message += f" is not a subtype of specified type ({elem_type})"
+            raise Exception(message)
+        self_type = scope.visible_fatptr(self.info, "Array", [elem_type])
+        self.apply_constraints(scope, self_type)
+        return self_type
+
+    def apply_constraints(self, scope, self_type):
+        temp_info, _temp_var, buf, indexations, ary = self.construction_nodes(self_type)
+        facts = [
+            (temp_info.id, "==", buf.info.id),
+        ]
+        self.typeflow_temp(scope, {temp_info.id:buf.exprtype(scope)}, facts, [*indexations, ary])
 
     def typeflow(self, scope):
-        for elem in self.elements: elem.typeflow(scope)
+        self.exprtype(scope)
 
 @dataclass
 class DictionaryLiteral(Expression):
     pairs: list[tuple[Expression, Expression]]
+    construction: Optional[tuple] = field(default=None, init=False, repr=False, compare=False)
 
     @property
     def subexpressions(self):
         return [*chain.from_iterable(self.pairs)]
 
-    def codegen(self, scope):
-        self_type = self.exprtype(scope)
-        key_type = self_type.type_params.data[0]
-        value_type = self_type.type_params.data[1]
+    @property
+    def created_ids(self):
+        return {self.info.id} | super().created_ids
 
+    @property
+    def evaluation_subexpressions(self):
+        if not self.construction: return super().evaluation_subexpressions
+        assign, inserts, dict_var = self.construction
+        return [assign.value, *inserts, dict_var]
+
+    def codegen(self, scope):
+        self.exprtype(scope)
+        assign, inserts, dict_var = self.construction
+        assign.codegen(scope)
+        for insert in inserts: insert.codegen(scope)
+        return dict_var.codegen(scope)
+
+    def construction_nodes(self, scope, self_type):
+        key_type = self_type.type_params.data[0]
         hasher = self.get_hasher(scope, key_type)
         eq = self.get_eq(scope, key_type)
-
         dict_obj = ObjectCreation(self.info, self.info.id + "_dict_literal", self_type, [hasher, eq])
         dict_var = Identifier(self.info, self.info.id + "_dict_literal_var")
         assign = Assignment(NodeInfo.from_info(self.info, "assign"), dict_var, dict_obj)
-        assign.codegen(scope)
-
-        # insert the key-value pairs
-        for i, (k, v) in enumerate(self.pairs):
-            MethodCall(NodeInfo.from_info(self.info, f"pair_{i}"), dict_var, "insert", [k, v]).codegen(scope)
-
-        return dict_var.codegen(scope)
+        pairs = enumerate(self.pairs)
+        inserts = [MethodCall(NodeInfo.from_info(self.info, f"pair_{i}"), dict_var, "insert", [k, v]) for i, (k, v) in pairs]
+        return assign, inserts, dict_var
 
     def is_string_key(self, scope, key_type):
         return is_named_fatptr(key_type, "String")
@@ -981,7 +1055,14 @@ class DictionaryLiteral(Expression):
         if not (self.is_string_key(scope, inferred_key_type) or inferred_key_type == Integer(32)):
             raise Exception(f"Currently only support i32 and String as dictionary key type, not {inferred_key_type}")
         
-        return scope.type_env.validated_type(self.info, FatPtr.generic("DefaultMap", [inferred_key_type, inferred_value_type]))
+        self_type = scope.type_env.validated_type(self.info, FatPtr.generic("DefaultMap", [inferred_key_type, inferred_value_type]))
+        self.apply_constraints(scope, self_type)
+        return self_type
+
+    def apply_constraints(self, scope, self_type):
+        self.construction = self.construction_nodes(scope, self_type)
+        assign, inserts, _dict_var = self.construction
+        self.typeflow_temp(scope, {}, [], [assign, *inserts])
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -990,16 +1071,12 @@ class DictionaryLiteral(Expression):
 class StringLiteral(Expression):
     value: str
 
-    def codegen(self, scope):
-        n_bytes = len(self.value.encode('utf-8'))
-        n_codepoints = len(self.value)
+    @property
+    def created_ids(self):
+        return {self.info.id, NodeInfo.from_info(self.info, "buffer").id}
 
-        size_lit = IntegerLiteral(NodeInfo.from_info(self.info, "size"), n_codepoints, 32)
-        n_bytes_lit = IntegerLiteral(NodeInfo.from_info(self.info, "n_bytes"), n_bytes, 32)
-        capacity_lit = IntegerLiteral(NodeInfo.from_info(self.info, "capacity"), n_bytes + 1, 32)
-        buf = CreateBuffer(NodeInfo.from_info(self.info, "buffer"), Buffer([Integer(8)]), capacity_lit)
-        temp_info = NodeInfo.from_info(self.info, "temp_buf")
-        temp_var = Identifier(temp_info, temp_info.id)
+    def codegen(self, scope):
+        n_bytes, temp_info, temp_var, buf, string = self.construction_nodes(self.exprtype(scope))
         assign = Assignment(NodeInfo.from_info(self.info, "assign"), temp_var, buf)
         assign.codegen(scope)
         llvmtype = llvm.LLVMArrayType.from_size_and_type(n_bytes, IntegerType(8))
@@ -1009,15 +1086,35 @@ class StringLiteral(Expression):
         operands = [temp_var.codegen(scope), zero.results[0], lit.results[0]]
         buffer_set = BufferSetOp.create(operands=operands, attributes={"typ": llvmtype})
         scope.region.last_block.add_ops([lit, zero, buffer_set])
-        obj_name = self.info.id + "_string_literal"
-        string = ObjectCreation(self.info, obj_name, self.exprtype(scope), [temp_var, n_bytes_lit, size_lit, capacity_lit])
         return string.codegen(scope)
 
+    def construction_nodes(self, self_type):
+        n_bytes = len(self.value.encode('utf-8'))
+        n_codepoints = len(self.value)
+        size_lit = IntegerLiteral(NodeInfo.from_info(self.info, "size"), n_codepoints, 32)
+        n_bytes_lit = IntegerLiteral(NodeInfo.from_info(self.info, "n_bytes"), n_bytes, 32)
+        capacity_lit = IntegerLiteral(NodeInfo.from_info(self.info, "capacity"), n_bytes + 1, 32)
+        buf = CreateBuffer(NodeInfo.from_info(self.info, "buffer"), Buffer([Integer(8)]), capacity_lit)
+        temp_info = NodeInfo.from_info(self.info, "temp_buf")
+        temp_var = Identifier(temp_info, temp_info.id)
+        obj_name = self.info.id + "_string_literal"
+        string = ObjectCreation(self.info, obj_name, self_type, [temp_var, n_bytes_lit, size_lit, capacity_lit])
+        return n_bytes, temp_info, temp_var, buf, string
+
     def exprtype(self, scope):
-        return scope.visible_fatptr(self.info, "String")
+        self_type = scope.visible_fatptr(self.info, "String")
+        self.apply_constraints(scope, self_type)
+        return self_type
+
+    def apply_constraints(self, scope, self_type):
+        _n_bytes, temp_info, _temp_var, buf, string = self.construction_nodes(self_type)
+        facts = [
+            (temp_info.id, "==", buf.info.id),
+        ]
+        self.typeflow_temp(scope, {temp_info.id:buf.exprtype(scope)}, facts, [string])
 
     def typeflow(self, scope):
-        pass
+        self.exprtype(scope)
 
 @dataclass
 class InterpolationPrimitive:
@@ -1027,12 +1124,26 @@ class InterpolationPrimitive:
 
 @dataclass
 class InterpolationStringCopy:
+    index: int
     value: "Identifier"
     offset: Expression
 
 @dataclass
 class InterpolatedStringLiteral(Expression):
     parts: tuple[Expression]
+    evaluation: tuple[Expression, ...] = field(default_factory=tuple, init=False, repr=False, compare=False)
+
+    @property
+    def subexpressions(self):
+        return [*self.parts]
+
+    @property
+    def evaluation_subexpressions(self):
+        return self.evaluation or super().evaluation_subexpressions
+
+    @property
+    def created_ids(self):
+        return {self.info.id, NodeInfo.from_info(self.info, "interp_create_buffer").id} | super().created_ids
 
     def codegen(self, scope):
         fmt_parts = []
@@ -1068,12 +1179,8 @@ class InterpolatedStringLiteral(Expression):
         scope.region.last_block.add_ops([raw_buf, snprintf])
 
         for copy in copies:
-            copy_call = MethodCall(
-                NodeInfo.from_info(self.info, "interp_copy"),
-                copy.value,
-                "copy_into",
-                [buf_id, copy.offset]
-            )
+            copy_info = NodeInfo.from_info(self.info, f"interp_copy_{copy.index}")
+            copy_call = MethodCall(copy_info, copy.value, "copy_into", [buf_id, copy.offset])
             copy_call.codegen(scope)
 
         string_name = f"{self.info.id}_interp_string"
@@ -1136,7 +1243,7 @@ class InterpolatedStringLiteral(Expression):
         fmt_parts.append("%*s")
         final_args.append(self.unwrap(scope, byte_id, Integer(32)))
         final_args.append(self.global_c_string(scope, "empty", "\0"))
-        copies.append(InterpolationStringCopy(part_id, offset))
+        copies.append(InterpolationStringCopy(index, part_id, offset))
         total_bytes = self.add(total_bytes, byte_id, f"interp_total_bytes_{index}")
         total_chars = self.add(total_chars, char_id, f"interp_total_chars_{index}")
         offset = self.add(offset, byte_id, f"interp_offset_{index}")
@@ -1250,14 +1357,70 @@ class InterpolatedStringLiteral(Expression):
     def exprtype(self, scope):
         # parser will have inserted implicit conversions to String
         for part in self.parts: part.exprtype(scope)
-        return scope.visible_fatptr(self.info, "String")
+        self_type = scope.visible_fatptr(self.info, "String")
+        self.apply_constraints(scope, self_type)
+        return self_type
+
+    def apply_constraints(self, scope, self_type):
+        names = (
+            f"{self.info.id}_interp_total_bytes",
+            f"{self.info.id}_interp_total_chars",
+            f"{self.info.id}_interp_capacity",
+        )
+        types = {name:Integer(32) for name in names}
+        capacity_id = Identifier(NodeInfo.from_info(self.info, "interp_capacity"), names[2])
+        create_buffer = CreateBuffer(NodeInfo.from_info(self.info, "interp_create_buffer"), Buffer([Integer(8)]), capacity_id)
+        buffer_name = f"{self.info.id}_interp_buffer"
+        old_type_table = scope.type_table.copy()
+        scope.type_table.update(types)
+        types[buffer_name] = create_buffer.exprtype(scope)
+        scope.type_table = old_type_table
+        buf_id = Identifier(NodeInfo.from_info(self.info, "interp_buffer"), buffer_name)
+        total_id = Identifier(NodeInfo.from_info(self.info, "interp_total_bytes"), names[0])
+        chars_id = Identifier(NodeInfo.from_info(self.info, "interp_total_chars"), names[1])
+        string_name = f"{self.info.id}_interp_string"
+        string = ObjectCreation(self.info, string_name, self_type, [buf_id, total_id, chars_id, capacity_id])
+        facts = [
+            (buffer_name, "==", create_buffer.info.id),
+        ]
+        evaluation = []
+        calls = []
+        copies = []
+        for index, part in enumerate(self.parts):
+            evaluation.append(part)
+            if isinstance(part, StringLiteral) and "\0" not in part.value: continue
+            if self.primitive_part(part, scope): continue
+            part_name = f"{self.info.id}_interp_string_part_{index}"
+            part_type = part.exprtype(scope)
+            part_id = Identifier(NodeInfo.from_info(self.info, f"interp_string_part_{index}"), part_name)
+            types[part_name] = part_type
+            targets = type_region_param_names(scope, part_name, part_type)
+            values = type_region_param_names(scope, part.info.id, part_type)
+            facts.extend((target, "==", value) for target, value in zip(targets, values))
+            byte_info = NodeInfo.from_info(self.info, f"interp_byte_length_{index}")
+            char_info = NodeInfo.from_info(self.info, f"interp_char_length_{index}")
+            copy_info = NodeInfo.from_info(self.info, f"interp_copy_{index}")
+            copy_offset = self.integer(f"interp_copy_offset_{index}", 0)
+            byte_call = MethodCall(byte_info, part_id, "byte_length", [])
+            char_call = MethodCall(char_info, part_id, "char_length", [])
+            copy_call = MethodCall(copy_info, part_id, "copy_into", [buf_id, copy_offset])
+            evaluation.extend((byte_call, char_call))
+            calls.extend((byte_call, char_call))
+            copies.append(copy_call)
+        evaluation.extend((create_buffer, *copies, string))
+        self.evaluation = tuple(evaluation)
+        self.typeflow_temp(scope, types, facts, [*calls, *copies, string])
 
     def typeflow(self, scope):
-        pass
+        self.exprtype(scope)
 
 @dataclass
 class CharLiteral(Expression):
     value: str
+
+    @property
+    def created_ids(self):
+        return {self.info.id}
 
     @property
     def n_codepoints(self):
@@ -1280,6 +1443,7 @@ class CharLiteral(Expression):
     def exprtype(self, scope):
         if self.n_codepoints != 1:
             raise Exception(f"{self.info}: Character literal '{self.value}' is not a single Unicode codepoint; it is {self.n_codepoints}")
+        scope.points_to_facts.add((self.info.id, "==", self.info.id))
         return scope.visible_fatptr(self.info, "Character")
 
     def typeflow(self, scope):
@@ -1289,10 +1453,16 @@ class CharLiteral(Expression):
 class RangeLiteral(Expression):
     start: Expression
     end: Expression
+    desugared: Expression = None
 
     @property
     def subexpressions(self):
         return [self.start, self.end]
+
+    @property
+    def created_ids(self):
+        if self.desugared: return self.desugared.created_ids
+        return {self.info.id} | super().created_ids
 
     def ensure_i32_args(self, scope):
         start_type = self.start.exprtype(scope)
@@ -1306,26 +1476,35 @@ class RangeLiteral(Expression):
 @dataclass
 class InclusiveRangeLiteral(RangeLiteral):
 
+    def constructor(self):
+        if not self.desugared:
+            self.desugared = ObjectCreation(self.info, self.info.id + "_inclusive_range", FatPtr.basic("Range"), [self.start, self.end])
+        return self.desugared
+
     def codegen(self, scope):
-        return ObjectCreation(self.info, self.info.id + "_inclusive_range", FatPtr.basic("Range"), [self.start, self.end]).codegen(scope)
+        return self.constructor().codegen(scope)
     
     def exprtype(self, scope):
         self.ensure_i32_args(scope)
-        return ObjectCreation(self.info, self.info.id + "_inclusive_range", FatPtr.basic("Range"), [self.start, self.end]).exprtype(scope)
+        return self.constructor().exprtype(scope)
 
 @dataclass
 class ExclusiveRangeLiteral(RangeLiteral):
 
+    def constructor(self):
+        if not self.desugared:
+            one = IntegerLiteral(self.info, 1, 32)
+            end_minus_one = Arithmetic(self.info, self.end, "SUB", one)
+            name = self.info.id + "_exclusive_range"
+            self.desugared = ObjectCreation(self.info, name, FatPtr.basic("Range"), [self.start, end_minus_one])
+        return self.desugared
+
     def codegen(self, scope):
-        one = IntegerLiteral(self.info, 1, 32)
-        end_minus_one = Arithmetic(self.info, self.end, "SUB", one)
-        return ObjectCreation(self.info, self.info.id + "_exclusive_range", FatPtr.basic("Range"), [self.start, end_minus_one]).codegen(scope)
+        return self.constructor().codegen(scope)
     
     def exprtype(self, scope):
         self.ensure_i32_args(scope)
-        one = IntegerLiteral(self.info, 1, 32)
-        end_minus_one = Arithmetic(self.info, self.end, "SUB", one)
-        return ObjectCreation(self.info, self.info.id + "_exclusive_range", FatPtr.basic("Range"), [self.start, end_minus_one]).exprtype(scope)
+        return self.constructor().exprtype(scope)
 
 @dataclass
 class TupleLiteral(Expression):
@@ -1376,6 +1555,11 @@ class FunctionLiteral(Expression):
         self.yield_type = yield_type
         self._return_type = Any()
         self.has_return = False
+        self.insertion_points = {}
+        self.region_mapping = {}
+        self.liveness_at_start = {}
+        self.lifetime_checked = False
+        self.output_region_slots = ()
 
     @property
     def definition(self):
@@ -1385,9 +1569,12 @@ class FunctionLiteral(Expression):
         if self.name in scope.comp_unit.codegenned: return
         body_scope = Scope(scope, method=self)
         body_scope.behavior = None
+        body_scope.set_region_plan(self)
         body_scope.type_table = {}
         body_scope.symbol_table = {}
+        body_scope.set_live_regions(self.liveness_at_start)
         self.wrap_params(body_scope)
+        body_scope.receive_output_regions(self.output_region_slots)
         self.body.codegen(body_scope)
         attr_dict = {
             "func_name":StringAttr(self.name),
@@ -1430,13 +1617,28 @@ class FunctionLiteral(Expression):
             self.body.statements[-1] = ReturnValue(ret_info, last_stmt.expr)
             self.has_return = True
             self._return_type = last_stmt.expr.exprtype(scope)
+            self.body.statements[-1].typeflow(scope)
             return
         self.body.statements.append(Return(ret_info))
         self.has_return = True
         self._return_type = None
+        self.body.statements[-1].typeflow(scope)
 
     def typeflow(self, scope):
         self.exprtype(scope)
+
+    def check_lifetime_constraints(self, body_scope):
+        if self.lifetime_checked: return
+        output_layout = type_region_layout(body_scope, "ret", self.return_type())
+        self.output_region_slots = output_layout.slots
+        found_facts = body_scope.points_to_facts.copy()
+        for required_name in body_scope.required_region_names:
+            found_facts.add((required_name, "==", required_name))
+        param_names = [*function_entry_region_names(self, body_scope), *output_layout.names]
+        discovered_graph = PointsToGraph(found_facts, param_names)
+        live_at_return = {"ret":True} if self.return_type() else {}
+        record_lifetime_results(self, self.body, discovered_graph, live_at_return)
+        self.lifetime_checked = True
 
     def return_type(self):
         return self._return_type
@@ -1452,6 +1654,7 @@ class FunctionLiteral(Expression):
             body_scope.type_table[param.name] = param_types[i]
         self.body.typeflow(body_scope)
         self.insert_implicit_return(body_scope)
+        self.check_lifetime_constraints(body_scope)
         return_type = self.return_type() if self.return_type() else Nothing()
         return Function([ArrayAttr(param_types), scope.simplify(self.yield_type), return_type])
 
@@ -1503,7 +1706,7 @@ class FieldIdentifier(Identifier):
             scope.region.last_block.add_op(get)
             return get.results[0]
 
-        cast = CastOp.make(get.results[0], original_type, specialized_type)
+        cast = scope.cast(get.results[0], original_type, specialized_type)
         scope.region.last_block.add_ops([get, cast])
         return cast.results[0]
 
@@ -1609,9 +1812,10 @@ class TypeCheck(Expression):
                 #debug_print(f'{right_type} is not a subtype of {old_typ}')
                 #debug_print(f'{right_type} ancestors: {scope.ancestors(right_type)}')
                 #debug_print(old_typ in scope.ancestors(right_type))
+        add_downcast_region_facts(scope, self.left.name, old_typ, new_typ)
         scope.type_table[self.left.name] = new_typ
         if codegen and new_typ != old_typ:
-            cast = CastOp.make(scope.symbol_table[self.left.name], old_typ, new_typ)
+            cast = scope.cast(scope.symbol_table[self.left.name], old_typ, new_typ)
             scope.region.first_block.add_op(cast)
             scope.symbol_table[self.left.name] = cast.results[0]
         #print(f"narrowed {self.left.name} from {old_typ} to {new_typ} in true branch")
@@ -1634,7 +1838,7 @@ class TypeCheck(Expression):
 
         scope.type_table[self.left.name] = new_typ
         if codegen and new_typ != old_typ:
-            cast = CastOp.make(scope.symbol_table[self.left.name], old_typ, new_typ)
+            cast = scope.cast(scope.symbol_table[self.left.name], old_typ, new_typ)
             scope.region.first_block.add_op(cast)
             scope.symbol_table[self.left.name] = cast.results[0]
         #print(f"narrowed {self.left.name} from {old_typ} to {new_typ} in false branch")
@@ -1754,6 +1958,17 @@ class As(Expression):
     def subexpressions(self):
         return [self.operand]
 
+    @property
+    def created_ids(self):
+        if self.targets_string():
+            return Format(self.info, self.operand).created_ids
+        return super().created_ids
+
+    def targets_string(self):
+        if is_named_fatptr(self.typ, "String"): return True
+        if isinstance(self.typ, QualifiedType): return self.typ.text() == "String"
+        return False
+
     def conform_integer_literal(self, to_typ):
         if not isinstance(self.operand, IntegerLiteral):
             return False
@@ -1799,7 +2014,7 @@ class As(Expression):
         
         if operand_type == to_typ: return operand
         
-        cast = CastOp.make(operand, operand_type, to_typ)
+        cast = scope.cast(operand, operand_type, to_typ)
         scope.region.last_block.add_op(cast)
         return cast.results[0]
 
@@ -1816,7 +2031,9 @@ class As(Expression):
         if self.conform_integer_literal(to_typ):
             return self.operand.exprtype(scope)
         to_integer = isinstance(to_typ, Integer)
-        if operand_type == to_typ: return operand_type
+        if operand_type == to_typ:
+            if not is_value_type(operand_type): scope.points_to_facts.add((self.info.id, "==", self.operand.info.id))
+            return operand_type
         from_integer = isinstance(operand_type, Integer)
         if from_integer and to_integer:
             from_min, from_max = operand_type.value_range()
@@ -1834,6 +2051,8 @@ class As(Expression):
 
         if not scope.subtype(operand_type, to_typ):
             raise Exception(f"{self.info} Can't cast {operand_type} to {to_typ}")
+        if not is_value_type(operand_type) and not is_value_type(to_typ):
+            scope.points_to_facts.add((self.info.id, "==", self.operand.info.id))
         return to_typ
 
 @dataclass
@@ -1844,6 +2063,7 @@ class Into(Expression):
 
     @property
     def subexpressions(self):
+        if self.method: return [self.method]
         return [self.operand]
 
     def codegen(self, scope):
@@ -1857,7 +2077,7 @@ class Into(Expression):
         if method_return_type == to_type: return converted
 
         # If the conversion method returned a subtype, we must upcast to the desired type
-        cast = CastOp.make(converted, method_return_type, to_type)
+        cast = scope.cast(converted, method_return_type, to_type)
         scope.region.last_block.add_op(cast)
         return cast.results[0]
 
@@ -2047,9 +2267,20 @@ class FunctionCall(Expression):
     function: str
     arguments: List[Expression]
     function_path: Optional[Path] = None
+    output_region_names: tuple[str, ...] = field(default_factory=tuple, init=False, repr=False, compare=False)
+    output_region_ids: tuple[str, ...] = field(default_factory=tuple, init=False, repr=False, compare=False)
+
     @property
     def subexpressions(self):
         return [*self.arguments]
+
+    @property
+    def created_ids(self):
+        return {*self.output_region_ids} | super().created_ids
+
+    @property
+    def deferred_region_ids(self):
+        return {*self.output_region_ids} | super().deferred_region_ids
 
     def resolved_function(self, scope):
         return scope.get_function(self.info, self.function, self.function_path)
@@ -2066,9 +2297,12 @@ class FunctionCall(Expression):
         func = self.resolved_function(scope)
         attr_dict = {"func_name":StringAttr(func.symbol_name()), "ret_type":ret_schema}
         result_types = [ret_typ] if ret_typ else []
+        previous_frame = scope.set_output_region_frame(self.info, self.output_region_ids)
         call_op = FunctionCallOp.create(operands=args, attributes=attr_dict, result_types=result_types)
         scope.region.last_block.add_op(call_op)
-        return call_op.results[0] if len(call_op.results) > 0 else None
+        scope.restore_output_region_frame(previous_frame)
+        if len(call_op.results) == 0: return None
+        return call_op.results[0]
 
     def ensure_valid_arg_types(self, scope, func):
         if len(self.arguments) != func.arity: raise Exception(f"{self.info}: Wrong number of arguments for {func.name}: expected {func.arity}, got {len(self.arguments)}.")
@@ -2090,18 +2324,21 @@ class FunctionCall(Expression):
 
         if len(types) == 0 or all(is_value_type(t) for t in types): return
 
-        if formal_constraints.all_alias:
-            scope.points_to_facts.all_alias = True
-            #print(f"{self.info} call to .{self.method} poisons the calling context")
-            return
-
-        scope.points_to_facts = scope.points_to_facts.union(formal_constraints)
+        root_types = {arg.info.id:arg_type for arg, arg_type in zip(self.arguments, arg_types)}
+        if ret_type: root_types[self.info.id] = ret_type
+        default_roots = [arg.info.id for arg in self.arguments]
+        if ret_type: default_roots.append(self.info.id)
+        expanded_constraints = expand_call_constraints(scope, formal_constraints, root_types, default_roots)
+        scope.points_to_facts = scope.points_to_facts.union(expanded_constraints)
 
     def exprtype(self, scope):
         func = self.resolved_function(scope)
         self.ensure_valid_arg_types(scope, func)
         type_env = scope.comp_unit.repository.current_program_context(scope.comp_unit, current_path=func.info.filepath)[1].type_env
         ret_type = type_env.simplify(func.return_type()) if func.return_type() else None
+        layout = type_region_layout(scope, self.info.id, ret_type)
+        self.output_region_names = () if isinstance(func, ExternDef) else layout.names
+        self.output_region_ids = () if isinstance(func, ExternDef) else layout.slots
         self.apply_constraints(scope, ret_type)
         return ret_type
 
@@ -2118,6 +2355,21 @@ class DeferredNameAccessCall(Expression):
     @property
     def subexpressions(self):
         return [*self.arguments]
+
+    @property
+    def used_ids(self):
+        if self.resolved: return self.resolved.used_ids
+        return super().used_ids
+
+    @property
+    def created_ids(self):
+        if self.resolved: return self.resolved.created_ids
+        return super().created_ids
+
+    @property
+    def deferred_region_ids(self):
+        if self.resolved: return self.resolved.deferred_region_ids
+        return super().deferred_region_ids
 
     def resolve(self, scope):
         if self.resolved: return self.resolved
@@ -2261,10 +2513,38 @@ class MethodCall(Expression):
     receiver: Expression
     method: str
     arguments: List[Expression]
+    adapter_arg_indexes: tuple[int, ...] = field(default_factory=tuple, init=False, repr=False, compare=False)
+    adapter_result: bool = field(default=False, init=False, repr=False, compare=False)
+    output_region_names: tuple[str, ...] = field(default_factory=tuple, init=False, repr=False, compare=False)
+    output_region_ids: tuple[str, ...] = field(default_factory=tuple, init=False, repr=False, compare=False)
+    needs_output_regions: bool = field(default=True, init=False, repr=False, compare=False)
 
     @property
     def subexpressions(self):
         return [self.receiver, *self.arguments]
+
+    @property
+    def evaluation_subexpressions(self):
+        if isinstance(self.receiver, Expression): return [*self.arguments, self.receiver]
+        return [*self.arguments]
+
+    def arg_adapter_id(self, i):
+        return NodeInfo.from_info(self.info, f"arg_{i}_adapter").id
+
+    def result_adapter_id(self):
+        return NodeInfo.from_info(self.info, "result_adapter").id
+
+    @property
+    def created_ids(self):
+        adapter_ids = {self.arg_adapter_id(i) for i in self.adapter_arg_indexes}
+        if self.adapter_result: adapter_ids.add(self.result_adapter_id())
+        output_ids = set(self.output_region_ids) if self.needs_output_regions else set()
+        return adapter_ids | output_ids | super().created_ids
+
+    @property
+    def deferred_region_ids(self):
+        output_ids = set(self.output_region_ids) if self.needs_output_regions else set()
+        return output_ids | super().deferred_region_ids
 
     def desugar(self, scope, rec_typ):
         if isinstance(rec_typ, Coroutine):
@@ -2302,8 +2582,10 @@ class MethodCall(Expression):
         behavior_args = behavior.broad_param_types()
         
         args = [arg.codegen(scope) for arg in self.arguments]
+        adapter_arg_indexes = set(self.adapter_arg_indexes)
         for (i, arg) in enumerate(args):
-            cast = CastOp.make(arg, arg_types[i], behavior_args[i])
+            region = scope.region_for_expr(self.arg_adapter_id(i)) if i in adapter_arg_indexes else None
+            cast = scope.cast(arg, arg_types[i], behavior_args[i], region)
             unwrap = UnwrapOp(operands=[cast.results[0]], result_types=[behavior_args[i].base_typ()])
             scope.region.last_block.add_ops([cast, unwrap])
             args[i] = unwrap.results[0]
@@ -2326,13 +2608,16 @@ class MethodCall(Expression):
         ary_type = llvm.LLVMArrayType.from_size_and_type(len(args), llvm.LLVMPointerType.opaque())
         parameterizations = self.parameterizations(arg_types, scope)
         operands = [parameterizations, unwrap.results[0], *args]
+        previous_frame = scope.set_output_region_frame(self.info, self.output_region_ids, self.needs_output_regions)
         call_op = MethodCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
         scope.region.last_block.add_op(call_op)
+        scope.restore_output_region_frame(previous_frame)
         if len(call_op.results) == 0: return None
         if not specialized:
             debug_print(self)
             raise Exception()
-        cast = CastOp.make(call_op.results[0], broad, specialized)
+        region = scope.region_for_expr(self.result_adapter_id()) if self.adapter_result else None
+        cast = scope.cast(call_op.results[0], broad, specialized, region)
         scope.region.last_block.add_op(cast)
         return cast.results[0]
 
@@ -2347,34 +2632,66 @@ class MethodCall(Expression):
     def additional_constraint_mappings(self):
         return { "ret":self.info.id, "self":self.receiver.info.id }
 
-    def apply_constraints(self, scope, behavior, specialized):
+    def apply_constraints(self, scope, behavior, specialized, rec_typ):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
+        behavior_args = behavior.broad_param_types()
+        adapter_arg_indexes = set(self.adapter_arg_indexes)
+        arg_region_roots = [self.arg_adapter_id(i) if i in adapter_arg_indexes else arg.info.id for i, arg in enumerate(self.arguments)]
         types = (specialized, *arg_types)
+        if "self" in self.additional_constraint_mappings(): types = (*types, rec_typ)
         if len(types) == 0 or all(is_value_type(t) for t in types): return
 
         formal_constraints = behavior.constraints()
-        if self.method == "init":
-            formal_constraints = formal_constraints.union(behavior.cls.all_constraints())
         if specialized and not is_value_type(specialized):
             return_constraints = scope.type_env.constraints_of(specialized).map({"self":"ret"})
             formal_constraints = formal_constraints.union(return_constraints)
 
-        mapping = {str(i):arg.info.id for i, arg in enumerate(self.arguments)}
+        for i in adapter_arg_indexes:
+            if is_value_type(arg_types[i]): continue
+            scope.points_to_facts.add((self.arg_adapter_id(i), "<", self.arguments[i].info.id))
+
+        mapping = {str(i):arg_region_roots[i] for i in range(len(self.arguments))}
         mapping = mapping | self.additional_constraint_mappings()
         formal_constraints = formal_constraints.map(mapping)
 
         # Exclude trivial value types from alias graph
         
-        value_type_names = {arg.info.id for (arg, arg_t) in zip(self.arguments, arg_types) if is_value_type(arg_t)}
-        if specialized and is_value_type(specialized): value_type_names.add("ret")
+        value_type_names = {root for (root, arg_t) in zip(arg_region_roots, arg_types) if is_value_type(arg_t)}
+        if specialized and is_value_type(specialized): value_type_names.add(self.info.id)
         formal_constraints = formal_constraints.prune(value_type_names)
 
-        if formal_constraints.all_alias:
-            scope.points_to_facts.all_alias = True
-            #print(f"{self.info} call to .{self.method} poisons the calling context")
-            return
+        root_types = {root:behavior_args[i] if i in adapter_arg_indexes else arg_types[i] for i, root in enumerate(arg_region_roots)}
+        if "self" in self.additional_constraint_mappings(): root_types[self.receiver.info.id] = rec_typ
+        if specialized: root_types[self.info.id] = specialized
+        default_roots = [*arg_region_roots]
+        if "self" in self.additional_constraint_mappings(): default_roots.append(self.receiver.info.id)
+        if specialized: default_roots.append(self.info.id)
+        expanded_constraints = expand_call_constraints(scope, formal_constraints, root_types, default_roots)
+        region_types = [(root, typ) for root, typ in root_types.items() if not is_value_type(scope.simplify(typ))]
+        input_names = [name for root, typ in region_types for name in type_region_param_names(scope, root, typ)]
+        if behavior.name == "init":
+            output_names = set(self.output_region_names)
+            input_names = [name for name in input_names if name not in output_names]
+        has_region_return = specialized and not is_value_type(scope.simplify(specialized))
+        specialized_outputs = type_region_param_names(scope, self.info.id, specialized) if has_region_return else []
+        live_roots = [self.info.id] if has_region_return else []
+        if behavior.name == "init": live_roots.append(self.receiver.info.id)
+        boundary_names = (*self.output_region_names, *input_names)
+        param_names = {*self.output_region_names, *input_names, *specialized_outputs}
+        expanded_constraints = coalesce_output_regions(expanded_constraints, boundary_names, live_roots, param_names, self.info)
+        scope.points_to_facts = scope.points_to_facts.union(expanded_constraints)
 
-        scope.points_to_facts = scope.points_to_facts.union(formal_constraints)
+    def configure_output_regions(self, scope, behavior, broad, specialized, rec_typ):
+        layouts = [type_region_layout(scope, self.info.id, typ) for typ in (broad, specialized)]
+        physical_layouts = [layouts[1]]
+        if behavior.name == "init":
+            definition = behavior.methods[0].definition
+            init_layout = init_output_region_layout(scope, self.receiver.info.id, rec_typ, definition.params)
+            layouts.append(init_layout)
+            physical_layouts.append(init_layout)
+        self.output_region_names = tuple(dict.fromkeys(name for layout in layouts for name in layout.names))
+        self.output_region_ids = tuple(dict.fromkeys(name for layout in layouts for name in layout.slots))
+        self.needs_output_regions = any(layout.slots for layout in physical_layouts)
 
     def simple_exprtype(self, scope, rec_typ):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -2387,9 +2704,22 @@ class MethodCall(Expression):
             raise Exception(f"{self.info}: there exists no overload of method {rec_typ}.{self.method} compatible with argument types {arg_types}")
         if len(behaviors) > 1:
             raise Exception(f"{self.info}: invocation of {self.method} with argument types {arg_types} is ambiguous.")
-        broad = behaviors[0].broad_return_type()
-        specialized = behaviors[0].specialized_return_type(rec_typ, arg_types, scope)
-        self.apply_constraints(scope, behaviors[0], specialized)
+        behavior = behaviors[0]
+        behavior_args = behavior.broad_param_types()
+        broad = behavior.broad_return_type()
+        specialized = behavior.specialized_return_type(rec_typ, arg_types, scope)
+        self.configure_output_regions(scope, behavior, broad, specialized, rec_typ)
+        needs_reabstraction = function_needs_reabstraction
+        self.adapter_arg_indexes = tuple(i for i, arg_type in enumerate(arg_types) if needs_reabstraction(arg_type, behavior_args[i]))
+        self.adapter_result = bool(broad and specialized and needs_reabstraction(broad, specialized))
+        for adapter_id in [self.arg_adapter_id(i) for i in self.adapter_arg_indexes]:
+            scope.points_to_facts.add((adapter_id, "==", adapter_id))
+            scope.required_region_names.add(adapter_id)
+        if self.adapter_result:
+            adapter_id = self.result_adapter_id()
+            scope.points_to_facts.add((adapter_id, "==", adapter_id))
+            scope.required_region_names.add(adapter_id)
+        self.apply_constraints(scope, behavior, specialized, rec_typ)
         
         #debug_print(f"unspecialized return type of {rec_typ}.{self.method} with args {arg_types} is {unspecialized}")
         #debug_print(f"specialized return type of {rec_typ}.{self.method} with args {arg_types} is {specialized}")
@@ -2399,7 +2729,12 @@ class MethodCall(Expression):
         rec_typ = self.receiver.exprtype(scope)
         if isinstance(rec_typ, TypeParameter): rec_typ = rec_typ.bound
         desugared = self.desugar(scope, rec_typ)
-        if desugared: return desugared.exprtype(scope)
+        if desugared:
+            result = desugared.exprtype(scope)
+            self.output_region_names = desugared.output_region_names
+            self.output_region_ids = desugared.output_region_ids
+            self.needs_output_regions = desugared.needs_output_regions
+            return result
         broad, specialized = self.simple_exprtype(scope, rec_typ)
         return specialized
 
@@ -2419,7 +2754,7 @@ class CoroutineCall(MethodCall):
         self_type = self.exprtype(scope)
         union = scope.simplify(Union.from_list([Nil(), self_type]))
         if len(self.arguments) > 0:
-            cast = CastOp.make(self.arguments[0].codegen(scope), self.arguments[0].exprtype(scope), union)
+            cast = scope.cast(self.arguments[0].codegen(scope), self.arguments[0].exprtype(scope), union)
             unwrap = UnwrapOp.create(operands=[cast.results[0]], result_types=[union.base_typ()])
             scope.region.last_block.add_ops([cast, unwrap])
             operands = [coro, unwrap.results[0]]
@@ -2470,7 +2805,7 @@ class FunctionLiteralCall(MethodCall):
         args = [arg.codegen(scope) for arg in self.arguments]
         rec_typ = self.receiver.exprtype(scope)
         for (i, arg) in enumerate(args):
-            cast = CastOp.make(arg, arg_types[i], rec_typ.param_types.data[i])
+            cast = scope.cast(arg, arg_types[i], rec_typ.param_types.data[i])
             unwrap = UnwrapOp(operands=[cast.results[0]], result_types=[rec_typ.param_types.data[i].base_typ()])
             scope.region.last_block.add_ops([cast, unwrap])
             args[i] = unwrap.results[0]
@@ -2480,13 +2815,18 @@ class FunctionLiteralCall(MethodCall):
         result_types = [ret_typ] if ret_typ else []
         unwrap = UnwrapOp.create(operands=[self.receiver.codegen(scope)], result_types=[llvm.LLVMPointerType.opaque()])
         call_op = FPtrCallOp.create(operands=[unwrap.results[0], *args], attributes=attr_dict, result_types=result_types)
-        scope.region.last_block.add_ops([unwrap, call_op])
+        scope.region.last_block.add_op(unwrap)
+        previous_frame = scope.set_output_region_frame(self.info, self.output_region_ids)
+        scope.region.last_block.add_op(call_op)
+        scope.restore_output_region_frame(previous_frame)
         if len(call_op.results) == 0: return
         return call_op.results[0]
 
-    def apply_constraints(self, scope):
-        return
-        #scope.points_to_facts.all_alias = True
+    def apply_constraints(self, scope, ret_typ):
+        if not ret_typ or is_value_type(ret_typ): return
+        facts = scope.type_env.constraints_of(ret_typ).map({"self":self.info.id})
+        facts.add((self.info.id, "==", self.info.id))
+        scope.points_to_facts = scope.points_to_facts.union(facts)
 
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
@@ -2497,8 +2837,12 @@ class FunctionLiteralCall(MethodCall):
         for i, param in enumerate(rec_typ.param_types.data):
             if not scope.subtype(self.arguments[i].exprtype(scope), param):
                 raise Exception(f"{self.info}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param} for parameter #{i + 1}")
-        self.apply_constraints(scope)
-        return None if rec_typ.return_type == Nothing() else rec_typ.return_type
+        ret_typ = None if rec_typ.return_type == Nothing() else rec_typ.return_type
+        layout = type_region_layout(scope, self.info.id, ret_typ)
+        self.output_region_names = layout.names
+        self.output_region_ids = layout.slots
+        self.apply_constraints(scope, ret_typ)
+        return ret_typ
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -2669,7 +3013,7 @@ class BufferIndexation(Indexation):
         self_typ = self.exprtype(scope)
         idx_type = self.arguments[0].exprtype(scope)
         idx = self.arguments[0].codegen(scope)
-        cast = CastOp.make(idx, idx_type, Integer(64))
+        cast = scope.cast(idx, idx_type, Integer(64))
         operands = [self.receiver.codegen(scope), cast.results[0]]
         if isinstance(self_typ, TypeParameter):
             parameterization = scope.get_parameterization(self_typ)
@@ -2701,8 +3045,8 @@ class BufferSetIndex(MethodCall):
         elem_type = scope.simplify(rec_typ.elem_type)
         idx_type = self.arguments[0].exprtype(scope)
         idx = self.arguments[0].codegen(scope)
-        cast_idx = CastOp.make(idx, idx_type, Integer(64))
-        cast_val = CastOp.make(self.arguments[1].codegen(scope), self.arguments[1].exprtype(scope), elem_type)
+        cast_idx = scope.cast(idx, idx_type, Integer(64))
+        cast_val = scope.cast(self.arguments[1].codegen(scope), self.arguments[1].exprtype(scope), elem_type)
         operands = [self.receiver.codegen(scope), cast_idx.results[0], cast_val.results[0]]
         if isinstance(elem_type, TypeParameter):
             parameterization = scope.get_parameterization(elem_type)
@@ -2789,7 +3133,7 @@ class ClassMethodCall(MethodCall):
         
         args = [arg.codegen(scope) for arg in self.arguments]
         for (i, arg) in enumerate(args):
-            cast = CastOp.make(arg, arg_types[i], behavior_args[i])
+            cast = scope.cast(arg, arg_types[i], behavior_args[i])
             unwrap = UnwrapOp(operands=[cast.results[0]], result_types=[behavior_args[i].base_typ()])
             scope.region.last_block.add_ops([cast, unwrap])
             args[i] = unwrap.results[0]
@@ -2821,10 +3165,12 @@ class ClassMethodCall(MethodCall):
         #    scope.region.last_block.add_op(call_op)
         #    return call_op.results[0] if len(call_op.results) > 0 else None
 
+        previous_frame = scope.set_output_region_frame(self.info, self.output_region_ids, self.needs_output_regions)
         call_op = ClassMethodCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
         scope.region.last_block.add_op(call_op)
+        scope.restore_output_region_frame(previous_frame)
         if len(call_op.results) == 0: return None
-        cast = CastOp.make(call_op.results[0], broad, specialized)
+        cast = scope.cast(call_op.results[0], broad, specialized)
         scope.region.last_block.add_op(cast)
         return cast.results[0]
 
@@ -2860,11 +3206,11 @@ class ClassMethodCall(MethodCall):
             raise Exception(f"{self.info}: Class method {rec_typ.cls.data}.{self.method} has an abstract overload, and cannot be called directly.")
         broad = behavior_decl.broad_return_type()
         specialized = behavior_decl.specialized_return_type(rec_typ, arg_types, scope)
-        self.apply_constraints(scope, behaviors[0], specialized)
+        self.configure_output_regions(scope, behavior_decl, broad, specialized, rec_typ)
+        self.apply_constraints(scope, behaviors[0], specialized, rec_typ)
         return broad, specialized
 
     def exprtype(self, scope):
-        rec_typ = self.resolved_receiver(scope)
         broad, specialized = self.simple_exprtype(scope)
         return specialized
 
@@ -2895,27 +3241,36 @@ class IntrinsicCall(ClassMethodCall):
 @dataclass
 class PrintCall(Expression):
     args: List[Expression]
+    conversion: Optional[MethodCall] = field(default=None, init=False, repr=False, compare=False)
 
     @property
     def subexpressions(self):
+        if self.conversion: return [self.conversion]
         return [*self.args]
 
     def codegen(self, scope):
+        self.exprtype(scope)
         arg_type = self.args[0].exprtype(scope)
-        attr_dict = {"typ":arg_type.base_typ()}
-        if is_named_fatptr(arg_type, "String"):
-            c_string = MethodCall(NodeInfo.from_info(self.info, "c_string"), self.args[0], "c_string", [])
-            operands = [c_string.codegen(scope)]
-            attr_dict = {"typ":c_string.exprtype(scope).base_typ()}
-        else:
-            operands = [self.args[0].codegen(scope)]
+        buffer = self.conversion.codegen(scope) if self.conversion else None
+        buffer_type = self.conversion.exprtype(scope) if self.conversion else None
+        region_name = scope.region_mapping.get(self.conversion.info.id) if self.conversion else None
+        if region_name and not scope.created_regions.get(region_name):
+            region = RegionOfBufferOp.make(buffer)
+            scope.region.last_block.add_op(region)
+            scope.created_regions[region_name] = region.results[0]
+        operands = [buffer] if self.conversion else [self.args[0].codegen(scope)]
+        attr_dict = {"typ":buffer_type.base_typ() if buffer_type else arg_type.base_typ()}
         print_op = PrintOp.create(operands=operands, attributes=attr_dict, result_types=[IntegerType(32)])
         wrap = WrapOp.make(print_op.results[0])
         scope.region.last_block.add_ops([print_op, wrap])
         return wrap.results[0]
 
     def exprtype(self, scope):
-        self.args[0].exprtype(scope)
+        arg_type = self.args[0].exprtype(scope)
+        if not is_named_fatptr(arg_type, "String"): return Integer(32)
+        if not self.conversion:
+            self.conversion = MethodCall(NodeInfo.from_info(self.info, "c_string"), self.args[0], "c_string", [])
+        self.conversion.exprtype(scope)
         return Integer(32)
 
 @dataclass
@@ -2945,6 +3300,14 @@ class Format(Expression):
     def subexpressions(self):
         return [self.arg]
 
+    @property
+    def created_ids(self):
+        buffer_ids = {
+            NodeInfo.from_info(self.info, "buffer").id,
+            NodeInfo.from_info(self.info, "create_buf").id,
+        }
+        return {self.info.id, *buffer_ids} | super().created_ids
+
     def codegen(self, scope):
 
         arg_type = self.arg.exprtype(scope)
@@ -2960,33 +3323,49 @@ class Format(Expression):
 
         # Future: add branch for non-literal Bool operand
 
-        buf_type = Buffer([Integer(8)])
-        capacity = IntegerLiteral(NodeInfo.from_info(self.info, "thirty_two"), 32, 32)
-        
-        create_buffer = CreateBuffer(NodeInfo.from_info(self.info, "create_buf"), buf_type, capacity)
-        buf_name = self.info.id + "_temp_buf"
-        buf_id = Identifier(self.info, buf_name)
+        create_buffer, buf_name, buf_id, n_bytes_name, string = self.construction_nodes(self.exprtype(scope))
         assign = Assignment(NodeInfo.from_info(self.info, "assign_buf"), buf_id, create_buffer)
         assign.codegen(scope)
         attr_dict = {"typ":arg_type.base_typ()}
         operands = [buf_id.codegen(scope), self.arg.codegen(scope)]
         format_op = FormatOp.create(operands=operands, attributes=attr_dict, result_types=[Integer(32)])
         scope.region.last_block.add_op(format_op)
-        n_bytes_name = self.info.id + "_n_bytes"
         scope.symbol_table[n_bytes_name] = format_op.results[0]
         scope.type_table[n_bytes_name] = Integer(32)
-        n_bytes_id = Identifier(self.info, n_bytes_name)
-        one = IntegerLiteral(NodeInfo.from_info(self.info, "one"), 1, 32)
-
-        # correct for \0A in format string
-        corrected_bytes = Arithmetic(NodeInfo.from_info(self.info, "n_bytes_minus_one"), n_bytes_id, "SUB", one)
-        obj_name = self.info.id + "_string_literal"
-        string = ObjectCreation(self.info, obj_name, self.exprtype(scope), [buf_id, corrected_bytes, corrected_bytes, capacity])
         return string.codegen(scope)
 
+    def construction_nodes(self, self_type):
+        capacity = IntegerLiteral(NodeInfo.from_info(self.info, "thirty_two"), 32, 32)
+        create_buffer = CreateBuffer(NodeInfo.from_info(self.info, "create_buf"), Buffer([Integer(8)]), capacity)
+        buf_name = self.info.id + "_temp_buf"
+        buf_id = Identifier(self.info, buf_name)
+        n_bytes_name = self.info.id + "_n_bytes"
+        n_bytes_id = Identifier(self.info, n_bytes_name)
+        one = IntegerLiteral(NodeInfo.from_info(self.info, "one"), 1, 32)
+        corrected_bytes = Arithmetic(NodeInfo.from_info(self.info, "n_bytes_minus_one"), n_bytes_id, "SUB", one)
+        obj_name = self.info.id + "_string_literal"
+        string = ObjectCreation(self.info, obj_name, self_type, [buf_id, corrected_bytes, corrected_bytes, capacity])
+        return create_buffer, buf_name, buf_id, n_bytes_name, string
+
     def exprtype(self, scope):
-        self.arg.exprtype(scope)
-        return scope.visible_fatptr(self.info, "String")
+        arg_type = self.arg.exprtype(scope)
+        if arg_type == Nil():
+            return StringLiteral(self.info, "nil").exprtype(scope)
+        if isinstance(self.arg, IntegerLiteral):
+            return StringLiteral(self.info, f"{self.arg.value}").exprtype(scope)
+        if isinstance(self.arg, BoolLiteral):
+            return StringLiteral(self.info, ["true", "false"][self.arg.value]).exprtype(scope)
+        self_type = scope.visible_fatptr(self.info, "String")
+        self.apply_constraints(scope, self_type)
+        return self_type
+
+    def apply_constraints(self, scope, self_type):
+        create_buffer, buf_name, _buf_id, n_bytes_name, string = self.construction_nodes(self_type)
+        facts = [
+            (buf_name, "==", create_buffer.info.id),
+        ]
+        types = {buf_name:create_buffer.exprtype(scope), n_bytes_name:Integer(32)}
+        self.typeflow_temp(scope, types, facts, [string])
 
 @dataclass
 class CttzCall(Expression):
@@ -3058,10 +3437,28 @@ class ObjectCreation(Expression):
     type: TypeAttribute
     arguments: List[Expression]
     method: "ClassMethodCall" = None
+    initializer: Optional[MethodCall] = field(default=None, init=False, repr=False, compare=False)
 
     @property
     def subexpressions(self):
         return [*self.arguments]
+
+    @property
+    def created_ids(self):
+        init_regions = set(self.initializer.output_region_ids) if self.initializer else set()
+        created_ids = {self.info.id, *getattr(self, "hidden_region_ids", set()), *init_regions}
+        return created_ids | self.exception_info().created_ids | super().created_ids
+
+    @property
+    def deferred_region_ids(self):
+        init_regions = set(self.initializer.output_region_ids) if self.initializer else set()
+        return init_regions | super().deferred_region_ids
+
+    def exception_info(self):
+        file_name = StringLiteral(NodeInfo.from_info(self.info, "file_name"), str(self.info.filepath).replace("\\", "/"))
+        line_number = IntegerLiteral(NodeInfo.from_info(self.info, "line_number"), self.info.line_number, 32)
+        anon_id = Identifier(self.info, self.anon_name)
+        return MethodCall(NodeInfo.from_info(self.info, "set_exception_info"), anon_id, "set_info", [line_number, file_name])
 
     def codegen(self, scope):
 
@@ -3079,23 +3476,39 @@ class ObjectCreation(Expression):
         parameterizations = self.parameterizations(cls, self_type, scope)
         num_data_fields = IntegerAttr.from_int_and_width(n_data_fields, 32)
         region_name = scope.region_mapping[self.info.id] if self.info.id in scope.region_mapping else ""
+        region = scope.region_for_expr(self.info.id)
         class_name = StringAttr(cls.symbol_name())
-        new_op = NewOp.make(parameterizations, cls.base_typ(), class_name, num_data_fields, region_name, self_type)
+        hidden_regions = self.hidden_region_operands(scope, cls)
+        new_op = NewOp.make(parameterizations, cls.base_typ(), class_name, num_data_fields, region_name, self_type, region, hidden_regions)
         scope.region.last_block.add_op(new_op)
         scope.symbol_table[self.anon_name] = new_op.results[0]
         scope.type_table[self.anon_name] = self_type
 
-        anon_id = Identifier(self.info, self.anon_name)
-        MethodCall(NodeInfo.from_info(self.info, "init_call"), anon_id, "init", self.arguments).codegen(scope)
+        self.initializer.codegen(scope)
 
         exception_type = FatPtr.basic("Exception")
         is_exception = scope.subtype(self_type, exception_type)
         if is_exception:
-            file_name = StringLiteral(NodeInfo.from_info(self.info, "file_name"), str(self.info.filepath).replace("\\", "/"))
-            line_number = IntegerLiteral(NodeInfo.from_info(self.info, "line_number"), self.info.line_number, 32)
-            MethodCall(NodeInfo.from_info(self.info, "set_exception_info"), anon_id, "set_info", [line_number, file_name]).codegen(scope)
+            self.exception_info().codegen(scope)
 
         return new_op.results[0]
+
+    def hidden_region_operands(self, scope, cls):
+        return [self.hidden_region_operand(scope, cls, region) for region in cls.hidden_virtual_regions()]
+
+    def hidden_region_operand(self, scope, cls, region):
+        suffix = cls.region_suffix(region.name)
+        paths = (f"{self.info.id}.{suffix}", f"{self.anon_name}.{suffix}")
+        for path in paths:
+            operand = scope.region_operand(scope.region_mapping.get(path, path))
+            if operand: return operand
+        name = scope.region_mapping.get(paths[0], paths[0])
+        created = scope.create_region(name)
+        for path in paths:
+            scope.created_regions[path] = created
+            mapped = scope.region_mapping.get(path)
+            if mapped: scope.created_regions[mapped] = created
+        return created
 
     def parameterizations(self, created_cls, self_type, scope):
         if self_type.type_params == NoneAttr(): return []
@@ -3172,10 +3585,21 @@ class ObjectCreation(Expression):
         if any(isinstance(elem.definition, AbstractMethodDef) for elem in cls.vtable() if isinstance(elem, Method)):
             offender = next(elem for elem in cls.vtable() if isinstance(elem, Method) and isinstance(elem.definition, AbstractMethodDef))
             raise Exception(f"{self.info}: Cannot instantiate class {simplified_type} with abstract method {offender.definition.name} defined in class {offender.definition.defining_class.name}")
+        hidden_suffixes = {cls.region_suffix(region.name) for region in cls.hidden_virtual_regions()}
+        self.hidden_region_ids = {f"{root}.{suffix}" for root in (self.info.id, self.anon_name) for suffix in hidden_suffixes}
+        for root in (self.info.id, self.anon_name):
+            type_constraints = scope.type_env.constraints_of(simplified_type).map({"self":root})
+            for fact in type_constraints._set: scope.points_to_facts.add(fact)
         scope.type_table[self.anon_name] = simplified_type
         anon_id = Identifier(self.info, self.anon_name)
-        MethodCall(NodeInfo.from_info(self.info, "init_call"), anon_id, "init", self.arguments).exprtype(scope)
-        scope.points_to_facts.add((self.info.id, "==", self.anon_name))
+        if not self.initializer:
+            self.initializer = MethodCall(NodeInfo.from_info(self.info, "init_call"), anon_id, "init", self.arguments)
+        self.initializer.exprtype(scope)
+        result_regions = type_region_param_names(scope, self.info.id, simplified_type)
+        object_regions = type_region_param_names(scope, self.anon_name, simplified_type)
+        for result, obj in zip(result_regions, object_regions): scope.points_to_facts.add((result, "==", obj))
+        if scope.subtype(simplified_type, FatPtr.basic("Exception")):
+            self.exception_info().exprtype(scope)
         return simplified_type
 
 @dataclass
@@ -3215,13 +3639,17 @@ class ExternDef(Statement):
 @dataclass
 class FunctionDef(Statement):
     name: str
-    constraints : Constraints
+    _constraints : Constraints
     params: List['VarDecl']
     arity: int
     _return_type: TypeAttribute
     yield_type: TypeAttribute
     body: BlockNode
     hasreturn: bool
+    insertion_points: dict = field(default_factory=dict)
+    region_mapping: dict = field(default_factory=dict)
+    liveness_at_start: dict = field(default_factory=dict)
+    output_region_slots: tuple[str, ...] = field(default_factory=tuple)
 
     @property
     def definition(self):
@@ -3236,9 +3664,12 @@ class FunctionDef(Statement):
         symbol_name = self.symbol_name()
         if symbol_name in scope.comp_unit.codegenned: return
         body_scope = Scope(scope, method=self)
+        body_scope.set_region_plan(self)
         body_scope.type_table = {}
         body_scope.symbol_table = {}
+        body_scope.set_live_regions(self.liveness_at_start)
         self.wrap_params(body_scope)
+        body_scope.receive_output_regions(self.output_region_slots)
         self.body.codegen(body_scope)
         result_type = self.return_type()
         result_type = scope.simplify(result_type).base_typ() if result_type else llvm.LLVMVoidType()
@@ -3266,13 +3697,30 @@ class FunctionDef(Statement):
     def return_type(self):
         return self._return_type
 
+    @property
+    def constraints(self):
+        constraints = self._constraints.copy()
+        if self.should_infer_all_alias(constraints): constraints.all_alias = True
+        if not constraints.all_alias: return constraints
+        roots = [param.name for param in self.params]
+        if self.return_type(): roots.append("ret")
+        constraints = constraints.union(Constraints(alias_roots=roots))
+        constraints.all_alias = False
+        return constraints
+
+    def should_infer_all_alias(self, constraints):
+        return (not constraints.no_alias) and len(constraints._set) == 0 and len(constraints.alias_roots) == 0
+
+    def check_lifetime_constraints(self, body_scope):
+        check_function_lifetime_constraints(self, body_scope)
+
     def wrap_params(self, body_scope):
         body_block = body_scope.region.block
         for i, param in enumerate(self.params):
             param_type = param.type(body_scope.type_env)
             arg = body_block.insert_arg(param_type.base_typ(), i)            
             refer = WrapOp.make(body_block.args[i], param_type)
-            cast = CastOp.make(refer.results[0], param_type, param_type)
+            cast = body_scope.cast(refer.results[0], param_type, param_type)
             body_block.add_ops([refer, cast])
             body_scope.symbol_table[param.name] = cast.results[0]
             body_scope.type_table[param.name] = param_type
@@ -3281,6 +3729,7 @@ class FunctionDef(Statement):
         if self.name[0].isupper():
             raise Exception(f"{self.info}: Function names should not be capitalized.")
         body_scope = Scope(scope, method=self)
+        body_scope.points_to_facts = Constraints()
         body_scope.type_table = {}
         body_scope.symbol_table = {}
         for i, param in enumerate(self.params):
@@ -3290,6 +3739,7 @@ class FunctionDef(Statement):
         self.body.typeflow(body_scope)
         if not self.hasreturn and self.return_type():
             raise Exception(f"{self.info}: Function declares return type {self.return_type()} yet has no return statement.")
+        self.check_lifetime_constraints(body_scope)
 
 @dataclass
 class MethodDef(Statement):
@@ -3331,19 +3781,20 @@ class MethodDef(Statement):
         self.insertion_points = {}
         self.region_mapping = {}
         self.liveness_at_start = {}
+        self.output_region_names = ()
+        self.output_region_slots = ()
 
     def codegen(self, scope):
         #debug_print(f"codegenning {self.defining_class.name}.{self.name}")
         if self.qualified_name() in scope.comp_unit.codegenned: return
         body_scope = Scope(scope)
-        body_scope.region_mapping = self.region_mapping
-        body_scope.insertion_points = self.insertion_points
+        body_scope.set_region_plan(self)
         arg_types = scope.behavior.broad_param_types()
         self.wrap_self(body_scope)
         self.wrap_params(body_scope, arg_types)
 
-        body_scope.created_regions = {reg:None for reg, alive in self.liveness_at_start.items() if alive}
-
+        body_scope.set_live_regions(self.liveness_at_start)
+        body_scope.receive_output_regions(self.output_region_slots)
         self.body.codegen(body_scope)
         result_type = scope.behavior.broad_return_type().base_typ() if scope.behavior.broad_return_type() else llvm.LLVMVoidType()
         attr_dict = {
@@ -3378,7 +3829,7 @@ class MethodDef(Statement):
         self_arg = body_block.insert_arg(self_typ.base_typ(), 0)
         unused = body_block.insert_arg(self_typ.base_typ(), 1)
         refer = WrapOp.make(self_arg, self_typ)
-        cast = CastOp.make(refer.results[0], self_typ, self_typ)
+        cast = body_scope.cast(refer.results[0], self_typ, self_typ)
         body_block.add_ops([refer, cast])
         body_scope.symbol_table["self"] = cast.results[0]
         body_scope.type_table["self"] = self_typ
@@ -3392,7 +3843,7 @@ class MethodDef(Statement):
             param_type = body_scope.simplify(param.type(body_scope.type_env))
             arg = body_block.insert_arg(arg_types[i].base_typ(), i + 3)
             wrap = WrapOp.make(arg, arg_types[i])
-            cast = CastOp.make(wrap.results[0], arg_types[i], param_type)
+            cast = body_scope.cast(wrap.results[0], arg_types[i], param_type)
             body_block.add_ops([wrap, cast])
             body_scope.symbol_table[param.name] = cast.results[0]
             body_scope.type_table[param.name] = param_type
@@ -3404,7 +3855,7 @@ class MethodDef(Statement):
             vtable_bytes = IntegerAttr.from_int_and_width(self.defining_class.vtable_size() * 8, 32)
             original_type = field.declaration.type(body_scope.type_env)
             attr_dict = {"offset":offset, "vtable_bytes":vtable_bytes, "original_type":original_type.base_typ()}
-            cast = CastOp.make(body_scope.symbol_table[param.name], param_type, original_type)
+            cast = body_scope.cast(body_scope.symbol_table[param.name], param_type, original_type)
             operands = [body_scope.symbol_table["self"], cast.results[0]]
             set_field = SetFieldOp.create(operands=operands, attributes=attr_dict)
             body_block.add_ops([cast, set_field])
@@ -3428,38 +3879,38 @@ class MethodDef(Statement):
 
     @property
     def constraints(self):
-        # constraints from overridden methods
-        # not robust to differently named parameters
-        annotated_facts = Constraints(all_alias=self._constraints.all_alias, no_alias=self._constraints.no_alias)
-        annotated_facts = annotated_facts.union(*(m._constraints for m in self.widely_overridden_methods()))
-        annotated_facts.all_alias = self._constraints.all_alias
+        return self.with_default_alias(self.own_constraints())
 
-        # annotation constraints
+    def own_constraints(self):
+        annotated_facts = self._constraints.copy()
         for lhs, op, rhs in self._constraints._set:
-            # ensures that overrides can have more precise (less conservative) constraints
-            if (lhs, "==", rhs) in annotated_facts:
-                annotated_facts.remove((lhs, "==", rhs))
-            if (rhs, "==", lhs) in annotated_facts:
-                annotated_facts.remove((rhs, "==", lhs))
             if op == "==" and ((lhs, "<", rhs) in annotated_facts or (rhs, "<", lhs) in annotated_facts):
                 raise Exception(f"{self.info}: Constraint {lhs} {op} {rhs} is less precise than constraints from overridden methods.")
-            annotated_facts.add((lhs, op, rhs))
 
-        # If there are no annotations on this method or any of its overidden methods, mark as all_alias
-        if self.should_infer_all_alias(annotated_facts):
-            #print(f"inferring that {self.defining_class.name}.{self.name} is all_alias")
-            annotated_facts.all_alias = True
+        if annotated_facts.all_alias:
+            annotated_facts = annotated_facts.union(Constraints(alias_roots=self.default_alias_roots()))
+            annotated_facts.all_alias = False
 
         return annotated_facts
 
+    def with_default_alias(self, annotated_facts):
+        if not self.should_infer_all_alias(annotated_facts): return annotated_facts
+        return annotated_facts.union(Constraints(alias_roots=self.default_alias_roots()))
+
     def should_infer_all_alias(self, annotated_facts) -> bool:
-        return (not self.name == "init") and (not annotated_facts.no_alias) and len(annotated_facts._set) == 0
+        has_no_constraints = not annotated_facts._set and not annotated_facts.alias_roots
+        return self.name != "init" and not annotated_facts.no_alias and has_no_constraints
+
+    def default_alias_roots(self):
+        roots = ("self", *(param.name for param in self.params))
+        if self.return_type(): roots = (*roots, "ret")
+        return roots
 
     def annotated_points_to_facts(self, body_scope, param_names):
 
         # (self class + overridden methods + annotations + return type) constraints
 
-        initial_constraints = self.constraints if not self._constraints.no_alias else self._constraints
+        initial_constraints = self._constraints if self._constraints.no_alias else self.constraints_for(body_scope)
 
         # constraints from self class
         annotated_facts = initial_constraints.union(self.self_type_constraints())
@@ -3473,10 +3924,21 @@ class MethodDef(Statement):
         annotated_facts = annotated_facts.union(return_constraints)
 
         for name in param_names: annotated_facts.add((name, "==", name))
-        return annotated_facts
+        return expand_alias_roots(body_scope, annotated_facts, self.root_types(body_scope))
 
-    def overridden_facts(self, body_scope, param_names):
-        all_overridden_methods = [*chain.from_iterable(m.definition.overridden_methods() for m in body_scope.behavior.methods)]
+    def constraints_for(self, body_scope):
+        if isinstance(body_scope.method, Method): return body_scope.method.constraints()
+        return self.constraints
+
+    def root_types(self, body_scope):
+        root_types = {"self":self.defining_class.type()}
+        for param in self.params:
+            root_types[param.name] = param.type(body_scope.type_env)
+        if self.return_type(): root_types["ret"] = self.return_type()
+        return root_types
+
+    def overridden_facts(self, body_scope):
+        all_overridden_methods = self.overridden_methods_for(body_scope)
         overridden_facts = Constraints()
 
         for m in all_overridden_methods:
@@ -3495,13 +3957,17 @@ class MethodDef(Statement):
             if return_cls:
                 overridden_facts = overridden_facts.union(return_cls.all_constraints().map({"self": "ret"}))
 
-        return overridden_facts
+        return expand_alias_roots(body_scope, overridden_facts, self.root_types(body_scope))
 
-    def check_override_lifetime_constraints(self, body_scope, annotated_graph, param_names, name):
-        all_overridden_methods = [*chain.from_iterable(m.definition.overridden_methods() for m in body_scope.behavior.methods)]
+    def overridden_methods_for(self, body_scope):
+        if isinstance(body_scope.method, Method): return body_scope.method.constraint_parents()
+        return self.overridden_methods()
+
+    def check_override_lifetime_constraints(self, body_scope, annotated_graph, param_names):
+        all_overridden_methods = self.overridden_methods_for(body_scope)
         if len(all_overridden_methods) < 1: return
         
-        overridden_facts = self.overridden_facts(body_scope, param_names)
+        overridden_facts = self.overridden_facts(body_scope)
         if overridden_facts.all_alias: return
 
         overridden_graph = PointsToGraph(overridden_facts, param_names)
@@ -3513,79 +3979,81 @@ class MethodDef(Statement):
         ok, comment = annotated_graph.is_covered_by(overridden_graph, annotated_graph_name, overidden_graph_name)
         if ok: return
 
-        print(f"Overidden methods points-to graph for {name}:")
-        overridden_graph.print()
-        print(f"Annotation-specified graph for {name}:")
-        annotated_graph.print()
         raise Exception(f"{self.info}: Override check-- {comment}")
 
-    def pointsto_param_names(self):
-        fields = [field.declaration.name for field in self.defining_class.fields() if not isinstance(field.declaration, TypeFieldDecl)]
+    def entry_region_names(self, body_scope):
+        fields = [field for field in self.defining_class.fields() if not isinstance(field.declaration, TypeFieldDecl)]
+        fields = [field for field in fields if not is_value_type(field.type())]
+        if self.name == "init":
+            init_fields = {normalize_constraint_name(param.name) for param in self.params if param.name.startswith("@")}
+            fields = [field for field in fields if normalize_constraint_name(field.declaration.name) in init_fields]
+        field_names = [name for field in fields for name in type_region_param_names(body_scope, field.declaration.name, field.type())]
+
         virtual_regions = [normalize_constraint_name(reg) for reg in self.defining_class.all_regions()]
-        param_names = [*(param.name for param in self.params), *fields, *virtual_regions, "self"]
-        if self.hasreturn: param_names.append("ret")
+        if self.name == "init":
+            initialized_roots = {normalize_constraint_name(field.declaration.name) for field in fields}
+            virtual_regions = [region for region in virtual_regions if self.init_region_visible(region, initialized_roots)]
+
+        type_env = body_scope.type_env
+        region_params = [param for param in self.params if not is_value_type(param.type(type_env))]
+        param_names = [name for param in region_params for name in type_region_param_names(body_scope, param.name, param.type(type_env))]
+        param_names.extend([*field_names, *virtual_regions, "self"])
         return param_names
 
-    def live_at_return(self):
-        return {"self":True} | ({"ret":True} if self.hasreturn else {})
+    def callable_output_layout(self, body_scope):
+        broad_return = body_scope.behavior.broad_return_type() if body_scope.behavior else self.return_type()
+        layouts = [type_region_layout(body_scope, "ret", broad_return)]
+        if self.name == "init":
+            self_type = body_scope.simplify(self.defining_class.type())
+            layouts.append(init_output_region_layout(body_scope, "self", self_type, self.params))
+        names = tuple(name for layout in layouts for name in layout.names)
+        slots = tuple(name for layout in layouts for name in layout.slots)
+        return names, slots
+
+    def pointsto_param_names(self, body_scope):
+        names = [*self.entry_region_names(body_scope), *self.output_region_names]
+        if self.return_type() and not is_value_type(self.return_type()):
+            names.extend(type_region_param_names(body_scope, "ret", self.return_type()))
+        return list(dict.fromkeys(names))
+
+    def init_region_visible(self, region, initialized_roots):
+        binding = self.defining_class.virtual_region_binding(region)
+        if not binding: return True
+        return any(binding == root or binding.startswith(f"{root}.") for root in initialized_roots)
+
+    def live_at_return(self, body_scope):
+        result = {"self":True}
+        result.update({param.name:True for param in self.params if not is_value_type(param.type(body_scope.type_env))})
+        if self.return_type() and not is_value_type(self.return_type()): result["ret"] = True
+        return result
 
     def check_lifetime_constraints(self, body_scope):
-        
-        param_names = self.pointsto_param_names()
-        
-        found_facts = body_scope.points_to_facts
-
-        #if found_facts.all_alias:
-            #print(f"{self.defining_class.name}.{self.name} was discovered to be all_alias")
-
+        self.output_region_names, self.output_region_slots = self.callable_output_layout(body_scope)
+        entry_names = self.entry_region_names(body_scope)
+        param_names = self.pointsto_param_names(body_scope)
         annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
-        name = f"{self.defining_class.name}.{self.name}"
-
-        annotated_graph = PointsToGraph(annotated_facts, param_names)
-        discovered_graph = PointsToGraph(found_facts, param_names)
-
-        self.check_override_lifetime_constraints(body_scope, annotated_graph, param_names, name)
-
-        if annotated_facts.all_alias:
-            single_region_name = "single_region_" + random_letters(10)
-            self.region_mapping = {k:single_region_name for k,v in discovered_graph.var_mapping.items()}
-            self.liveness_at_start = {k:True for k,v in discovered_graph.var_mapping.items()}
-            #print(f"{self.defining_class.name}.{self.name} annotated with all_alias")
-            return
-
-        discovered_graph.transform_until_stable()
-        annotated_graph.transform_until_stable()
-
-        #print(f"Final discovered points-to graph for {name}:")
-        #discovered_graph.print()
-        #print(f"Final annotation-specified graph for {name}:")
-        #annotated_graph.print()
-
-        discovered_graph_name = "discovered points-to graph of method body"
-        annotated_graph_name = "points-to graph specified by signature and annotations"
-        ok, comment = discovered_graph.is_approximated_by(annotated_graph, discovered_graph_name, annotated_graph_name)
-
-        if ok:
-            live_tbl = {k:False for k,v in discovered_graph.var_mapping.items()} | self.live_at_return()
-            insertion_points = {}
-            liveness_at_start = self.body.liveness(live_tbl, discovered_graph, insertion_points)
-            self.insertion_points = insertion_points
-            self.region_mapping = {k:discovered_graph.region_name(v) for k,v in discovered_graph.var_mapping.items()}
-            self.liveness_at_start = liveness_at_start
-
-            #if len(insertion_points) > 0: print(f"insertion points for {self.defining_class.name}.{self.name}")
-            #all_insertion_points = [*chain.from_iterable(points for points in insertion_points.values())]
-            #for point in all_insertion_points:
-            #    print(point.stmt.info.source_line)
-            #    print(f"{point.stmt.__class__.__name__} {point.op.__class__.__name__} {point.reg_name}")
-            return
-
-        print(f"Final discovered points-to graph for {name}:")
-        discovered_graph.print()
-        print(f"Final annotation-specified graph for {name}:")
-        annotated_graph.print()
-
-        raise Exception(f"{self.info}: {comment}")
+        behavior = body_scope.behavior
+        mapping = {str(i):param.name for i, param in enumerate(self.params)} | {"ret":"ret", "self":"self"}
+        behavior_constraints = behavior.constraints().map(mapping)
+        behavior_facts = expand_alias_roots(body_scope, annotated_facts.union(behavior_constraints), self.root_types(body_scope))
+        runtime_entry_names = [*entry_names]
+        behavior_params = [pair for method in behavior.methods for pair in zip(self.params, method.param_types())]
+        region_params = [(param, typ) for param, typ in behavior_params if not is_value_type(typ)]
+        runtime_entry_names.extend(name for param, typ in region_params for name in type_region_param_names(body_scope, param.name, typ))
+        input_roots = {"self", *(param.name for param in self.params)}
+        constraint_names = (name for lhs, _op, rhs in behavior_constraints._set for name in (lhs, rhs))
+        runtime_entry_names.extend(name for name in constraint_names if name.split(".")[0] in input_roots)
+        runtime_entry_names = list(dict.fromkeys(runtime_entry_names))
+        behavior_names = list(dict.fromkeys((*runtime_entry_names, *self.output_region_names)))
+        for region_name in behavior_names: behavior_facts.add((region_name, "==", region_name))
+        behavior_graph = PointsToGraph(behavior_facts, set(behavior_names))
+        override_check = lambda graph: self.check_override_lifetime_constraints(body_scope, graph, param_names)
+        regions = CallableRegions(param_names, entry_names, self.output_region_names, annotated_facts, self.live_at_return(body_scope))
+        regions.override_check = override_check
+        regions.runtime_entry_names = runtime_entry_names
+        regions.behavior_graph = behavior_graph
+        regions.behavior_names = behavior_names
+        check_callable_lifetime_constraints(self, body_scope, regions)
 
     def check_setter_num_params(self):
         if not self.name.startswith("_set_"): return
@@ -3659,8 +4127,11 @@ class ClassMethodDef(MethodDef):
     def codegen(self, scope):
         if self.qualified_name() in scope.comp_unit.codegenned: return
         body_scope = Scope(scope)
+        body_scope.set_region_plan(self)
         arg_types = scope.behavior.broad_param_types()
         self.wrap_params(body_scope, arg_types)
+        body_scope.set_live_regions(self.liveness_at_start)
+        body_scope.receive_output_regions(self.output_region_slots)
         self.body.codegen(body_scope)
         result_type = scope.behavior.broad_return_type().base_typ() if scope.behavior.broad_return_type() else llvm.LLVMVoidType()
         attr_dict = {
@@ -3682,7 +4153,7 @@ class ClassMethodDef(MethodDef):
             param_type = body_scope.simplify(param.type(body_scope.type_env))
             arg = body_block.insert_arg(arg_types[i].base_typ(), i + 1)
             wrap = WrapOp.make(arg, arg_types[i])
-            cast = CastOp.make(wrap.results[0], arg_types[i], param_type)
+            cast = body_scope.cast(wrap.results[0], arg_types[i], param_type)
             body_block.add_ops([wrap, cast])
             body_scope.symbol_table[param.name] = cast.results[0]
             body_scope.type_table[param.name] = param_type
@@ -3692,15 +4163,21 @@ class ClassMethodDef(MethodDef):
 
     # Class methods with all value-typed parameters should not be inferred all_alias
     def should_infer_all_alias(self, annotated_facts) -> bool:
-        normal_conditions = (not self.name == "init") and (not annotated_facts.no_alias) and len(annotated_facts._set) == 0
+        has_no_constraints = not annotated_facts._set and not annotated_facts.alias_roots
+        normal_conditions = self.name != "init" and not annotated_facts.no_alias and has_no_constraints
         class_env = self.defining_class.type_env
         not_all_primitive_params = not all(is_value_type(class_env.simplify(param.type(class_env))) for param in self.params)
         return normal_conditions and not_all_primitive_params
 
-    def pointsto_param_names(self):
-        param_names = [param.name for param in self.params]
-        if self.hasreturn: param_names.append("ret")
-        return param_names
+    def entry_region_names(self, body_scope):
+        type_env = body_scope.type_env
+        region_params = [param for param in self.params if not is_value_type(param.type(type_env))]
+        return [name for param in region_params for name in type_region_param_names(body_scope, param.name, param.type(type_env))]
+
+    def default_alias_roots(self):
+        roots = tuple(param.name for param in self.params)
+        if self.return_type(): roots = (*roots, "ret")
+        return roots
 
     def setup_init(self, body_scope):
         if self.name == "init":
@@ -3716,8 +4193,10 @@ class ClassMethodDef(MethodDef):
     def initialize_points_to(self, body_scope):
         body_scope.points_to_facts = Constraints()
 
-    def live_at_return(self):
-        return {"ret":True} if self.hasreturn else {}
+    def live_at_return(self, body_scope):
+        result = {param.name:True for param in self.params if not is_value_type(param.type(body_scope.type_env))}
+        if self.return_type() and not is_value_type(self.return_type()): result["ret"] = True
+        return result
 
     def ensure_capitalization(self):
         if self.name[5].isupper():
@@ -3889,8 +4368,10 @@ class Method:
         return broad
 
     def constraints(self):
-        constraints = self.definition.constraints.union(*(defn.constraints for defn in self.overridden_methods()))
-        constraints.all_alias = self.definition.constraints.all_alias
+        constraints = self.definition.own_constraints()
+        if not constraints.no_alias:
+            constraints = constraints.union(*(method.own_constraints() for method in self.constraint_parents()))
+        constraints = self.definition.with_default_alias(constraints)
         if isinstance(self.definition, ClassMethodDef): return constraints
         for param in self.definition.params:
             if "@" not in param.name: continue
@@ -3898,6 +4379,22 @@ class Method:
             if is_value_type(param_type): continue
             constraints.add(("self", "<", param.name))
         return constraints
+
+    def constraint_parents(self):
+        return [method for method in self.parent_methods() if self.covers_parent(method)]
+
+    def parent_methods(self):
+        definition = self.definition
+        methods = [method for method in self.cls.parents_methods() if method.name == definition.name and method.arity == definition.arity]
+        return [method for method in methods if method.defining_class != definition.defining_class]
+
+    def covers_parent(self, method):
+        return all(self.type_env.subtype(t, u) for t, u in zip(self.param_types(), self.parent_param_types(method)))
+
+    def parent_param_types(self, method):
+        type_env = TypeEnvironment(self.cls.type_env)
+        for typ in method.type_params: type_env.add_alias(FatPtr.basic(typ.label.data), typ)
+        return [type_env.simplify(method.defining_class.type_env.simplify(param._type)) for param in method.params]
 
     def return_type(self):
         result = self.type_env.simplify(self.definition.return_type())
@@ -4070,7 +4567,10 @@ class Behavior(Statement):
     def add_method_constraints(self, constraints, method):
         mapping = {param.name:str(i) for i,param in enumerate(method.definition.params)} | {"ret":"ret", "self":"self"}
         method_constraints = method.constraints()
+        if self.name == "init": method_constraints = method_constraints.union(self.cls.all_constraints())
         constraints.all_alias = constraints.all_alias or method_constraints.all_alias
+        mapped_roots = tuple(self.map_constraint_name(root, mapping)[0] for root in method_constraints.alias_roots)
+        constraints.alias_roots = tuple(dict.fromkeys((*constraints.alias_roots, *mapped_roots)))
         for lhs, op, rhs in method_constraints._set:
             self.add_behavior_constraint(constraints, mapping, lhs, op, rhs)
 
@@ -4215,10 +4715,11 @@ class Behavior(Statement):
 
     def remove_superfluous_methods(self):
         methods = [*self.methods]
+        order = {method:i for i, method in enumerate(methods)}
         for method in methods:
             others = [*self.methods]
             others.remove(method)
-            if any(other.is_override_of(method) for other in others):
+            if any(other.is_override_of(method) and (not method.is_override_of(other) or order[other] < order[method]) for other in others):
                 self.methods.remove(method)
         methods = [*self.methods]
         for method in methods:
@@ -4266,8 +4767,62 @@ class ClassBehavior(Behavior):
         return f"ClassBehavior({self.name}, {self.broad_param_types()}, {self.offset})"
 
 @dataclass
+class VirtualRegion:
+    name: str
+    cls: "ClassDef"
+    offset: int = 0
+
+    def symbol(self):
+        return SymbolRefAttr(self.getter_name())
+
+    def getter_name(self):
+        return class_member_symbol_name(self.cls.info.filepath, self.cls.name, "region", self.name)
+
+    def binding_path(self):
+        return self.cls.virtual_region_binding(self.name)
+
+    def codegen(self, scope):
+        getter_name = self.getter_name()
+        if getter_name in scope.comp_unit.codegenned: return
+        binding = self.binding_path()
+        if not binding:
+            self_type = self.cls.type_env.simplify(self.cls.type())
+            body_block = Block([])
+            self_arg = body_block.insert_arg(self_type.base_typ(), 0)
+            get = GetHiddenRegionOp.make(self_arg, self.cls.layout_type_attrs(), self.cls.hidden_region_offset(self.name))
+            body_block.add_ops([get, func.Return(get.results[0])])
+            func_op = func.FuncOp(getter_name, ([self_type.base_typ()], [llvm.LLVMPointerType.opaque()]), region=Region([body_block]))
+            scope.comp_unit.toplevel_ops.append(func_op)
+            scope.region.last_block.add_op(func_op)
+            scope.comp_unit.codegenned.add(getter_name)
+            return
+
+        body_scope = Scope(scope, cls=self.cls)
+        body_scope.type_env = self.cls.type_env
+        body_scope.symbol_table = {}
+        body_scope.type_table = {}
+
+        self_type = body_scope.simplify(self.cls.type())
+        self_arg = body_scope.region.block.insert_arg(self_type.base_typ(), 0)
+        wrap = WrapOp.make(self_arg, self_type)
+        cast = body_scope.cast(wrap.results[0], self_type, self_type)
+        body_scope.region.block.add_ops([wrap, cast])
+        body_scope.symbol_table["self"] = cast.results[0]
+        body_scope.type_table["self"] = self_type
+
+        region = body_scope.region_from_source(binding)
+        if not region:
+            raise Exception(f"{self.cls.info}: Cannot generate region getter for {self.cls.name}.{self.name} bound to {binding}.")
+        body_scope.region.block.add_op(func.Return(region))
+
+        func_op = func.FuncOp(getter_name, ([self_type.base_typ()], [llvm.LLVMPointerType.opaque()]), region=body_scope.region)
+        scope.comp_unit.toplevel_ops.append(func_op)
+        scope.region.last_block.add_op(func_op)
+        scope.comp_unit.codegenned.add(getter_name)
+
+@dataclass
 class Vtable:
-    entries: List["Field | Behavior | Method"]
+    entries: List["Field | VirtualRegion | Behavior | Method"]
     starts: dict[TypeAttribute, int]
 
     def start_of(self, typ):
@@ -4275,7 +4830,7 @@ class Vtable:
 
     def assign_offsets(self):
         for i, elem in reversed(list(enumerate(self.entries))):
-            if isinstance(elem, (Behavior, Method)): elem.offset = i
+            if isinstance(elem, (VirtualRegion, Behavior, Method)): elem.offset = i
 
     @classmethod
     def for_class(cls, owner):
@@ -4314,6 +4869,12 @@ class Vtable:
         return elem
 
     @classmethod
+    def virtual_region_replacement(cls, regions, elem):
+        for region in regions:
+            if region.name == elem.name: return region
+        return elem
+
+    @classmethod
     def method_replacement(cls, methods, superfluous_methods, elem):
         for method in methods:
             if method.is_override_of(elem): return method
@@ -4323,6 +4884,7 @@ class Vtable:
     @classmethod
     def replacement(cls, owner, fields, methods, superfluous_methods, elem):
         if isinstance(elem, Field): return cls.field_replacement(owner, fields, elem)
+        if isinstance(elem, VirtualRegion): return cls.virtual_region_replacement(owner.virtual_region_entries(), elem)
         if isinstance(elem, Behavior): return cls.behavior_replacement(owner._behaviors, elem)
         if isinstance(elem, Method): return cls.method_replacement(methods, superfluous_methods, elem)
         return elem
@@ -4356,17 +4918,18 @@ class Vtable:
 
         field_declarations = cls.field_declarations(owner)
         fields = [Field(i, owner, declaration) for (i, declaration) in enumerate(field_declarations)]
+        regions = owner.virtual_region_entries()
 
         if not isinstance(owner._behaviors, list):
             owner.initialize_behaviors()
         methods = [*chain.from_iterable(behavior.methods for behavior in owner._behaviors)]
         superfluous_methods = [*chain.from_iterable(behavior.superfluous_methods for behavior in owner._behaviors)]
         vtables = [*chain.from_iterable(cache[sup].entries for sup in owner.my_ordering())]
-        entries = [*fields, *owner._behaviors, *methods, *vtables]
+        entries = [*fields, *regions, *owner._behaviors, *methods, *vtables]
 
         for i, elem in reversed(list(enumerate(entries))):
             entries[i] = cls.replacement(owner, fields, methods, superfluous_methods, elem)
-            if isinstance(entries[i], (Behavior, Method)): entries[i].offset = i
+            if isinstance(entries[i], (VirtualRegion, Behavior, Method)): entries[i].offset = i
 
         result = cls(entries, cls.starts_for_flat(owner, cache))
         cache[owner] = result
@@ -4423,6 +4986,7 @@ class ClassDef(Statement):
     _type_env: TypeEnvironment
     _vtable: Optional[Vtable]
     _my_ordering: List["ClassDef"]
+    _virtual_region_bindings: dict[str, Optional[str]]
 
     def __init__(self, info, name, type_params, supertypes, fields, regions, constraints, methods):
         self.info = info
@@ -4438,6 +5002,7 @@ class ClassDef(Statement):
         self._type_env = None
         self._vtable = None
         self._my_ordering = None
+        self._virtual_region_bindings = {}
 
     @property
     def type_env(self):
@@ -4449,7 +5014,7 @@ class ClassDef(Statement):
         class_name = self.symbol_name()
         if class_name in scope.comp_unit.codegenned: return
 
-        fields_types = ArrayAttr([t.base_typ() if not isinstance(t, TypeParameter) else IntegerAttr.from_int_and_width(self.type_parameters.index(t), 64) for t in self.fields_types()])
+        fields_types = ArrayAttr(self.layout_type_attrs())
         data_size_fn_name = StringAttr(self.data_size_symbol_name())
         data_size_fn = DataSizeDefOp.create(attributes={"meth_name":data_size_fn_name,"types":fields_types})
         scope.region.last_block.add_op(data_size_fn)
@@ -4474,6 +5039,7 @@ class ClassDef(Statement):
         for field in self.fields(): field.codegen(self_scope)
         #debug_print(f"{self.name} fields are {[field.declaration.scoped_name(self.type_env) for field in self.fields()]}")
         for elem in self.vtable():
+            if isinstance(elem, VirtualRegion): elem.codegen(self_scope)
             if isinstance(elem, Behavior): elem.codegen(self_scope)
         scope.merge_ops(self_scope)
         scope.comp_unit.codegenned.add(class_name)
@@ -4547,7 +5113,79 @@ class ClassDef(Statement):
         pruned = list(reversed({reg_name:reg_name for reg_name in reversed(unpruned)}.values()))
         return pruned
 
-    def all_constraints(self):
+    def virtual_region_entries(self):
+        return [VirtualRegion(name, self) for name in self.all_regions()]
+
+    def virtual_region(self, name):
+        return next((elem for elem in self.vtable() if isinstance(elem, VirtualRegion) and elem.name == name), None)
+
+    def hidden_virtual_regions(self):
+        return [region for region in self.virtual_region_entries() if not region.binding_path()]
+
+    def region_suffix(self, name):
+        return normalize_constraint_name(name).removeprefix("self.")
+
+    def hidden_region_offset(self, name):
+        name = self.region_suffix(name)
+        names = [self.region_suffix(region.name) for region in self.hidden_virtual_regions()]
+        return len(self.stored_type_fields()) + names.index(name)
+
+    def equivalent_region_names(self, name):
+        name = normalize_constraint_name(name)
+        equalities = {(lhs, op, rhs) for lhs, op, rhs in self.all_constraints()._set if op == "=="}
+        graph = PointsToGraph(Constraints(equalities), set())
+        if name not in graph.var_mapping: return []
+        region = graph.var_mapping[name]
+        return sorted(label for label, mapped in graph.var_mapping.items() if mapped == region and label != name)
+
+    def can_get_region(self, path):
+        parts = normalize_constraint_name(path).split(".")
+        if len(parts) < 2 or parts[0] != "self": return False
+        source_type = self.type_env.simplify(self.type())
+        for i, part in enumerate(parts[1:], start=1):
+            if not isinstance(source_type, FatPtr): return False
+            cls = self.type_env.get_class(None, source_type)
+            if part.startswith("$"): return i == len(parts) - 1 and part in cls.all_regions()
+            field = next((field for field in cls.all_field_declarations() if field.name == "@" + part), None)
+            if not field: return False
+            field_type = field.type(cls.type_env)
+            source_type = self.type_env.specialize([cls.type()], [source_type], field_type)
+            source_type = self.type_env.simplify(source_type)
+        return isinstance(source_type, (FatPtr, Buffer))
+
+    def virtual_region_binding(self, name, resolving=frozenset()):
+        name = normalize_constraint_name(name)
+        if not resolving and name in self._virtual_region_bindings:
+            return self._virtual_region_bindings[name]
+        if name in resolving: return None
+        resolving = resolving | {name}
+        candidates = []
+        for candidate in self.equivalent_region_names(name):
+            resolved = self.resolve_region_path(candidate, resolving)
+            if not resolved or resolved == name: continue
+            if not self.can_get_region(resolved): continue
+            candidates.append(resolved)
+        if candidates:
+            binding = min(dict.fromkeys(candidates), key=lambda candidate: ("$" in candidate, len(candidate), candidate))
+            if len(resolving) == 1: self._virtual_region_bindings[name] = binding
+            return binding
+        if len(resolving) == 1: self._virtual_region_bindings[name] = None
+        return None
+
+    def resolve_region_path(self, path, resolving):
+        path = normalize_constraint_name(path)
+        parts = path.split(".")
+        for i, part in enumerate(parts):
+            if not part.startswith("$"): continue
+            prefix = ".".join(parts[:i + 1])
+            if i == len(parts) - 1 and (i != 1 or parts[0] != "self"): return path
+            binding = self.virtual_region_binding(prefix, resolving)
+            if not binding: return None
+            return self.resolve_region_path(".".join([binding, *parts[i + 1:]]), resolving | {prefix})
+        return path
+
+    def all_constraints(self, resolving=frozenset(), typ=None):
+        resolving = resolving | {self.symbol_name()}
         constraints = Constraints()
         full_ordering = [self, *self.my_ordering()]
         region_constraints = [*chain.from_iterable(cls.region_constraints._set for cls in full_ordering)]
@@ -4557,12 +5195,11 @@ class ClassDef(Statement):
         fields = [field for field in self.fields() if not isinstance(field.declaration, TypeFieldDecl)]
         for field in fields:
             field_type = field.type()
+            if typ: field_type = self._type_env.specialize([self.type()], [typ], field_type)
             if is_value_type(field_type): continue
             constraints.add(("self", "<", field.declaration.name))
-            
-            # recursive, need to think more about how to handle this
-            if self._type_env.subtype(self.type(), field_type): continue
-            field_type_constraints = self._type_env.constraints_of(field_type).map({"self":field.declaration.name})
+
+            field_type_constraints = self._type_env.constraints_of(field_type, resolving).map({"self":field.declaration.name})
             constraints = constraints.union(field_type_constraints)
         
         return constraints
@@ -4586,8 +5223,26 @@ class ClassDef(Statement):
     def base_typ(self):
         return llvm.LLVMStructType.from_type_list([t.base_typ() for t in self.fields_types()])
 
+    def stored_data_fields(self):
+        return [field for field in self.fields() if field.needs_storage() and not isinstance(field.declaration, TypeFieldDecl)]
+
+    def field_storage_offset(self, field):
+        if isinstance(field.declaration, TypeFieldDecl):
+            return self.stored_type_fields().index(field)
+        return len(self.stored_type_fields()) + len(self.hidden_virtual_regions()) + self.stored_data_fields().index(field)
+
     def fields_types(self):
-        return [field.type() for field in self.fields() if field.needs_storage()]
+        return [
+            *[field.type() for field in self.stored_type_fields()],
+            *[ReifiedType() for _ in self.hidden_virtual_regions()],
+            *[field.type() for field in self.stored_data_fields()],
+        ]
+
+    def layout_type_attrs(self):
+        type_fields = [f.declaration.type_param for f in self.fields() if isinstance(f.declaration, TypeFieldDecl)]
+        field_index = type_fields.index
+        integer_attr = IntegerAttr.from_int_and_width
+        return [t.base_typ() if not isinstance(t, TypeParameter) else integer_attr(field_index(t), 64) for t in self.fields_types()]
 
     def direct_supertypes(self):
         supertypes = [self._type_env.validated_type(self.info, t) for t in self._direct_supertypes]
@@ -4684,10 +5339,11 @@ class ClassDef(Statement):
     def initialize_behaviors(self):
         all_method_definitions = self.all_method_definitions()
         as_methods = [Method(definition, self, 0, None, None) for definition in all_method_definitions]
-        confusable_sets = list(reversed({tuple(m.confusable_set(as_methods)):m for m in reversed(as_methods)}.keys()))
+        method_order = {method.definition:i for i, method in enumerate(as_methods)}
+        confusable_sets = list(reversed(dict.fromkeys(frozenset(m.confusable_set(as_methods)) for m in reversed(as_methods))))
         self._behaviors = []
         for confusable_set in confusable_sets:
-            belonging_methods = [m for m in confusable_set]
+            belonging_methods = sorted(confusable_set, key=lambda method: method_order[method.definition])
             meth_name = belonging_methods[0].definition.name
             meth_arity = belonging_methods[0].definition.arity
             ty = ClassBehavior if len(meth_name) > 6 and meth_name.startswith("_Self_") else Behavior
@@ -4700,7 +5356,9 @@ class ClassDef(Statement):
         self._vtable = Vtable.for_class(self)
 
     def marginal_vtable_size(self):
-        return len([*self.all_field_declarations(), *self.behaviors, *[*chain.from_iterable(behavior.methods for behavior in self.behaviors)]])
+        member_count = len(self.all_field_declarations()) + len(self.all_regions()) + len(self.behaviors)
+        method_count = sum(len(behavior.methods) for behavior in self.behaviors)
+        return member_count + method_count
 
     def offset_to(self, target_type):
         if not self._vtable:
@@ -4764,7 +5422,7 @@ class VarDecl(Statement):
     def liveness(self, live_tbl, points_to_graph, insertion_points):
         before_tbl = live_tbl | { self.name : False }
         stmt_insertion_points = points_to_graph.region_insertion_points(self, before_tbl, live_tbl)
-        if len(stmt_insertion_points) > 0: insertion_points[self.info.id] = stmt_insertion_points
+        add_insertion_points(insertion_points, self, stmt_insertion_points)
         return before_tbl
 
     def codegen(self, scope):
@@ -4820,10 +5478,10 @@ class Field:
         setter_name = StringAttr(self.setter_name())
         original_type = self.declaration.type(scope.type_env)
         specialized = self.type()
-        struct_type = self.cls.base_typ()
 
         if isinstance(self.declaration, TypeFieldDecl):
-            offset = IntegerAttr.from_int_and_width(self.offset, 32)
+            storage_offset = self.cls.field_storage_offset(self) if self.needs_storage() else self.offset
+            offset = IntegerAttr.from_int_and_width(storage_offset, 32)
             attr_dict = {"offset":offset, "meth_name":accessor_name}
             if not self.needs_storage():
                 attr_dict["id_hierarchy"] = id_hierarchy(self.declaration.type_param, [])
@@ -4833,12 +5491,12 @@ class Field:
             scope.region.last_block.add_op(accessor)
             return
 
-        # could very easily be incorrect; unsure if the field order is necessarily the same as self.cls.type_parameters.index(t)
-        fields_types = fields_types = [t.base_typ() if not isinstance(t, TypeParameter) else IntegerAttr.from_int_and_width([f.declaration.type_param for f in self.cls.fields() if isinstance(f.declaration, TypeFieldDecl)].index(t), 64) for t in self.cls.fields_types()]
+        fields_types = self.cls.layout_type_attrs()
+        storage_offset = self.cls.field_storage_offset(self)
 
         parameterization = StringAttr("_parameterization_" + name_hierarchy(self.type()).data[0].data) if not isinstance(self.type(), TypeParameter) else None
-        getter = GetterDefOp.make(getter_name, fields_types, self.offset, original_type, specialized, parameterization)
-        setter = SetterDefOp.make(setter_name, fields_types, self.offset, original_type, specialized, parameterization)
+        getter = GetterDefOp.make(getter_name, fields_types, storage_offset, original_type, specialized, parameterization)
+        setter = SetterDefOp.make(setter_name, fields_types, storage_offset, original_type, specialized, parameterization)
 
         attr_dict = {"meth_name":accessor_name, "getter_name":getter_name, "setter_name":setter_name}
         accessor = AccessorDefOp.create(attributes=attr_dict)
@@ -4877,9 +5535,13 @@ class Assignment(Statement):
     desugared: Expression = None
 
     def liveness(self, live_tbl, points_to_graph, insertion_points):
-        before_tbl = live_tbl | {id:True for id in self.value.used_ids} | { self.target.info.id:False }
+        if self.desugared: return self.desugared.liveness(live_tbl, points_to_graph, insertion_points)
+        target_ids = {self.target.info.id}
+        if isinstance(self.target, TupleLiteral): target_ids.update(self.target.used_ids)
+        before_tbl = live_tbl | {id:True for id in self.value.used_ids} | {id:False for id in target_ids}
         stmt_insertion_points = points_to_graph.region_insertion_points(self, before_tbl, live_tbl)
-        if len(stmt_insertion_points) > 0: insertion_points[self.info.id] = stmt_insertion_points
+        add_insertion_points(insertion_points, self, stmt_insertion_points)
+        add_expression_region_points(points_to_graph, insertion_points, self, self.value, before_tbl, live_tbl)
         return before_tbl
 
     def desugar(self, scope, typ):
@@ -4903,6 +5565,12 @@ class Assignment(Statement):
         if value_type and value_type != llvm.LLVMVoidType(): return
         raise Exception(f"{self.info}: Assignment impossible: right hand side expression has no value.")
 
+    def add_reference_facts(self, scope, typ):
+        targets = type_region_param_names(scope, self.target.info.id, typ)
+        values = type_region_param_names(scope, self.value.info.id, typ)
+        for target, value in zip(targets, values):
+            scope.points_to_facts.add((target, "==", value))
+
     def codegen(self, scope):
         if self.desugared: return self.desugared.codegen(scope)
         value_type = self.value.exprtype(scope)
@@ -4913,8 +5581,7 @@ class Assignment(Statement):
     def basic_typeflow(self, scope):
         value_type = self.value.exprtype(scope)
         self.ensure_value_type(value_type)
-        if not is_value_type(value_type):
-            scope.points_to_facts.add((self.target.info.id, "==", self.value.info.id))
+        if not is_value_type(value_type): self.add_reference_facts(scope, value_type)
         if(not isinstance(self.target, Identifier)):
             raise Exception(f"{self.info}: lhs in assignment is not an identifier!")
         if self.target.name == "self":
@@ -4948,14 +5615,7 @@ class SimpleAssignment(Assignment):
 class DestructureAssignment(Assignment):
 
     def codegen(self, scope):
-        value_type = self.value.exprtype(scope)
-
-        tupl = Identifier(self.info, self.info.id + "_lhs_tuple")
-        assign = Assignment(self.info, tupl, self.value)
-        assign.codegen(scope)
-
-        for assignment in self.assignments(scope, tupl, value_type):
-            assignment.codegen(scope)
+        self.desugared.codegen(scope)
 
     def assignments(self, scope, tupl, value_type):
         result = []
@@ -4971,10 +5631,8 @@ class DestructureAssignment(Assignment):
         value_type = self.value.exprtype(scope)
         tupl = Identifier(self.info, self.info.id + "_lhs_tuple")
         assign = Assignment(self.info, tupl, self.value)
-        assign.typeflow(scope)
-
-        for assignment in self.assignments(scope, tupl, value_type):
-            assignment.typeflow(scope)
+        self.desugared = BlockNode(self.info, [assign, *self.assignments(scope, tupl, value_type)])
+        self.desugared.typeflow(scope)
 
 @dataclass
 class DestructurePairAssignment(DestructureAssignment):
@@ -4994,13 +5652,7 @@ class DestructurePairAssignment(DestructureAssignment):
             raise Exception(f"{self.info}: rhs of destructuring assignment should be a tuple or Pair, not {value_type}")
         if len(self.target.elems) != 2:
             raise Exception(f"Can only destructure a {value_type} instance into two identifiers, not {len(self.target.elems)}")
-
-        tupl = Identifier(self.info, self.info.id + "_lhs_tuple")
-        assign = Assignment(self.info, tupl, self.value)
-        assign.typeflow(scope)
-
-        for assignment in self.assignments(scope, tupl, value_type):
-            assignment.typeflow(scope)
+        super().typeflow(scope)
 
 @dataclass
 class Reference(Assignment):
@@ -5027,7 +5679,7 @@ class Reassignment(Assignment):
         typ = self.value.exprtype(scope)
         new_val = self.value.codegen(scope)
         old_typ = scope.type_table[self.target.name]
-        cast = CastOp.make(new_val, typ, old_typ)
+        cast = scope.cast(new_val, typ, old_typ)
         assign = AssignOp.make(scope.symbol_table[self.target.name], cast.results[0], old_typ)
         scope.region.last_block.add_ops([cast, assign])
         scope.insert_region_removals(self)
@@ -5049,10 +5701,11 @@ class FieldAssignment(Assignment):
         offset = IntegerAttr.from_int_and_width(field.offset, IntegerType(64))
         vtable_bytes = IntegerAttr.from_int_and_width(scope.cls.vtable_size() * 8, 32)
         attr_dict = {"offset":offset, "vtable_bytes":vtable_bytes, "original_type":original_type.base_typ()}
-        cast = CastOp.make(new_val, typ, original_type)
+        cast = scope.cast(new_val, typ, original_type)
         operands = [scope.symbol_table["self"], cast.results[0]]
         set_field = SetFieldOp.create(operands=operands, attributes=attr_dict)
         scope.region.last_block.add_ops([cast, set_field])
+        scope.type_table[self.target.name] = typ
         scope.insert_region_removals(self)
 
     def typeflow(self, scope):
@@ -5064,6 +5717,7 @@ class FieldAssignment(Assignment):
         if not scope.subtype(typ, declared_type):
             if typ != Integer(32) or declared_type not in [Float(), Integer(64)]:
                 raise Exception(f"{self.info}: cannot assign to field {self.target.name}: {typ} is not a subtype of {declared_type}")
+        if not is_value_type(typ): self.add_reference_facts(scope, typ)
         self.target.typeflow(scope)
         scope.type_table[self.target.name] = typ
 
@@ -5075,7 +5729,7 @@ class CallAssignment(Assignment):
         typ = self.value.exprtype(scope)
         new_val = self.value.codegen(scope)
         target_type = self.target.exprtype(scope)
-        cast = CastOp.make(new_val, typ, target_type)
+        cast = scope.cast(new_val, typ, target_type)
         assign = AssignOp.make(self.target.codegen(scope), cast.results[0], target_type)
         scope.region.last_block.add_ops([cast, assign])
         scope.insert_region_removals(self)
@@ -5098,7 +5752,7 @@ class Branch(Statement):
             if local_type == Nothing(): continue
             old_type = scope.type_table[key]
             #print(f"inserting cast and assign ({local_type} -> {old_type}) for {key}")
-            cast = CastOp.make(local_var, local_type, old_type)
+            cast = scope.cast(local_var, local_type, old_type)
             assign = AssignOp.make(old_var, cast.results[0], old_type)
             exit.insert_ops([cast, assign])
 
@@ -5125,7 +5779,7 @@ class Branch(Statement):
             #print(f"{self.info}: merged {key} from {all_types} to {new_typ}")
             if new_typ == value: continue
             if new_typ == Nothing(): continue
-            cast = CastOp.make(main_scope.symbol_table[key], value, new_typ)
+            cast = main_scope.cast(main_scope.symbol_table[key], value, new_typ)
             main_scope.symbol_table[key] = cast.results[0]
             main_scope.type_table[key] = new_typ
             main_scope.region.last_block.add_op(cast)
@@ -5133,8 +5787,7 @@ class Branch(Statement):
 
     def merge_scope_pointsto(self, main_scope, branch_scopes):
         main_scope.points_to_facts = main_scope.points_to_facts.union(*(scope.points_to_facts for scope in branch_scopes))
-        for scope in branch_scopes:
-            main_scope.created_regions = main_scope.created_regions | scope.created_regions
+        main_scope.required_region_names = main_scope.required_region_names.union(*(scope.required_region_names for scope in branch_scopes))
 
 @dataclass
 class IfStatement(Branch):
@@ -5142,7 +5795,6 @@ class IfStatement(Branch):
     else_block: Optional[BlockNode]
 
     def liveness(self, live_tbl, points_to_graph, insertion_points):
-        
         before_then = self.then_block.liveness(live_tbl, points_to_graph, insertion_points)
         live_before_then = {k:v for k,v in before_then.items() if v}
         before_else = {k:v for k,v in live_tbl.items() if v}
@@ -5152,8 +5804,19 @@ class IfStatement(Branch):
             live_before_else = {k:v for k,v in before_else.items() if v}
         
         before_tbl = before_then | before_else | live_before_then | live_before_else | {id:True for id in self.condition.used_ids}
-        stmt_insertion_points = points_to_graph.region_insertion_points(self, before_tbl, live_tbl)
-        if len(stmt_insertion_points) > 0: insertion_points[self.info.id] = stmt_insertion_points
+        points_to_graph.region_insertion_points(self, before_tbl, live_tbl)
+        before_regions = points_to_graph.region_liveness(before_tbl)
+        after_regions = points_to_graph.region_liveness(live_tbl)
+        dying_regions = {name for name, live in before_regions.items() if live and not after_regions.get(name, False)}
+        implicit_else = BlockNode(NodeInfo.from_info(self.info, "implicit_else"), [])
+        for block, branch_tbl in (
+            (self.then_block, before_then),
+            (self.else_block or implicit_else, before_else),
+        ):
+            branch_regions = points_to_graph.region_liveness(branch_tbl)
+            points = [InsertionPoint(block, RemoveRegionOp, name) for name in sorted(dying_regions) if not branch_regions.get(name, False)]
+            add_insertion_points(insertion_points, block, points)
+        add_expression_region_points(points_to_graph, insertion_points, self, self.condition, before_tbl, live_tbl)
         return before_tbl 
 
     def codegen(self, scope):
@@ -5184,7 +5847,16 @@ class IfStatement(Branch):
         self.narrow_true(branch_scopes[0])
         self.narrow_false(alternate_scope)
 
-        for (b_scope, b_block) in zip(branch_scopes, branch_blocks): b_block.codegen(b_scope)
+        for b_scope, b_block in zip(branch_scopes, branch_blocks):
+            b_scope.insert_region_removals(b_block)
+            b_block.codegen(b_scope)
+
+        has_implicit_else = False
+        if not self.else_block:
+            implicit_else = BlockNode(NodeInfo.from_info(self.info, "implicit_else"), [])
+            last_op = alternate_scope.region.last_block.last_op
+            alternate_scope.insert_region_removals(implicit_else)
+            has_implicit_else = alternate_scope.region.last_block.last_op is not last_op
 
         main_exits = [ScopeExit(b_scope, False) for b_scope in branch_scopes]
 
@@ -5192,6 +5864,7 @@ class IfStatement(Branch):
         for exit in main_exits: self.cast_mutated_vars(scope, exit)
         
         branch_regions = [b_scope.region for b_scope in branch_scopes]
+        if has_implicit_else: branch_regions.append(alternate_scope.region)
         if_op = IfOp.create(operands=[unwrap.results[0]], regions=branch_regions)
         scope.region.last_block.add_op(if_op)
         self.merge_scopes(scope, route_scopes)
@@ -5229,39 +5902,59 @@ class WhileStatement(Branch):
     body: BlockNode
 
     def liveness(self, live_tbl, points_to_graph, insertion_points):
+        created_regions = points_to_graph.created_region_names.copy()
+        lifetime_points = points_to_graph.lifetime_points.copy()
 
-        insertion_points_copy = insertion_points.copy()
-
-        # first run though; use throwaway inerstion_points_copy
-        before_tbl = self.body.liveness(live_tbl, points_to_graph, insertion_points_copy)
+        before_tbl = self.body.liveness(live_tbl, points_to_graph, {})
 
         used_in_condition = self.condition.used_ids
 
         before_tbl = before_tbl | {id:True for id in used_in_condition}
 
         if self.preheader:
-            before_tbl = self.preheader.liveness(before_tbl, points_to_graph, insertion_points_copy)
+            before_tbl = self.preheader.liveness(before_tbl, points_to_graph, {})
+
+        points_to_graph.created_region_names = created_regions
+        points_to_graph.lifetime_points = lifetime_points
 
         # Live at end of loop: union(live at beginning, live at end)
         live_after = {k:v for k,v in live_tbl.items() if v}
         live_before = {k:v for k,v in before_tbl.items() if v}
         union_tbl = before_tbl | live_after | live_before
 
-        # second run through; use real insertion_points
-        before_tbl = self.body.liveness(union_tbl, points_to_graph, insertion_points)
+        # second run through; use real insertion points
+        backedge_regions = points_to_graph.region_liveness(union_tbl)
+        loop_points = {}
+        before_tbl = self.body.liveness(union_tbl, points_to_graph, loop_points)
 
         before_tbl = before_tbl | {id:True for id in used_in_condition}
 
         # insertion points due to preheader
         if self.preheader:
-            before_tbl = self.preheader.liveness(before_tbl, points_to_graph, insertion_points)
+            before_tbl = self.preheader.liveness(before_tbl, points_to_graph, loop_points)
+
+        key = insertion_key
+        lifetimes = points_to_graph.lifetime_points
+        created_points = (point for points in loop_points.values() for point in points if point.op == CreateRegionOp)
+        backedge_points = (point for point in created_points if backedge_regions.get(point.reg_name, False))
+        live_points = (point for point in backedge_points if point.reg_name in lifetimes.get((key(point.stmt), "before"), ()))
+        carried = {(key(point.stmt), point.reg_name):point.deferred for point in live_points}
+        for points in loop_points.values():
+            remaining = [point for point in points if point.op != CreateRegionOp or (key(point.stmt), point.reg_name) not in carried]
+            if remaining: add_insertion_points(insertion_points, remaining[0].stmt, remaining)
+        carried_regions = {}
+        for (_, name), deferred in carried.items():
+            carried_regions[name] = carried_regions.get(name, True) and deferred
+        creations = [InsertionPoint(self, CreateRegionOp, name, carried_regions[name]) for name in sorted(carried_regions)]
+        add_insertion_points(insertion_points, self, creations)
 
         live_after = {k:v for k,v in live_tbl.items() if v}
         live_before = {k:v for k,v in before_tbl.items() if v}
         union_tbl = before_tbl | live_after | live_before
 
         stmt_insertion_points = points_to_graph.region_insertion_points(self, union_tbl, live_tbl)
-        if len(stmt_insertion_points) > 0: insertion_points[self.info.id] = stmt_insertion_points
+        add_insertion_points(insertion_points, self, stmt_insertion_points)
+        add_expression_region_points(points_to_graph, insertion_points, self, self.condition, union_tbl, live_tbl)
 
         return union_tbl
 
@@ -5346,17 +6039,12 @@ class For(Statement):
     inductee: Identifier
     iterable: Expression
     iterator: MethodCall
-    temp_ident: Identifier
+    iterator_ident: Identifier
     body: BlockNode
+    desugared: Optional[tuple[Assignment, WhileStatement]] = field(default=None, init=False, repr=False, compare=False)
 
     def liveness(self, live_tbl, points_to_graph, insertion_points):
-
-        assign0 = Assignment(NodeInfo.from_info(self.info, "assign_iterator"), self.temp_ident, self.iterator)
-        nxt_call = MethodCall(NodeInfo.from_info(self.info, "next_call"), self.temp_ident, "next", [])
-        assign1 = Assignment(NodeInfo.from_info(self.info, "assign_next"), self.inductee, nxt_call)
-        condition = NegatedTypeCheck(NodeInfo.from_info(self.info, "nil_check"), self.inductee, Nil())
-        wile = WhileStatement(NodeInfo.from_info(self.info, "while_loop"), condition, assign1, self.body)
-
+        assign0, wile = self.desugared
         before_tbl = wile.liveness(live_tbl, points_to_graph, insertion_points)
         before_tbl = assign0.liveness(before_tbl, points_to_graph, insertion_points)
         return before_tbl
@@ -5371,12 +6059,8 @@ class For(Statement):
         while (x := _iterator_xyz.next()) is not Nil { ... }
         """
 
-        assign0 = Assignment(NodeInfo.from_info(self.info, "assign_iterator"), self.temp_ident, self.iterator)
+        assign0, wile = self.desugared
         assign0.codegen(scope)
-        nxt_call = MethodCall(NodeInfo.from_info(self.info, "next_call"), self.temp_ident, "next", [])
-        assign1 = Assignment(NodeInfo.from_info(self.info, "assign_next"), self.inductee, nxt_call)
-        condition = NegatedTypeCheck(NodeInfo.from_info(self.info, "nil_check"), self.inductee, Nil())
-        wile = WhileStatement(NodeInfo.from_info(self.info, "while_loop"), condition, assign1, self.body)
         wile.codegen(scope)
 
     def typeflow(self, scope):
@@ -5393,10 +6077,10 @@ class For(Statement):
         iterator_type = self.iterator.exprtype(scope)
         if not isinstance(iterator_type, FatPtr):
             raise Exception(f"{self.info}: For-loop iterator must be an object with a .next() method, not {iterator_type}")
-        assign0 = Assignment(NodeInfo.from_info(self.info, "assign_iterator"), self.temp_ident, self.iterator)
+        assign0 = Assignment(NodeInfo.from_info(self.info, "assign_iterator"), self.iterator_ident, self.iterator)
         assign0.typeflow(scope)
 
-        nxt_call = MethodCall(NodeInfo.from_info(self.info, "next_call"), self.temp_ident, "next", [])
+        nxt_call = MethodCall(NodeInfo.from_info(self.info, "next_call"), self.iterator_ident, "next", [])
         nxt_type = nxt_call.exprtype(scope)
         if not isinstance(nxt_type, Union):
             debug_print(nxt_type)
@@ -5408,21 +6092,22 @@ class For(Statement):
         assign1 = Assignment(NodeInfo.from_info(self.info, "assign_next"), self.inductee, nxt_call)
         condition = NegatedTypeCheck(NodeInfo.from_info(self.info, "nil_check"), self.inductee, Nil())
         wile = WhileStatement(NodeInfo.from_info(self.info, "while_loop"), condition, assign1, self.body)
+        self.desugared = (assign0, wile)
         wile.typeflow(scope)
 
 @dataclass
 class Return(Statement):
 
     def liveness(self, live_tbl, points_to_graph, insertion_points):
-        before_tbl = {k:(k == "self" or k == "ret") for k,v in live_tbl.items() }
+        before_tbl = {k:v for k,v in live_tbl.items() if v}
         after_tbl = {k:False for k,v in before_tbl.items()}
         stmt_insertion_points = points_to_graph.region_insertion_points(self, before_tbl, after_tbl)
-        if len(stmt_insertion_points) > 0:
-            insertion_points[self.info.id] = [point for point in stmt_insertion_points if isinstance(point.op, CreateRegionOp)]
+        add_insertion_points(insertion_points, self, stmt_insertion_points)
         return before_tbl
 
     def codegen(self, scope):
         scope.insert_region_creations(self)
+        scope.insert_region_removals(self)
         ret_op = ReturnOp.create()
         scope.region.last_block.add_op(ret_op)
         self.untype_variables(scope)
@@ -5455,18 +6140,23 @@ class ReturnValue(Return):
         return [self.value]
 
     def liveness(self, live_tbl, points_to_graph, insertion_points):
-        before_tbl = {k:(k == "self" or k == "ret") for k,v in live_tbl.items() } | { id:True for id in self.value.used_ids }
+        before_tbl = {k:v for k,v in live_tbl.items() if v}
+        before_tbl = before_tbl | {normalize_constraint_name(self.value.info.id): True}
+        before_tbl = before_tbl | {id:True for id in self.value.used_ids}
         after_tbl = {k:False for k,v in before_tbl.items()}
         stmt_insertion_points = points_to_graph.region_insertion_points(self, before_tbl, after_tbl)
-        if len(stmt_insertion_points) > 0:
-            insertion_points[self.info.id] = [point for point in stmt_insertion_points if isinstance(point.op, CreateRegionOp)]
+        add_insertion_points(insertion_points, self, stmt_insertion_points)
+        creation_before_tbl = {k:v for k,v in before_tbl.items() if k not in self.value.created_ids}
+        add_expression_region_points(points_to_graph, insertion_points, self, self.value, creation_before_tbl, live_tbl)
         return before_tbl
 
     def codegen(self, scope):
         scope.insert_region_creations(self)
         retval_typ = scope.simplify(self.value.exprtype(scope))
         broad_return_type = scope.behavior.broad_return_type() if scope.behavior else scope.simplify(scope.method.definition.return_type())
-        cast = CastOp.make(self.value.codegen(scope), retval_typ, broad_return_type)
+        value = self.value.codegen(scope)
+        scope.insert_region_removals(self)
+        cast = scope.cast(value, retval_typ, broad_return_type)
         ret_op = ReturnOp.create(operands=[cast.results[0]])
         scope.region.last_block.add_ops([cast, ret_op])
         self.untype_variables(scope)
@@ -5551,7 +6241,7 @@ class CoYield(Expression):
 
     @property
     def subexpressions(self):
-        return [self.arg]
+        return [self.arg] if self.arg else []
 
     def codegen(self, scope):
         if not self.arg:
@@ -5564,7 +6254,7 @@ class CoYield(Expression):
         to_type = exception_or_nil if not scope.method else scope.simplify(Union.from_list([scope.method.definition.yield_type, Nil()]))
         arg_type = self.arg.exprtype(scope)
         cold = scope.subtype(arg_type, exception_type)
-        cast = CastOp.make(self.arg.codegen(scope), arg_type, to_type)
+        cast = scope.cast(self.arg.codegen(scope), arg_type, to_type)
         unwrap = UnwrapOp.create(operands=[cast.results[0]], result_types=[to_type.base_typ()])
         yield_op = CoroYieldOp.make(unwrap.results[0], self_type.base_typ(), cold)
         wrap = WrapOp.make(yield_op.results[0], self_type)
@@ -5649,18 +6339,21 @@ class CreateBuffer(Expression):
     def subexpressions(self):
         return [self.size]
 
+    @property
+    def created_ids(self):
+        return {self.info.id} | super().created_ids
+
     def codegen(self, scope):
         size_type = self.size.exprtype(scope)
         size = self.size.codegen(scope)
-        cast = CastOp.make(size, size_type, Integer(64))
+        cast = scope.cast(size, size_type, Integer(64))
         region_name = scope.region_mapping[self.info.id] if self.info.id in scope.region_mapping else ""
+        region = scope.region_for_expr(self.info.id)
         elem_type = scope.simplify(self.buf.elem_type)
-        attr_dict = {"typ":elem_type.base_typ(), "region_id":StringAttr(region_name)}
-        operands = [cast.results[0]]
+        parameterization = None
         if isinstance(elem_type, TypeParameter):
             parameterization = scope.get_parameterization(elem_type)
-            operands.append(parameterization)
-        create_buffer = CreateBufferOp.create(operands=operands, attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
+        create_buffer = CreateBufferOp.make(cast.results[0], elem_type, region_name, parameterization, region)
         scope.region.last_block.add_ops([cast, create_buffer])
         return create_buffer.results[0]
 
@@ -5672,6 +6365,7 @@ class CreateBuffer(Expression):
             raise Exception(f"{self.info}: Buffer creation can only take integers up to 64 bits wide, not {size_typ}.")
         buf_type = scope.simplify(self.buf)
         elem_type = scope.type_env.validated_type(self.info, buf_type.elem_type)
+        scope.points_to_facts.add((self.info.id, "==", self.info.id))
         return Buffer([elem_type])
 
 @dataclass

@@ -5,7 +5,7 @@ class KeyNotFound extends Exception {}
 class Map[K, V] extends KeyedStore[K, V, Pair[K, V]] {
     
     abstract def get(key : K) -> V? {}
-    abstract def insert(key : K, value : V) {}
+    abstract def insert(key : K, value : V) {} ~> { $values holds value, $keys holds key }
     abstract def remove(key : K) -> V? {}
 
     def put(key : K, value : V) -> Bool {

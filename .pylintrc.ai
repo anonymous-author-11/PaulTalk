@@ -4,5 +4,8 @@ persistent = no
 [DESIGN]
 max-nested-blocks = 3
 
+[FORMAT]
+max-line-length = 140
+
 [REPORTS]
 score = no

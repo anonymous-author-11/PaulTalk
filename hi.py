@@ -38,9 +38,9 @@ def type_size(typ: TypeAttribute) -> int:
         result = type_size(typ.type) * typ.size.data
         return result
     if isinstance(typ, FatPtr):
-        return 160
+        return 192
     if isinstance(typ, TypeParameter):
-        return 160
+        return 192
     if isinstance(typ, Bool):
         return 1
     if isinstance(typ, IntegerType) or isinstance(typ, Float64Type):
@@ -66,10 +66,11 @@ class TypeParameter(ParametrizedAttribute, TypeAttribute):
         return TypeParameter([StringAttr(label), bound or Any(), StringAttr(defining_class), StringAttr(owner_id)])
 
     def base_typ(self):
-        return llvm.LLVMStructType.from_type_list([
+        types = [
             llvm.LLVMPointerType.opaque(),
-            IntegerType(160)
-        ])
+            IntegerType(192),
+        ]
+        return llvm.LLVMStructType.from_type_list(types)
 
     def symbol(self):
         return self.bound.symbol()
@@ -231,12 +232,14 @@ class FatPtr(ParametrizedAttribute, TypeAttribute):
         return FatPtr([StringAttr(name), ArrayAttr(types), NoneAttr()])
 
     def base_typ(self):
-        return llvm.LLVMStructType.from_type_list([
+        types = [
             llvm.LLVMPointerType.opaque(),
             llvm.LLVMPointerType.opaque(),
-            llvm.LLVMPointerType.opaque(),
-            IntegerType(32)
-        ])
+            IntegerType(64),
+            IntegerType(32),
+            IntegerType(32),
+        ]
+        return llvm.LLVMStructType.from_type_list(types)
 
     def symbol(self):
         if self.path == NoneAttr():
@@ -396,6 +399,12 @@ class Function(ParametrizedAttribute, TypeAttribute):
         params = ", ".join([f"{t}" for t in self.param_types.data])
         return self.fname() + f"[{params} -> {self.return_type}]"
 
+def function_needs_reabstraction(from_typ, to_typ):
+    if not isinstance(from_typ, Function) or not isinstance(to_typ, Function): return False
+    not_substitutable = lambda a, b: (a != b) and not (isinstance(a, TypeParameter) and isinstance(b, TypeParameter))
+    different_params = any(not_substitutable(a, b) for a, b in zip(from_typ.param_types.data, to_typ.param_types.data))
+    return len(from_typ.param_types.data) > 0 and (different_params or not_substitutable(from_typ.return_type, to_typ.return_type))
+
 @irdl_attr_definition
 class Buffer(ParametrizedAttribute, TypeAttribute):
     name = "hi.buffer"
@@ -496,12 +505,14 @@ class Any(ParametrizedAttribute, TypeAttribute):
         return StringAttr("any_typ")
 
     def base_typ(self):
-        return llvm.LLVMStructType.from_type_list([
+        types = [
             llvm.LLVMPointerType.opaque(),
             llvm.LLVMPointerType.opaque(),
-            llvm.LLVMPointerType.opaque(),
-            IntegerType(32)
-        ])
+            IntegerType(64),
+            IntegerType(32),
+            IntegerType(32),
+        ]
+        return llvm.LLVMStructType.from_type_list(types)
 
 @irdl_attr_definition
 class Nil(ParametrizedAttribute, TypeAttribute):
@@ -523,30 +534,37 @@ class Nil(ParametrizedAttribute, TypeAttribute):
 class CastOp(IRDLOperation):
     name = "hi.cast"
     operand: Operand = operand_def()
+    region: OptOperandDef = opt_operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
     to_typ: TypeAttribute = attr_def(TypeAttribute)
     from_typ_name: StringAttr = attr_def(StringAttr)
     to_typ_name: StringAttr = attr_def(StringAttr)
+    output_region_map: OptAttributeDef = opt_attr_def(DenseArrayBase)
 
     @classmethod
-    def make(cls, operand, from_typ, to_typ):
+    def make(cls, operand, from_typ, to_typ, region=None, output_region_map=None):
         attr_dict = {"from_typ":from_typ,"to_typ":to_typ,"from_typ_name":from_typ.symbol(), "to_typ_name":to_typ.symbol()}
-        return CastOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ])
+        if output_region_map is not None:
+            attr_dict["output_region_map"] = DenseArrayBase.from_list(IntegerType(32), output_region_map)
+        return CastOp.build(operands=[operand, region], attributes=attr_dict, result_types=[to_typ])
 
 @irdl_op_definition
 class ReabstractOp(IRDLOperation):
     name = "hi.reabstract"
     operand: Operand = operand_def()
+    region: OptOperandDef = opt_operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
     to_typ: TypeAttribute = attr_def(TypeAttribute)
+    output_region_map: OptAttributeDef = opt_attr_def(DenseArrayBase)
     traits = frozenset()
 
     @classmethod
-    def make(cls, operand, from_typ, to_typ):
+    def make(cls, operand, from_typ, to_typ, region=None, output_region_map=None):
         attr_dict = {"from_typ":from_typ,"to_typ":to_typ}
-        return ReabstractOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+        if output_region_map is not None: attr_dict["output_region_map"] = output_region_map
+        return ReabstractOp.build(operands=[operand, region], result_types=[to_typ], attributes=attr_dict)
 
 @irdl_op_definition
 class TupleCastOp(IRDLOperation):

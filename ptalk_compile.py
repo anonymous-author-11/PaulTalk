@@ -47,13 +47,18 @@ LAYOUT_PATH = DIST_FOLDER / "data_files/datalayout.ll"
 UTILS_PATH = DIST_FOLDER / "data_files/utils.ll"
 WRAPPERS_PATH = DIST_FOLDER / "data_files/wrappers.ll"
 CORO_RUNTIME_PATH = DIST_FOLDER / "data_files/coro_runtime.ll"
+BUMP_ALLOCATOR_PATH = DIST_FOLDER / "data_files/bump_allocator.ll"
+GC_ALLOCATOR_PATH = DIST_FOLDER / "data_files/gc_allocator.ll"
+NO_REGION_RUNTIME_PATH = DIST_FOLDER / "data_files/no_region_runtime.ll"
+REGION_RUNTIME_PATH = DIST_FOLDER / "data_files/region_runtime.ll"
 WIN_UTILS_PATH = DIST_FOLDER / "data_files/win_utils.ll"
 POSIX_UTILS_PATH = DIST_FOLDER / "data_files/posix_utils.ll"
 
 OS_UTILS_PATH = WIN_UTILS_PATH if platform.system() == "Windows" else POSIX_UTILS_PATH
 
-def compiler_driver_main(input_path, output_path=None, build_dir=Path("."), debug_mode=False, no_timings=False, show_dependencies=False):
-    CompilationJob(input_path, output_path, build_dir, debug_mode, no_timings, show_dependencies).run()
+
+def compiler_driver_main(path, output=None, build_dir=Path("."), debug=False, no_timings=False, show_dependencies=False, backend="region"):
+    CompilationJob(path, output, build_dir, debug, no_timings, show_dependencies, backend).run()
 
 class CompilationJob:
     input: "SourceFile"
@@ -71,26 +76,28 @@ class CompilationJob:
         if ".exe" in self.output_path.name: return self.build.dir / f"{self.output_path.stem}.obj"
         return self.output_path.parent / f"{self.output_path.stem}.obj"
     
-    def __init__(self, input_path, output_path=None, build_dir=Path("."), debug_mode=False, no_timings=False, show_dependencies=False):
+    def __init__(self, path, output=None, build_dir=Path("."), debug=False, no_timings=False, show_dependencies=False, backend="region"):
         self.metrics = Metrics()
         self.record_time("after_imports")
     
-        input_path = Path(input_path)
+        input_path = Path(path)
         if not input_path.exists(): raise Exception(f"Input path {input_path} does not exist.")
         if not input_path.is_file(): raise Exception(f"Input path {input_path} should point to a .mini file.")
         if input_path.suffix != ".mini": raise Exception(f"Input path {input_path} should point to a .mini file.")
 
-        self.build = BuildDirectory(build_dir, debug_mode)
+        self.build = BuildDirectory(build_dir, debug)
         self.dependencies = Dependencies(self.build, show_dependencies)
         self.input = SourceFile(input_path.resolve(), self.build)
         self.time_printer = OptionalPrinter(not no_timings)
         self.status_printer = OptionalPrinter(not silent[0])
-        self.settings = OptimizationSettings(debug_mode)
+        self.settings = OptimizationSettings(debug)
+        if backend not in ("region", "bump", "gc"): raise ValueError(f"Unknown allocation backend: {backend}")
+        self.backend = backend
         self.repository = ProgramRepository(parse)
 
         self.output_path = None
-        if not output_path: return
-        self.output_path = Path(output_path)
+        if not output: return
+        self.output_path = Path(output)
         if not "." in self.output_path.name: raise Exception("Please provide an file extension in the output name.")
 
     def run(self):
@@ -267,10 +274,15 @@ class CompilationJob:
         cmd_out = subprocess.run(to_llvm_dialect, text=True, shell=True, input=module_str, capture_output=True)
         if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
 
-        # only rewrite actual module header lines so string literals are never modified.
-        module_str = cmd_out.stdout[14:-3]
-        module_str = re.sub(r"(?m)^(\s*)module\b", r"\1// ----- module", module_str)
-        module_str = module_str[9:]
+        outer = "module @ir {\n"
+        outer_start = cmd_out.stdout.index(outer)
+        aliases = cmd_out.stdout[:outer_start]
+        body = cmd_out.stdout[outer_start + len(outer):-3]
+        starts = [match.start() for match in re.finditer(r"(?m)^  module\b", body)]
+        if not starts: raise Exception("Combined MLIR module contained no child modules.")
+        ends = [*starts[1:], len(body)]
+        sections = [aliases + body[start:end] for start, end in zip(starts, ends)]
+        module_str = "\n// -----\n".join(sections)
 
         self.metrics.llvm_ir_lines = module_str.count("\n")
         self.record_time("after_mlir_opt_lower")
@@ -336,7 +348,19 @@ class CompilationJob:
 
         self.record_time("before_llvm_link")
 
-        link_utils = (LLVM_LINK_PATH, UTILS_PATH, CORO_RUNTIME_PATH, OS_UTILS_PATH, self.input.bc_file, LAYOUT_PATH, "-S")
+        region_runtime_path = REGION_RUNTIME_PATH if self.backend == "region" else NO_REGION_RUNTIME_PATH
+        allocator_path = GC_ALLOCATOR_PATH if self.backend == "gc" else BUMP_ALLOCATOR_PATH
+        link_utils = (
+            LLVM_LINK_PATH,
+            UTILS_PATH,
+            CORO_RUNTIME_PATH,
+            allocator_path,
+            region_runtime_path,
+            OS_UTILS_PATH,
+            self.input.bc_file,
+            LAYOUT_PATH,
+            "-S",
+        )
         utils_ir = run_checked(link_utils)
 
         # use the correct main function
@@ -885,8 +909,12 @@ def run_pdl_lowering(module_str, side_output_path) -> str:
     Printer(stringio).print(cmd_out.stdout)
     module_str = stringio.getvalue()
 
-    # trim off the residual PDL bytecode
-    module_str = module_str[23:-16]
+    # trim off the residual PDL bytecode while preserving top-level attribute aliases
+    wrapper = '"builtin.module"() ({\n'
+    wrapper_start = module_str.index(wrapper)
+    wrapper_end = '}) : () -> ()\n\n'
+    if not module_str.endswith(wrapper_end): raise Exception("Unexpected PDL module wrapper.")
+    module_str = module_str[:wrapper_start] + module_str[wrapper_start + len(wrapper):-len(wrapper_end)]
     module_str = module_str.replace("placeholder.call", "llvm.call")
     module_str = module_str.replace("placeholder.extractvalue", "llvm.extractvalue")
     with open(side_output_path, "w", encoding="utf-8") as outfile:
@@ -1004,9 +1032,19 @@ def add_compiler_args(parser):
     parser.add_argument('--debug', dest='debug_mode', action='store_true', help='Compile in debug mode')
     parser.add_argument('--no-timings', dest='no_timings', action='store_true', help='Do not print timings for the compilation stages')
     parser.add_argument('--dependencies', dest='show_dependencies', action='store_true', help='Print the dependency graph of imported files')
+    parser.add_argument('--backend', choices=("region", "bump", "gc"), default="region", help='Select the allocation backend')
 
 if __name__ == "__main__":
     compiler_parser = argparse.ArgumentParser(description='The PaulTalk compiler')
     add_compiler_args(compiler_parser)
     args = compiler_parser.parse_args()
-    compiler_driver_main(args.input_file_path, args.output_path, args.build_dir, args.debug_mode, args.no_timings, args.show_dependencies)
+    compiler_args = (
+        args.input_file_path,
+        args.output_path,
+        args.build_dir,
+        args.debug_mode,
+        args.no_timings,
+        args.show_dependencies,
+        args.backend,
+    )
+    compiler_driver_main(*compiler_args)

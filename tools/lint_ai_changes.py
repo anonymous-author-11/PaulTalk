@@ -10,15 +10,19 @@ import tokenize
 from pathlib import Path
 import re
 
-TARGET_RULES = {"R1702"}
-TARGET_SYMBOLS = {"too-many-nested-blocks"}
+TARGET_RULES = {"C0301", "R1702"}
+TARGET_SYMBOLS = {"line-too-long", "too-many-nested-blocks"}
 RULE_MESSAGES = {
+    "line-too-long": "Lines must not exceed 140 characters.",
     "too-many-nested-blocks": "Too much nesting (max is 3). Refactor with guard clauses or helper functions.",
     "deep-indentation": "Indentation is too deep (max is 3 levels). Refactor with guard clauses or helper functions.",
     "hidden-import": "Imports must be unconditional top-level statements at the start of the file.",
     "semicolon-statement": "Semicolons are not allowed in Python code.",
     "missing-blank-line": "Keep an empty line between methods, classes, and functions.",
     "walrus-operator": "Walrus operator is not allowed.",
+    "split-comprehension": "Comprehensions must remain on one line.",
+    "split-call": "Function and method calls must remain on one line.",
+    "split-signature": "Function and method signatures must remain on one line.",
 }
 INDENT_LEVEL_LIMIT = 3
 INDENT_WIDTH = 4
@@ -192,7 +196,7 @@ def run_pylint(repo_root: Path, files: list[Path]) -> tuple[int, list[dict[str, 
         str(rcfile),
         "--disable=all",
         "--enable",
-        "too-many-nested-blocks",
+        "too-many-nested-blocks,line-too-long",
         "--output-format=json",
     ]
     cmd.extend(str(path) for path in files)
@@ -244,16 +248,18 @@ def hidden_import_message(rel_path: str, line: int, column: int, detail: str) ->
     }
 
 
-def style_message(msg_id: str, symbol: str, rel_path: str, line: int, column: int, detail: str) -> dict[str, object]:
-    return {
+def style_message(msg_id: str, symbol: str, path: str, line: int, column: int, detail: str, end: int | None = None) -> dict[str, object]:
+    message = {
         "message-id": msg_id,
         "symbol": symbol,
-        "path": rel_path,
+        "path": path,
         "line": line,
         "column": column,
         "message": detail,
         "type": "refactor",
     }
+    if end is not None: message["end-line"] = end
+    return message
 
 
 def collect_file_token_style_messages(path: Path, repo_root: Path) -> list[dict[str, object]]:
@@ -278,6 +284,53 @@ def collect_token_style_messages(repo_root: Path, files: list[Path]) -> list[dic
     messages: list[dict[str, object]] = []
     for path in files:
         messages.extend(collect_file_token_style_messages(path, repo_root))
+    return messages
+
+
+def signature_end_line(tokens: list[tokenize.TokenInfo], index: int) -> int | None:
+    depth = 0
+    for token in tokens[index + 1:]:
+        if token.type != tokenize.OP: continue
+        if token.string in "([{": depth += 1
+        if token.string in ")]}": depth -= 1
+        if token.string == ":" and depth == 0: return token.start[0]
+    return None
+
+
+def collect_file_multiline_messages(path: Path, repo_root: Path) -> list[dict[str, object]]:
+    rel_path = path.relative_to(repo_root).as_posix()
+    source = path.read_text(encoding="utf-8")
+    try:
+        module = ast.parse(source, filename=str(path))
+        tokens = list(tokenize.generate_tokens(io.StringIO(source).readline))
+    except (SyntaxError, tokenize.TokenError):
+        return []
+
+    messages: list[dict[str, object]] = []
+    comprehension_types = (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)
+    for node in ast.walk(module):
+        if not isinstance(node, comprehension_types) or node.lineno == node.end_lineno: continue
+        detail = "Keep the complete comprehension on one physical line."
+        messages.append(style_message("AICOMP", "split-comprehension", rel_path, node.lineno, node.col_offset + 1, detail, node.end_lineno))
+
+    for node in ast.walk(module):
+        if not isinstance(node, ast.Call) or node.lineno == node.end_lineno: continue
+        detail = "Keep the complete function or method call on one physical line."
+        messages.append(style_message("AICALL", "split-call", rel_path, node.lineno, node.col_offset + 1, detail, node.end_lineno))
+
+    for index, token in enumerate(tokens):
+        if token.type != tokenize.NAME or token.string != "def": continue
+        end_line = signature_end_line(tokens, index)
+        if end_line is None or end_line == token.start[0]: continue
+        detail = "Keep the complete function or method signature on one physical line."
+        messages.append(style_message("AISIG", "split-signature", rel_path, token.start[0], token.start[1] + 1, detail, end_line))
+
+    return messages
+
+
+def collect_multiline_messages(repo_root: Path, files: list[Path]) -> list[dict[str, object]]:
+    messages: list[dict[str, object]] = []
+    for path in files: messages.extend(collect_file_multiline_messages(path, repo_root))
     return messages
 
 
@@ -444,7 +497,8 @@ def filter_messages_to_changed_lines(messages: list[dict[str, object]], changed_
         line = int(message.get("line", 0))
         if path not in changed_lines:
             continue
-        if line not in changed_lines[path]:
+        end_line = int(message.get("end-line", line))
+        if not any(line <= changed_line <= end_line for changed_line in changed_lines[path]):
             continue
         filtered.append(message)
     return filtered
@@ -463,6 +517,9 @@ def format_message(message: dict[str, object]) -> str:
         "semicolon-statement",
         "missing-blank-line",
         "walrus-operator",
+        "split-comprehension",
+        "split-call",
+        "split-signature",
     }
     if msg_id in TARGET_RULES or symbol in TARGET_SYMBOLS or symbol in extra_symbols:
         shame_text = RULE_MESSAGES.get(
@@ -512,6 +569,7 @@ def main() -> int:
     hidden_import_messages = collect_hidden_import_messages(repo_root, files)
     token_style_messages = collect_token_style_messages(repo_root, files)
     blank_line_messages = collect_blank_line_messages(repo_root, files)
+    multiline_messages = collect_multiline_messages(repo_root, files)
     if "No module named pylint" in stderr:
         print(
             "pylint is not installed. Install dependencies with `pip install -r requirements-ci.txt`.",
@@ -521,7 +579,7 @@ def main() -> int:
     if stderr:
         print(stderr, file=sys.stderr)
 
-    if not any((messages, indent_messages, hidden_import_messages, token_style_messages, blank_line_messages)):
+    if not any((messages, indent_messages, hidden_import_messages, token_style_messages, blank_line_messages, multiline_messages)):
         if return_code == 0:
             print("AI style lint passed.")
             return 0
@@ -544,6 +602,7 @@ def main() -> int:
     relevant_messages.extend(hidden_import_messages)
     relevant_messages.extend(token_style_messages)
     relevant_messages.extend(blank_line_messages)
+    relevant_messages.extend(multiline_messages)
     relevant_messages = filter_messages_to_changed_lines(relevant_messages, changed_lines)
     other_errors = filter_messages_to_changed_lines(other_errors, changed_lines)
 

@@ -88,6 +88,7 @@ def main():
             "When set, the directory is preserved after tests complete."
         ),
     )
+    parser.add_argument("--backend", choices=("region", "bump", "gc"), default="region", help="Select the allocation backend.")
     parser.add_argument("-v", "--verbose", action="store_true", help="Run with verbose output.")
     args, remaining = parser.parse_known_args()
 
@@ -97,6 +98,8 @@ def main():
             parser.error(f"--build-dir must point to an existing directory: {args.build_dir}")
         os.environ["PTALK_TEST_BUILD_DIR"] = build_dir
         os.environ["PTALK_TEST_PRESERVE_BUILD_DIR"] = "1"
+
+    os.environ["PTALK_TEST_BACKEND"] = args.backend
 
     suite = build_suite(args.suite, selected_names=remaining if remaining else None)
     runner = unittest.TextTestRunner(verbosity=2 if args.verbose else 1)

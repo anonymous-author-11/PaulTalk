@@ -89,6 +89,66 @@ class CompilerNegativeTestsMixin:
             """
             self.compile_fails(mini_code, "Region variable $x must have type Region", "region_decl_type")
 
+    def test_function_no_alias(self):
+            mini_code = """
+            class Box {
+                def init() {}
+            }
+
+            def alias(left : Box, right : Box) {
+                right = left;
+            } ~> no_alias
+            """
+            self.compile_fails(mini_code, "in the same node in discovered points-to graph of function body", "function_no_alias")
+
+    def test_scoped_alias_required(self):
+            mini_code = """
+            import std;
+
+            class Holder {
+                $value : Region
+                @value : String
+
+                regions { $value == @value }
+
+                def init(@value : String) {}
+
+                def get() -> String {
+                    return @value;
+                } ~> { ret == $value }
+            }
+
+            def touch(value : Holder) {
+            } ~> all_alias
+
+            def read(keep : Holder, touched : Holder) -> String {
+                touch(touched);
+                return keep.get();
+            } ~> { ret == keep$value }
+            """
+            self.compile_fails(mini_code, "in the same node in discovered points-to graph of function body", "scoped_alias_required")
+
+    def test_downcast_regions(self):
+            mini_code = """
+            class Data {
+                def init() {}
+            }
+
+            class Pair {
+                @left : Data
+                @right : Data
+
+                setters @left, @right
+
+                def init(@left : Data, @right : Data) {}
+            }
+
+            def use(obj : Object, right : Data) {
+                if obj is Pair { obj.right() = right; }
+            } ~> no_alias
+            """
+            self.compile_fails(mini_code, "same node in discovered points-to graph", "downcast_regions")
+
     def test_class_def_inconsistent_hierarchy(self):
             mini_code = """
             class A {}

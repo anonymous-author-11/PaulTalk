@@ -194,7 +194,9 @@ class ValidUTF8Decoder extends Iterator[i32] {
 
     getters @peeker
 
-    def init(iterator : Iterator[i8]) { @peeker = iterator into Peeker; }
+    def init(iterator : Iterator[i8]) {
+        @peeker = iterator into Peeker;
+    } ~> { @peeker == iterator }
 
     def next() -> i32? {
         b1 = @peeker.next();
@@ -214,11 +216,11 @@ class ValidUTF8Decoder extends Iterator[i32] {
         return codepoint;
     }
 
-    def bad_result(b1 : i8) -> i32? { return nil;  }
+    def bad_result(b1 : i8) -> i32? { return nil; } ~> no_alias
 
-    def invalid_continuation(b_next : i8) -> Bool { return false; }
+    def invalid_continuation(b_next : i8) -> Bool { return false; } ~> no_alias
     
-    def invalid_codepoint(codepoint : i32, bytes_needed : i32) -> Bool { return false; }
+    def invalid_codepoint(codepoint : i32, bytes_needed : i32) -> Bool { return false; } ~> no_alias
 }
 
 // Decodes UTF8 bytes that may or may not be valid
@@ -231,7 +233,7 @@ class UTF8Decoder extends ValidUTF8Decoder {
     def Self.lossy(iterator : Iterator[i8]) -> UTF8Decoder {
         replacer = (byte : i8) => { Unicode.replacement_codepoint(); };
         return UTF8Decoder{iterator, replacer};
-    } ~> { ret.iterator == iterator }
+    } ~> { ret.peeker == iterator }
 
     def init(iterator : Iterator[i8]) {
         @peeker = iterator into Peeker;
@@ -240,7 +242,7 @@ class UTF8Decoder extends ValidUTF8Decoder {
 
     def init(iterator : Iterator[i8], @replacer : (i8) -> i32) {
         @peeker = iterator into Peeker;
-    }
+    } ~> { @peeker == iterator == @peeker.iterator }
 
     def bad_result(b1 : i8) -> i32? {
         return @replacer.call(b1); 

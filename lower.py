@@ -21,7 +21,9 @@ from xdsl.dialects.builtin import (
     IntegerType,
     FunctionType,
     DenseArrayBase,
-    MemRefType
+    MemRefType,
+    ArrayAttr,
+    UnregisteredAttr
 )
 from xdsl.ir.core import SSAValue, OpResult, Block, Region
 from xdsl.irdl import IRDLOperation
@@ -36,6 +38,15 @@ from utils import builtin_types, vtable_buffer_size
 from itertools import chain
 import random
 
+TBAATagAttr = UnregisteredAttr.with_name_and_type("llvm.tbaa_tag", False)
+BUFFER_TBAA_ROOT = '#llvm.tbaa_root<id = "PaulTalk storage">'
+BUFFER_HEADER_TYPE = f'#llvm.tbaa_type_desc<id = "PaulTalk buffer header", members = {{<{BUFFER_TBAA_ROOT}, 0>}}>'
+BUFFER_PAYLOAD_TYPE = f'#llvm.tbaa_type_desc<id = "PaulTalk buffer payload", members = {{<{BUFFER_TBAA_ROOT}, 0>}}>'
+BUFFER_HEADER_TAG = f"base_type = {BUFFER_HEADER_TYPE}, access_type = {BUFFER_HEADER_TYPE}, offset = 0"
+BUFFER_PAYLOAD_TAG = f"base_type = {BUFFER_PAYLOAD_TYPE}, access_type = {BUFFER_PAYLOAD_TYPE}, offset = 0"
+BUFFER_HEADER_TBAA = ArrayAttr([TBAATagAttr("llvm.tbaa_tag", False, False, BUFFER_HEADER_TAG)])
+BUFFER_PAYLOAD_TBAA = ArrayAttr([TBAATagAttr("llvm.tbaa_tag", False, False, BUFFER_PAYLOAD_TAG)])
+
 def get_parent_module(op):
     parent = op.parent_op()
     while parent:
@@ -45,6 +56,59 @@ def get_parent_module(op):
 
 def random_letters(n):
     return "".join(random.choices('abcdefghijklmnopqrstuvwxyz', k=n))
+
+def region_value(region):
+    if region: return [], region
+    null = llvm.ZeroOp.create(result_types=[llvm.LLVMPointerType.opaque()])
+    return [null], null.results[0]
+
+def allocation_call(region, size):
+    if not region:
+        call = llvm.CallOp("bump_malloc", size, return_type=llvm.LLVMPointerType.opaque())
+        call.properties["operandSegmentSizes"] = DenseArrayBase.from_list(IntegerType(32), [1, 0])
+        call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        return call
+    call = llvm.CallOp("Allocate", region, size, return_type=llvm.LLVMPointerType.opaque())
+    call.properties["operandSegmentSizes"] = DenseArrayBase.from_list(IntegerType(32), [2, 0])
+    call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+    return call
+
+def layout_field_address(data_ptr, types, offset):
+    current_offset = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
+    zero = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
+    ops = [current_offset, zero]
+
+    for i, typ in enumerate(types):
+        if isinstance(typ, IntegerAttr):
+            gep = llvm.GEPOp(data_ptr, [typ.value.data], pointee_type=llvm.LLVMPointerType.opaque())
+            load = llvm.CallOp("invariant_load", gep.results[0], return_type=llvm.LLVMPointerType.opaque())
+            size_align = SizeOp.make(load.results[0])
+            dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
+            size = llvm.ExtractValueOp(dense_ary, size_align.results[0], IntegerType(64))
+            dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
+            alignment = llvm.ExtractValueOp(dense_ary, size_align.results[0], IntegerType(64))
+            ops.extend([gep, load, size_align, size, alignment])
+        else:
+            size = TypeSizeOp.create(attributes={"typ":typ}, result_types=[IntegerType(64)])
+            alignment = TypeAlignmentOp.create(attributes={"typ":typ}, result_types=[IntegerType(64)])
+            ops.extend([size, alignment])
+        if i == offset: break
+        rem = arith.RemUI(current_offset.results[0], alignment.results[0])
+        cmp_rem = mid.ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
+        high_end_pad = mid.ArithmeticOp.make("SUB", alignment.results[0], rem.results[0])
+        padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
+        padded_size = mid.ArithmeticOp.make("ADD", size.results[0], padding.results[0])
+        current_offset = mid.ArithmeticOp.make("ADD", current_offset.results[0], padded_size.results[0])
+        ops.extend([rem, cmp_rem, high_end_pad, padding, padded_size, current_offset])
+
+    rem_final = arith.RemUI(current_offset.results[0], alignment.results[0])
+    cmp_rem_final = mid.ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
+    high_pad_final = mid.ArithmeticOp.make("SUB", alignment.results[0], rem_final.results[0])
+    padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
+    final_size = mid.ArithmeticOp.make("ADD", current_offset.results[0], padding_final.results[0])
+    field_gep = llvm.GEPOp.from_mixed_indices(data_ptr, [final_size.results[0]], pointee_type=IntegerType(8))
+    ops.extend([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, field_gep])
+    return ops, field_gep
 
 class LowerHi(ModulePass):
     name = "lower-hi"
@@ -106,17 +170,16 @@ class LowerControlFlow(ModulePass):
         self.context.load_dialect(llvm.LLVM)
 
     def apply(self, ctx: MLContext, op: ModuleOp) -> None:
-        walker = PatternRewriteWalker(
-            GreedyRewritePatternApplier([
-                LowerMain(),
-                LowerIf(),
-                LowerWhile(),
-                LowerBreak(),
-                LowerContinue(),
-                LowerMethodCall()
-            ]),
-            apply_recursively=True
-        )
+        patterns = [
+            LowerMain(),
+            LowerIf(),
+            LowerWhile(),
+            LowerBreak(),
+            LowerContinue(),
+            LowerMethodCall(),
+        ]
+        applier = GreedyRewritePatternApplier(patterns)
+        walker = PatternRewriteWalker(applier, apply_recursively=True)
         walker.rewrite_module(op)
 
 class LowerMid(ModulePass):
@@ -127,91 +190,93 @@ class LowerMid(ModulePass):
         self.context.load_dialect(llvm.LLVM)
 
     def apply(self, ctx: MLContext, op: ModuleOp) -> None:
-        walker = PatternRewriteWalker(
-            GreedyRewritePatternApplier([
-                LowerUnionize(),
-                LowerFuncDef(),
-                LowerGetterDef(),
-                LowerSetterDef(),
-                LowerAccessorDef(),
-                LowerTypeAccessorDef(),
-                LowerFieldAccess(),
-                LowerGetField(),
-                LowerSetField(),
-                LowerGetTypeField(),
-                LowerArgPasser(),
-                LowerBufferFiller(),
-                LowerCheckFlag(),
-                LowerParameterization(),
-                LowerPrint(),
-                LowerTypeDef(),
-                LowerTypeIntegersTable(),
-                LowerTypePtrsTable(),
-                LowerVtable(),
-                LowerHashTable(),
-                LowerOffsetTable(),
-                LowerLiteral(),
-                LowerDataSizeDef(),
-                LowerBoxDef(),
-                LowerBoxUnionDef(),
-                LowerNew(),
-                LowerUnboxDef(),
-                LowerFormat(),
-                LowerSnprintf()
-                #LowerDataSize(),
-                #LowerSize(),
-                #LowerCreateBuffer(),
-                #LowerParameterizationIndexation(),
-                #LowerParameterizationsArray(),
-                #LowerGlobalFptr(),
-                #LowerUtilsAPI(),
-                #LowerSetFlag(),
-                #LowerBox(),
-                #LowerFromBuffer()
-                #LowerCall(),
-                #LowerFPtrCall(),
-                #LowerNarrow(),
-                #LowerPlaceIntoBuffer(),
-                #LowerCreateTuple(),
-                #LowerCoroYield(),
-                #LowerCoroCall(),
-                #LowerPrelude(),
-                #LowerPrintfDecl(),
-                #LowerPrintF(),
-                #LowerUnbox(),
-                #LowerToFatPtr(),
-                #LowerCoroCreate(),
-                #LowerReUnionize(),
-                #LowerTypID(),
-                #LowerRefer(),
-                #LowerFieldAccess(),
-                #LowerSetOffset(),
-                #LowerMalloc(),
-                #LowerAssign(),
-                #LowerMemCpy(),
-                #LowerIntrinsic(),
-                #LowerBufferIndexation(),
-                #LowerUnwrap(),
-                #LowerComparison(),
-                #LowerArithmetic(),
-                #LowerLogical(),
-                #LowerGlobalStr(),
-                #LowerExternalTypeDef(),
-                #LowerCoroGetResult(),
-                #LowerCoroSetResult(),
-                #LowerNext(),
-                #LowerTypeSize(),
-                #LowerGetFlag(),
-                #LowerInvariant(),
-                #LowerAnointTrampoline(),
-                #LowerSetupException(),
-                #LowerSubtype(),
-                #LowerAddrOf(),
-                #LowerWrap(),
-                #LowerAllocate()
-            ]),
-            apply_recursively=True
-        )
+        patterns = [
+            LowerUnionize(),
+            LowerFuncDef(),
+            LowerGetterDef(),
+            LowerSetterDef(),
+            LowerAccessorDef(),
+            LowerTypeAccessorDef(),
+            LowerFieldAccess(),
+            LowerGetField(),
+            LowerGetRegion(),
+            LowerGetHiddenRegion(),
+            LowerSetField(),
+            LowerGetTypeField(),
+            LowerRegionOfBuffer(),
+            LowerArgPasser(),
+            LowerBufferFiller(),
+            LowerCheckFlag(),
+            LowerParameterization(),
+            LowerPrint(),
+            LowerTypeDef(),
+            LowerTypeIntegersTable(),
+            LowerTypePtrsTable(),
+            LowerVtable(),
+            LowerHashTable(),
+            LowerOffsetTable(),
+            LowerLiteral(),
+            LowerDataSizeDef(),
+            LowerBoxDef(),
+            LowerBoxUnionDef(),
+            LowerNew(),
+            LowerUnboxDef(),
+            LowerFormat(),
+            LowerSnprintf(),
+            #LowerDataSize(),
+            #LowerSize(),
+            LowerCreateBuffer(),
+            #LowerParameterizationIndexation(),
+            #LowerParameterizationsArray(),
+            #LowerGlobalFptr(),
+            #LowerUtilsAPI(),
+            #LowerSetFlag(),
+            #LowerBox(),
+            #LowerFromBuffer()
+            #LowerCall(),
+            #LowerFPtrCall(),
+            #LowerNarrow(),
+            #LowerPlaceIntoBuffer(),
+            #LowerCreateTuple(),
+            #LowerCoroYield(),
+            #LowerCoroCall(),
+            #LowerPrelude(),
+            #LowerPrintfDecl(),
+            #LowerPrintF(),
+            #LowerUnbox(),
+            #LowerToFatPtr(),
+            #LowerCoroCreate(),
+            #LowerReUnionize(),
+            #LowerTypID(),
+            #LowerRefer(),
+            #LowerFieldAccess(),
+            #LowerSetOffset(),
+            #LowerMalloc(),
+            #LowerAssign(),
+            #LowerMemCpy(),
+            #LowerIntrinsic(),
+            #LowerBufferIndexation(),
+            #LowerUnwrap(),
+            #LowerComparison(),
+            #LowerArithmetic(),
+            #LowerLogical(),
+            #LowerGlobalStr(),
+            #LowerExternalTypeDef(),
+            #LowerCoroGetResult(),
+            #LowerCoroSetResult(),
+            #LowerNext(),
+            #LowerTypeSize(),
+            #LowerGetFlag(),
+            #LowerInvariant(),
+            #LowerAnointTrampoline(),
+            #LowerSetupException(),
+            #LowerSubtype(),
+            #LowerAddrOf(),
+            #LowerWrap(),
+            #LowerAllocate()
+        ]
+        applier = GreedyRewritePatternApplier(patterns)
+        walker = PatternRewriteWalker(applier, apply_recursively=True)
         walker.rewrite_module(op)
 
 def debug_code(op):
@@ -313,13 +378,8 @@ class LowerCast(RewritePattern):
             rewriter.replace_matched_op(unbox_op)
             return 
         
-        function_to_function = isinstance(from_typ, Function) and isinstance(to_typ, Function)
-        not_substitutable = lambda a, b: (a != b) and (not (isinstance(a, TypeParameter) and isinstance(b, TypeParameter)))
-        different_param_types = function_to_function and any(not_substitutable(a,b) for a,b in zip(from_typ.param_types.data, to_typ.param_types.data))
-        needs_reabstraction = function_to_function and len(from_typ.param_types.data) and (different_param_types or not_substitutable(from_typ.return_type,to_typ.return_type))
-        
-        if needs_reabstraction:
-            reabstract_op = ReabstractOp.make(operand, from_typ, to_typ)
+        if function_needs_reabstraction(from_typ, to_typ):
+            reabstract_op = ReabstractOp.make(operand, from_typ, to_typ, op.region, op.output_region_map)
             rewriter.replace_matched_op(reabstract_op)
             return
         
@@ -440,21 +500,28 @@ class LowerReabstract(RewritePattern):
         fptr = f_block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
         operands = [fptr, *[x.results[0] for x in unwraps]]
         call = FPtrCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
-        f_block.add_ops([*wraps, *casts, *unwraps, call])
+        frame = None
+        output_regions = []
+        if op.output_region_map:
+            output_regions = [OutputRegionOp.make(index) for index in op.output_region_map.as_tuple()]
+            frame = SetOutputRegionFrameOp.make([region.results[0] for region in output_regions])
+        f_block.add_ops([*wraps, *casts, *unwraps, *output_regions])
+        if frame: f_block.add_op(frame)
+        f_block.add_op(call)
         if has_return:
             cast = CastOp.make(call.results[0], from_typ.return_type, to_typ.return_type)
             unwrap = UnwrapOp.create(operands=[cast.results[0]], result_types=[to_typ.return_type.base_typ()])
-            ret = func.Return(unwrap.results[0])
-            f_block.add_ops([cast, unwrap, ret])
-        else:
-            f_block.add_op(func.Return())
+            f_block.add_ops([cast, unwrap])
+        if frame: f_block.add_op(RestoreOutputRegionFrameOp.make(frame.results[0]))
+        f_block.add_op(func.Return(unwrap.results[0]) if has_return else func.Return())
         f_body = Region([f_block])
         dict_ary = ArrayAttr([DictionaryAttr({"llvm.nest":UnitAttr()}), *[DictionaryAttr({}) for arg in to_typ.param_types.data]])
         func_def = func.FuncOp(wrapper_name, FunctionType.from_lists([t.base_typ() for t in to_typ.param_types.data], ret_type), f_body, arg_attrs=dict_ary)
         top_level = get_parent_module(op)
         rewriter.insert_op_before(func_def, top_level.body.block.first_op)
 
-        tramp = MallocOp.create(attributes={"typ":llvm.LLVMArrayType.from_size_and_type(24, IntegerType(8))}, result_types=[llvm.LLVMPointerType.opaque()])
+        tramp_type = llvm.LLVMArrayType.from_size_and_type(24, IntegerType(8))
+        tramp = MallocOp.build(operands=[op.region], attributes={"typ":tramp_type}, result_types=[llvm.LLVMPointerType.opaque()])
         anoint = AnointTrampolineOp.create(operands=[tramp.results[0]])
         wrapper = AddrOfOp.from_string(wrapper_name)
         fptr = llvm.LoadOp(operand, llvm.LLVMPointerType.opaque())
@@ -789,11 +856,15 @@ class LowerCreateBuffer(RewritePattern):
         load_64 = arith.ExtSIOp(load.results[0], IntegerType(64))
         alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
         malloc_size = arith.Muli(load_64.results[0], type_size.results[0])
-        malloc = llvm.CallOp("bump_malloc", malloc_size.results[0], return_type=llvm.LLVMPointerType.opaque())
-        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
-        malloc.properties["operandSegmentSizes"] = operandSegmentSizes
-        malloc.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
-        store = llvm.StoreOp(malloc.results[0], alloca.results[0])
+        region_ops, region = region_value(op.region)
+        word_size = llvm.ConstantOp(IntegerAttr.from_int_and_width(8, 64), IntegerType(64))
+        allocation_size = arith.Addi(malloc_size.results[0], word_size.results[0])
+        malloc = allocation_call(region, allocation_size.results[0])
+        store_region = llvm.StoreOp(region, malloc.results[0])
+        store_region.attributes["tbaa"] = BUFFER_HEADER_TBAA
+        payload = llvm.GEPOp(malloc.results[0], [8], pointee_type=IntegerType(8))
+        store = llvm.StoreOp(payload.results[0], alloca.results[0])
+        buffer_ops = [malloc, store_region, payload, store]
         
         # fill uninitialized memory with zeroes
         #false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
@@ -805,10 +876,21 @@ class LowerCreateBuffer(RewritePattern):
         #memset.properties["operandSegmentSizes"] = operandSegmentSizes
         #memset.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
 
-        rewriter.inline_block_before_matched_op(Block([type_size, load, load_64, malloc_size]))
-        rewriter.inline_block_after_matched_op(Block([malloc, store]))
+        rewriter.inline_block_before_matched_op(Block([type_size, load, load_64, malloc_size, word_size, allocation_size, *region_ops]))
+        rewriter.inline_block_after_matched_op(Block(buffer_ops))
         #rewriter.inline_block_after_matched_op(Block([false, zero, memset]))
         rewriter.replace_matched_op(alloca)
+
+class LowerRegionOfBuffer(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: RegionOfBufferOp, rewriter: PatternRewriter):
+        payload = llvm.LoadOp(op.buffer, llvm.LLVMPointerType.opaque())
+        header = llvm.GEPOp(payload.results[0], [-8], pointee_type=IntegerType(8))
+        region = llvm.LoadOp(header.results[0], llvm.LLVMPointerType.opaque())
+        region.attributes["invariant"] = UnitAttr()
+        region.attributes["tbaa"] = BUFFER_HEADER_TBAA
+        rewriter.inline_block_before_matched_op(Block([payload, header]))
+        rewriter.replace_matched_op(region)
 
 class LowerCreateTuple(RewritePattern):
     @op_type_rewrite_pattern
@@ -844,10 +926,7 @@ class LowerMalloc(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: MallocOp, rewriter: PatternRewriter):
         malloc_size = TypeSizeOp.create(attributes={"typ":op.typ}, result_types=[IntegerType(64)])
-        malloc = llvm.CallOp("bump_malloc", malloc_size.results[0], return_type=llvm.LLVMPointerType.opaque())
-        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
-        malloc.properties["operandSegmentSizes"] = operandSegmentSizes
-        malloc.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        malloc = allocation_call(op.region, malloc_size.results[0])
         rewriter.insert_op_before_matched_op(malloc_size)
         rewriter.replace_matched_op(malloc)
 
@@ -882,10 +961,7 @@ class LowerFromBuffer(RewritePattern):
         data_size = llvm.LoadOp(data_size_ptr.results[0], IntegerType(64))
         threshold = llvm.ConstantOp(IntegerAttr.from_int_and_width(128, 64), IntegerType(64))
         small_struct = mid.ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
-        malloc = llvm.CallOp("bump_malloc", data_size.results[0], return_type=llvm.LLVMPointerType.opaque())
-        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
-        malloc.properties["operandSegmentSizes"] = operandSegmentSizes
-        malloc.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        malloc = allocation_call(None, data_size.results[0])
         false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
         args = [op.buf, malloc.results[0], data_size.results[0], false.results[0]]
         memcpy0 = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
@@ -1041,29 +1117,40 @@ class LowerNew(RewritePattern):
         dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
         malloc_size = llvm.ExtractValueOp(dense_ary, size_align.results[0], IntegerType(64))
 
-        malloc = llvm.CallOp("bump_malloc", malloc_size.results[0], return_type=llvm.LLVMPointerType.opaque())
-        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
-        malloc.properties["operandSegmentSizes"] = operandSegmentSizes
-        malloc.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        region_ops, region = region_value(op.region)
+        malloc = allocation_call(region, malloc_size.results[0])
+        region_id = llvm.CallOp("RegionId", region, return_type=IntegerType(32))
+        region_id.properties["operandSegmentSizes"] = DenseArrayBase.from_list(IntegerType(32), [1, 0])
+        region_id.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
         
         offset = llvm.ConstantOp(IntegerAttr.from_int_and_width(vtable_buffer_size(), 32), IntegerType(32))
+        unused = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
         fat_base = FatPtr.basic("").base_typ()
         alloca = AllocateOp.make(fat_base)
         gep0 = llvm.GEPOp(alloca.results[0], [0,1], pointee_type=fat_base)
-        gep1 = llvm.GEPOp(alloca.results[0], [0,3], pointee_type=fat_base)
+        gep1 = llvm.GEPOp(alloca.results[0], [0,2], pointee_type=fat_base)
+        gep2 = llvm.GEPOp(alloca.results[0], [0,3], pointee_type=fat_base)
+        gep3 = llvm.GEPOp(alloca.results[0], [0,4], pointee_type=fat_base)
         store0 = llvm.StoreOp(vptr.results[0], alloca.results[0])
         store1 = llvm.StoreOp(malloc.results[0], gep0.results[0])
-        store2 = llvm.StoreOp(offset.results[0], gep1.results[0])
-        rewriter.inline_block_before_matched_op(Block([size_align, malloc_size, malloc, offset]))
+        store2 = llvm.StoreOp(unused.results[0], gep1.results[0])
+        store3 = llvm.StoreOp(offset.results[0], gep2.results[0])
+        store4 = llvm.StoreOp(region_id.results[0], gep3.results[0])
+        rewriter.inline_block_before_matched_op(Block([size_align, malloc_size, *region_ops, malloc, region_id, offset, unused]))
 
         if op.has_type_fields:
             for i, parameterization in enumerate(op.parameterizations):
                 gep_i = llvm.GEPOp(malloc.results[0], [i], pointee_type=llvm.LLVMPointerType.opaque())
                 store_i = llvm.StoreOp(parameterization, gep_i.results[0])
                 rewriter.inline_block_before_matched_op(Block([gep_i, store_i]))
-            invariant1 = InvariantOp.make(malloc.results[0], 8 * (len(op.typ.types.data) - op.num_data_fields.value.data))
-            rewriter.insert_op_before_matched_op(invariant1)
-        rewriter.inline_block_after_matched_op(Block([gep0, gep1, store0, store1, store2]))
+
+        hidden_start = len(op.parameterizations)
+        for i, hidden_region in enumerate(op.hidden_regions):
+            field_ops, field_gep = layout_field_address(malloc.results[0], op.typ.types.data, hidden_start + i)
+            store_hidden = llvm.StoreOp(hidden_region, field_gep.results[0])
+            invariant = InvariantOp.make(field_gep.results[0], 8)
+            rewriter.inline_block_before_matched_op(Block([*field_ops, store_hidden, invariant]))
+        rewriter.inline_block_after_matched_op(Block([gep0, gep1, gep2, gep3, store0, store1, store2, store3, store4]))
         rewriter.replace_matched_op(alloca)
 
 class LowerLiteral(RewritePattern):
@@ -1455,9 +1542,15 @@ class LowerUnionize(RewritePattern):
             rewriter.inline_block_before_matched_op(block)
         alloca = AllocateOp.make(op.to_typ)
         gep = llvm.GEPOp(alloca.results[0], [0, 1], pointee_type=op.to_typ)
-        memcpy = MemCpyOp.make(operand, gep.results[0], op.from_typ)
+        ops = [gep]
+        if isinstance(op.from_typ, FatPtr) or isinstance(op.from_typ, TypeParameter):
+            source = llvm.GEPOp(operand, [0, 1], pointee_type=op.from_typ)
+            ops.append(source)
+            memcpy = MemCpyOp.make(source.results[0], gep.results[0], IntegerType(hi.type_size(op.from_typ)))
+        else:
+            memcpy = MemCpyOp.make(operand, gep.results[0], op.from_typ)
         set_flag = SetFlagOp.create(operands=[alloca.results[0]], attributes={"struct_typ":op.to_typ, "typ_name":op.from_typ_name})
-        rewriter.inline_block_after_matched_op(Block([gep, memcpy, set_flag]))
+        rewriter.inline_block_after_matched_op(Block([*ops, memcpy, set_flag]))
         rewriter.replace_matched_op(alloca)
 
 class LowerReUnionize(RewritePattern):
@@ -1752,7 +1845,8 @@ class LowerPrint(RewritePattern):
         debug_code(op)
         op_typ = op.typ
         load_type = op_typ
-        if op_typ == llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque()]):
+        is_string = op_typ == llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque()])
+        if is_string:
             load_type = llvm.LLVMPointerType.opaque()
         load = llvm.LoadOp(op.value, load_type)
         input_val = load.results[0]
@@ -1762,6 +1856,16 @@ class LowerPrint(RewritePattern):
             rewriter.insert_op_before_matched_op(cast_op)
             input_val = cast_op.results[0]
             op_typ = IntegerType(32)
+
+        if is_string:
+            call = llvm.CallOp("puts", input_val, return_type=IntegerType(32))
+            call.properties["operandSegmentSizes"] = DenseArrayBase.from_list(IntegerType(32), [1, 0])
+            call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+            effects = "other = none, argMem = read, inaccessibleMem = readwrite"
+            call.properties["memory_effects"] = llvm.MemEffectsAttr(effects)
+            call.attributes["tbaa"] = BUFFER_PAYLOAD_TBAA
+            rewriter.replace_matched_op(call)
+            return
 
         format_str = AddrOfOp.from_string(format_strings[op_typ])
         printf_call = PrintFOp.create(operands=[format_str.result, input_val], result_types=[IntegerType(32)])
@@ -1814,6 +1918,7 @@ class LowerSnprintf(RewritePattern):
         )
         call.properties["callee_type"] = call_type
         call.properties["var_callee_type"] = call_type
+        call.attributes["tbaa"] = BUFFER_PAYLOAD_TBAA
         rewriter.replace_matched_op(call)
 
 class LowerMain(RewritePattern):
@@ -2192,51 +2297,12 @@ class LowerDataSizeDef(RewritePattern):
 class LowerGetterDef(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: GetterDefOp, rewriter: PatternRewriter):
-        size_alignment_tuple = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
         body_block = Block([])
         data_ptr = body_block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
         body = Region([body_block])
 
-        current_offset = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
-        false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
-        zero = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
-        one = llvm.ConstantOp(IntegerAttr.from_int_and_width(1, 64), IntegerType(64))
-        sixty_three = llvm.ConstantOp(IntegerAttr.from_int_and_width(63, 64), IntegerType(64))
-        body_block.add_ops([current_offset, false, zero, one, sixty_three])
-
-        for i, t in enumerate(op.types.data):
-            if isinstance(t, IntegerAttr):
-                # not statically known size
-                gep = llvm.GEPOp(data_ptr, [t.value.data], pointee_type=llvm.LLVMPointerType.opaque())
-                load0 = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
-                size_align = SizeOp.make(load0.results[0])
-                dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
-                size = llvm.ExtractValueOp(dense_ary, size_align.results[0], IntegerType(64))
-                dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
-                alignment = llvm.ExtractValueOp(dense_ary, size_align.results[0], IntegerType(64))
-                body_block.add_ops([gep, load0, size_align, size, alignment])
-            else:
-                # a statically known field
-                size = TypeSizeOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
-                alignment = TypeAlignmentOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
-                body_block.add_ops([size, alignment])
-            if i == op.offset.value.data: break
-            rem = arith.RemUI(current_offset.results[0], alignment.results[0])
-            cmp_rem = mid.ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
-            high_end_pad = mid.ArithmeticOp.make("SUB", alignment.results[0], rem.results[0])
-            padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
-            padded_size = mid.ArithmeticOp.make("ADD", size.results[0], padding.results[0])
-            current_offset = mid.ArithmeticOp.make("ADD", current_offset.results[0], padded_size.results[0])
-            body_block.add_ops([rem, cmp_rem, high_end_pad, padding, padded_size, current_offset])
-
-        rem_final = arith.RemUI(current_offset.results[0], alignment.results[0])
-        cmp_rem_final = mid.ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
-        high_pad_final = mid.ArithmeticOp.make("SUB", alignment.results[0], rem_final.results[0])
-        padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
-        final_size = mid.ArithmeticOp.make("ADD", current_offset.results[0], padding_final.results[0])
-
-        field_gep = llvm.GEPOp.from_mixed_indices(data_ptr, [final_size.results[0]], pointee_type=IntegerType(8))
-        body_block.add_ops([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, field_gep])
+        field_ops, field_gep = layout_field_address(data_ptr, op.types.data, op.offset.value.data)
+        body_block.add_ops(field_ops)
         if op.box:
             if op.parameterization:
                 parameterization = AddrOfOp.from_stringattr(op.parameterization)
@@ -2286,52 +2352,13 @@ class LowerGetterDef(RewritePattern):
 class LowerSetterDef(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: SetterDefOp, rewriter: PatternRewriter):
-        size_alignment_tuple = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
         body_block = Block([])
         data_ptr = body_block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
         value = body_block.insert_arg(op.original_type, 1)
         body = Region([body_block])
 
-        current_offset = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
-        false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
-        zero = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
-        one = llvm.ConstantOp(IntegerAttr.from_int_and_width(1, 64), IntegerType(64))
-        sixty_three = llvm.ConstantOp(IntegerAttr.from_int_and_width(63, 64), IntegerType(64))
-        body_block.add_ops([current_offset, false, zero, one, sixty_three])
-
-        for i, t in enumerate(op.types.data):
-            if isinstance(t, IntegerAttr):
-                # not statically known size
-                gep = llvm.GEPOp(data_ptr, [t.value.data], pointee_type=llvm.LLVMPointerType.opaque())
-                load0 = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
-                size_align = SizeOp.make(load0.results[0])
-                dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
-                size = llvm.ExtractValueOp(dense_ary, size_align.results[0], IntegerType(64))
-                dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
-                alignment = llvm.ExtractValueOp(dense_ary, size_align.results[0], IntegerType(64))
-                body_block.add_ops([gep, load0, size_align, size, alignment])
-            else:
-                # a statically known field
-                size = TypeSizeOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
-                alignment = TypeAlignmentOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
-                body_block.add_ops([size, alignment])
-            if i == op.offset.value.data: break
-            rem = arith.RemUI(current_offset.results[0], alignment.results[0])
-            cmp_rem = mid.ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
-            high_end_pad = mid.ArithmeticOp.make("SUB", alignment.results[0], rem.results[0])
-            padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
-            padded_size = mid.ArithmeticOp.make("ADD", size.results[0], padding.results[0])
-            current_offset = mid.ArithmeticOp.make("ADD", current_offset.results[0], padded_size.results[0])
-            body_block.add_ops([rem, cmp_rem, high_end_pad, padding, padded_size, current_offset])
-
-        rem_final = arith.RemUI(current_offset.results[0], alignment.results[0])
-        cmp_rem_final = mid.ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
-        high_pad_final = mid.ArithmeticOp.make("SUB", alignment.results[0], rem_final.results[0])
-        padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
-        final_size = mid.ArithmeticOp.make("ADD", current_offset.results[0], padding_final.results[0])
-
-        field_gep = llvm.GEPOp.from_mixed_indices(data_ptr, [final_size.results[0]], pointee_type=IntegerType(8))
-        body_block.add_ops([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, field_gep])
+        field_ops, field_gep = layout_field_address(data_ptr, op.types.data, op.offset.value.data)
+        body_block.add_ops(field_ops)
         if op.unbox:
             if op.parameterization:
                 parameterization = AddrOfOp.from_stringattr(op.parameterization)
@@ -2413,10 +2440,7 @@ class LowerBoxDef(RewritePattern):
 
         entry.add_ops([alloca, gep, vptr, store, data_size_fn, call, data_size, false, threshold, small_struct, br])
 
-        malloc = llvm.CallOp("bump_malloc", data_size.results[0], return_type=llvm.LLVMPointerType.opaque())
-        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
-        malloc.properties["operandSegmentSizes"] = operandSegmentSizes
-        malloc.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        malloc = allocation_call(None, data_size.results[0])
         
         args = [malloc.results[0], data_ptr, data_size.results[0], false.results[0]]
         memcpy0 = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
@@ -2491,10 +2515,7 @@ class LowerBoxUnionDef(RewritePattern):
         br = cf.Branch(exit)
         right_size_block.add_ops([memcpy, br])
         
-        malloc = llvm.CallOp("bump_malloc", data_size.results[0], return_type=llvm.LLVMPointerType.opaque())
-        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
-        malloc.properties["operandSegmentSizes"] = operandSegmentSizes
-        malloc.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        malloc = allocation_call(None, data_size.results[0])
         
         args = [malloc.results[0], data_ptr, data_size.results[0], false.results[0]]
         memcpy = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
@@ -2582,7 +2603,7 @@ class LowerTypeAccessorDef(RewritePattern):
             rewriter.replace_matched_op(func_op)
             return
         gep = llvm.GEPOp(data_ptr, [op.offset.value.data], pointee_type=llvm.LLVMPointerType.opaque())
-        load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+        load = llvm.CallOp("invariant_load", gep.results[0], return_type=llvm.LLVMPointerType.opaque())
         ret = func.Return(load.results[0])
         body.block.add_ops([gep, load, ret])
         func_op = func.FuncOp(name=op.meth_name.data, function_type=ftype, region=body)
@@ -2700,6 +2721,30 @@ class LowerGetField(RewritePattern):
             rewriter.inline_block_after_matched_op(Block([assumed_type, assume]))
         
         rewriter.replace_matched_op(wrap)
+
+class LowerGetRegion(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: GetRegionOp, rewriter: PatternRewriter):
+        fat_base = FatPtr.basic("").base_typ()
+        attr_dict = {"vtable_bytes":op.vtable_bytes, "offset":op.offset}
+        getter = FieldAccessOp.create(operands=[op.fat_ptr], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
+        unwrapped = UnwrapOp.create(operands=[op.fat_ptr], result_types=[fat_base])
+        call = llvm.CallIndirectOp(getter.results[0], unwrapped.results[0], return_type=llvm.LLVMPointerType.opaque())
+        call.properties["no_unwind"] = UnitAttr()
+        call.properties["will_return"] = UnitAttr()
+        call.properties["memory_effects"] = llvm.MemEffectsAttr("other = none, argMem = read, inaccessibleMem = readwrite")
+        rewriter.inline_block_before_matched_op(Block([getter, unwrapped]))
+        rewriter.replace_matched_op(call)
+
+class LowerGetHiddenRegion(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: GetHiddenRegionOp, rewriter: PatternRewriter):
+        dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
+        data_ptr = llvm.ExtractValueOp(dense_ary, op.fat_ptr, llvm.LLVMPointerType.opaque())
+        field_ops, field_gep = layout_field_address(data_ptr.results[0], op.types.data, op.offset.value.data)
+        region = llvm.LoadOp(field_gep.results[0], llvm.LLVMPointerType.opaque())
+        rewriter.inline_block_before_matched_op(Block([data_ptr, *field_ops]))
+        rewriter.replace_matched_op(region)
 
 class LowerGetTypeField(RewritePattern):
     @op_type_rewrite_pattern

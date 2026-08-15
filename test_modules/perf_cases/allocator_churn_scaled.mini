@@ -1,0 +1,5 @@
+import std;
+import allocator_churn_benchmark;
+
+checksum = allocator_churn_benchmark.churn(10, 25000, 16);
+IO.print(checksum);

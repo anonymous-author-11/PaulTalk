@@ -118,6 +118,36 @@ class CompilerPositiveTestsMixin:
         expected_output = "ok"
         self.compile_and_run(mini_code, expected_output, "region_dollar_syntax")
 
+    def test_scoped_all_alias(self):
+        mini_code = """
+            import std;
+
+            class Holder {
+                $value : Region
+                @value : String
+
+                regions { $value == @value }
+
+                def init(@value : String) {}
+
+                def get() -> String {
+                    return @value;
+                } ~> { ret == $value }
+            }
+
+            def touch(value : Holder) {
+            } ~> all_alias
+
+            def read(keep : Holder, touched : Holder) -> String {
+                touch(touched);
+                return keep.get();
+            } ~> { ret == keep$value, all_alias(touched) }
+
+            IO.print(read(Holder{"ok"}, Holder{"ignored"}));
+        """
+        expected_output = "ok"
+        self.compile_and_run(mini_code, expected_output, "scoped_all_alias")
+
     def test_construction_routes_to_self_new(self):
         mini_code = """
             import std;

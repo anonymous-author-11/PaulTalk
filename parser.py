@@ -267,7 +267,11 @@ class CSTTransformer(Transformer):
     def all_alias(self, token):
         return Constraints(all_alias=True)
 
+    def all_alias_constraint(self, token, roots):
+        return Constraints(alias_roots=roots)
+
     def constraint(self, constraints):
+        if isinstance(constraints, Constraints): return constraints
         return Constraints(constraints)
 
     def holds_one(self, lhs, op, rhs):
@@ -375,19 +379,17 @@ class CSTTransformer(Transformer):
         line = self.line_number(inductee) if not isinstance(inductee, TupleLiteral) else inductee.info.line_number
         for_info = NodeInfo(None, self.file_path, line)
         inductee_info = NodeInfo(None, self.file_path, line)
-        temp_name = "_temp_" + random_letters(10)
-        temp_info = NodeInfo(temp_name, self.file_path, line)
         iterator_name = "_iterator_" + random_letters(10)
         iterator_info = NodeInfo(iterator_name, self.file_path, line)
         inductee_name = ("inductee_" + random_letters(10)) if isinstance(inductee, TupleLiteral) else inductee.value
         inductee_id = Identifier(inductee_info, inductee_name)
-        temp_ident = Identifier(temp_info, temp_name)
+        iterator_ident = Identifier(iterator_info, iterator_name)
         iterator = MethodCall(iterator_info, iterable, "iterator", [])
         if isinstance(inductee, TupleLiteral):
             destructure_info = NodeInfo(None, self.file_path, line)
             destructure = Assignment(destructure_info, inductee, inductee_id)
             body.statements = [destructure, *body.statements]
-        return For(for_info, inductee_id, iterable, iterator, temp_ident, body)
+        return For(for_info, inductee_id, iterable, iterator, iterator_ident, body)
 
     def return_statement(self, ret, value):
         node_info = NodeInfo(None, self.file_path, self.line_number(ret))

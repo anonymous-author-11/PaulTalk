@@ -2,7 +2,7 @@
 ; Windows-specific utility functions
 
 declare ptr @VirtualAlloc(ptr, i64, i32, i32) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
-declare i32 @VirtualFree(ptr allocptr nocapture noundef, i64, i32) mustprogress nounwind willreturn allockind("free") memory(none, inaccessiblemem: readwrite, inaccessiblemem: readwrite)
+declare i32 @VirtualFree(ptr nocapture noundef, i64, i32) mustprogress nounwind willreturn memory(inaccessiblemem: readwrite)
 declare i32 @VirtualProtect(ptr, i64, i32, ptr) mustprogress nocallback nofree nosync nounwind willreturn memory(none, inaccessiblemem: readwrite)
 
 ; Define an OS-agnostic wrapper around VirtualAlloc(MEM_RESERVE)
@@ -29,14 +29,16 @@ define void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind w
 
 ; MEM_DECOMMIT = 0x4000 = 16384
 ; For dwFreeType = MEM_DECOMMIT, the dwSize parameter is the size of the region to decommit.
-define void @virtual_reset(ptr %addr, i64 %size) {
+define i1 @virtual_reset(ptr %addr, i64 %size) {
   %result = call i32 @VirtualFree(ptr %addr, i64 %size, i32 16384)
-  ret void
+  %succeeded = icmp ne i32 %result, 0
+  ret i1 %succeeded
 }
 
 declare void @coroutine_trampoline(ptr)
 
-declare i32 @printf(ptr, ...)
+declare i32 @printf(ptr, ...) memory(argmem: readwrite, inaccessiblemem: readwrite)
+declare i32 @puts(ptr) memory(argmem: read, inaccessiblemem: readwrite)
 
 declare ptr @GetCurrentProcess() local_unnamed_addr
 

@@ -50,18 +50,18 @@ define available_externally { i64, i64 } @size_wrapper(ptr %f, ptr nocapture nof
   ret { i64, i64 } %result
 }
 
-define available_externally { ptr, i160 } @box_wrapper(ptr %f, ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
-  %result = call { ptr, i160 } %f(ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none)
-  ret { ptr, i160 } %result
+define available_externally { ptr, i192 } @box_wrapper(ptr %f, ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
+  %result = call { ptr, i192 } %f(ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none)
+  ret { ptr, i192 } %result
 }
 
-define available_externally void @unbox_wrapper(ptr %f, { ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none) {
-  call void %f({ ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define available_externally void @unbox_wrapper(ptr %f, { ptr, i192 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none) {
+  call void %f({ ptr, i192 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
   ret void
 }
 
-define available_externally ptr @behavior_wrapper(ptr %f, { ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull %1) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none) {
-  %result = call ptr %f({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull %1) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none)
+define available_externally ptr @behavior_wrapper(ptr %f, { ptr, ptr, i64, i32, i32 } %0, ptr nocapture nofree noundef nonnull %1) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none) {
+  %result = call ptr %f({ ptr, ptr, i64, i32, i32 } %0, ptr nocapture nofree noundef nonnull %1) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none)
   ret ptr %result
 }
   
@@ -74,21 +74,21 @@ define available_externally { i64, i64 } @_size_Default(ptr %parameterization) a
   ret {i64, i64} { i64 32, i64 8 }
 }
 
-define available_externally { ptr, i160 } @_box_Default(ptr %fat_ptr, ptr %parameterization) alwaysinline {
+define available_externally { ptr, i192 } @_box_Default(ptr %fat_ptr, ptr %parameterization) alwaysinline {
   %vptr = load ptr, ptr %fat_ptr, align 8
-  %3 = insertvalue { ptr, i160 } undef, ptr %vptr, 0
+  %3 = insertvalue { ptr, i192 } undef, ptr %vptr, 0
   %4 = getelementptr i8, ptr %fat_ptr, i64 8
-  %5 = load i160, ptr %4, align 4
-  %6 = insertvalue { ptr, i160 } %3, i160 %5, 1
-  ret { ptr, i160 } %6
+  %5 = load i192, ptr %4, align 8
+  %6 = insertvalue { ptr, i192 } %3, i192 %5, 1
+  ret { ptr, i192 } %6
 }
 
-define available_externally void @_unbox_Default({ ptr, i160 } %fat_ptr, ptr %parameterization, ptr %destination) alwaysinline {
-  %vptr = extractvalue { ptr, i160 } %fat_ptr, 0
-  %data = extractvalue { ptr, i160 } %fat_ptr, 1
+define available_externally void @_unbox_Default({ ptr, i192 } %fat_ptr, ptr %parameterization, ptr %destination) alwaysinline {
+  %vptr = extractvalue { ptr, i192 } %fat_ptr, 0
+  %data = extractvalue { ptr, i192 } %fat_ptr, 1
   %dest_data = getelementptr i8, ptr %destination, i64 8
   store ptr %vptr, ptr %destination
-  store i160 %data, ptr %dest_data
+  store i192 %data, ptr %dest_data, align 8
   ret void
 }
 
@@ -111,7 +111,7 @@ define available_externally void @assume_offset(ptr %fat_ptr, ptr %id_ptr) alway
   %vptr = load ptr, ptr %fat_ptr
   %id_of_casted = load i64, ptr %vptr
   %offset = call i32 @get_offset(ptr %vptr, ptr %id_ptr)
-  %destination = getelementptr { ptr, ptr, ptr, i32 }, ptr %fat_ptr, i32 0, i32 3
+  %destination = getelementptr { ptr, ptr, i64, i32, i32 }, ptr %fat_ptr, i32 0, i32 3
   %dest_value = load i32, ptr %destination
   %slot = alloca i32
   store i32 %dest_value, ptr %slot

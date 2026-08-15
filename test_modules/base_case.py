@@ -31,6 +31,10 @@ class CompilerTestCase(unittest.TestCase):
         value = os.environ.get("PTALK_TEST_PRESERVE_BUILD_DIR", "").strip().lower()
         return value in {"1", "true", "yes", "on"}
 
+    @classmethod
+    def backend(cls) -> str:
+        return os.environ.get("PTALK_TEST_BACKEND", "region")
+
     @staticmethod
     def _force_remove_tree(path: Path):
         if not path.exists():
@@ -74,18 +78,17 @@ class CompilerTestCase(unittest.TestCase):
         self.bin_dir().mkdir(parents=True, exist_ok=True)
         self.build_dir().mkdir(parents=True, exist_ok=True)
 
+    def compile_path(self, input_path, output_path, debug_mode=True):
+        silent[0] = True
+        build_dir = self.build_dir()
+        backend = self.backend()
+        compiler_driver_main(input_path, output_path, debug=debug_mode, build_dir=build_dir, no_timings=True, backend=backend)
+
     def compile_to_executable(self, mini_code, output_file_name_base, debug_mode=True):
         self._ensure_test_dirs()
         with open(self.temp_input_file_name, "w", encoding='utf-8') as f: f.write(mini_code)
         self.output_path = self.bin_dir() / f"{output_file_name_base}.exe"
-        silent[0] = True
-        compiler_driver_main(
-            self.temp_input_file_name,
-            self.output_path,
-            debug_mode=debug_mode,
-            build_dir=self.build_dir(),
-            no_timings=True
-        )
+        self.compile_path(self.temp_input_file_name, self.output_path, debug_mode)
         return self.output_path
 
     def run_executable(self, exe_path: Path) -> str:
@@ -126,14 +129,7 @@ class CompilerTestCase(unittest.TestCase):
         with open(self.temp_input_file_name, "w", encoding="utf-8") as f:
             f.write(mini_code)
         output_path = self.bin_dir() / f"{output_file_name_base}{output_suffix}"
-        silent[0] = True
-        compiler_driver_main(
-            self.temp_input_file_name,
-            output_path,
-            debug_mode=debug_mode,
-            build_dir=self.build_dir(),
-            no_timings=True
-        )
+        self.compile_path(self.temp_input_file_name, output_path, debug_mode)
         return output_path
 
     def _error_category(self, message: str) -> str:
@@ -145,15 +141,8 @@ class CompilerTestCase(unittest.TestCase):
         self._ensure_test_dirs()
         with open(self.temp_input_file_name, "w", encoding='utf-8') as f: f.write(mini_code)
         self.output_path = self.bin_dir() / f"{output_file_name_base}.exe"
-        silent[0] = True
         with self.assertRaises(Exception) as cm:
-            compiler_driver_main(
-                self.temp_input_file_name,
-                self.output_path,
-                debug_mode=True,
-                build_dir=self.build_dir(),
-                no_timings=True
-            )
+            self.compile_path(self.temp_input_file_name, self.output_path)
         error_text = str(cm.exception)
         self.assertEqual(
             self._error_category(error_text),
@@ -208,28 +197,14 @@ class CompilerTestCase(unittest.TestCase):
         with ExitStack() as stack:
             root = self.temp_project_root(stack, files)
             self.output_path = self.bin_dir() / f"{output_file_name_base}.exe"
-            silent[0] = True
-            compiler_driver_main(
-                root / entrypoint,
-                self.output_path,
-                debug_mode=True,
-                build_dir=self.build_dir(),
-                no_timings=True
-            )
+            self.compile_path(root / entrypoint, self.output_path)
             actual_output = self.run_executable(self.output_path)
             self.assert_output_exact(actual_output, expected_output)
             return actual_output
 
     def assert_compile_path_fails(self, input_path, expected_phrase, expected_category):
-        silent[0] = True
         with self.assertRaises(Exception) as cm:
-            compiler_driver_main(
-                input_path,
-                self.output_path,
-                debug_mode=True,
-                build_dir=self.build_dir(),
-                no_timings=True
-            )
+            self.compile_path(input_path, self.output_path)
         error_text = str(cm.exception)
         self.assertEqual(
             self._error_category(error_text),

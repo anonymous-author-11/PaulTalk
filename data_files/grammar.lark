@@ -60,6 +60,9 @@ constraint_list: "{" (constraint ("," constraint)*)? "}"
 
 constraint: holds_constraint
           | equality_chain
+          | all_alias_constraint
+
+all_alias_constraint: ALL_ALIAS "(" region_variable_list ")"
 
 holds_constraint: region_variable HOLDS parenthesized_rv_list  -> holds_many
                 | parenthesized_rv_list HOLDS region_variable  -> many_holds
@@ -124,8 +127,6 @@ comparison: arithmetic -> comparison_single
           | comparison GT arithmetic
           | comparison LE arithmetic
           | comparison GE arithmetic
-          | comparison "..." arithmetic -> inclusive_range_literal
-          | comparison ".." arithmetic -> exclusive_range_literal
           | comparison IS typ -> is_check
           | comparison IS NOT typ -> isnot_check
 
@@ -156,6 +157,8 @@ factor: primary -> factor_single
       | NOT factor -> not_op
 
 primary: postfix_expr
+       | postfix_expr "..." postfix_expr -> inclusive_range_literal
+       | postfix_expr ".." postfix_expr -> exclusive_range_literal
 
 postfix_expr: primary_atom postfix_part*
 primary_atom: "(" expression ")" -> paren_expr

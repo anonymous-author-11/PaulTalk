@@ -1,0 +1,5 @@
+import core;
+import array;
+import io;
+
+IO.print(['a', 'b', 'c', 'd'] into String);

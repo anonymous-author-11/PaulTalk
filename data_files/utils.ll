@@ -6,7 +6,8 @@ source_filename = "UtilsModule"
 !1 = !{}
 
 ; External function declarations
-declare i32 @printf(ptr, ...)
+declare i32 @printf(ptr, ...) memory(argmem: readwrite, inaccessiblemem: readwrite)
+declare i32 @puts(ptr) memory(argmem: read, inaccessiblemem: readwrite)
 declare void @exit()
 declare noalias ptr @malloc(i64)
 declare noalias ptr @GC_malloc(i64)
@@ -47,7 +48,7 @@ declare noalias ptr @virtual_reserve(i64) mustprogress nofree nounwind willretur
 declare void @virtual_commit(ptr, i64)
 
 ; An OS-agnostic API to reset a reserved memory region
-declare void @virtual_reset(ptr, i64)
+declare i1 @virtual_reset(ptr, i64)
 
 declare ptr @coroutine_create(ptr, ptr)
 declare void @arg_passer(ptr)
@@ -65,13 +66,6 @@ declare void @GC_enable_incremental()
 
 define ptr @invariant_load(ptr %ptr) alwaysinline {
   %result = load ptr, ptr %ptr, !invariant.load !1
-  ret ptr %result
-}
-
-define noalias ptr @bump_malloc_wrapper(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) memory(none, argmem: readwrite, inaccessiblemem: readwrite) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
-  ;%result = tail call noalias ptr @calloc(i64 noundef %size, i64 1)
-  ;%result = tail call noalias ptr @GC_malloc(i64 noundef %size)
-  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr, ptr %committed_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   ret ptr %result
 }
 
@@ -96,6 +90,7 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr, ptr %
 }
 
 define void @commit_bump_pages(ptr %needed_end, ptr %committed_ptr) {
+entry:
   %committed = load ptr, ptr %committed_ptr
   %need = icmp ugt ptr %needed_end, %committed
   br i1 %need, label %commit, label %return
@@ -109,28 +104,6 @@ commit:
   call void @virtual_commit(ptr %committed, i64 %n)
   %end_ptr = inttoptr i64 %end_i to ptr
   store ptr %end_ptr, ptr %committed_ptr
-  br label %return
-
-return:
-  ret void
-}
-
-define void @commit_additional_pages(ptr %base, i64 %size) {
-  %base_i = ptrtoint ptr %base to i64
-  %end_i  = add i64 %base_i, %size
-  %start_tmp = add i64 %base_i, 4095
-  %start_i   = and i64 %start_tmp, -4096
-  %end_tmp = add i64 %end_i, 4095
-  %end_a   = and i64 %end_tmp, -4096
-  %need = icmp ugt i64 %end_a, %start_i
-  br i1 %need, label %commit, label %return
-
-commit:
-  %n = sub i64 %end_a, %start_i
-  %is_small_commit = icmp ult i64 %n, 65536
-  %commit_size = select i1 %is_small_commit, i64 65536, i64 %n
-  %p = inttoptr i64 %start_i to ptr
-  call void @virtual_commit(ptr %p, i64 %commit_size)
   br label %return
 
 return:
@@ -228,10 +201,10 @@ define { i64, i64 } @_data_size_union_typ(ptr %0) {
   ret { i64, i64 } %30
 }
 
-define void @_unbox_union_typ({ ptr, i160 } %0, ptr %1, ptr %dest) {
-  %4 = alloca { ptr, i160 }, align 8
-  store { ptr, i160 } %0, ptr %4, align 8
-  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+define void @_unbox_union_typ({ ptr, i192 } %0, ptr %1, ptr %dest) {
+  %4 = alloca { ptr, i192 }, align 8
+  store { ptr, i192 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i192 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
   %7 = call { i64, i64 } @_data_size_union_typ(ptr %1)
   %size = extractvalue { i64, i64 } %7, 0
@@ -247,26 +220,39 @@ define { i64, i64 } @_size_Default(ptr %parameterization) alwaysinline {
   ret {i64, i64} { i64 32, i64 8 }
 }
 
-define { ptr, i160 } @_box_Default(ptr %fat_ptr, ptr %parameterization) alwaysinline {
+define { ptr, i192 } @_box_Default(ptr %fat_ptr, ptr %parameterization) alwaysinline {
   %vptr = load ptr, ptr %fat_ptr, align 8
-  %3 = insertvalue { ptr, i160 } undef, ptr %vptr, 0
+  %3 = insertvalue { ptr, i192 } undef, ptr %vptr, 0
   %4 = getelementptr i8, ptr %fat_ptr, i64 8
-  %5 = load i160, ptr %4, align 4
-  %6 = insertvalue { ptr, i160 } %3, i160 %5, 1
-  ret { ptr, i160 } %6
+  %5 = load i192, ptr %4, align 8
+  %6 = insertvalue { ptr, i192 } %3, i192 %5, 1
+  ret { ptr, i192 } %6
 }
 
-define void @_unbox_Default({ ptr, i160 } %fat_ptr, ptr %parameterization, ptr %destination) alwaysinline {
-  %vptr = extractvalue { ptr, i160 } %fat_ptr, 0
-  %data = extractvalue { ptr, i160 } %fat_ptr, 1
+define void @_unbox_Default({ ptr, i192 } %fat_ptr, ptr %parameterization, ptr %destination) alwaysinline {
+  %vptr = extractvalue { ptr, i192 } %fat_ptr, 0
+  %data = extractvalue { ptr, i192 } %fat_ptr, 1
   %dest_data = getelementptr i8, ptr %destination, i64 8
   store ptr %vptr, ptr %destination
-  store i160 %data, ptr %dest_data
+  store i192 %data, ptr %dest_data, align 8
   ret void
 }
 
+declare void @runtime_init()
+declare noalias nonnull ptr @CreateRegion() alwaysinline willreturn mustprogress nofree nounwind memory(none, argmem: none, inaccessiblemem: readwrite) allockind("alloc") "alloc-family"="region"
+declare void @RemoveRegionExact(ptr) alwaysinline willreturn mustprogress nounwind memory(none, argmem: readwrite, inaccessiblemem: readwrite)
+declare noalias ptr @Allocate(ptr, i64) memory(none, argmem: readwrite, inaccessiblemem: readwrite) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
+declare i32 @RegionId(ptr) speculatable willreturn mustprogress memory(none)
+declare ptr @RegionOf(ptr) speculatable willreturn mustprogress memory(none, argmem: read, inaccessiblemem: none)
+declare ptr @SetOutputRegionFrame(ptr) alwaysinline mustprogress nofree nosync nounwind willreturn memory(readwrite)
+declare void @RestoreOutputRegionFrame(ptr) alwaysinline mustprogress nofree nosync nounwind willreturn memory(write)
+declare ptr @OutputRegionSlot(i32) alwaysinline mustprogress nofree nosync nounwind willreturn memory(read)
+declare ptr @MaterializeRegion(ptr) alwaysinline mustprogress nofree nounwind willreturn memory(none, argmem: readwrite, inaccessiblemem: readwrite)
+declare ptr @OutputRegion(i32) alwaysinline mustprogress nofree nounwind willreturn memory(readwrite)
+
 define void @setup_landing_pad(i32 %argc, ptr %argv) {
   call void @os_specific_setup()
+  call void @runtime_init()
   store i32 %argc, ptr @__global_argc
   store ptr %argv, ptr @__global_argv
   ;call void @GC_enable_incremental()

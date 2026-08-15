@@ -190,7 +190,7 @@ module @patterns {
   pdl.pattern @LowerBoxCall : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %ptr_type_attr = pdl.attribute = !llvm.ptr
-    %box_type = pdl.type : !llvm.struct<(ptr, i160)>
+    %box_type = pdl.type : !llvm.struct<(ptr, i192)>
     %ptr = pdl.operand : %ptr_type
     %parameterization = pdl.operand : %ptr_type
     %root = pdl.operation "mid.box_call"(%ptr, %parameterization : !pdl.value, !pdl.value) -> (%box_type : !pdl.type)
@@ -212,7 +212,7 @@ module @patterns {
   pdl.pattern @LowerUnboxCall : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %ptr_type_attr = pdl.attribute = !llvm.ptr
-    %box_type = pdl.type : !llvm.struct<(ptr, i160)>
+    %box_type = pdl.type : !llvm.struct<(ptr, i192)>
     %value = pdl.operand : %box_type
     %ptr = pdl.operand : %ptr_type
     %parameterization = pdl.operand : %ptr_type
@@ -387,9 +387,16 @@ module @patterns {
       %printf_type_attr = pdl.attribute = !llvm.func<i32 (!llvm.ptr, ...)>
       %sym_name = pdl.attribute = "printf"
       %linkage = pdl.attribute = #llvm.linkage<external>
-      %printf_decl = pdl.operation "llvm.func" {"sym_name" = %sym_name, "function_type" = %printf_type_attr, "linkage" = %linkage}
+      %printf_memory = pdl.attribute = #llvm.memory_effects<other = none, argMem = readwrite, inaccessibleMem = readwrite>
+      %printf_decl = pdl.operation "llvm.func" {"sym_name" = %sym_name, "function_type" = %printf_type_attr, "linkage" = %linkage, "memory_effects" = %printf_memory}
       %with_region = pdl.apply_native_rewrite "add_region"(%printf_decl : !pdl.operation) : !pdl.operation
+      %puts_type_attr = pdl.attribute = !llvm.func<i32 (!llvm.ptr)>
+      %puts_name = pdl.attribute = "puts"
+      %puts_memory = pdl.attribute = #llvm.memory_effects<other = none, argMem = read, inaccessibleMem = readwrite>
+      %puts_decl = pdl.operation "llvm.func" {"sym_name" = %puts_name, "function_type" = %puts_type_attr, "linkage" = %linkage, "memory_effects" = %puts_memory}
+      %puts_with_region = pdl.apply_native_rewrite "add_region"(%puts_decl : !pdl.operation) : !pdl.operation
       pdl.erase %printf_decl
+      pdl.erase %puts_decl
       pdl.erase %root
     }
   }
@@ -400,7 +407,8 @@ module @patterns {
       %snprintf_type_attr = pdl.attribute = !llvm.func<i32 (!llvm.ptr, i32, !llvm.ptr, ...)>
       %sym_name = pdl.attribute = "snprintf"
       %linkage = pdl.attribute = #llvm.linkage<external>
-      %snprintf_decl = pdl.operation "llvm.func" {"sym_name" = %sym_name, "function_type" = %snprintf_type_attr, "linkage" = %linkage}
+      %memory = pdl.attribute = #llvm.memory_effects<other = none, argMem = readwrite, inaccessibleMem = readwrite>
+      %snprintf_decl = pdl.operation "llvm.func" {"sym_name" = %sym_name, "function_type" = %snprintf_type_attr, "linkage" = %linkage, "memory_effects" = %memory}
       %with_region = pdl.apply_native_rewrite "add_region"(%snprintf_decl : !pdl.operation) : !pdl.operation
       pdl.erase %snprintf_decl
       pdl.erase %root
@@ -455,11 +463,76 @@ module @patterns {
       %malloc_with_region = pdl.apply_native_rewrite "add_region"(%malloc_decl : !pdl.operation) : !pdl.operation
       pdl.erase %malloc_decl
 
+      %invariant_load = pdl.attribute = "invariant_load"
+      %func_type_attr_invariant_load = pdl.attribute = !llvm.func<ptr (ptr)>
+      %invariant_load_decl = pdl.operation "llvm.func" {"sym_name" = %invariant_load, "function_type" = %func_type_attr_invariant_load, "linkage" = %linkage}
+      %invariant_load_with_region = pdl.apply_native_rewrite "add_region"(%invariant_load_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %invariant_load_decl
+
       %free = pdl.attribute = "free"
       %func_type_attr_free = pdl.attribute = !llvm.func<void  (ptr)>
       %free_decl = pdl.operation "llvm.func" {"sym_name" = %free, "function_type" = %func_type_attr_free, "linkage" = %linkage}
       %free_with_region = pdl.apply_native_rewrite "add_region"(%free_decl : !pdl.operation) : !pdl.operation
       pdl.erase %free_decl
+
+      %create_region = pdl.attribute = "CreateRegion"
+      %func_type_attr_create_region = pdl.attribute = !llvm.func<ptr ()>
+      %create_region_decl = pdl.operation "llvm.func" {"sym_name" = %create_region, "function_type" = %func_type_attr_create_region, "linkage" = %linkage}
+      %create_region_with_region = pdl.apply_native_rewrite "add_region"(%create_region_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %create_region_decl
+
+      %remove_region_exact = pdl.attribute = "RemoveRegionExact"
+      %func_type_attr_remove_region_exact = pdl.attribute = !llvm.func<void (ptr)>
+      %remove_region_exact_decl = pdl.operation "llvm.func" {"sym_name" = %remove_region_exact, "function_type" = %func_type_attr_remove_region_exact, "linkage" = %linkage}
+      %remove_region_exact_with_region = pdl.apply_native_rewrite "add_region"(%remove_region_exact_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %remove_region_exact_decl
+
+      %allocate = pdl.attribute = "Allocate"
+      %func_type_attr_allocate = pdl.attribute = !llvm.func<ptr (ptr, i64)>
+      %allocate_decl = pdl.operation "llvm.func" {"sym_name" = %allocate, "function_type" = %func_type_attr_allocate, "linkage" = %linkage}
+      %allocate_with_region = pdl.apply_native_rewrite "add_region"(%allocate_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %allocate_decl
+
+      %region_id = pdl.attribute = "RegionId"
+      %func_type_attr_region_id = pdl.attribute = !llvm.func<i32 (ptr)>
+      %region_id_decl = pdl.operation "llvm.func" {"sym_name" = %region_id, "function_type" = %func_type_attr_region_id, "linkage" = %linkage}
+      %region_id_with_region = pdl.apply_native_rewrite "add_region"(%region_id_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %region_id_decl
+
+      %region_of = pdl.attribute = "RegionOf"
+      %func_type_attr_region_of = pdl.attribute = !llvm.func<ptr (ptr)>
+      %region_of_decl = pdl.operation "llvm.func" {"sym_name" = %region_of, "function_type" = %func_type_attr_region_of, "linkage" = %linkage}
+      %region_of_with_region = pdl.apply_native_rewrite "add_region"(%region_of_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %region_of_decl
+
+      %set_output_region_frame = pdl.attribute = "SetOutputRegionFrame"
+      %func_type_attr_set_output_region_frame = pdl.attribute = !llvm.func<ptr (ptr)>
+      %set_output_region_frame_decl = pdl.operation "llvm.func" {"sym_name" = %set_output_region_frame, "function_type" = %func_type_attr_set_output_region_frame, "linkage" = %linkage}
+      %set_output_region_frame_with_region = pdl.apply_native_rewrite "add_region"(%set_output_region_frame_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %set_output_region_frame_decl
+
+      %restore_output_region_frame = pdl.attribute = "RestoreOutputRegionFrame"
+      %func_type_attr_restore_output_region_frame = pdl.attribute = !llvm.func<void (ptr)>
+      %restore_output_region_frame_decl = pdl.operation "llvm.func" {"sym_name" = %restore_output_region_frame, "function_type" = %func_type_attr_restore_output_region_frame, "linkage" = %linkage}
+      %restore_output_region_frame_with_region = pdl.apply_native_rewrite "add_region"(%restore_output_region_frame_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %restore_output_region_frame_decl
+
+      %output_region = pdl.attribute = "OutputRegion"
+      %func_type_attr_output_region = pdl.attribute = !llvm.func<ptr (i32)>
+      %output_region_decl = pdl.operation "llvm.func" {"sym_name" = %output_region, "function_type" = %func_type_attr_output_region, "linkage" = %linkage}
+      %output_region_with_region = pdl.apply_native_rewrite "add_region"(%output_region_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %output_region_decl
+
+      %output_region_slot = pdl.attribute = "OutputRegionSlot"
+      %output_region_slot_decl = pdl.operation "llvm.func" {"sym_name" = %output_region_slot, "function_type" = %func_type_attr_output_region, "linkage" = %linkage}
+      %output_region_slot_with_region = pdl.apply_native_rewrite "add_region"(%output_region_slot_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %output_region_slot_decl
+
+      %materialize_region = pdl.attribute = "MaterializeRegion"
+      %func_type_attr_materialize_region = pdl.attribute = !llvm.func<ptr (ptr)>
+      %materialize_region_decl = pdl.operation "llvm.func" {"sym_name" = %materialize_region, "function_type" = %func_type_attr_materialize_region, "linkage" = %linkage}
+      %materialize_region_with_region = pdl.apply_native_rewrite "add_region"(%materialize_region_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %materialize_region_decl
       
       %landing_pad = pdl.attribute = "setup_landing_pad"
       %func_type_attr1 = pdl.attribute = !llvm.func<void (i32, !llvm.ptr)>
@@ -527,13 +600,13 @@ module @patterns {
       pdl.erase %assume_offset_decl
 
       %box = pdl.attribute = "_box_Default"
-      %func_type_attr9 = pdl.attribute = !llvm.func<!llvm.struct<(ptr, i160)> (ptr, ptr)>
+      %func_type_attr9 = pdl.attribute = !llvm.func<!llvm.struct<(ptr, i192)> (ptr, ptr)>
       %box_decl = pdl.operation "llvm.func" {"sym_name" = %box, "function_type" = %func_type_attr9, "linkage" = %linkage}
       %box_with_region = pdl.apply_native_rewrite "add_region"(%box_decl : !pdl.operation) : !pdl.operation
       pdl.erase %box_decl
 
       %unbox = pdl.attribute = "_unbox_Default"
-      %func_type_attr99 = pdl.attribute = !llvm.func<!llvm.void (!llvm.struct<(ptr, i160)>, ptr, ptr)>
+      %func_type_attr99 = pdl.attribute = !llvm.func<!llvm.void (!llvm.struct<(ptr, i192)>, ptr, ptr)>
       %unbox_decl = pdl.operation "llvm.func" {"sym_name" = %unbox, "function_type" = %func_type_attr99, "linkage" = %linkage}
       %unbox_with_region = pdl.apply_native_rewrite "add_region"(%unbox_decl : !pdl.operation) : !pdl.operation
       pdl.erase %unbox_decl
@@ -586,19 +659,19 @@ module @patterns {
       pdl.erase %typegetter_decl
 
       %box_wrapper = pdl.attribute = "box_wrapper"
-      %func_type_attr807 = pdl.attribute = !llvm.func<!llvm.struct<(ptr, i160)> (ptr, ptr, ptr)>
+      %func_type_attr807 = pdl.attribute = !llvm.func<!llvm.struct<(ptr, i192)> (ptr, ptr, ptr)>
       %box_wrapper_decl = pdl.operation "llvm.func" {"sym_name" = %box_wrapper, "function_type" = %func_type_attr807, "linkage" = %linkage}
       %box_wrapper_with_region = pdl.apply_native_rewrite "add_region"(%box_wrapper_decl : !pdl.operation) : !pdl.operation
       pdl.erase %box_wrapper_decl
 
       %unbox_wrapper = pdl.attribute = "unbox_wrapper"
-      %func_type_attr808 = pdl.attribute = !llvm.func<void (ptr, !llvm.struct<(ptr, i160)>, ptr, ptr)>
+      %func_type_attr808 = pdl.attribute = !llvm.func<void (ptr, !llvm.struct<(ptr, i192)>, ptr, ptr)>
       %unbox_wrapper_decl = pdl.operation "llvm.func" {"sym_name" = %unbox_wrapper, "function_type" = %func_type_attr808, "linkage" = %linkage}
       %unbox_wrapper_with_region = pdl.apply_native_rewrite "add_region"(%unbox_wrapper_decl : !pdl.operation) : !pdl.operation
       pdl.erase %unbox_wrapper_decl
 
       %behavior_wrapper = pdl.attribute = "behavior_wrapper"
-      %func_type_attr834 = pdl.attribute = !llvm.func<ptr (ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, ptr)>
+      %func_type_attr834 = pdl.attribute = !llvm.func<ptr (ptr, !llvm.struct<(ptr, ptr, i64, i32, i32)>, ptr)>
       %behavior_wrapper_decl = pdl.operation "llvm.func" {"sym_name" = %behavior_wrapper, "function_type" = %func_type_attr834, "linkage" = %linkage}
       %behavior_wrapper_with_region = pdl.apply_native_rewrite "add_region"(%behavior_wrapper_decl : !pdl.operation) : !pdl.operation
       pdl.erase %behavior_wrapper_decl
@@ -637,7 +710,7 @@ module @patterns {
 
       %indexation = pdl.operation "mid.buffer_indexation"(%receiver, %index, %type_size_result : !pdl.value, !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
       %indexation_result = pdl.result 0 of %indexation
-      %box_type = pdl.type : !llvm.struct<(ptr, i160)>
+      %box_type = pdl.type : !llvm.struct<(ptr, i192)>
       %box = pdl.operation "mid.box_call"(%indexation_result, %parameterization : !pdl.value, !pdl.value) -> (%box_type : !pdl.type)
       %box_result = pdl.result 0 of %box
       %wrap = pdl.operation "mid.wrap"(%box_result : !pdl.value)
@@ -853,7 +926,7 @@ module @patterns {
 
       %indexation = pdl.operation "mid.buffer_indexation"(%receiver, %index, %type_size_result : !pdl.value, !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
       %indexation_result = pdl.result 0 of %indexation
-      %box_type = pdl.type : !llvm.struct<(ptr, i160)>
+      %box_type = pdl.type : !llvm.struct<(ptr, i192)>
       %unwrap = pdl.operation "mid.unwrap"(%value_ptr : !pdl.value) -> (%box_type : !pdl.type)
       %unwrap_result = pdl.result 0 of %unwrap
       %unbox = pdl.operation "mid.unbox_call"(%unwrap_result, %parameterization, %indexation_result : !pdl.value, !pdl.value, !pdl.value)
@@ -903,12 +976,12 @@ module @patterns {
   pdl.pattern @LowerCreateBufferParameterized : benefit(2) {
     %ptr_type = pdl.type : !llvm.ptr
     %i64_type = pdl.type : i64
-    %i32_type = pdl.type : i32
     %size = pdl.operand : %ptr_type
     %parameterization = pdl.operand : %ptr_type
     %typ_attr = pdl.attribute
     %region = pdl.attribute
-    %root = pdl.operation "mid.create_buffer"(%size, %parameterization : !pdl.value, !pdl.value) {"typ" = %typ_attr, "region_id" = %region} -> (%ptr_type : !pdl.type)
+    %segments = pdl.attribute = array<i32: 1, 1, 0>
+    %root = pdl.operation "mid.create_buffer"(%size, %parameterization : !pdl.value, !pdl.value) {"typ" = %typ_attr, "region_id" = %region, "operandSegmentSizes" = %segments} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
       %size_align_tuple = pdl.type : !llvm.struct<(i64, i64)>
       %type_size_align = pdl.operation "mid.size"(%parameterization : !pdl.value) -> (%size_align_tuple : !pdl.type)
@@ -921,14 +994,36 @@ module @patterns {
       pdl.replace %root with %dynamic
     }
   }
+  pdl.pattern @LowerCreateBufferParameterizedRegion : benefit(3) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %i64_type = pdl.type : i64
+    %size = pdl.operand : %ptr_type
+    %parameterization = pdl.operand : %ptr_type
+    %region_arg = pdl.operand : %ptr_type
+    %typ_attr = pdl.attribute
+    %region = pdl.attribute
+    %segments = pdl.attribute = array<i32: 1, 1, 1>
+    %root = pdl.operation "mid.create_buffer"(%size, %parameterization, %region_arg : !pdl.value, !pdl.value, !pdl.value) {"typ" = %typ_attr, "region_id" = %region, "operandSegmentSizes" = %segments} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %size_align_tuple = pdl.type : !llvm.struct<(i64, i64)>
+      %type_size_align = pdl.operation "mid.size"(%parameterization : !pdl.value) -> (%size_align_tuple : !pdl.type)
+      %type_size_align_result = pdl.result 0 of %type_size_align
+      %position = pdl.attribute = array<i64: 0>
+      %type_size = pdl.operation "placeholder.extractvalue"(%type_size_align_result : !pdl.value) {"position" = %position} -> (%i64_type : !pdl.type)
+      %type_size_result = pdl.result 0 of %type_size
+
+      %dynamic = pdl.operation "mid.create_buffer_dynamic"(%size, %type_size_result, %region_arg : !pdl.value, !pdl.value, !pdl.value) {"region_id" = %region} -> (%ptr_type : !pdl.type)
+      pdl.replace %root with %dynamic
+    }
+  }
   pdl.pattern @LowerCreateBufferStatic : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %i64_type = pdl.type : i64
-    %i32_type = pdl.type : i32
     %size = pdl.operand : %ptr_type
     %typ_attr = pdl.attribute
     %region = pdl.attribute
-    %root = pdl.operation "mid.create_buffer"(%size : !pdl.value) {"typ" = %typ_attr, "region_id" = %region} -> (%ptr_type : !pdl.type)
+    %segments = pdl.attribute = array<i32: 1, 0, 0>
+    %root = pdl.operation "mid.create_buffer"(%size : !pdl.value) {"typ" = %typ_attr, "region_id" = %region, "operandSegmentSizes" = %segments} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
       %type_size = pdl.operation "mid.type_size" {"typ" = %typ_attr} -> (%i64_type : !pdl.type)
       %type_size_result = pdl.result 0 of %type_size
@@ -936,10 +1031,25 @@ module @patterns {
       pdl.replace %root with %dynamic
     }
   }
+  pdl.pattern @LowerCreateBufferStaticRegion : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %i64_type = pdl.type : i64
+    %size = pdl.operand : %ptr_type
+    %region_arg = pdl.operand : %ptr_type
+    %typ_attr = pdl.attribute
+    %region = pdl.attribute
+    %segments = pdl.attribute = array<i32: 1, 0, 1>
+    %root = pdl.operation "mid.create_buffer"(%size, %region_arg : !pdl.value, !pdl.value) {"typ" = %typ_attr, "region_id" = %region, "operandSegmentSizes" = %segments} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %type_size = pdl.operation "mid.type_size" {"typ" = %typ_attr} -> (%i64_type : !pdl.type)
+      %type_size_result = pdl.result 0 of %type_size
+      %dynamic = pdl.operation "mid.create_buffer_dynamic"(%size, %type_size_result, %region_arg : !pdl.value, !pdl.value, !pdl.value) {"region_id" = %region} -> (%ptr_type : !pdl.type)
+      pdl.replace %root with %dynamic
+    }
+  }
   pdl.pattern @LowerCreateBufferDynamic : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %i64_type = pdl.type : i64
-    %i32_type = pdl.type : i32
     %size = pdl.operand : %ptr_type
     %type_size = pdl.operand : %i64_type
     %region = pdl.attribute
@@ -964,20 +1074,114 @@ module @patterns {
   pdl.pattern @LowerCreateRegion : benefit(1) {
     %reg_name = pdl.attribute
     %ptr_type = pdl.type : !llvm.ptr
-    %operands = pdl.operands
-    %root = pdl.operation "mid.create_region"(%operands : !pdl.range<value>) {"reg_name" = %reg_name} -> (%ptr_type : !pdl.type)
+    %root = pdl.operation "mid.create_region" {"reg_name" = %reg_name} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
-      %ptr_type_attr = pdl.attribute = !llvm.ptr
-      %alloca = pdl.operation "mid.alloc" {"typ" = %ptr_type_attr} -> (%ptr_type : !pdl.type)
-      pdl.replace %root with %alloca
+      %callee = pdl.attribute = @CreateRegion
+      %opsegsize = pdl.attribute = array<i32: 0, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call" {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      pdl.replace %root with (%call_result : !pdl.value)
     }
   }
   pdl.pattern @LowerRemoveRegion : benefit(1) {
     %reg_name = pdl.attribute
-    %operands = pdl.operands
-    %root = pdl.operation "mid.remove_region"(%operands : !pdl.range<value>) {"reg_name" = %reg_name}
+    %region = pdl.operand
+    %root = pdl.operation "mid.remove_region"(%region : !pdl.value) {"reg_name" = %reg_name}
     pdl.rewrite %root {
-      pdl.erase %root
+      %callee = pdl.attribute = @RemoveRegionExact
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%region : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+      pdl.replace %root with %call
+    }
+  }
+  pdl.pattern @LowerRegionOf : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %fat_ptr = pdl.operand
+    %root = pdl.operation "mid.region_of"(%fat_ptr : !pdl.value) -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %callee = pdl.attribute = @RegionOf
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%fat_ptr : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      pdl.replace %root with (%call_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerSetOutputRegionFrame : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %handles = pdl.operands
+    %root = pdl.operation "mid.set_output_region_frame"(%handles : !pdl.range<value>) -> (%ptr_type, %ptr_type : !pdl.type, !pdl.type)
+    pdl.rewrite %root {
+      %num_handles = pdl.apply_native_rewrite "count_elements"(%handles : !pdl.range<value>) : !pdl.attribute
+      %frame_type = pdl.apply_native_rewrite "array_from_size_and_type"(%num_handles, %ptr_type : !pdl.attribute, !pdl.type) : !pdl.type
+      %frame_type_attr = pdl.apply_native_rewrite "type_to_type_attr"(%frame_type : !pdl.type) : !pdl.attribute
+      %frame = pdl.operation "mid.alloc" {"typ" = %frame_type_attr} -> (%ptr_type : !pdl.type)
+      %frame_result = pdl.result 0 of %frame
+      pdl.apply_native_rewrite "store_operands_in_container"(%root, %frame_type_attr, %frame_result : !pdl.operation, !pdl.attribute, !pdl.value)
+      %callee = pdl.attribute = @SetOutputRegionFrame
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%frame_result : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      pdl.replace %root with (%call_result, %frame_result : !pdl.value, !pdl.value)
+    }
+  }
+  pdl.pattern @LowerRestoreOutputRegionFrame : benefit(1) {
+    %previous = pdl.operand
+    %root = pdl.operation "mid.restore_output_region_frame"(%previous : !pdl.value)
+    pdl.rewrite %root {
+      %callee = pdl.attribute = @RestoreOutputRegionFrame
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%previous : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+      pdl.replace %root with %call
+    }
+  }
+  pdl.pattern @LowerOutputRegion : benefit(1) {
+    %index = pdl.attribute
+    %i32_type = pdl.type : i32
+    %ptr_type = pdl.type : !llvm.ptr
+    %root = pdl.operation "mid.output_region" {"index" = %index} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %constant = pdl.operation "arith.constant" {"value" = %index} -> (%i32_type : !pdl.type)
+      %constant_result = pdl.result 0 of %constant
+      %callee = pdl.attribute = @OutputRegion
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%constant_result : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      pdl.replace %root with (%call_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerOutputRegionSlot : benefit(1) {
+    %index = pdl.attribute
+    %i32_type = pdl.type : i32
+    %ptr_type = pdl.type : !llvm.ptr
+    %root = pdl.operation "mid.output_region_slot" {"index" = %index} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %constant = pdl.operation "arith.constant" {"value" = %index} -> (%i32_type : !pdl.type)
+      %constant_result = pdl.result 0 of %constant
+      %callee = pdl.attribute = @OutputRegionSlot
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%constant_result : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      pdl.replace %root with (%call_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerMaterializeRegion : benefit(1) {
+    %cell = pdl.operand
+    %ptr_type = pdl.type : !llvm.ptr
+    %root = pdl.operation "mid.materialize_region"(%cell : !pdl.value) -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %callee = pdl.attribute = @MaterializeRegion
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%cell : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      pdl.replace %root with (%call_result : !pdl.value)
     }
   }
   pdl.pattern @LowerResetRegion : benefit(1) {
@@ -1522,6 +1726,23 @@ module @patterns {
       pdl.replace %root with (%call_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerMallocRegion : benefit(2) {
+    %type_attr = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %i64_type = pdl.type : i64
+    %region = pdl.operand : %ptr_type
+    %root = pdl.operation "mid.malloc"(%region : !pdl.value) {"typ" = %type_attr} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %malloc_size = pdl.operation "mid.type_size" {"typ" = %type_attr} -> (%i64_type : !pdl.type)
+      %malloc_size_result = pdl.result 0 of %malloc_size
+      %callee = pdl.attribute = @Allocate
+      %opsegsize = pdl.attribute = array<i32: 2, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%region, %malloc_size_result : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      pdl.replace %root with (%call_result : !pdl.value)
+    }
+  }
   pdl.pattern @LowerFree : benefit(1) {
     %ptr = pdl.operand
     %root = pdl.operation "mid.free"(%ptr : !pdl.value)
@@ -1553,7 +1774,7 @@ module @patterns {
       %call = pdl.operation "placeholder.call"(%vptr_result, %addr_of_result : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%i32_type : !pdl.type)
       %offset = pdl.result 0 of %call
       %indices = pdl.attribute = array<i32: 0, 3>
-      %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+      %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, i64, i32, i32)>
       %destination = pdl.operation "llvm.getelementptr"(%fat_ptr : !pdl.value) {"elem_type" = %fat_base_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
       %destination_result = pdl.result 0 of %destination
       %store = pdl.operation "llvm.store"(%offset, %destination_result : !pdl.value, !pdl.value)
@@ -1691,6 +1912,31 @@ module @patterns {
       %call = pdl.operation "placeholder.call"(%func_ptr_result, %arg_passer_result : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
       %call_result = pdl.result 0 of %call
       %fill = pdl.operation "func.call_indirect"(%laundered_result, %call_result, %args : !pdl.value, !pdl.value, !pdl.range<value>)
+      %store = pdl.operation "llvm.store"(%call_result, %alloca_result : !pdl.value, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerCreateBufferDynamicRegion : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %i64_type = pdl.type : i64
+    %size = pdl.operand : %ptr_type
+    %type_size = pdl.operand : %i64_type
+    %region_arg = pdl.operand : %ptr_type
+    %region = pdl.attribute
+    %root = pdl.operation "mid.create_buffer_dynamic"(%size, %type_size, %region_arg : !pdl.value, !pdl.value, !pdl.value) {"region_id" = %region} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %load = pdl.operation "llvm.load"(%size : !pdl.value) -> (%i64_type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %ptr_type_attr = pdl.attribute = !llvm.ptr
+      %alloca = pdl.operation "mid.alloc" {"typ" = %ptr_type_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %malloc_size = pdl.operation "arith.muli"(%load_result, %type_size : !pdl.value, !pdl.value) -> (%i64_type : !pdl.type)
+      %malloc_size_result = pdl.result 0 of %malloc_size
+      %callee = pdl.attribute = @Allocate
+      %opsegsize = pdl.attribute = array<i32: 2, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%region_arg, %malloc_size_result : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
       %store = pdl.operation "llvm.store"(%call_result, %alloca_result : !pdl.value, !pdl.value)
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
@@ -1992,8 +2238,8 @@ module @patterns {
     %ptr_type_attr = pdl.attribute = !llvm.ptr
     %fat_ptr = pdl.operand : %ptr_type
     %buf = pdl.operand : %ptr_type
-    %fat_base_type = pdl.type : !llvm.struct<(ptr, ptr, ptr, i32)>
-    %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+    %fat_base_type = pdl.type : !llvm.struct<(ptr, ptr, i64, i32, i32)>
+    %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, i64, i32, i32)>
     %i32_type = pdl.type : i32
     %i64_type = pdl.type : i64
     
@@ -2167,7 +2413,7 @@ module @patterns {
   pdl.pattern @LowerNew : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %i32_type = pdl.type : i32
-    %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+    %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, i64, i32, i32)>
     %num_data_fields = pdl.attribute
     %region_id = pdl.attribute
     %typ_attr = pdl.attribute
@@ -2199,7 +2445,7 @@ module @patterns {
   pdl.pattern @LowerParameterizedNew : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %i32_type = pdl.type : i32
-    %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+    %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, i64, i32, i32)>
     %num_data_fields = pdl.attribute
     %region_id = pdl.attribute
     %typ_attr = pdl.attribute
@@ -2244,8 +2490,8 @@ module @patterns {
     %ptr_type_attr = pdl.attribute = !llvm.ptr
     %vptr = pdl.operand : %ptr_type
     %buf = pdl.operand : %ptr_type
-    %fat_base_type = pdl.type : !llvm.struct<(ptr, ptr, ptr, i32)>
-    %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+    %fat_base_type = pdl.type : !llvm.struct<(ptr, ptr, i64, i32, i32)>
+    %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, i64, i32, i32)>
     %i64_type = pdl.type : i64
     
     // Match the original operation
@@ -2276,7 +2522,9 @@ module @patterns {
         
         // Malloc for large structures
         %callee = pdl.attribute = @bump_malloc
-        %malloc = pdl.operation "placeholder.call"(%data_size_result : !pdl.value) {"callee" = %callee} -> (%ptr_type : !pdl.type)
+        %opsegsize_malloc = pdl.attribute = array<i32: 1, 0>
+        %opbundlesize_malloc = pdl.attribute = array<i32>
+        %malloc = pdl.operation "placeholder.call"(%data_size_result : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize_malloc, "op_bundle_sizes" = %opbundlesize_malloc} -> (%ptr_type : !pdl.type)
         %malloc_result = pdl.result 0 of %malloc
         
         // First memcpy to copy data to malloc result

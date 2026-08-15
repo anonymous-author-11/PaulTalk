@@ -1,3 +1,4 @@
+import argparse
 import subprocess
 import shutil
 import sys
@@ -6,7 +7,7 @@ import unittest
 from pathlib import Path
 from AST import AST, Assignment, FileImportTarget, IntegerLiteral, silent
 from parser import parse, resolve_import_target, source_directories
-from ptalk_compile import add_source_directories, compiler_driver_main
+from ptalk_compile import add_compiler_args, add_source_directories, compiler_driver_main
 from program_repository import ProgramRepository
 from .base_case import CompilerTestCase
 
@@ -115,35 +116,31 @@ class ParserContractTests(unittest.TestCase):
 
 class CompilerCliContractTests(CompilerTestCase):
 
+    def test_backend_arg(self):
+        parser = argparse.ArgumentParser()
+        add_compiler_args(parser)
+        self.assertEqual(parser.parse_args(["input.mini"]).backend, "region")
+        self.assertEqual(parser.parse_args(["input.mini", "--backend", "gc"]).backend, "gc")
+
     def test_cli_rejects_non_mini_input(self):
         self._ensure_test_dirs()
         with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as tmp:
             tmp.write("print(1);")
             temp_txt = Path(tmp.name)
-        try:
-            with self.assertRaisesRegex(Exception, "should point to a \\.mini file"):
-                compiler_driver_main(
-                    temp_txt,
-                    self.bin_dir() / "non_mini.exe",
-                    debug_mode=True,
-                    build_dir=self.build_dir(),
-                    no_timings=True
-                )
-        finally:
-            temp_txt.unlink(missing_ok=True)
+        self.addCleanup(temp_txt.unlink, missing_ok=True)
+        output = self.bin_dir() / "non_mini.exe"
+        build_dir = self.build_dir()
+        with self.assertRaisesRegex(Exception, "should point to a \\.mini file"):
+            compiler_driver_main(temp_txt, output, debug=True, build_dir=build_dir, no_timings=True)
 
     def test_cli_requires_output_extension(self):
         self._ensure_test_dirs()
         with open(self.temp_input_file_name, "w", encoding="utf-8") as f:
             f.write("print(1);")
+        output = self.bin_dir() / "no_extension"
+        build_dir = self.build_dir()
         with self.assertRaisesRegex(Exception, "Please provide an file extension in the output name."):
-            compiler_driver_main(
-                self.temp_input_file_name,
-                self.bin_dir() / "no_extension",
-                debug_mode=True,
-                build_dir=self.build_dir(),
-                no_timings=True
-            )
+            compiler_driver_main(self.temp_input_file_name, output, debug=True, build_dir=build_dir, no_timings=True)
 
     def test_cli_can_emit_object_file(self):
         self._ensure_test_dirs()
@@ -325,3 +322,36 @@ class LintContractTests(unittest.TestCase):
         )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("AIWALRUS", result.stdout)
+
+    def test_ai_lint_split_comp(self):
+        source = (
+            "def load(items):\n"
+            "    return [\n"
+            "        item for item in items\n"
+            "    ]\n"
+        )
+        result = self._run_ai_lint(source)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("AICOMP", result.stdout)
+
+    def test_ai_lint_split_sig(self):
+        source = (
+            "def load(\n"
+            "    items,\n"
+            "):\n"
+            "    return items\n"
+        )
+        result = self._run_ai_lint(source)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("AISIG", result.stdout)
+
+    def test_ai_lint_split_call(self):
+        source = "def load():\n    return dict(\n        value=1,\n    )\n"
+        result = self._run_ai_lint(source)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("AICALL", result.stdout)
+
+    def test_ai_lint_long_line(self):
+        result = self._run_ai_lint("value = '" + "x" * 141 + "'\n")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("C0301", result.stdout)

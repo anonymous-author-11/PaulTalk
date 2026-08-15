@@ -11,7 +11,16 @@ def ptalk_main(args):
 	if args.command == "build":
 		return build_main()
 	if args.command == "compile":
-		return compiler_driver_main(args.input_file_path, args.output_path, args.build_dir, args.debug_mode, args.no_timings, args.show_dependencies)
+		compiler_args = (
+			args.input_file_path,
+			args.output_path,
+			args.build_dir,
+			args.debug_mode,
+			args.no_timings,
+			args.show_dependencies,
+			args.backend,
+		)
+		return compiler_driver_main(*compiler_args)
 	if args.command == "version":
 		process_command = ["0install","select","https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml"]
 		return subprocess.run(process_command)

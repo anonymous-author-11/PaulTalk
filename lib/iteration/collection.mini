@@ -6,7 +6,7 @@ no_export math, CollectionAdapter;
 
 class Collection[T] extends Iterable[T] {
 
-    abstract def size() -> i32
+    abstract def size() -> i32 ~> no_alias
 
     def is_empty() -> Bool {
         return self.size() == 0;

@@ -29,9 +29,10 @@ define void @virtual_commit(ptr %allocation, i64 %size) {
 }
 
 ; MADV_DONTNEED = 4 (on Linux)
-define void @virtual_reset(ptr %addr, i64 %size) {
+define i1 @virtual_reset(ptr %addr, i64 %size) {
   %result = call i32 @madvise(ptr %addr, i64 %size, i32 4)
-  ret void
+  %succeeded = icmp eq i32 %result, 0
+  ret i1 %succeeded
 }
 
 ; Define an OS-agnostic wrapper around mprotect

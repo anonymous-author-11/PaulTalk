@@ -4,7 +4,8 @@ from xdsl.irdl import (
     IRDLOperation, irdl_op_definition, irdl_attr_definition, operand_def, result_def, attr_def, Operand,
     region_def, Region, VarRegion, var_region_def, VarOperand, var_operand_def, VarResultDef, var_result_def,
     opt_region_def, OptRegionDef, ParametrizedAttribute, ParameterDef, prop_def, opt_prop_def, OptOperandDef,
-    opt_operand_def, OptAttributeDef, opt_attr_def, successor_def, Successor, OptResultDef, opt_result_def
+    opt_operand_def, OptAttributeDef, opt_attr_def, successor_def, Successor, OptResultDef, opt_result_def,
+    AttrSizedOperandSegments
 )
 from xdsl.dialects.builtin import (
     IntegerType, IntegerAttr, IntAttr, NoneAttr, StringAttr, ArrayAttr, Float64Type, FixedBitwidthType,
@@ -414,35 +415,106 @@ class AddrOfOp(IRDLOperation):
 @irdl_op_definition
 class MallocOp(IRDLOperation):
     name = "mid.malloc"
+    region: OptOperandDef = opt_operand_def()
     typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
 
     @classmethod
-    def make(cls, typ):
-        return MallocOp.create(operands=[], attributes={"typ":typ.base_typ()}, result_types=[typ])
+    def make(cls, typ, region=None):
+        return MallocOp.build(operands=[region], attributes={"typ":typ.base_typ()}, result_types=[typ])
 
 @irdl_op_definition
 class CreateRegionOp(IRDLOperation):
     name = "mid.create_region"
     reg_name: StringAttr = attr_def(StringAttr)
-    operand : OptOperandDef = opt_operand_def()
     result : OpResult = result_def()
 
     @classmethod
-    def make(cls, name, operand=None):
-        operands = [operand] if operand else []
-        return CreateRegionOp.create(operands=operands, attributes={"reg_name":StringAttr(name)}, result_types=[llvm.LLVMPointerType.opaque()])
+    def make(cls, name):
+        return CreateRegionOp.create(attributes={"reg_name":StringAttr(name)}, result_types=[llvm.LLVMPointerType.opaque()])
 
 @irdl_op_definition
 class RemoveRegionOp(IRDLOperation):
     name = "mid.remove_region"
-    operand : OptOperandDef = opt_operand_def()
+    operand: Operand = operand_def()
     reg_name: StringAttr = attr_def(StringAttr)
 
     @classmethod
-    def make(cls, name, operand=None):
-        operands = [operand] if operand else []
-        return RemoveRegionOp.create(operands=operands, attributes={"reg_name":StringAttr(name)})
+    def make(cls, name, operand):
+        return RemoveRegionOp.create(operands=[operand], attributes={"reg_name":StringAttr(name)})
+
+@irdl_op_definition
+class RegionOfOp(IRDLOperation):
+    name = "mid.region_of"
+    fat_ptr: Operand = operand_def()
+    result: OpResult = result_def(llvm.LLVMPointerType.opaque())
+
+    @classmethod
+    def make(cls, fat_ptr):
+        return RegionOfOp.create(operands=[fat_ptr], result_types=[llvm.LLVMPointerType.opaque()])
+
+@irdl_op_definition
+class RegionOfBufferOp(IRDLOperation):
+    name = "mid.region_of_buffer"
+    buffer: Operand = operand_def()
+    result: OpResult = result_def(llvm.LLVMPointerType.opaque())
+
+    @classmethod
+    def make(cls, buffer):
+        return RegionOfBufferOp.create(operands=[buffer], result_types=[llvm.LLVMPointerType.opaque()])
+
+@irdl_op_definition
+class SetOutputRegionFrameOp(IRDLOperation):
+    name = "mid.set_output_region_frame"
+    handles: VarOperand = var_operand_def()
+    previous: OpResult = result_def(llvm.LLVMPointerType.opaque())
+    frame: OpResult = result_def(llvm.LLVMPointerType.opaque())
+
+    @classmethod
+    def make(cls, regions):
+        result_types = [llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()]
+        return SetOutputRegionFrameOp.create(operands=regions, result_types=result_types)
+
+@irdl_op_definition
+class RestoreOutputRegionFrameOp(IRDLOperation):
+    name = "mid.restore_output_region_frame"
+    previous: Operand = operand_def()
+
+    @classmethod
+    def make(cls, previous):
+        return RestoreOutputRegionFrameOp.create(operands=[previous])
+
+@irdl_op_definition
+class OutputRegionOp(IRDLOperation):
+    name = "mid.output_region"
+    index: IntegerAttr = attr_def(IntegerAttr)
+    result: OpResult = result_def(llvm.LLVMPointerType.opaque())
+
+    @classmethod
+    def make(cls, index):
+        index_attr = IntegerAttr.from_int_and_width(index, 32)
+        return OutputRegionOp.create(attributes={"index":index_attr}, result_types=[llvm.LLVMPointerType.opaque()])
+
+@irdl_op_definition
+class OutputRegionSlotOp(IRDLOperation):
+    name = "mid.output_region_slot"
+    index: IntegerAttr = attr_def(IntegerAttr)
+    result: OpResult = result_def(llvm.LLVMPointerType.opaque())
+
+    @classmethod
+    def make(cls, index):
+        index_attr = IntegerAttr.from_int_and_width(index, 32)
+        return OutputRegionSlotOp.create(attributes={"index":index_attr}, result_types=[llvm.LLVMPointerType.opaque()])
+
+@irdl_op_definition
+class MaterializeRegionOp(IRDLOperation):
+    name = "mid.materialize_region"
+    cell: Operand = operand_def()
+    result: OpResult = result_def(llvm.LLVMPointerType.opaque())
+
+    @classmethod
+    def make(cls, cell):
+        return MaterializeRegionOp.create(operands=[cell], result_types=[llvm.LLVMPointerType.opaque()])
 
 @irdl_op_definition
 class ResetRegionOp(IRDLOperation):
@@ -454,28 +526,6 @@ class ResetRegionOp(IRDLOperation):
     def make(cls, name, operand=None):
         operands = [operand] if operand else []
         return ResetRegionOp.create(operands=operands, attributes={"reg_name":StringAttr(name)})
-
-@irdl_op_definition
-class ProtectRegionOp(IRDLOperation):
-    name = "mid.protect_region"
-    operand : OptOperandDef = opt_operand_def()
-    reg_name: StringAttr = attr_def(StringAttr)
-
-    @classmethod
-    def make(cls, name, operand=None):
-        operands = [operand] if operand else []
-        return ProtectRegionOp.create(operands=operands, attributes={"reg_name":StringAttr(name)})
-
-@irdl_op_definition
-class UnprotectRegionOp(IRDLOperation):
-    name = "mid.unprotect_region"
-    operand : OptOperandDef = opt_operand_def()
-    reg_name: StringAttr = attr_def(StringAttr)
-
-    @classmethod
-    def make(cls, name, operand=None):
-        operands = [operand] if operand else []
-        return UnprotectRegionOp.create(operands=operands, attributes={"reg_name":StringAttr(name)})
 
 @irdl_op_definition
 class UtilsAPIOp(IRDLOperation):
@@ -551,9 +601,18 @@ class CreateBufferOp(IRDLOperation):
     name = "mid.create_buffer"
     size: Operand = operand_def()
     parameterization: OptOperandDef = opt_operand_def()
+    region: OptOperandDef = opt_operand_def()
+    irdl_options = [AttrSizedOperandSegments(as_property=True)]
     region_id: StringAttr = attr_def(StringAttr)
     typ: Attribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, size, typ, region_id, parameterization=None, region=None):
+        operands = [size, parameterization, region]
+        attributes = {"typ":typ.base_typ(), "region_id":StringAttr(region_id or "none")}
+        result_types = [llvm.LLVMPointerType.opaque()]
+        return CreateBufferOp.build(operands=operands, attributes=attributes, result_types=result_types)
 
 @irdl_op_definition
 class CreateTupleOp(IRDLOperation):
@@ -691,6 +750,29 @@ class GetFieldOp(IRDLOperation):
     original_type: TypeAttribute = attr_def(TypeAttribute)
     assumed_type: OptAttributeDef = opt_attr_def(StringAttr)
     result: OpResult = result_def()
+
+@irdl_op_definition
+class GetRegionOp(IRDLOperation):
+    name = "mid.get_region"
+    fat_ptr: Operand = operand_def(hi.FatPtr)
+    offset: IntegerAttr = attr_def(IntegerAttr)
+    vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
+    region_name: StringAttr = attr_def(StringAttr)
+    result: OpResult = result_def(llvm.LLVMPointerType.opaque())
+
+@irdl_op_definition
+class GetHiddenRegionOp(IRDLOperation):
+    name = "mid.get_hidden_region"
+    fat_ptr: Operand = operand_def()
+    types: ArrayAttr = attr_def(ArrayAttr)
+    offset: IntegerAttr = attr_def(IntegerAttr)
+    result: OpResult = result_def(llvm.LLVMPointerType.opaque())
+
+    @classmethod
+    def make(cls, fat_ptr, types, offset):
+        attributes = {"types":ArrayAttr(types), "offset":IntegerAttr.from_int_and_width(offset, 64)}
+        result_types = [llvm.LLVMPointerType.opaque()]
+        return GetHiddenRegionOp.create(operands=[fat_ptr], attributes=attributes, result_types=result_types)
 
 @irdl_op_definition
 class GetTypeFieldOp(IRDLOperation):
@@ -860,7 +942,10 @@ class ParameterizationOp(IRDLOperation):
 @irdl_op_definition
 class NewOp(IRDLOperation):
     name = "mid.new"
+    region: OptOperandDef = opt_operand_def()
     parameterizations: VarOperand = var_operand_def()
+    hidden_regions: VarOperand = var_operand_def()
+    irdl_options = [AttrSizedOperandSegments(as_property=True)]
     typ: TypeAttribute = attr_def(TypeAttribute)
     class_name: Attribute = attr_def(StringAttr)
     num_data_fields: IntegerAttr = attr_def(IntegerAttr)
@@ -869,11 +954,11 @@ class NewOp(IRDLOperation):
     result: OpResult = result_def()
 
     @classmethod
-    def make(cls, parameterizations, typ, class_name, num_data_fields, region_id, result_type):
+    def make(cls, parameterizations, typ, class_name, num_data_fields, region_id, result_type, region=None, hidden_regions=()):
         if not region_id: region_id = "none"
         attr_dict = {"typ":typ, "class_name":class_name, "num_data_fields":num_data_fields, "region_id":StringAttr(region_id)}
-        if len(typ.types.data) > num_data_fields.value.data: attr_dict["has_type_fields"] = UnitAttr()
-        return NewOp.create(operands=parameterizations, attributes=attr_dict, result_types=[result_type])
+        if parameterizations: attr_dict["has_type_fields"] = UnitAttr()
+        return NewOp.build(operands=[region, parameterizations, hidden_regions], attributes=attr_dict, result_types=[result_type])
 
 @irdl_op_definition
 class BoxDefOp(IRDLOperation):
@@ -1245,80 +1330,89 @@ class AddressOfOp(llvm.AddressOfOp, IRDLOperation):
     name = "mid.addressof"
     traits = frozenset([])
 
-Mid = Dialect(
-    "mid",
-    [
-        MainOp,
-        IdentifierOp,
-        LiteralOp,
-        AssignOp,
-        PrintfDeclOp,
-        PrintOp,
-        PrintFOp,
-        GlobalStrOp,
-        ComparisonOp,
-        ArithmeticOp,
-        WhileOp,
-        IfOp,
-        ReturnOp,
-        FunctionCallOp,
-        FunctionDefOp,
-        PreludeOp,
-        AllocateOp,
-        MallocOp,
-        SetFlagOp,
-        CheckFlagOp,
-        GetFlagOp,
-        NewOp,
-        TypeDefOp,
-        MethodCallOp,
-        ClassMethodCallOp,
-        FieldAccessOp,
-        WrapOp,
-        UnwrapOp,
-        BoxOp,
-        UnboxOp,
-        UnionizeOp,
-        NarrowOp,
-        ToFatPtrOp,
-        ReferOp,
-        UtilsAPIOp,
-        CoroCreateOp,
-        CoroYieldOp,
-        CoroCallOp,
-        CoroGetResultOp,
-        CoroSetResultOp,
-        AddrOfOp,
-        NextOp,
-        IntrinsicOp,
-        CreateBufferOp,
-        CreateTupleOp,
-        CreateVectorOp,
-        BufferIndexationOp,
-        TupleGetOp,
-        TupleSetOp,
-        InvariantOp,
-        SetupExceptionOp,
-        PDLOps,
-        GlobalOp,
-        AddressOfOp,
-        HashTableOp,
-        TypeIntegersTableOp,
-        TypePtrsTableOp,
-        VtableOp,
-        GetterDefOp,
-        OffsetTableOp,
-        SetOffsetOp,
-        FPtrCallOp,
-        ArgPasserOp,
-        BufferFillerOp,
-        ExternalTypeDefOp,
-        PlaceIntoBufferOp,
-        FromBufferOp,
-        MemCpyOp,
-        GlobalFptrOp,
-        SubtypeOp,
-        ParameterizationOp
-    ],
-    []
-)
+MID_OPERATIONS = [
+    MainOp,
+    IdentifierOp,
+    LiteralOp,
+    AssignOp,
+    PrintfDeclOp,
+    PrintOp,
+    PrintFOp,
+    GlobalStrOp,
+    ComparisonOp,
+    ArithmeticOp,
+    WhileOp,
+    IfOp,
+    ReturnOp,
+    FunctionCallOp,
+    FunctionDefOp,
+    PreludeOp,
+    AllocateOp,
+    MallocOp,
+    SetFlagOp,
+    CheckFlagOp,
+    GetFlagOp,
+    NewOp,
+    TypeDefOp,
+    MethodCallOp,
+    ClassMethodCallOp,
+    FieldAccessOp,
+    GetFieldOp,
+    GetRegionOp,
+    GetHiddenRegionOp,
+    GetTypeFieldOp,
+    SetFieldOp,
+    WrapOp,
+    UnwrapOp,
+    BoxOp,
+    UnboxOp,
+    UnionizeOp,
+    NarrowOp,
+    ToFatPtrOp,
+    ReferOp,
+    UtilsAPIOp,
+    RegionOfOp,
+    RegionOfBufferOp,
+    SetOutputRegionFrameOp,
+    RestoreOutputRegionFrameOp,
+    OutputRegionOp,
+    OutputRegionSlotOp,
+    MaterializeRegionOp,
+    CoroCreateOp,
+    CoroYieldOp,
+    CoroCallOp,
+    CoroGetResultOp,
+    CoroSetResultOp,
+    AddrOfOp,
+    NextOp,
+    IntrinsicOp,
+    CreateBufferOp,
+    CreateTupleOp,
+    CreateVectorOp,
+    BufferIndexationOp,
+    TupleGetOp,
+    TupleSetOp,
+    InvariantOp,
+    SetupExceptionOp,
+    PDLOps,
+    GlobalOp,
+    AddressOfOp,
+    HashTableOp,
+    TypeIntegersTableOp,
+    TypePtrsTableOp,
+    VtableOp,
+    GetterDefOp,
+    OffsetTableOp,
+    SetOffsetOp,
+    FPtrCallOp,
+    ArgPasserOp,
+    BufferFillerOp,
+    ExternalTypeDefOp,
+    PlaceIntoBufferOp,
+    FromBufferOp,
+    MemCpyOp,
+    GlobalFptrOp,
+    SubtypeOp,
+    ParameterizationOp
+]
+Mid = Dialect("mid", MID_OPERATIONS, [])

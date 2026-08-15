@@ -1,0 +1,10 @@
+import std;
+import allocator_retained_benchmark;
+
+cycles = 25;
+count = 10000;
+items = Array[allocator_retained_benchmark.RetainedItem].new(cycles * count);
+for cycle in 0..cycles {
+    allocator_retained_benchmark.append_cycle(items, count, 24, cycle);
+}
+IO.print(allocator_retained_benchmark.score(items));

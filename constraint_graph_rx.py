@@ -1,5 +1,6 @@
 import rustworkx as rx
 from collections import defaultdict
+from itertools import combinations, product
 
 # Import the rustworkx wrapper and text generator from your utility file
 from graph_utils import DiGraph, generate_network_text
@@ -237,8 +238,7 @@ def check_graph_compatibility(G1: DiGraph, var_mapping1, G2: DiGraph, var_mappin
 def rename_nodes_with_parameters(G: DiGraph, var_mapping, parameter_names):
     """
     Rename nodes in the graph to use parameter names when possible.
-    If a node represents one or more parameters, its name is changed to the
-    alphabetically first parameter name. Otherwise, it keeps its original name.
+    Otherwise, prefer a source-level name over a generated expression ID.
     
     Args:
         G: DiGraph
@@ -251,12 +251,17 @@ def rename_nodes_with_parameters(G: DiGraph, var_mapping, parameter_names):
     rep_to_vars = defaultdict(list)
     for var, rep in var_mapping.items():
         rep_to_vars[rep].append(var)
+
+    def display_key(name):
+        parts = name.replace("_", ".").split(".")
+        generated = any(len(part) == 10 and part.isalpha() and part.islower() for part in parts)
+        return generated, name.startswith("_"), name.count("."), len(name), name
     
     node_mapping = {}
     for node in G._graph.nodes():
-        params = [v for v in rep_to_vars.get(node, []) if v in parameter_names]
-        # If params exist for this node, use the first sorted name. Otherwise, keep original.
-        node_mapping[node] = sorted(params)[0] if params else node
+        names = rep_to_vars.get(node, [])
+        params = sorted(name for name in names if name in parameter_names)
+        node_mapping[node] = params[0] if params else min(names, key=display_key, default=node)
     
     # Create a new graph with the relabeled nodes
     renamed_G = DiGraph()
@@ -367,86 +372,57 @@ def transform_until_stable(G: DiGraph, var_mapping: dict, parameter_names: list)
         # This is done once per iteration for efficiency, avoiding repeated lookups.
         rep_to_vars_map = defaultdict(set)
         for var, rep in current_var_mapping.items():
-            if rep in node_to_int:
-                rep_idx = uf[node_to_int[rep]]
-                rep_to_vars_map[rep_idx].add(var)
+            if rep not in node_to_int: continue
+            rep_idx = uf[node_to_int[rep]]
+            rep_to_vars_map[rep_idx].add(var)
+
+        rep_to_successors_map = defaultdict(set)
+        for source_idx, target_idx in G._graph.edge_list():
+            source_rep_idx = uf[source_idx]
+            target_rep_idx = uf[target_idx]
+            if source_rep_idx == target_rep_idx: continue
+            rep_to_successors_map[source_rep_idx].add(target_rep_idx)
 
         # --- Rule 1: Parameter Postfix Propagation ---
         # If Node(A, B) -> Node(B.foo), then Node(B.foo) becomes Node(B.foo, A.foo).
-        for node_idx, node_data in enumerate(graph_nodes):
-            rep_idx = uf[node_idx]
-            variables = rep_to_vars_map.get(rep_idx, set())
-            
+        propagations = []
+        for rep_idx, variables in rep_to_vars_map.items():
             params = variables & param_set
             non_params = variables - param_set
+            if not params or not non_params: continue
+            successor_indices = rep_to_successors_map.get(rep_idx, ())
+            successors = ((uf[index], var) for index in successor_indices for var in rep_to_vars_map.get(uf[index], ()) if "." in var)
+            paths = ((rep, var.rsplit(".", 1)) for rep, var in successors)
+            propagations.extend((rep, f"{param}.{suffix}") for rep, (prefix, suffix) in paths if prefix in non_params for param in params)
 
-            if not params or not non_params:
-                continue
+        unmapped = ((rep, var) for rep, var in propagations if var in param_set and var not in current_var_mapping)
+        new_vars = {var:rep for rep, var in unmapped}
+        current_var_mapping.update({new_var:int_to_node[rep_idx] for new_var, rep_idx in new_vars.items()})
+        for new_var, rep_idx in new_vars.items(): rep_to_vars_map[rep_idx].add(new_var)
+        changes_made += len(new_vars)
 
-            # Check all successors of the current node.
-            for succ_idx in G._graph.successor_indices(node_idx):
-                succ_rep_idx = uf[succ_idx]
-                
-                # Iterate over a copy, as we might modify the set.
-                for var in list(rep_to_vars_map.get(succ_rep_idx, set())):
-                    if '.' not in var: continue
-                    
-                    base, postfix = var.rsplit('.', 1)
-                    if base in non_params:
-                        # For each parameter in the parent, create and add the new variable.
-                        for param in params:
-                            new_var = f"{param}.{postfix}"
-                            if new_var not in current_var_mapping:
-                                # Add the new variable to the successor's representative.
-                                current_var_mapping[new_var] = int_to_node[succ_rep_idx]
-                                rep_to_vars_map[succ_rep_idx].add(new_var) # Update map for this iteration.
-                                changes_made += 1
-                            else:
-                                # If the new variable already exists, merge its node with the successor.
-                                existing_rep_node = current_var_mapping[new_var]
-                                if existing_rep_node in node_to_int:
-                                    existing_rep_idx = uf[node_to_int[existing_rep_node]]
-                                    if uf.union(existing_rep_idx, succ_rep_idx):
-                                        changes_made += 1
+        for succ_rep_idx, new_var in propagations:
+            if new_var not in param_set: continue
+            existing_rep_node = current_var_mapping[new_var]
+            if existing_rep_node not in node_to_int: continue
+            existing_rep_idx = uf[node_to_int[existing_rep_node]]
+            changes_made += uf.union(existing_rep_idx, succ_rep_idx)
         
         # --- Rule 2: Postfix-Based Successor Merging with Prefix Check ---
         # If Node(X, Y) -> Node(X.foo) and Node(X, Y) -> Node(Y.foo), merge the two successor nodes.
-        for node_idx, node_data in enumerate(graph_nodes):
-            rep_idx = uf[node_idx]
-            variables_in_parent = rep_to_vars_map.get(rep_idx, set())
-            
-            # Get the set of unique successor representatives.
-            successors = list(set(uf[s_idx] for s_idx in G._graph.successor_indices(node_idx)))
-            if len(successors) < 2:
-                continue
-
-            # Check all pairs of successors for merge conditions.
-            for i in range(len(successors)):
-                for j in range(i + 1, len(successors)):
-                    b_rep_idx, c_rep_idx = successors[i], successors[j]
-                    if uf[b_rep_idx] == uf[c_rep_idx]: continue
-
-                    vars_in_b = rep_to_vars_map.get(b_rep_idx, set())
-                    vars_in_c = rep_to_vars_map.get(c_rep_idx, set())
-
-                    # Find common postfixes where both prefixes exist in the parent node.
-                    for var_b in vars_in_b:
-                        if '.' not in var_b: continue
-                        prefix_b, postfix = var_b.rsplit('.', 1)
-
-                        for var_c in vars_in_c:
-                            if '.' not in var_c: continue
-                            prefix_c, postfix_c = var_c.rsplit('.', 1)
-
-                            # Condition: same postfix, and both prefixes are in the parent.
-                            if postfix == postfix_c and prefix_b in variables_in_parent and prefix_c in variables_in_parent:
-                                if uf.union(b_rep_idx, c_rep_idx):
-                                    changes_made += 1
-                                # Once merged, no need to check other vars for this pair.
-                                break
-                        else: # continue if inner loop wasn't broken
-                            continue
-                        break # break outer loop if inner loop was broken
+        successor_reps = {rep:{uf[index] for index in indices} for rep, indices in rep_to_successors_map.items()}
+        parent_successors = ((variables, successor_reps.get(rep, ())) for rep, variables in rep_to_vars_map.items())
+        paired_successors = ((variables, combinations(sorted(reps), 2)) for variables, reps in parent_successors)
+        successor_pairs = ((variables, first, second) for variables, pairs in paired_successors for first, second in pairs)
+        for variables_in_parent, b_rep_idx, c_rep_idx in successor_pairs:
+            if uf[b_rep_idx] == uf[c_rep_idx]: continue
+            b_paths = [var.rsplit('.', 1) for var in rep_to_vars_map.get(b_rep_idx, ()) if '.' in var]
+            c_paths = [var.rsplit('.', 1) for var in rep_to_vars_map.get(c_rep_idx, ()) if '.' in var]
+            b_postfixes = {postfix for prefix, postfix in b_paths if prefix in variables_in_parent}
+            c_postfixes = {postfix for prefix, postfix in c_paths if prefix in variables_in_parent}
+            should_merge = not b_postfixes.isdisjoint(c_postfixes)
+            if not should_merge: continue
+            changes_made += uf.union(b_rep_idx, c_rep_idx)
         
         if changes_made == 0:
             break

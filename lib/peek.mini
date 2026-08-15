@@ -4,11 +4,7 @@ class Peeker[T] extends Iterator[T] {
     @iterator : Iterator[T]
     @peeked : T?
 
-    regions {
-        $elems == @iterator$elems,
-        @peeked holds $elems,
-        @iterator holds @peeked
-    }
+    regions { @iterator == self, $nxt == @peeked }
 
     def Self.from_iterator(iterator : Iterator[T]) -> Peeker[T] {
         return Peeker{iterator};
@@ -26,9 +22,9 @@ class Peeker[T] extends Iterator[T] {
         if peeked is Nil { return @iterator.next(); }
         @peeked = nil;
         return peeked;
-    } ~> { ret == @peeked }
+    }
     def peek() -> T? {
         if @peeked is Nil { @peeked = @iterator.next(); }
         return @peeked;
-    } ~> { ret == @peeked }
+    } ~> { ret == $nxt }
 }
