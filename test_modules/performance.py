@@ -152,6 +152,7 @@ class CompilerPerformanceTests(CompilerTestCase):
                 "runs_per_mode": cls._perf_runs,
                 "warmup_runs_per_mode": cls._perf_warmups,
                 "platform": platform.platform(),
+                "host_cpu": os.environ.get("PTALK_PERF_HOST_CPU", platform.processor()),
                 "python_version": platform.python_version(),
                 "git_sha": os.environ.get("GITHUB_SHA", ""),
                 "baseline_file": str(cls._baseline_file),
